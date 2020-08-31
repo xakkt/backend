@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Vertical (basic) form</h2>
+  <form action="http://localhost:4000/api/endride" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="ride_id">ride_id:</label>
+      <input type="text" class="form-control" id="ride_id" placeholder="Enter fname" name="ride_id">
+    </div>
+    <div class="form-group">
+      <label for="email">lat:</label>
+      <input type="text" class="form-control" id="lat" placeholder="Enter lat" name="lat">
+    </div>
+    <div class="form-group">
+      <label for="">lng:</label>
+      <input type="text" class="form-control" id="lng" placeholder="Enter lng" name="lng">
+    </div>
+  
+    <div class="form-group">
+      <label for="total_distance_covered">total_distance_covered:</label>
+      <input type="text" class="form-control"  name="total_distance_covered">
+    </div>
+    <div class="form-group">
+      <label for="image">userPhoto:</label>
+      <input type="file" class="form-control" id="image" placeholder="Enter lat" name="image">
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
+
+</body>
+</html>
