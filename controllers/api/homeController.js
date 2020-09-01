@@ -14,7 +14,8 @@ exports.dashboard = async (req, res)=>{
 		return res.json({status: "success", message: "", data: {categories:categories, banner:setting[0].value}});
 		
    }catch(err){
-		res.status(400).json({status: "success", message: "", data: err});
+	   console.log(err)
+		res.status(400).json({status: "false", message: "", data: err});
    }
 }
 
