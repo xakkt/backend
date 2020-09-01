@@ -38,6 +38,7 @@ exports.create = async(req, res) => {
 					const categoryInfo = new ProductCategory({
 						name: req.body.name, 
 						parent_id: req.body.parent_id,
+						_store: req.body._store,
 						logo:req.body.logo
 					})
 				

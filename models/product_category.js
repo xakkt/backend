@@ -13,8 +13,10 @@ const productCategorySchema = Schema({
     type: Number,
     default: null
   },
-  store_id:{
-    type: String
+  _store:{
+    type: Schema.Types.ObjectId,
+    ref: 'Store',
+    required:true
   },
   logo: {
       type: String,

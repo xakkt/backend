@@ -5,12 +5,14 @@ const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
   brand_id: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref:'Brand'
     //required: true,
   },
   _category: {
     type: Schema.Types.ObjectId,
-    ref: 'ProductCategory'
+    ref: 'ProductCategory',
+    required: true
   },
   name:{
       type: Map,
