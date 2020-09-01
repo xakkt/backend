@@ -1,4 +1,5 @@
 const Product = require('../../models/product');
+const ProductCategory = require('../../models/product_category');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 
@@ -6,12 +7,12 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let product = await Product.find().exec();
-			if(!product.length) return res.json({status: "false", message: "No data found", data: product});
+			let product = await Product.find().populate('_category').exec();
+			if(!product.length) return res.json({status: "false", message: "No data found", data: []});
 			return res.json({status: "success", message: "", data: product});
 			
 	   }catch(err){
-			res.status(400).json({status: "success", message: "Product added successfully", data: err});
+			res.status(400).json({status: "success", message: "", data: err});
 	   }
 },
 
@@ -36,9 +37,9 @@ exports.create = async(req, res) => {
 				try{
 						const productinfo = {
 							name: {
-							  arabic:req.body.arabic,
-							  english:req.body.english,
-							  spanish:req.body.spanish,
+							  arabic:req.body.ar_name,
+							  english:req.body.en_name,
+							  spanish:req.body.es_name,
 							},
 							description: req.body.description,
 							sku: req.body.sku,
@@ -58,6 +59,10 @@ exports.create = async(req, res) => {
 						}
 				
 				let product = await Product.create(productinfo);
+				await ProductCategory.findOneAndUpdate({_id:req.body._category},{$push:{
+					_products:product._id
+				}},{ new: true }).exec();
+				
 				res.json({status: "success", message: "Product added successfully", data: product});
 			
 				}catch(err){

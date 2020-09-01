@@ -9,7 +9,7 @@ const productSchema = new Schema({
     //required: true,
   },
   _category: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'ProductCategory'
   },
   name:{
@@ -91,4 +91,4 @@ function dateToString(date){
   if(date) return new Date(date).toISOString();
 }
 
-module.exports = mongoose.model('products', productSchema);
+module.exports = mongoose.model('Product', productSchema);

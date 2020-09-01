@@ -19,7 +19,11 @@ const productCategorySchema = Schema({
   logo: {
       type: String,
       default: null
-  }
+  },
+  _products:[{
+    type: Schema.Types.ObjectId,
+    ref: 'Product'
+  }]
 }, {timestamps:true});
 
 productCategorySchema.plugin(uniqueValidator)
