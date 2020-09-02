@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let category = await ProductCategory.find().populate('_products').exec();
+			let category = await ProductCategory.find().exec();
 			if(!category.length) return res.json({status: "false", message: "No data found", data: category});
 			return res.json({status: "success", message: "", data: category});
 			
