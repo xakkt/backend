@@ -44,7 +44,7 @@ exports.dashboard = async (req, res)=>{
 				product:[]
 			}			
 		];
-		return res.json({data:pdata})
+		return res.json({status: "true",data:pdata})
 	
 		
    }catch(err){
