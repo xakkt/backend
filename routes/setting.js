@@ -5,7 +5,7 @@ const settingController = require('../controllers/api/settingController');
 
 const settingValidation = [
     body('key').not().isEmpty().trim().escape(),
-    body('value').not().isEmpty().trim().escape() 
+    //body('images').not().isEmpty().trim().escape() 
 ]
 
 

@@ -14,10 +14,11 @@ exports.add = async(req, res) => {
 				try{
 					let settingInfo =  { 
 						key: req.body.key,
-						value: req.body.value, 
+						value: req.body.images, 
 						description: req.body.description
 						}
-				
+				console.log(req.body.images)			
+			
 				let setting = await Setting.create(settingInfo);
 				res.json({status: "success", message: "Value added successfully", data: setting});
 			

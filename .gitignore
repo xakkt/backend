@@ -1,10 +1,10 @@
 # Node build artifacts
 node_modules
 npm-debug.log
-
+.env
 # Local development
 *.dev
-*.env
+
 .DS_Store
 
 # Docker

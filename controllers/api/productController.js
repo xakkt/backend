@@ -2,17 +2,21 @@ const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
-
+const fs = require('fs');
 
 exports.list = async (req, res)=>{
 	
 	  try{
-			let product = await Product.find().populate('_category').exec();
-			if(!product.length) return res.json({status: "false", message: "No data found", data: []});
-			return res.json({status: "success", message: "", data: product});
+			let products = await Product.find().populate('_category').exec();
+			if(!products.length) return res.json({status: "false", message: "No data found", data: []});
+			products = await products.map( (product) =>{
+				return {product, image:`${process.env.BASE_URL}/${product.image}`}
+				//return {...product, category:product._category.name}
+			} )
+			return res.json({status: "success", baseUrl:process.env.BASE_URL, message: "", data: products});
 			
 	   }catch(err){
-			res.status(400).json({status: "success", message: "", data: err});
+			res.status(400).json({status: "false", message: "", data: err});
 	   }
 },
 
@@ -45,6 +49,7 @@ exports.create = async(req, res) => {
 							sku: req.body.sku,
 							_category: req.body._category,
 							price: req.body.price,
+							image:req.body.image,
 							weight: req.body.weight,
 							meta_description: req.body.meta_description,
 							description: req.body.description,
