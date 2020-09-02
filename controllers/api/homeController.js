@@ -9,7 +9,8 @@ exports.dashboard = async (req, res)=>{
 	var product = [];
 	try{
 		let categories = await ProductCategory.find({_store:req.params.storeid}).populate('_products','name sku price image').lean();
-		
+		if(!categories.length) return res.json({status: "false", message: "No data found", data: categories});
+
 		 categories.map(element => {
 			
 			return element._products.map(data => {
@@ -44,11 +45,7 @@ exports.dashboard = async (req, res)=>{
 			}			
 		];
 		return res.json({data:pdata})
-	/*	let setting = await Setting.find({key:"home_banner"},'value').exec();
-		console.log(setting.length)
-		if(!setting.length) return res.json({status: "false", message: "No setting found", data: []})
-		if(!categories.length) return res.json({status: "false", message: "No data found", data: categories});
-		return res.json({status: "success", message: "", categories: categories, banner:setting[0].value });*/
+	
 		
    }catch(err){
 	   console.log(err)
