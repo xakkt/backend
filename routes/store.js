@@ -23,6 +23,7 @@ const storeNearByValidation = [
 router.post('/store/create', storeValidation, storeController.create);
 router.get('/store/list',storeController.list);
 router.get('/store/:id',storeController.show);
+router.get('/store/zipcode/:zipcode',storeController.getStoreByZipcode);
 router.post('/store/nearby/stores', storeNearByValidation,storeController.nearByStores);
 router.put('/store/:id/update', storeValidation, storeController.updateStore);
 router.delete('/store/:id/delete', storeController.deleteStore);

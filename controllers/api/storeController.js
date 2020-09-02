@@ -111,3 +111,13 @@ exports.deleteStore = async(req,res)=>{
 	  });
 }
 
+exports.getStoreByZipcode = async(req, res)=>{
+	try{
+		let stores = await Store.find({zipcode:req.params.zipcode}).lean();
+		if(!stores.length) return res.json({message: "Not store found"});
+		return res.json({status:true, message: "", data:stores});
+	}catch(err){
+		res.status(400).json({data:err});
+	}
+}
+
