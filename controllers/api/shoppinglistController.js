@@ -1,4 +1,6 @@
 const Shoppinglist = require('../../models/shoppinglist')
+const ShoppinglistName = require('../../models/shoppinglist_name')
+var ObjectId = require('mongoose').Types.ObjectId; 
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 
@@ -6,12 +8,16 @@ const { validationResult } = require('express-validator');
 exports.allShoppingLists = async (req, res)=>{
 	
 	  try{
-			let shoppinglist = await Shoppinglist.find({_user:req.params.userid},'name').exec();
+		    const listInfo = {
+				_user:req.body._user,
+				_store:req.body._store
+			}
+			let shoppinglist = await ShoppinglistName.find(listInfo,'name').exec();
 			if(!shoppinglist.length) return res.json({status: "false", message: "No data found", data: shoppinglist});
 			return res.json({status: "success", message: "", data: shoppinglist});
 			
 	   }catch(err){
-			res.status(400).json({status: "success", message: "Category added successfully", data: err});
+			res.status(400).json({status: "success", message: "", data: err});
 	   }
 },
 
@@ -23,13 +29,17 @@ exports.addProductToshoppinglist = async(req, res) => {
                 }
                
 				try{
-				
-				console.log(req.body);
-				const shoppinglist = await Shoppinglist.findByIdAndUpdate({_id:req.body._shoplist},{$push:{
-					_products:req.body._product }},{ new: true }).exec();
-				res.json({status: "success", message: "Product added to shoppinglist successfully", data: shoppinglist});
-			
+					    shoppinglistInfo = {
+							_shoppinglist: req.body._shoppinglist,
+							 _product:req.body._product,
+							 quantity:req.body.quantity
+						} 
+						const product = await Shoppinglist.create(shoppinglistInfo)
+						
+						return res.json({status: "success", message: "Product added to shoppinglist successfully", data: product});
+						
 				}catch(err){
+					
 					res.status(400).json({data: err.message});
 				}				
 					
@@ -42,16 +52,18 @@ exports.createShoppingList = async function(req, res){
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
 				}
-				const ShoppinglistInfo = new Shoppinglist({
-					_user: req.body._user, 
+				console.log(req.body);
+				const ShoppinglistInfo = {
 					name: req.body.name,
-					
-				})
+					_user: req.body._user, 
+					_store: req.body._store
+				};
 
-				const shoppinglist = await Shoppinglist.create(ShoppinglistInfo);
+				const shoppinglist = await ShoppinglistName.create(ShoppinglistInfo);
 				res.json({status: "true", message: "Shopping List Created", data: shoppinglist});
 
 	}catch(err){
+		if(err.code==11000)return res.status(400).json({data: "List with this name already exist"});
 		res.status(400).json({data: err.message});
 	}
 },
@@ -71,8 +83,8 @@ exports.deleteProductWishlist = async(req,res)=>{
 
 exports.shoppinglistProducts = async(req, res)=> {
     try{
-		let shoppinglist = await Shoppinglist.findById(req.params.shoplist).populate('_products').exec();
-		console.log(shoppinglist)
+		let shoppinglist = await Shoppinglist.find({_shoppinglist:req.params.shoplist}).populate('_product','name sku price').exec();
+		
 		if(!shoppinglist.length) return res.json({status: "false", message: "No data found", data: shoppinglist});
 		return res.json({status: "success", message: "", data: shoppinglist});
 		
