@@ -42,35 +42,6 @@ exports.addPoductToWishlist = async(req, res) => {
 			}; 
 
 
-
-exports.updateWishlist = async function(req, res){
-
-	try{
-
-		const errors = await validationResult(req);
-				if (!errors.isEmpty()) {
-					return res.status(400).json({ errors: errors.array() });
-				}
-
-		const categoryInfo = {
-			name: req.body.name, 
-			//parent_id: req.body.parent_id,
-			logo:req.body.logo
-		}
-
-		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
-		const category =  await ProductCategory.findByIdAndUpdate(req.params.id, categoryInfo,{ new: true,	upsert: false});
-		console.log(category)
-			if(category)return res.json({status:true, message: "Category updated", data:category});
-			return res.status(400).json({status:false, message: "Category not found"});
-			
-		} catch(err){ console.log(err)
-			res.status(400).json({status:false, message: "Not updated", data:err});
-		}
-	
-
-}
-
 exports.deleteProductWishlist = async(req,res)=>{
   
 	Wishlist.deleteOne({ _id: req.params.wishlistid }, function (err, data) {
