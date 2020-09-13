@@ -60,7 +60,8 @@ app.get('/chat',(req, res) => res.render('pages/socket'));
 
 app.use('/api/v1/user',userRoutes);
 app.use('/api/v1',homeRoute);
-app.use('/api/v1',[shiplistRoute,wishlistRoute,settingRoute,storeRoutes,productRoutes,productCategoryRoutes]);
+app.use('/api/v1',storeRoutes);
+app.use('/api/v1',[shiplistRoute,wishlistRoute,settingRoute,productRoutes,productCategoryRoutes]);
 
 
 server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
