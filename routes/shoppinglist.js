@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const shoppingController = require('../controllers/api/shoppinglistController')
+const verifyjwt = require('../middlewares/tokenVerification');
+
+
+router.use(verifyjwt.checkToken);
 
 const shoppinglistValidation = [
     body('_user').not().isEmpty().trim().escape().withMessage('_user should not be empty'),

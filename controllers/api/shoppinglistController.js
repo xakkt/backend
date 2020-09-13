@@ -69,11 +69,8 @@ exports.createShoppingList = async function(req, res){
 },
 exports.updateShoppinglist = async function(req, res){
 		try{
-			    const productInfo = {
-					   _shoppinglist:req.body._shoppinglist,
-					   quantity:req.body.quantity
-				};
-				const updatedList = await Shoppinglist.findByIdAndUpdate({ _id: req.params.shoppinglistid }, productInfo,{ new: true, upsert: true });
+			    
+				const updatedList = await Shoppinglist.findByIdAndUpdate(req.body._shoppinglistid, {$set: {quantity:req.body.quantity}},{ new: true }).exec();
 				return res.json({status: "true", message: "Shopping List Updated", data: updatedList});
 			}catch(err){
 				return res.status(400).json({status: "false", message: "", data: err});

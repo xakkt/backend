@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const wishController = require('../controllers/api/wishlistController')
+const verifyjwt = require('../middlewares/tokenVerification');
+
+
+router.use(verifyjwt.checkToken);
 
 const wishlistValidation = [
     body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
