@@ -38,7 +38,6 @@ shoppinglistNameSchema.index({
    _user: 1
  }, {
    unique: true,
-   message: "afsd"
  });
 
 module.exports = mongoose.model('ShoppinglistName', shoppinglistNameSchema);

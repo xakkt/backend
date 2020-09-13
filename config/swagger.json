@@ -1,1038 +1,931 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "",
-    "version": "1.0.5",
-    "title": "XAKKT",
-    "termsOfService": "",
-    "contact": {
-      "email": "manojn@xakkt.com"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    }
+    "version": "1.0",
+    "title": "XAKKT API",
+    "contact": {}
   },
-  "host": "localhost:4500",
+  "host": "localhost:4800",
   "basePath": "/api/v1",
-  "tags": [
-    {
-      "name": "product",
-      "description": "Everything about your Products",
-      "externalDocs": {
-        "description": "Find out more",
-        "url": "http://swagger.io"
-      }
-    },
-    {
-      "name": "store",
-      "description": "Access to Productstore orders"
-    },
-    {
-      "name": "user",
-      "description": "Operations about user",
-      "externalDocs": {
-        "description": "Find out more about our store",
-        "url": "http://swagger.io"
-      }
-    }
-  ],
   "schemes": [
-    "https",
     "http"
   ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
-    "/product/{productId}/uploadImage": {
+    "/user/create": {
       "post": {
+        "summary": "Creat an user",
         "tags": [
-          "product"
+          "User"
         ],
-        "summary": "uploads an image",
-        "description": "",
-        "operationId": "uploadFile",
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "operationId": "Creatanuser",
+        "deprecated": false,
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "productId",
-            "in": "path",
-            "description": "ID of Product to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "additionalMetadata",
-            "in": "formData",
-            "description": "Additional data to pass to server",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "file",
-            "in": "formData",
-            "description": "file to upload",
-            "required": false,
-            "type": "file"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ApiResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:Products",
-              "read:Products"
-            ]
-          }
-        ]
-      }
-    },
-    "/product": {
-      "post": {
-        "tags": [
-          "product"
-        ],
-        "summary": "Add a new product to the store",
-        "description": "",
-        "operationId": "addProduct",
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
+            "name": "Body",
             "in": "body",
-            "name": "body",
-            "description": "Prduct object that needs to be added to the store",
             "required": true,
+            "description": "",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/CreatanuserRequest"
             }
-          }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:products",
-              "read:products"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "product"
-        ],
-        "summary": "Update an existing Product",
-        "description": "",
-        "operationId": "updateProduct",
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Product object that needs to be added to the store",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Product"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Product not found"
-          },
-          "405": {
-            "description": "Validation exception"
-          }
-        },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:Products",
-              "read:Products"
-            ]
-          }
-        ]
-      }
-    },
-    "/product/findByCategory": {
-      "get": {
-        "tags": [
-          "product"
-        ],
-        "summary": "Finds find by category",
-        "description": "Multiple status values can be provided with comma separated strings",
-        "operationId": "findByCategory",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "available",
-                "pending",
-                "sold"
-              ],
-              "default": "available"
-            },
-            "collectionFormat": "multi"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid status value"
+            "description": "",
+            "headers": {}
           }
-        },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:Products",
-              "read:Products"
-            ]
-          }
-        ]
+        }
       }
     },
-    "/Product/findByTags": {
+    "/user/list": {
       "get": {
+        "summary": "List Users",
         "tags": [
-          "Product"
+          "User"
         ],
-        "summary": "Finds Products by tags",
-        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-        "operationId": "findProductsByTags",
+        "operationId": "ListUsers",
+        "deprecated": false,
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/json"
         ],
         "parameters": [
           {
-            "name": "tags",
-            "in": "query",
-            "description": "Tags to filter by",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid tag value"
-          }
-        },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:Products",
-              "read:Products"
-            ]
-          }
-        ],
-        "deprecated": true
-      }
-    },
-    "/Product/{ProductId}": {
-      "get": {
-        "tags": [
-          "Product"
-        ],
-        "summary": "Find Product by ID",
-        "description": "Returns a single Product",
-        "operationId": "getProductById",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "ProductId",
-            "in": "path",
-            "description": "ID of Product to return",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Product"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Product not found"
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Product"
-        ],
-        "summary": "Updates a Product in the store with form data",
-        "description": "",
-        "operationId": "updateProductWithForm",
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "ProductId",
-            "in": "path",
-            "description": "ID of Product that needs to be updated",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "name",
-            "in": "formData",
-            "description": "Updated name of the Product",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "in": "formData",
-            "description": "Updated status of the Product",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:Products",
-              "read:Products"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Product"
-        ],
-        "summary": "Deletes a Product",
-        "description": "",
-        "operationId": "deleteProduct",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "api_key",
+            "name": "Authorization",
             "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "ProductId",
-            "in": "path",
-            "description": "Product id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64"
+            "type": "string",
+            "description": ""
           }
         ],
         "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Product not found"
+          "200": {
+            "description": "",
+            "headers": {}
           }
         },
-        "security": [
-          {
-            "Productstore_auth": [
-              "write:Products",
-              "read:Products"
-            ]
-          }
-        ]
+        "security": []
       }
     },
-    "/store/order": {
+    "/user/authenticate": {
       "post": {
+        "summary": "User Authentication",
         "tags": [
-          "store"
+          "User"
         ],
-        "summary": "Place an order for a Product",
-        "description": "",
-        "operationId": "placeOrder",
-        "consumes": [
-          "application/json"
-        ],
+        "operationId": "UserAuthentication",
+        "deprecated": false,
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/json"
         ],
         "parameters": [
           {
+            "name": "Body",
             "in": "body",
-            "name": "body",
-            "description": "order placed for purchasing the Product",
             "required": true,
+            "description": "",
             "schema": {
-              "$ref": "#/definitions/Order"
+              "$ref": "#/definitions/UserAuthenticationRequest"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
-          },
-          "400": {
-            "description": "Invalid Order"
+            "description": "",
+            "headers": {}
           }
         }
       }
     },
-    "/store/order/{orderId}": {
-      "get": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Find purchase order by ID",
-        "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
-        "operationId": "getOrderById",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of Product that needs to be fetched",
-            "required": true,
-            "type": "integer",
-            "maximum": 10,
-            "minimum": 1,
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Order not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
-        "operationId": "deleteOrder",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of the order that needs to be deleted",
-            "required": true,
-            "type": "integer",
-            "minimum": 1,
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Order not found"
-          }
-        }
-      }
-    },
-    "/store/inventory": {
-      "get": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Returns Product inventories by status",
-        "description": "Returns a map of status codes to quantities",
-        "operationId": "getInventory",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              
-            ]
-          }
-        ]
-      }
-    },
-    "/user/createWithArray": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Creates list of users with given input array",
-        "description": "",
-        "operationId": "createUsersWithArrayInput",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "List of user object",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/createWithList": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Creates list of users with given input array",
-        "description": "",
-        "operationId": "createUsersWithListInput",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "List of user object",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/{username}": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Get user by user name",
-        "description": "",
-        "operationId": "getUserByName",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be fetched. Use user1 for testing. ",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
+    "/user/update/5f283c64bd36a0501d250ed0": {
       "put": {
+        "summary": "Update user profile",
         "tags": [
-          "user"
+          "User"
         ],
-        "summary": "Updated user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "updateUser",
-        "consumes": [
+        "operationId": "Updateuserprofile",
+        "deprecated": false,
+        "produces": [
           "application/json"
         ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
         "parameters": [
           {
-            "name": "username",
-            "in": "path",
-            "description": "name that need to be updated",
+            "name": "Authorization",
+            "in": "header",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": ""
           },
           {
+            "name": "Body",
             "in": "body",
-            "name": "body",
-            "description": "Updated user object",
             "required": true,
+            "description": "",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UpdateuserprofileRequest"
             }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid user supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "deleteUser",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be deleted",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logs user into the system",
-        "description": "",
-        "operationId": "loginUser",
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "description": "The user name for login",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "The password for login in clear text",
-            "required": true,
-            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "headers": {
-              "X-Expires-After": {
-                "type": "string",
-                "format": "date-time",
-                "description": "date in UTC when token expires"
-              },
-              "X-Rate-Limit": {
-                "type": "integer",
-                "format": "int32",
-                "description": "calls per hour allowed by the user"
-              }
-            },
-            "schema": {
-              "type": "string"
-            }
-          },
-          "400": {
-            "description": "Invalid username/password supplied"
+            "description": "",
+            "headers": {}
           }
-        }
+        },
+        "security": []
       }
     },
-    "/user/logout": {
+    "/user/5f283c64bd36a0501d250ed0": {
       "get": {
+        "summary": "Fetch user by id",
         "tags": [
-          "user"
+          "User"
         ],
-        "summary": "Logs out current logged in user session",
-        "description": "",
-        "operationId": "logoutUser",
+        "operationId": "Fetchuserbyid",
+        "deprecated": false,
         "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Create user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "createUser",
-        "consumes": [
           "application/json"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "Created user object",
+            "name": "Authorization",
+            "in": "header",
             "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/store/list": {
+      "get": {
+        "summary": "List All Stores",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "ListAllStores",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/store/nearby/stores": {
+      "post": {
+        "summary": "NearByStores",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "NearByStores",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/NearByStoresRequest"
             }
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "",
+            "headers": {}
           }
         }
       }
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     },
-    "Productstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "https://Productstore.swagger.io/oauth/authorize",
-      "flow": "implicit",
-      "scopes": {
-        "read:Products": "read your Products",
-        "write:Products": "modify Products in your account"
+    "/store/create": {
+      "post": {
+        "summary": "Create Store",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "CreateStore",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateStoreRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/5f463b1b446b850b42e3084d/delete": {
+      "delete": {
+        "summary": "Delete Store",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "DeleteStore",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/store/5f463c342c7a4e0dca9a06e0/update": {
+      "put": {
+        "summary": "Update Store",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "UpdateStore",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateStoreRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/5f463b1b446b850b42e3084d": {
+      "get": {
+        "summary": "GetStoreById",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "GetStoreById",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Find store by zipcode",
+        "tags": [
+          "Store"
+        ],
+        "operationId": "Findstorebyzipcode",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/product/list": {
+      "get": {
+        "summary": "List Products",
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ListProducts",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/product/create": {
+      "post": {
+        "summary": "Create Product",
+        "tags": [
+          "Product"
+        ],
+        "operationId": "CreateProduct",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/product/5f3796402b577907025e36b3": {
+      "get": {
+        "summary": "Show Product by id",
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ShowProductbyid",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/product/5f37963c2b577907025e36b2/delete": {
+      "delete": {
+        "summary": "Delete Product",
+        "tags": [
+          "Product"
+        ],
+        "operationId": "DeleteProduct",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/product/5f37963c2b577907025e36b2/update": {
+      "put": {
+        "summary": "Update Product",
+        "tags": [
+          "Product"
+        ],
+        "operationId": "UpdateProduct",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/category/create": {
+      "post": {
+        "summary": "Add Category",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "AddCategory",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AddCategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/category/5f3684d16599aa899e5bcb59/update": {
+      "put": {
+        "summary": "Update Category",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "UpdateCategory",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateCategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/category/list": {
+      "get": {
+        "summary": "List Category",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "ListCategory",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/category/5f3684e4367c3589d88517b6/delete": {
+      "delete": {
+        "summary": "Delete Category",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "DeleteCategory",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/category/5f4e599c46d8d7a270d569e9/products": {
+      "get": {
+        "summary": "List Products of Category",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "ListProductsofCategory",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/setting/add": {
+      "post": {
+        "summary": "Add a setting info",
+        "tags": [
+          "Setting"
+        ],
+        "operationId": "Addasettinginfo",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AddasettinginfoRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/app/dashboard/5f4d40aa7cc37a3d1c2de268": {
+      "get": {
+        "summary": "App homepage",
+        "tags": [
+          "Home"
+        ],
+        "operationId": "Apphomepage",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/wishlist/add_product": {
+      "post": {
+        "summary": "Add Product to wishlist",
+        "tags": [
+          "Wishlist"
+        ],
+        "operationId": "AddProducttowishlist",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AddProducttowishlistRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/shoppinglist/add_product": {
+      "post": {
+        "summary": "Add Product to Shopping list",
+        "tags": [
+          "Shopping List"
+        ],
+        "operationId": "AddProducttoShoppinglist",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AddProducttoShoppinglistRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/shoppinglist/create": {
+      "post": {
+        "summary": "Create a shopping list",
+        "tags": [
+          "Shopping List"
+        ],
+        "operationId": "Createashoppinglist",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateashoppinglistRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/shoppinglist": {
+      "post": {
+        "summary": "All Shoppiglist of user",
+        "tags": [
+          "Shopping List"
+        ],
+        "operationId": "AllShoppiglistofuser",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AllShoppiglistofuserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/shoppinglist/5f5a3a0d9cf6ae17bb49c0d6/products": {
+      "get": {
+        "summary": "Shopping list products",
+        "tags": [
+          "Shopping List"
+        ],
+        "operationId": "Shoppinglistproducts",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/shoppinglist/remove_product/5f5a644918a97d75af88676d": {
+      "delete": {
+        "summary": "Remove product from list",
+        "tags": [
+          "Shopping List"
+        ],
+        "operationId": "Removeproductfromlist",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
       }
     }
   },
   "definitions": {
-    "ApiResponse": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "type": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "Category": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        }
+    "CreatanuserRequest": {
+      "title": "CreatanuserRequest",
+      "example": {
+        "first_name": "Manoj",
+        "last_name": "Negi",
+        "email": "www.abc@gmail.com",
+        "password": "123456",
+        "contact_no": "9872100824",
+        "status": true,
+        "ncrStatus": true,
+        "superbuckId": 12345,
+        "timezone": "US",
+        "dob": "2020-08-26T14:17:47.556Z"
       },
-      "xml": {
-        "name": "Category"
-      }
-    },
-    "Product": {
-      "type": "object",
-      "required": [
-        "name",
-        "photoUrls"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "category": {
-          "$ref": "#/definitions/Category"
-        },
-        "name": {
-          "type": "string",
-          "example": "doggie"
-        },
-        "photoUrls": {
-          "type": "array",
-          "xml": {
-            "wrapped": true
-          },
-          "items": {
-            "type": "string",
-            "xml": {
-              "name": "photoUrl"
-            }
-          }
-        },
-        "tags": {
-          "type": "array",
-          "xml": {
-            "wrapped": true
-          },
-          "items": {
-            "xml": {
-              "name": "tag"
-            },
-            "$ref": "#/definitions/Tag"
-          }
-        },
-        "status": {
-          "type": "string",
-          "description": "Product status in the store",
-          "enum": [
-            "available",
-            "pending",
-            "sold"
-          ]
-        }
-      },
-      "xml": {
-        "name": "Product"
-      }
-    },
-    "Tag": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "xml": {
-        "name": "Tag"
-      }
-    },
-    "Order": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "ProductId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "quantity": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "shipDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "status": {
-          "type": "string",
-          "description": "Order Status",
-          "enum": [
-            "placed",
-            "approved",
-            "delivered"
-          ]
-        },
-        "complete": {
-          "type": "boolean"
-        }
-      },
-      "xml": {
-        "name": "Order"
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "username": {
+        "first_name": {
           "type": "string"
         },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
+        "last_name": {
           "type": "string"
         },
         "email": {
@@ -1041,22 +934,631 @@
         "password": {
           "type": "string"
         },
-        "phone": {
+        "contact_no": {
           "type": "string"
         },
-        "userStatus": {
+        "status": {
+          "type": "boolean"
+        },
+        "ncrStatus": {
+          "type": "boolean"
+        },
+        "superbuckId": {
           "type": "integer",
-          "format": "int32",
-          "description": "User Status"
+          "format": "int32"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
         }
       },
-      "xml": {
-        "name": "User"
-      }
+      "required": [
+        "first_name",
+        "last_name",
+        "email",
+        "password",
+        "contact_no",
+        "status",
+        "ncrStatus",
+        "superbuckId",
+        "timezone",
+        "dob"
+      ]
+    },
+    "UserAuthenticationRequest": {
+      "title": "UserAuthenticationRequest",
+      "example": {
+        "email": "www.abc@gmail.com",
+        "password": "123456"
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "UpdateuserprofileRequest": {
+      "title": "UpdateuserprofileRequest",
+      "example": {
+        "first_name": "Sonam",
+        "last_name": "Negi",
+        "email": "ims.fff@gmail.com",
+        "password": "123456",
+        "contact_no": "9872100824",
+        "status": true,
+        "ncrStatus": true,
+        "superbuckId": 12345,
+        "timezone": "US",
+        "dob": "2020-08-26T14:17:47.556Z"
+      },
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "contact_no": {
+          "type": "string"
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "ncrStatus": {
+          "type": "boolean"
+        },
+        "superbuckId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "first_name",
+        "last_name",
+        "email",
+        "password",
+        "contact_no",
+        "status",
+        "ncrStatus",
+        "superbuckId",
+        "timezone",
+        "dob"
+      ]
+    },
+    "NearByStoresRequest": {
+      "title": "NearByStoresRequest",
+      "example": {
+        "lat": 30.7333,
+        "long": 86.7794
+      },
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number",
+          "format": "double"
+        },
+        "long": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "lat",
+        "long"
+      ]
+    },
+    "CreateStoreRequest": {
+      "title": "CreateStoreRequest",
+      "example": {
+        "name": "store dummy",
+        "description": "store 4",
+        "contact_no": "45464564",
+        "zipcode": "458789",
+        "long": 44.54,
+        "lat": 24.5,
+        "status": true
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "contact_no": {
+          "type": "string"
+        },
+        "zipcode": {
+          "type": "string"
+        },
+        "long": {
+          "type": "number",
+          "format": "double"
+        },
+        "lat": {
+          "type": "number",
+          "format": "double"
+        },
+        "status": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "contact_no",
+        "zipcode",
+        "long",
+        "lat",
+        "status"
+      ]
+    },
+    "UpdateStoreRequest": {
+      "title": "UpdateStoreRequest",
+      "example": {
+        "name": "mystore 3",
+        "description": "store 4",
+        "contact_no": "45464564",
+        "zipcode": "458789",
+        "long": 33.54,
+        "lat": 11.5,
+        "status": true,
+        "isdeleted": false
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "contact_no": {
+          "type": "string"
+        },
+        "zipcode": {
+          "type": "string"
+        },
+        "long": {
+          "type": "number",
+          "format": "double"
+        },
+        "lat": {
+          "type": "number",
+          "format": "double"
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "isdeleted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "contact_no",
+        "zipcode",
+        "long",
+        "lat",
+        "status",
+        "isdeleted"
+      ]
+    },
+    "CreateProductRequest": {
+      "title": "CreateProductRequest",
+      "example": {
+        "sku": "43E3A4F94AF",
+        "price": 34.54,
+        "weight": 45.65,
+        "image": "p5.jpg",
+        "ar_name": "ONE",
+        "en_name": "ONE",
+        "es_name": "ONE",
+        "_category": "5f4f8f41411b4b0ad5db46df",
+        "meta_title": "title",
+        "meta_keywords": "keyword",
+        "meta_description": "meta descritpion",
+        "description": "this is descrtion",
+        "short_description": "short description",
+        "is_featured": true,
+        "crv": "dsf",
+        "valid_from": "2020-08-09T13:03:10.671Z",
+        "valid_till": "2020-08-09T13:03:10.671Z"
+      },
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "weight": {
+          "type": "number",
+          "format": "double"
+        },
+        "image": {
+          "type": "string"
+        },
+        "ar_name": {
+          "type": "string"
+        },
+        "en_name": {
+          "type": "string"
+        },
+        "es_name": {
+          "type": "string"
+        },
+        "_category": {
+          "type": "string"
+        },
+        "meta_title": {
+          "type": "string"
+        },
+        "meta_keywords": {
+          "type": "string"
+        },
+        "meta_description": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "short_description": {
+          "type": "string"
+        },
+        "is_featured": {
+          "type": "boolean"
+        },
+        "crv": {
+          "type": "string"
+        },
+        "valid_from": {
+          "type": "string"
+        },
+        "valid_till": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sku",
+        "price",
+        "weight",
+        "image",
+        "ar_name",
+        "en_name",
+        "es_name",
+        "_category",
+        "meta_title",
+        "meta_keywords",
+        "meta_description",
+        "description",
+        "short_description",
+        "is_featured",
+        "crv",
+        "valid_from",
+        "valid_till"
+      ]
+    },
+    "UpdateProductRequest": {
+      "title": "UpdateProductRequest",
+      "example": {
+        "sku": "478978",
+        "price": 34.54,
+        "weight": 45.65,
+        "ar_name": "rtet name",
+        "en_name": "english name",
+        "es_name": "spanish name",
+        "_category": "5f3684d16599aa899e5bcb59",
+        "meta_title": "title",
+        "meta_keywords": "keyword",
+        "meta_description": "meta descritpion",
+        "description": "this is descrtion",
+        "short_description": "short description",
+        "is_featured": true,
+        "crv": "dsf",
+        "valid_from": "2020-08-09T13:03:10.671Z",
+        "valid_till": "2020-08-09T13:03:10.671Z"
+      },
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "weight": {
+          "type": "number",
+          "format": "double"
+        },
+        "ar_name": {
+          "type": "string"
+        },
+        "en_name": {
+          "type": "string"
+        },
+        "es_name": {
+          "type": "string"
+        },
+        "_category": {
+          "type": "string"
+        },
+        "meta_title": {
+          "type": "string"
+        },
+        "meta_keywords": {
+          "type": "string"
+        },
+        "meta_description": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "short_description": {
+          "type": "string"
+        },
+        "is_featured": {
+          "type": "boolean"
+        },
+        "crv": {
+          "type": "string"
+        },
+        "valid_from": {
+          "type": "string"
+        },
+        "valid_till": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sku",
+        "price",
+        "weight",
+        "ar_name",
+        "en_name",
+        "es_name",
+        "_category",
+        "meta_title",
+        "meta_keywords",
+        "meta_description",
+        "description",
+        "short_description",
+        "is_featured",
+        "crv",
+        "valid_from",
+        "valid_till"
+      ]
+    },
+    "AddCategoryRequest": {
+      "title": "AddCategoryRequest",
+      "example": {
+        "name": "gamma",
+        "logo": "abc.jpg",
+        "_store": "5f4d40aa7cc37a3d1c2de268"
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "_store": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "logo",
+        "_store"
+      ]
+    },
+    "UpdateCategoryRequest": {
+      "title": "UpdateCategoryRequest",
+      "example": {
+        "name": "twfo",
+        "logo": "abc.jpg"
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "logo"
+      ]
+    },
+    "AddasettinginfoRequest": {
+      "title": "AddasettinginfoRequest",
+      "example": {
+        "key": "home_banner",
+        "images": [
+          "banner.jpg",
+          "banner3.jpg",
+          "banner2.jpeg",
+          "app_banner.jpg"
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "images"
+      ]
+    },
+    "AddProducttowishlistRequest": {
+      "title": "AddProducttowishlistRequest",
+      "example": {
+        "_user": "5f283c64bd36a0501d250ed0",
+        "_product": "5f4e962e81090019183001fe",
+        "wish_price": 23.54,
+        "max_price": 45.89
+      },
+      "type": "object",
+      "properties": {
+        "_user": {
+          "type": "string"
+        },
+        "_product": {
+          "type": "string"
+        },
+        "wish_price": {
+          "type": "number",
+          "format": "double"
+        },
+        "max_price": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "_user",
+        "_product",
+        "wish_price",
+        "max_price"
+      ]
+    },
+    "AddProducttoShoppinglistRequest": {
+      "title": "AddProducttoShoppinglistRequest",
+      "example": {
+        "_shoppinglist": "5f5a60c7b6ab90d7743dba56",
+        "_product": "5f4e96ef109001918300200",
+        "quantity": 70
+      },
+      "type": "object",
+      "properties": {
+        "_shoppinglist": {
+          "type": "string"
+        },
+        "_product": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "_shoppinglist",
+        "_product",
+        "quantity"
+      ]
+    },
+    "CreateashoppinglistRequest": {
+      "title": "CreateashoppinglistRequest",
+      "example": {
+        "name": "category C",
+        "_user": "5f5a66833fcb34b0ue0d679d",
+        "_store": "5f5a66208666f4a8b3d23c6b"
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "_user": {
+          "type": "string"
+        },
+        "_store": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "_user",
+        "_store"
+      ]
+    },
+    "AllShoppiglistofuserRequest": {
+      "title": "AllShoppiglistofuserRequest",
+      "example": {
+        "_user": "5f283c64bd36a0501d250ed0",
+        "_store": "5f47a1de258cca56efa22268"
+      },
+      "type": "object",
+      "properties": {
+        "_user": {
+          "type": "string"
+        },
+        "_store": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_user",
+        "_store"
+      ]
     }
   },
-  "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
-  }
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "Store"
+    },
+    {
+      "name": "Product"
+    },
+    {
+      "name": "Category"
+    },
+    {
+      "name": "Setting"
+    },
+    {
+      "name": "Home"
+    },
+    {
+      "name": "Wishlist"
+    },
+    {
+      "name": "Shopping List"
+    }
+  ]
 }

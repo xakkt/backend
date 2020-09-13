@@ -23,8 +23,10 @@ const updateListValidation = [
 router.post('/shoppinglist/add_product', updateListValidation, shoppingController.addProductToshoppinglist);
 router.post('/shoppinglist/create',shoppinglistValidation, shoppingController.createShoppingList);
 router.post('/shoppinglist',getListValidation,shoppingController.allShoppingLists);
+router.delete('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
+router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
 router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistProducts)
-
+router.delete('/shoppinglist/:id/remove',shoppingController.deleteShoppinglist);
 
 
 module.exports = router;
