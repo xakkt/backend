@@ -59,7 +59,8 @@ app.get('/demo', (req, res) => res.render('pages/demo'))
 app.get('/chat',(req, res) => res.render('pages/socket'));
 
 app.use('/api/v1/user',userRoutes);
-app.use('/api/v1',[shiplistRoute,wishlistRoute,homeRoute,settingRoute,storeRoutes,productRoutes,productCategoryRoutes]);
+app.use('/api/v1',homeRoute);
+app.use('/api/v1',[shiplistRoute,wishlistRoute,settingRoute,storeRoutes,productRoutes,productCategoryRoutes]);
 
 
 server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
