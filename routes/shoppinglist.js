@@ -8,14 +8,12 @@ const verifyjwt = require('../middlewares/tokenVerification');
 router.use(verifyjwt.checkToken);
 
 const shoppinglistValidation = [
-    body('_user').not().isEmpty().trim().escape().withMessage('_user should not be empty'),
     body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
     body('name').not().isEmpty().trim().escape().withMessage('name should not be empty')
 ]
 
 const getListValidation = [
-    body('_user').not().isEmpty().trim().escape().withMessage('_user should not be empty'),
-    body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+       body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
    ]
 
 const updateListValidation = [

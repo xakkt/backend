@@ -24,7 +24,7 @@ exports.addPoductToWishlist = async(req, res) => {
                 console.log(req.body);
 				try{
 					const wishlistInfo = new Wishlist({
-						_user: req.body._user, 
+						_user: req.decoded.id, 
 						_product: req.body._product,
 						_store: req.body._store,
                         wish_price: req.body.wish_price,
@@ -60,7 +60,7 @@ exports.allWishlistProducts = async(req, res)=>{
 			return res.status(400).json({ errors: errors.array() });
 		}
 		console.log(req.body)
-		const products = await Wishlist.find({_user:req.body._user,_store:req.body._store}).exec();
+		const products = await Wishlist.find({_user:req.decoded.id,_store:req.body._store}).exec();
 		if(!products.length) return res.json({status: "success", message: "no data found", data: []})
 		return res.json({status: "success", message: "", data: products})
 	}catch(err){

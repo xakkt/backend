@@ -9,7 +9,7 @@ exports.allShoppingLists = async (req, res)=>{
 	
 	  try{
 		    const listInfo = {
-				_user:req.body._user,
+				_user:req.decoded.id,
 				_store:req.body._store
 			}
 			let shoppinglist = await ShoppinglistName.find(listInfo,'name').exec();
@@ -47,15 +47,16 @@ exports.addProductToshoppinglist = async(req, res) => {
 
 
 exports.createShoppingList = async function(req, res){
-	try{
+	
+	try{ 
 				const errors = await validationResult(req);
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
 				}
-				console.log(req.body);
+				
 				const ShoppinglistInfo = {
 					name: req.body.name,
-					_user: req.body._user, 
+					_user: req.decoded.id, 
 					_store: req.body._store
 				};
 
@@ -69,7 +70,6 @@ exports.createShoppingList = async function(req, res){
 },
 exports.updateShoppinglist = async function(req, res){
 		try{
-			    
 				const updatedList = await Shoppinglist.findByIdAndUpdate(req.body._shoppinglistid, {$set: {quantity:req.body.quantity}},{ new: true }).exec();
 				return res.json({status: "true", message: "Shopping List Updated", data: updatedList});
 			}catch(err){

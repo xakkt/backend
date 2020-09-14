@@ -24,7 +24,7 @@ const productCategoryRoutes = require('./routes/product_category')
 const homeRoute = require('./routes/home');
 const settingRoute = require('./routes/setting')
 const wishlistRoute = require('./routes/wishlist')
-const shiplistRoute = require('./routes/shoppinglist')
+const shoppinglistRoute = require('./routes/shoppinglist')
 
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -61,7 +61,7 @@ app.get('/chat',(req, res) => res.render('pages/socket'));
 app.use('/api/v1/user',userRoutes);
 app.use('/api/v1',homeRoute);
 app.use('/api/v1',storeRoutes);
-app.use('/api/v1',[shiplistRoute,wishlistRoute,settingRoute,productRoutes,productCategoryRoutes]);
+app.use('/api/v1',[shoppinglistRoute,wishlistRoute,settingRoute,productRoutes,productCategoryRoutes]);
 
 
 server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
