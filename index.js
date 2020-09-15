@@ -3,7 +3,6 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('./config/database')
 const path = require('path')
-const verifyjwt = require('./middlewares/tokenVerification');
 
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('./config/swagger.json')

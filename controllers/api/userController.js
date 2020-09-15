@@ -138,7 +138,7 @@ exports.authenticate = async (req, res) => {
 		
 		if(!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({status:false, message: "Invalid password!!!", data:null});
 		
-		const token = await jwt.sign({id: userInfo._id}, process.env.JWT_SECRET, { expiresIn: '10h' }); 
+		const token = await jwt.sign({id: userInfo._id}, process.env.JWT_SECRET, { expiresIn: '30d' }); 
 		return res.json({status:true, message: "user found!!!", data:{user: userInfo, token:token}});	
 	
 	}catch(err){

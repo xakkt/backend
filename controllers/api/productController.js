@@ -7,11 +7,11 @@ const fs = require('fs');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let products = await Product.find().populate('_category').exec();
+			let products = await Product.find().populate('_category').lean();
 			if(!products.length) return res.json({status: "false", message: "No data found", data: []});
 			products = await products.map( (product) =>{
-				return {product, image:`${process.env.BASE_URL}/${product.image}`}
-				//return {...product, category:product._category.name}
+				 product.image = `${process.env.BASE_URL}/images/products/${product.image}`;
+				 return product;
 			} )
 			return res.json({status: "success", baseUrl:process.env.BASE_URL, message: "", data: products});
 			

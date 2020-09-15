@@ -103,13 +103,21 @@ exports.deleteShoppinglist = async(req, res)=>{
 
 exports.shoppinglistProducts = async(req, res)=> {
     try{
-		let shoppinglist = await Shoppinglist.find({_shoppinglist:req.params.shoplist}).populate('_product','name sku price').exec();
+		let shoppinglist = await Shoppinglist.find({_shoppinglist:req.params.shoplist}).populate('_product','name sku price image').lean();
 		
 		if(!shoppinglist.length) return res.json({status: "false", message: "No data found", data: shoppinglist});
-		return res.json({status: "success", message: "", data: shoppinglist});
+
+		shoppinglist = await shoppinglist.map( (list) =>{
+			console.log(list._product.image)
+			list._product.image = `${process.env.BASE_URL}/images/products/${list._product.image}`;
+			return list;
+	   } )
+
+	   	return res.json({status: "success", message: "", data: shoppinglist});
 		
    }catch(err){
-		res.status(400).json({status: "success", message: "", data: err});
+	   console.log(err)
+		res.status(400).json({status: "failure", message: "", data: err});
    }
 }
 
