@@ -37,5 +37,11 @@ const shoppingSchema = new Schema({
  
 }, {timestamps:true});
 
+shoppingSchema.index({
+    _shoppinglist: 1,
+    _product: 1
+  }, {
+    unique: true,
+  });
 
 module.exports = mongoose.model('Shoppinglist', shoppingSchema);
