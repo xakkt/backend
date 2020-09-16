@@ -108,8 +108,8 @@ exports.shoppinglistProducts = async(req, res)=> {
 		if(!shoppinglist.length) return res.json({status: "false", message: "No data found", data: shoppinglist});
 
 		shoppinglist = await shoppinglist.map( (list) =>{
-			
-			list._product.image = (list._product.image)?`${process.env.BASE_URL}/images/products/${list._product.image}`:'';
+			console.log(list._product.image)
+			list._product.image = `${process.env.BASE_URL}/images/products/${list._product.image}`;
 			return list;
 	   } )
 
