@@ -9,9 +9,10 @@ const swaggerDocument = require('./config/swagger.json')
 
 const PORT = process.env.PORT || 4000
 const app = express();
+var cors = require('cors')
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
+app.use(cors())
 var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
 moment.tz.setDefault("America/New_York");

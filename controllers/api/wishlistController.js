@@ -35,7 +35,7 @@ exports.addPoductToWishlist = async(req, res) => {
 				return res.json({status: "success", message: "Product added to wishlist successfully", data: wishlist});
 			
 				}catch(err){
-					if(err.code==11000)return res.status(400).json({data: "List with this name already exist"});
+					if(err.code==11000)return res.status(400).json({data: "Product with this name already exist"});
 					return res.status(400).json({data: err.message});
 				}				
 					
@@ -60,10 +60,16 @@ exports.allWishlistProducts = async(req, res)=>{
 			return res.status(400).json({ errors: errors.array() });
 		}
 		console.log(req.body)
-		const products = await Wishlist.find({_user:req.decoded.id,_store:req.body._store}).exec();
-		if(!products.length) return res.json({status: "success", message: "no data found", data: []})
-		return res.json({status: "success", message: "", data: products})
-	}catch(err){
+		let wishlist = await Wishlist.find({_user:req.decoded.id,_store:req.body._store}).populate('_product','name image price').lean();
+		if(!wishlist.length) return res.json({status: "success", message: "no data found", data: []})
+		wishlist = wishlist.map( (list) =>{
+			let image_path = (list._product.image)?list._product.image:'not-available-image.jpg';
+			let image  = `${process.env.BASE_URL}/images/products/${image_path}`;
+						
+			return {...list, _product:{ ...list._product,image:image}};
+	   } )
+		return res.json({status: "success", message: "", data: wishlist})
+	}catch(err){ console.log(err)
 		return res.status(400).json({status:false, message: "", data:err});
 	}
 }

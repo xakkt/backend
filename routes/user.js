@@ -20,7 +20,7 @@ const authValidation = [
 ]
 
 router.post('/create',userValidation,userController.create);
-router.get('/list', verifyjwt.checkToken,userController.list);
+router.get('/list', userController.list);
 router.post('/authenticate', authValidation, userController.authenticate);
 router.put('/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/:id', verifyjwt.checkToken,userController.getUser);

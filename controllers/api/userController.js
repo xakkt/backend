@@ -51,7 +51,7 @@ exports.list = function(req, res){
 			
 		let query = User.find({},{password:false, updatedAt:false}).exec();
 		query.then(function(result){
-			res.json({status:"success", data:{users: result}}); 
+			res.json({status:"success", users: result}); 
 		}).catch(err=>{ console.log(err); res.status(400).json({status:"false", data:err}) }); 	
 	
 },
@@ -94,7 +94,7 @@ exports.create = async (req, res) => {
 }; 
 
 exports.updateProfile = async function(req, res){
-console.log('fds');
+
 	try{
 		let userinfo =  {
 						first_name: req.body.first_name,
