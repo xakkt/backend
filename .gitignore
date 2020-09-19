@@ -1,5 +1,6 @@
 # Node build artifacts
 node_modules
+public/images/products
 npm-debug.log
 .env
 # Local development
