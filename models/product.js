@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
+const FKHelper = require('../helper/foreign-key-constraint');
 
 const Schema = mongoose.Schema;
 
@@ -12,7 +13,13 @@ const productSchema = new Schema({
   _category: {
     type: Schema.Types.ObjectId,
     ref: 'ProductCategory',
-    required: true
+    required: true,
+    validate: {
+      validator: function(v) {
+            return FKHelper(mongoose.model('ProductCategory'), v);
+        },
+        message: `ProductCategory doesn't exist`
+    } 
   },
   name:{
       type: Map,

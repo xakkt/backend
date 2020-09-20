@@ -9,6 +9,7 @@ exports.dashboard = async (req, res)=>{
 	var product = [];
 	try{
 		let categories = await ProductCategory.find({_store:req.params.storeid}).populate('_products','name sku price image').lean();
+		console.log(categories);
 		if(!categories.length) return res.json({status: "false", message: "No data found", data: categories});
 
 		 categories.map(element => {
