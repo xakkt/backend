@@ -63,11 +63,12 @@ exports.allWishlistProducts = async(req, res)=>{
 		let wishlist = await Wishlist.find({_user:req.decoded.id,_store:req.body._store}).populate('_product','name image price').lean();
 		if(!wishlist.length) return res.json({status: "success", message: "no data found", data: []})
 		wishlist = wishlist.map( (list) =>{
+			if(!list._product) return
 			let image_path = (list._product.image)?list._product.image:'not-available-image.jpg';
 			let image  = `${process.env.BASE_URL}/images/products/${image_path}`;
 						
 			return {...list, _product:{ ...list._product,image:image}};
-	   } )
+	   } ).filter(Boolean);
 		return res.json({status: "success", message: "", data: wishlist})
 	}catch(err){ console.log(err)
 		return res.status(400).json({status:false, message: "", data:err});
