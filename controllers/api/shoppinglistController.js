@@ -108,11 +108,12 @@ exports.shoppinglistProducts = async(req, res)=> {
 		if(!shoppinglist.length) return res.json({status: "false", message: "No data found", data: shoppinglist});
 
 		shoppinglist = shoppinglist.map( (list) =>{
+			if(!list._product) return
 			let image_path = (list._product.image)?list._product.image:'not-available-image.jpg';
 			let image  = `${process.env.BASE_URL}/images/products/${image_path}`;
 						
 			return {...list, _product:{ ...list._product,image:image}};
-	   } )
+	   } ).filter(Boolean);
 
 	   	return res.json({status: "success", message: "", data: shoppinglist});
 		
