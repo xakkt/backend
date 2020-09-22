@@ -30,7 +30,7 @@ exports.addProductToshoppinglist = async(req, res) => {
                
 				try{
 					    shoppinglistInfo = {
-							_shoppinglist: req.body._shoppinglist,
+							 _shoppinglist: req.body._shoppinglist,
 							 _product:req.body._product,
 							 quantity:req.body.quantity
 						} 

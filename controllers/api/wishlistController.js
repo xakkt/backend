@@ -3,18 +3,6 @@ var moment = require('moment');
 const { validationResult } = require('express-validator');
 
 
-exports.list = async (req, res)=>{
-	
-	  try{
-			let category = await ProductCategory.find().exec();
-			if(!category.length) return res.json({status: "false", message: "No data found", data: category});
-			return res.json({status: "success", message: "", data: category});
-			
-	   }catch(err){
-			res.status(400).json({status: "success", message: "Category added successfully", data: err});
-	   }
-},
-
 exports.addPoductToWishlist = async(req, res) => { 
 
     const errors = await validationResult(req);
@@ -45,10 +33,9 @@ exports.addPoductToWishlist = async(req, res) => {
 exports.deleteProductWishlist = async(req,res)=>{
   
 	Wishlist.deleteOne({ _id: req.params.wishlistid }, function (err, data) {
-		console.log(data);
-		console.log(err)
-		if (err) return handleError(err);
-		 return res.json({status:true, message: "Product Removed", data:data});
+		 if (err) return res.json({err:err});
+		 if(!data.deletedCount){ return res.json({status:true, message: "No product found", data:""}); }
+		 return res.json({status:true, message: "Product Removed from Wishlist", data:data});
 	  });
 	
 }
