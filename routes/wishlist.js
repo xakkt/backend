@@ -19,7 +19,7 @@ const listProductsVali = [
 ]
 router.post('/wishlist/add_product', wishlistValidation, wishController.addPoductToWishlist);
 router.post('/wishlist/products', listProductsVali, wishController.allWishlistProducts);
-router.delete('/wishlist/remove/:wishlistid', wishController.deleteProductWishlist);
+router.delete('/wishlist/remove/product', wishController.deleteProductWishlist);
 
 
 

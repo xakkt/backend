@@ -29,10 +29,13 @@ exports.addPoductToWishlist = async(req, res) => {
 					
 			}; 
 
-
 exports.deleteProductWishlist = async(req,res)=>{
-  
-	Wishlist.deleteOne({ _id: req.params.wishlistid }, function (err, data) {
+    const queryInfo = {
+		_store:req.body._store,
+		_product:req.body._product,
+		_user:req.body._user
+	}
+	Wishlist.deleteOne(queryInfo, function (err, data) {
 		 if (err) return res.json({err:err});
 		 if(!data.deletedCount){ return res.json({status:true, message: "No product found", data:""}); }
 		 return res.json({status:true, message: "Product Removed from Wishlist", data:data});
