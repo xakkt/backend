@@ -11,13 +11,13 @@ exports.addPoductToWishlist = async(req, res) => {
                 }
                 console.log(req.body);
 				try{
-					const wishlistInfo = new Wishlist({
+					const wishlistInfo = {
 						_user: req.decoded.id, 
 						_product: req.body._product,
 						_store: req.body._store,
                         wish_price: req.body.wish_price,
                         max_price: req.body.max_price
-					})
+					}
 				
 				const wishlist = await Wishlist.create(wishlistInfo);
 				return res.json({status: "success", message: "Product added to wishlist successfully", data: wishlist});

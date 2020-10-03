@@ -25,6 +25,7 @@ const homeRoute = require('./routes/home');
 const settingRoute = require('./routes/setting')
 const wishlistRoute = require('./routes/wishlist')
 const shoppinglistRoute = require('./routes/shoppinglist')
+const cartRoute = require('./routes/cart')
 
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -51,16 +52,13 @@ io.on('connection', function(socket){
 
   });
 
+app.get('/admin',(req,res)=> res.render('admin/index'))
 
-app.get('/', (req, res) => res.render('pages/index'))
-app.get('/endride',(req,res)=>res.render('pages/endride'))
-app.get('/saveform', (req, res) => res.render('pages/form'))
-app.get('/demo', (req, res) => res.render('pages/demo'))
-app.get('/chat',(req, res) => res.render('pages/socket'));
 
 app.use('/api/v1/user',userRoutes);
 app.use('/api/v1',homeRoute);
 app.use('/api/v1',storeRoutes);
+app.use('/api/v1',cartRoute);
 app.use('/api/v1',[shoppinglistRoute,wishlistRoute,settingRoute,productRoutes,productCategoryRoutes]);
 
 
