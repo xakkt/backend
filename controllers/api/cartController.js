@@ -41,7 +41,7 @@ exports.addPoductToCart = async (req, res) => {
                         cart: {
                             _product: req.body._product,
                             quantity: req.body.quantity,
-                            total_price: productInfo.price.toFixed(2)*req.body.quantity,
+                            total_price: productInfo.price*req.body.quantity,
                         },
                  }
              
