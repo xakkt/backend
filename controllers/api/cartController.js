@@ -1,4 +1,5 @@
 const Cart = require('../../models/cart')
+const Product = require('../../models/product');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 
@@ -32,17 +33,20 @@ exports.addPoductToCart = async (req, res) => {
                 }
                 
 				try{
+                    var productInfo = await Product.findById(req.body._product);
+
 					const cartInfo = {
 						_user: req.decoded.id, 
                         _store: req.body._store,
                         cart: {
                             _product: req.body._product,
                             quantity: req.body.quantity,
-                            total_price: req.body.total_price,
+                            total_price: productInfo.price*req.body.quantity,
                         },
                  }
              
-
+                
+                console.log(productInfo.price);
                 var product = await Cart.findOne({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo.cart._product}}});
                 if(product?.cart){
                     
