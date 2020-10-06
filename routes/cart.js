@@ -10,7 +10,7 @@ router.use(verifyjwt.checkToken);
 const cartValidation = [
     body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
     body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
-    body('quantity').not().isEmpty().trim().escape().withMessage('cart_price should not be empty'),
+    body('quantity').not().isEmpty().withMessage('cart_price should not be empty'),
     //body('total_price').not().isEmpty().trim().escape().withMessage('max_price should not be empty'),
 ]
 

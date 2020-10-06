@@ -2,7 +2,7 @@ const Cart = require('../../models/cart')
 const Product = require('../../models/product');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
-
+var mongoose = require('mongoose');
 exports.listCartProduct = async (req, res) => { 
     
     const errors = await validationResult(req);
@@ -46,14 +46,15 @@ exports.addPoductToCart = async (req, res) => {
                  }
              
                 
-                console.log(productInfo.price);
                 var product = await Cart.findOne({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo.cart._product}}});
                 if(product?.cart){
                     
-                    product =  await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo.cart._product}}},{$set : { 
+                   /* product =  await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo.cart._product}}},{$set : { 
                         "cart.$.quantity":product.cart[0].quantity+1
                     }},{new: true, upsert: true}).lean();
-                   
+                   */
+
+                   return res.json({status: "false", message: "Product is already in the cart"})
                     
                 }else{
                     
@@ -109,14 +110,18 @@ exports.updateProductQuantity = async(req,res) => {
         }
         try{            
             const cartInfo = {
+                quantity:req.body.quantity,
                 _store:req.body._store,
                 _product:req.body._product,
                 _user:req.decoded.id,
-                quantity:req.body.quantity,
-                total_price:req.body.total_price
             }
+           var productInfo = await Product.findById(req.body._product); 
+          //var cartProduct = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
+           var pQuantity = cartInfo.quantity;
+           var pPrice    = productInfo.price*pQuantity;    
+           console.log(productInfo.price)   
            var product =  await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo._product}}},{$set : { 
-                "cart.$.quantity":cartInfo.quantity, 'cart.$.total_price':cartInfo.total_price
+                "cart.$.quantity":pQuantity, 'cart.$.total_price':pPrice
             }},{new: true, upsert: true}).lean();
           //  var product = await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo._product}}},{$set:{cart: {'cart.$.quantity': cartInfo.quantity, 'cart.$.total_price':cartInfo.total_price }}},{new: true});
             if(product?.cart){
