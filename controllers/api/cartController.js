@@ -34,7 +34,7 @@ exports.addPoductToCart = async (req, res) => {
                 
 				try{
                     var productInfo = await Product.findById(req.body._product);
-
+                    if(!productInfo) return res.json({status: "false", message: "Product with this id not exists"})
 					const cartInfo = {
 						_user: req.decoded.id, 
                         _store: req.body._store,
