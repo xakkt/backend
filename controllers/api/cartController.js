@@ -2,7 +2,6 @@ const Cart = require('../../models/cart')
 const Product = require('../../models/product');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
-var mongoose = require('mongoose');
 exports.listCartProduct = async (req, res) => { 
     
     const errors = await validationResult(req);
@@ -15,10 +14,22 @@ exports.listCartProduct = async (req, res) => {
             _user: req.decoded.id, 
             _store: req.params.store,
            }
-        console.log(req.params.store)
+       
         var products = await Cart.find({_user:cartInfo._user,_store:cartInfo._store}).lean();
         if(!products.length) return res.json({ message: "No product found", data:""});
-        return res.json({status: "success", message: "All cart products", data: products});
+
+       let total_quantity, total_price; 
+       products.forEach((product, index) => {
+           total_quantity = product.cart.map(product =>  product.quantity).reduce(function(acc, cur){
+               return acc+cur;
+           }) 
+           total_price = product.cart.map(product =>  product.total_price).reduce(function(acc, cur){
+            return acc+cur;
+        }) 
+        
+        });
+        
+        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price}});
 
     }catch(err){
         return res.status(400).json({data: err.message});

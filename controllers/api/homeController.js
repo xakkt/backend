@@ -6,10 +6,13 @@ const { validationResult } = require('express-validator');
 const Wishlist = require('../../models/wishlist')
 const Shoppinglist = require('../../models/shoppinglist')
 const ShoppinglistName = require('../../models/shoppinglist_name')
+const Cart = require('../../models/cart')
+var mongoose = require('mongoose');
 
 exports.dashboard = async (req, res)=>{
 	var product = [];
 	var wishlistids = [];
+	var cartProductList = {};
 	var shoppinglistids = [];
 	var shoppinglistProductIds = [];
 	try{
@@ -27,8 +30,14 @@ exports.dashboard = async (req, res)=>{
 				message: 'Token is not valid'
 			  });
 			} else {
-			  
-			  let wishlist = await Wishlist.find({_user:decoded.id,_store:req.params.storeid},'_product').lean();
+				
+				var cartProducts = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(decoded.id),_store:mongoose.Types.ObjectId(req.params.storeid)} }])
+				
+				cartProducts.map(product => {
+					cartProductList[product.cart._product] = product.cart.quantity
+				})
+
+			    let wishlist = await Wishlist.find({_user:decoded.id,_store:req.params.storeid},'_product').lean();
 			    wishlist.map(data => {
 				wishlistids.push(data._product.toString())
 			  })
@@ -38,7 +47,7 @@ exports.dashboard = async (req, res)=>{
 				shoppinglistids.push(data._id)
 			  })
 			  let listProducts = await Shoppinglist.find({_shoppinglist:{$in:shoppinglistids}},'_product').lean()
-			  console.log('fds',listProducts)
+			 
 			  listProducts.map(data => {
 				shoppinglistProductIds.push(data._product.toString())
 			  })
@@ -54,12 +63,20 @@ exports.dashboard = async (req, res)=>{
 		 categories.map(element => {
 			
 			return element._products.map(data => {
-			
-				if(wishlistids.includes(data._id.toString()) && shoppinglistProductIds.includes(data._id.toString())){
+
+				var productId = data._id.toString();
+;
+				if(productId in cartProductList){
+					data = {...data, type:"product", quantity:cartProductList[productId]}
+				}else{
+					data = {...data, type:"product", quantity:0}
+				}
+
+				if(wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)){
 					data = {...data, type:"product", is_favourite:1, in_shoppinglist:1}
-				}else if(shoppinglistProductIds.includes(data._id.toString())){
+				}else if(shoppinglistProductIds.includes(productId)){
 					data = {...data, type:"product", is_favourite:0, in_shoppinglist:1}
-				}else if(wishlistids.includes(data._id.toString())){
+				}else if(wishlistids.includes(productId)){
 					data = {...data, type:"product", is_favourite:1, in_shoppinglist:0}
 				}else{
 					data = {...data, type:"product", is_favourite:0, in_shoppinglist:0}

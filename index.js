@@ -53,6 +53,7 @@ io.on('connection', function(socket){
   });
 
 app.get('/admin',(req,res)=> res.render('admin/index'))
+app.get('/admin/advance',(req, res)=> res.render('admin/product/add-product'))
 
 
 app.use('/api/v1/user',userRoutes);
