@@ -29,7 +29,7 @@ exports.listCartProduct = async (req, res) => {
         
         });
         
-        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price}});
+        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price.toFixed(2)}});
 
     }catch(err){
         return res.status(400).json({data: err.message});
