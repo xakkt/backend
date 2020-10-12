@@ -10,6 +10,13 @@ const storeValidation = [
     body('name').not().isEmpty().trim().escape(),
     body('description').not().isEmpty().trim().escape(),
     body('contact_no').not().isEmpty().trim().escape(),
+    verifyjwt.checkToken
+]
+
+const storeLocationValidation = [
+    body('name').not().isEmpty().trim().escape(),
+    body('description').not().isEmpty().trim().escape(),
+    body('contact_no').not().isEmpty().trim().escape(),
     body('zipcode').not().isEmpty().trim().escape(),
     body('lat').not().isEmpty().trim().escape(),
     body('long').not().isEmpty().trim().escape(),

@@ -203,35 +203,29 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Select Departments</label>
-                  <select class="select2" multiple="multiple" style="width: 100%;">
-                    <option selected="selected">Grocery</option>
-                    <option>Meat</option>
-                    <option>Produce</option>
-                    <option>Frozen</option>
-                    <option>Dairy</option>
-                    <option>Tortilleria</option>
-                    
+                  <label for="exampleInputEmail1">Name</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                  <label>Address</label>
+                  <select class="form-control select2" disabled="disabled" style="width: 100%;">
+                    <option selected="selected">Alabama</option>
+                    <option>Alaska</option>
+                    <option>California</option>
+                    <option>Delaware</option>
+                    <option>Tennessee</option>
+                    <option>Texas</option>
+                    <option>Washington</option>
                   </select>
                 </div>
                 <!-- /.form-group -->
-                
               </div>
               <!-- /.col -->
               <div class="col-md-6">
-                
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Address</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
-                </div>
-                
-                <!-- /.form-group -->
-              </div>
-
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Country</label>
-                  <select class="select2" data-placeholder="Select a State" style="width: 100%;">
+                  <label>Multiple</label>
+                  <select class="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
                     <option>Alabama</option>
                     <option>Alaska</option>
                     <option>California</option>
@@ -242,15 +236,12 @@
                   </select>
                 </div>
                 <!-- /.form-group -->
-              </div>
-
-              <div class="col-md-6">
                 <div class="form-group">
-                  <label>States</label>
-                  <select class="select2" data-placeholder="Select a State" style="width: 100%;">
-                    <option>Alabama</option>
+                  <label>Disabled Result</label>
+                  <select class="form-control select2" style="width: 100%;">
+                    <option selected="selected">Alabama</option>
                     <option>Alaska</option>
-                    <option>California</option>
+                    <option disabled="disabled">California (disabled)</option>
                     <option>Delaware</option>
                     <option>Tennessee</option>
                     <option>Texas</option>
@@ -259,76 +250,47 @@
                 </div>
                 <!-- /.form-group -->
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>City</label>
-                  <select class="select2" data-placeholder="Select a State" style="width: 100%;">
-                    <option>Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-                <!-- /.form-group -->
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>States</label>
-                  <select class="select2" data-placeholder="Select a State" style="width: 100%;">
-                    <option>Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-                <!-- /.form-group -->
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Latitude</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter lat">
-                </div>
-                <!-- /.form-group -->
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Longitude</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter long">
-                </div>
-                <!-- /.form-group -->
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Monday Openining Time</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Closing Time</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Address</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Address</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
-                </div>
-            </div>
-
-              
               <!-- /.col -->
             </div>
             <!-- /.row -->
 
-          
+            <h5>Custom Color Variants</h5>
+            <div class="row">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Minimal (.select2-danger)</label>
+                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                    <option selected="selected">Alabama</option>
+                    <option>Alaska</option>
+                    <option>California</option>
+                    <option>Delaware</option>
+                    <option>Tennessee</option>
+                    <option>Texas</option>
+                    <option>Washington</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Multiple (.select2-purple)</label>
+                  <div class="select2-purple">
+                    <select class="select2" multiple="multiple" data-placeholder="Select a State" data-dropdown-css-class="select2-purple" style="width: 100%;">
+                      <option>Alabama</option>
+                      <option>Alaska</option>
+                      <option>California</option>
+                      <option>Delaware</option>
+                      <option>Tennessee</option>
+                      <option>Texas</option>
+                      <option>Washington</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+            </div>
             <!-- /.row -->
           </div>
           <!-- /.card-body -->

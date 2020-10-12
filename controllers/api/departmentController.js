@@ -1,4 +1,5 @@
-const Store = require('../../models/store');
+const Department = require('../../models/department');
+const store = require('../../models/store');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 
@@ -6,20 +7,19 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let store = await Store.find().exec();
-			if(!store.length) return res.json({status: "false", message: "No data found", data: store});
-			return res.json({status: "success", message: "", data: store});
+			let department = await Department.find().exec();
+			if(!department.length) return res.json({status: "false", message: "No data found", data: department});
+			return res.json({status: "success", message: "", data: department});
 			
 	   }catch(err){
-           console.log(err)
-			res.status(400).json({status: "success", message: "", data: err});
+			res.status(400).json({status: "success", message: "Department added successfully", data: err});
 	   }
 },
 
 exports.show =  async (req, res)=> { 
 	try{
-		const stores = await Store.findById(req.params.id).exec();
-		res.json({status: "success", message: "", data: stores});
+		const departments = await Department.findById(req.params.id).exec();
+		res.json({status: "success", message: "", data: departments});
 	 }catch(err){
 		res.status(400).json({status: "false", data: err});
    }
@@ -45,8 +45,8 @@ exports.create = async(req, res) => {
 						}
 						
 				
-				let store = await Store.create(storeinfo);
-				res.json({status: "success", message: "Store added successfully", data: store});
+				let department = await Department.create(storeinfo);
+				res.json({status: "success", message: "Department added successfully", data: department});
 			
 				}catch(err){
 					res.status(400).json({data: err.message});
@@ -73,12 +73,12 @@ exports.nearByStores = async(req, res) =>{
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-	Store.find({ location :  { $near :	{ $geometry :  
+	Department.find({ location :  { $near :	{ $geometry :  
 				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:10000 	}  } 
-		} ).then( stores => {
+		} ).then( departments => {
 			
-		   			if(!stores.length) return res.status(400).json({status:false, message: "No store found nearby"});
-					return res.json({status:true, message: "", data:stores}); 
+		   			if(!departments.length) return res.status(400).json({status:false, message: "No department found nearby"});
+					return res.json({status:true, message: "", data:departments}); 
 								
 		}).catch( err => {
 			res.status(400).json({status:false, message:err});
@@ -106,9 +106,9 @@ exports.updateStore = async function(req, res){
 		}
 
 		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
-		const store =  await Store.findByIdAndUpdate({ _id: req.params.id }, storeinfo,{ new: true,	upsert: true});
-			if(store)return res.json({status:true, message: "Store updated", data:store});
-			return res.status(400).json({status:false, message: "Store not found"});
+		const department =  await Department.findByIdAndUpdate({ _id: req.params.id }, storeinfo,{ new: true,	upsert: true});
+			if(department)return res.json({status:true, message: "Department updated", data:department});
+			return res.status(400).json({status:false, message: "Department not found"});
 			
 		} catch(err){ console.log(err)
 			res.status(400).json({status:false, message: "Not updated", data:err});
@@ -118,17 +118,17 @@ exports.updateStore = async function(req, res){
 }
 
 exports.deleteStore = async(req,res)=>{
-	Store.deleteOne({ _id: req.params.id }, function (err) {
+	Department.deleteOne({ _id: req.params.id }, function (err) {
 		if (err) return res.status(400).json({data:err});
-		 return res.json({status:true, message: "Store Deleted", data:[]});
+		 return res.json({status:true, message: "Department Deleted", data:[]});
 	  });
 }
 
 exports.getStoreByZipcode = async(req, res)=>{
 	try{
-		let stores = await Store.find({zipcode:req.params.zipcode}).lean();
-		if(!stores.length) return res.json({message: "Not store found"});
-		return res.json({status:true, message: "", data:stores});
+		let departments = await Department.find({zipcode:req.params.zipcode}).lean();
+		if(!departments.length) return res.json({message: "Not department found"});
+		return res.json({status:true, message: "", data:departments});
 	}catch(err){
 		res.status(400).json({data:err});
 	}

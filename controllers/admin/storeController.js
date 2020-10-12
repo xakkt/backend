@@ -1,18 +1,17 @@
-const Store = require('../../models/store');
-var moment = require('moment');
+const Store = require('../../models/department');
+const store = require('../../models/store');
 const { validationResult } = require('express-validator');
 
 
 exports.list = async (req, res)=>{
 	
 	  try{
-			let store = await Store.find().exec();
-			if(!store.length) return res.json({status: "false", message: "No data found", data: store});
-			return res.json({status: "success", message: "", data: store});
+			let stores = await Store.find().exec();
+			if(!stores.length) return res.render('admin/store/listing',{ menu:"store", submenu:"list", data:"" })
+			return res.render('admin/store/listing',{ menu:"store", submenu:"list", stores:stores })
 			
 	   }catch(err){
-           console.log(err)
-			res.status(400).json({status: "success", message: "", data: err});
+			res.status(400).json({status: "success", data: err});
 	   }
 },
 
@@ -27,6 +26,7 @@ exports.show =  async (req, res)=> {
 	
 },
 exports.create = async(req, res) => { 
+    
 
 				const errors = await validationResult(req);
 				if (!errors.isEmpty()) {
@@ -34,21 +34,18 @@ exports.create = async(req, res) => {
 				}
 
 				try{
-					const storeinfo =  { 
+					const departmentinfo =  { 
 							name: req.body.name,
 							description: req.body.description, 
-							contact_no: req.body.contact_no,
-							_user: req.decoded.id,
-							no_of_stores: req.body.no_of_stores,
-							logo: req.body.logo,
-							status:req.body.status, 
+					     	logo: req.file.filename
 						}
 						
 				
-				let store = await Store.create(storeinfo);
-				res.json({status: "success", message: "Store added successfully", data: store});
+				let department = await Store.create(departmentinfo);
+				res.json({status: "success", message: "Store added successfully", data: department});
 			
 				}catch(err){
+                    console.log(err)
 					res.status(400).json({data: err.message});
 				}				
 					
@@ -77,7 +74,7 @@ exports.nearByStores = async(req, res) =>{
 				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:10000 	}  } 
 		} ).then( stores => {
 			
-		   			if(!stores.length) return res.status(400).json({status:false, message: "No store found nearby"});
+		   			if(!stores.length) return res.status(400).json({status:false, message: "No department found nearby"});
 					return res.json({status:true, message: "", data:stores}); 
 								
 		}).catch( err => {
@@ -96,7 +93,7 @@ exports.updateStore = async function(req, res){
 					return res.status(400).json({ errors: errors.array() });
 				}
 
-		let storeinfo =  { 
+		let departmentinfo =  { 
 			name: req.body.name,
 			description: req.body.description, 
 			contact_no: req.body.contact_no,
@@ -106,8 +103,8 @@ exports.updateStore = async function(req, res){
 		}
 
 		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
-		const store =  await Store.findByIdAndUpdate({ _id: req.params.id }, storeinfo,{ new: true,	upsert: true});
-			if(store)return res.json({status:true, message: "Store updated", data:store});
+		const department =  await Store.findByIdAndUpdate({ _id: req.params.id }, departmentinfo,{ new: true,	upsert: true});
+			if(department)return res.json({status:true, message: "Store updated", data:department});
 			return res.status(400).json({status:false, message: "Store not found"});
 			
 		} catch(err){ console.log(err)
@@ -127,7 +124,7 @@ exports.deleteStore = async(req,res)=>{
 exports.getStoreByZipcode = async(req, res)=>{
 	try{
 		let stores = await Store.find({zipcode:req.params.zipcode}).lean();
-		if(!stores.length) return res.json({message: "Not store found"});
+		if(!stores.length) return res.json({message: "Not department found"});
 		return res.json({status:true, message: "", data:stores});
 	}catch(err){
 		res.status(400).json({data:err});

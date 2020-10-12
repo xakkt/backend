@@ -1,19 +1,49 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
-
+const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
 
-const storeSchema = Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true
+
+const storeSchema = new Schema({ 
+    _department: {
+        type: Schema.Types.ObjectId,
+        ref:'User',
+        
+        validate: {
+                validator: function(v) {
+                return FKHelper(mongoose.model('Department'), v);
+          },
+        message: `Department doesn't exist`
+      }
+    
     },
-    store_no: {
-        type: Number
+    _user: {
+        type: String,
+        validate: {
+                validator: function(v) {
+                return FKHelper(mongoose.model('User'), v);
+             },
+            message: `User doesn't exist`
+        }
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    _country: {
+        type: String,
+        required: true
     },
     zipcode: {
-        type: Number,
+        type: String,
         required: true
     },
     location: {
@@ -27,39 +57,22 @@ const storeSchema = Schema({
             required: true
         }
     },
-    description: {
-        type: String,
-        required: true
-    },
-    logo: {
-        type: String,
-
-    },
     contact_no: {
         type: String,
         required: true
     },
-    status: {
-        type: Boolean,
-        default: false
-    },
-    isdeleted: {
-        type: Boolean,
-        default: false
-    },
-    user_id: {
-        type: String,
-        default: false
-    },
-    icon: {
-        type: Number,
-        default: 0
-    }
-}, {
-    timestamps: true
-});
+    time_schedule: [
+        { Monday:{startTime:Date,endTime:Date} },
+        { Tuesday:{startTime:Date,endTime:Date} },
+        { Wednesday:{startTime:Date,endTime:Date} },
+        { Thursday:{startTime:Date,endTime:Date} },
+        { Friday:{startTime:Date,endTime:Date} },
+        { Saturday:{startTime:Date,endTime:Date} },
+        { Sunday:{startTime:Date,endTime:Date} }
+    ]
+ });
 
-storeSchema.index({ location: "2dsphere" })
-storeSchema.plugin(uniqueValidator)
+ storeSchema.index({ location: "2dsphere" })
+ storeSchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model('Store', storeSchema);

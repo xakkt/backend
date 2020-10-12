@@ -13,9 +13,10 @@ var cors = require('cors')
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 app.use(cors())
-var moment = require('moment-timezone');
+var moment = require('moment');
+//var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
-moment.tz.setDefault("America/New_York");
+//moment.tz.setDefault("America/New_York");
 
 const userRoutes = require('./routes/user'); 
 const storeRoutes = require('./routes/store');
@@ -31,6 +32,7 @@ const adminRoute = require('./routes/admin')
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(logger('dev'));
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({extended: true}));
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -40,6 +42,7 @@ app.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+app.locals.moment = require('moment');
 
 io.on('connection', function(socket){
     console.log('a user connected');

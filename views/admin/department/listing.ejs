@@ -156,12 +156,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Stores</h1>
+            <h1>Departments</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Stores</li>
+              <li class="breadcrumb-item active">Departments</li>
             </ol>
           </div>
         </div>
@@ -178,7 +178,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All ff</h3>
+                <h3 class="card-title">All Departments</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -186,36 +186,36 @@
                   <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>Zipcode</th>
-                    <th>State</th>
-                    <th>Contact no.</th>
+                    <th>No of Stores</th>
+                    <th>Description</th>
+                    <th>Is Active</th>
+                    <th>Create At</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
                   
+                   <% departments.forEach(function(department){ %>
                   <tr>
-                    <td>Gilco Heights</td>
-                    <td>Chandigarh</td>
-                    <td>Chandigarh</td>
-                    <td>160004</td>
-                    <td>Punjab</td>
-                    <td>9872100824</td>
-                    <td>edit</td>
+                    <td><%= department.name %></td>
+                    <td><%= department.no_of_stores %></td>
+                    <td><%= department.description %></td>
+                    <td><%= department.is_active %> </td>
+                    <td><%= moment(department.createdAt).format('MMMM Do YYYY'); %></td>
+                    <td><i class="far fa-trash-alt"></i>&nbsp;&nbsp;<i class="fas fa-pencil-alt"></i></td>
                   </tr>
-                  
+                  <% }) %>
                   </tbody>
                   <tfoot>
                     <tr>
-                      <th>Name</th>
-                      <th>Address</th>
-                      <th>City</th>
-                      <th>Zipcode</th>
-                      <th>Contact no.</th>
-                      <th>Action</th>
-                    </tr>
+                      <tr>
+                        <th>Name</th>
+                        <th>No of Stores</th>
+                        <th>Description</th>
+                        <th>Is Active</th>
+                        <th>Create At</th>
+                        <th>Action</th>
+                      </tr>
                   </tfoot>
                 </table>
               </div>

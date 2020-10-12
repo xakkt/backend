@@ -15,7 +15,7 @@ exports.listCartProduct = async (req, res) => {
             _store: req.params.store,
            }
        
-        var products = await Cart.find({_user:cartInfo._user,_store:cartInfo._store}).lean();
+        var products = await Cart.find({_user:cartInfo._user,_store:cartInfo._store}).populate('_product').lean();
         if(!products.length) return res.json({ message: "No product found", data:""});
 
        let total_quantity, total_price; 

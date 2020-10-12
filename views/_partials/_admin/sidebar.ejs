@@ -36,25 +36,85 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link <% if (menu === 'dashboard') { %> active <% } %>">
+            <a href="/admin" class="nav-link <% if (menu === 'dashboard') { %> active <% } %>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p> Dashboard  </p>
             </a>
             
           </li>
-        <!--- Stores ---->
-         <li class="nav-item <% if (menu === 'stores') { %> menu-open <% } %>">
-            <a href="#" class="nav-link <% if (menu === 'stores') { %> active <% } %>">
+          <!-- Users -->
+          <li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">
+            <a href="#" class="nav-link <% if (menu === 'departments') { %> active <% } %>">
               <i class="nav-icon fas fa-box-open"></i>
               <p>
-                Stores
+                Users
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               
               <li class="nav-item">
-                <a href="/admin/store/create" class="nav-link <% if (menu === 'stores' && submenu === 'create' ) { %> active <% } %>">
+                <a href="/admin/department/create" class="nav-link <% if (menu === 'departments' && submenu === 'create' ) { %> active <% } %>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add New User</p>
+                </a>
+              </li>
+              
+            </ul>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="/admin/departments" class="nav-link <% if (menu === 'departments' && submenu === 'list' ) { %> active <% } %>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Departments</p>
+                </a>
+              </li>
+             
+            </ul>
+          </li>
+        <!--- Departments ---->
+         <li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">
+            <a href="#" class="nav-link <% if (menu === 'departments') { %> active <% } %>">
+              <i class="nav-icon fas fa-box-open"></i>
+              <p>
+                Departments
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="/admin/department/create" class="nav-link <% if (menu === 'departments' && submenu === 'create' ) { %> active <% } %>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add New Department</p>
+                </a>
+              </li>
+              
+            </ul>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="/admin/departments" class="nav-link <% if (menu === 'departments' && submenu === 'list' ) { %> active <% } %>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Departments</p>
+                </a>
+              </li>
+             
+            </ul>
+          </li>
+          <!-- Store -->
+          <li class="nav-item <% if (menu === 'store') { %> menu-open <% } %>">
+            <a href="#" class="nav-link <% if (menu === 'store') { %> active <% } %>">
+                <i class="nav-icon fas fa-cube"></i>
+              <p>
+                Stores
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+             
+              <li class="nav-item">
+                <a href="/admin/store/create" class="nav-link <% if (menu === 'store' && submenu === 'create' ) { %> active <% } %>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New Store</p>
                 </a>
@@ -64,7 +124,7 @@
             <ul class="nav nav-treeview">
               
               <li class="nav-item">
-                <a href="/admin/stores" class="nav-link <% if (menu === 'stores' && submenu === 'list' ) { %> active <% } %>">
+                <a href="/admin/stores" class="nav-link  <% if (menu === 'store' && submenu === 'list' ) { %> active <% } %>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>All Stores</p>
                 </a>
@@ -94,7 +154,7 @@
             <ul class="nav nav-treeview">
               
               <li class="nav-item">
-                <a href="/admin/products" class="nav-link  <% if (menu === 'products' && submenu === 'create' ) { %> list <% } %>">
+                <a href="/admin/products" class="nav-link  <% if (menu === 'products' && submenu === 'list' ) { %> active <% } %>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>All Products</p>
                 </a>
@@ -242,12 +302,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/forms/general.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>General Elements</p>
-                </a>
-              </li>
+              
               <li class="nav-item">
                 <a href="pages/forms/advanced.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -283,6 +338,14 @@
               <i class="nav-icon far fa-image"></i>
               <p>
                 Deal Analytics
+              </p>
+            </a>
+          </li>
+          <li class="nav-item <% if (menu === 'invoice') { %> menu-open <% } %>">
+            <a href="/admin/invoice" class="nav-link">
+              <i class="nav-icon far fa-image"></i>
+              <p>
+                 Invoice
               </p>
             </a>
           </li>
