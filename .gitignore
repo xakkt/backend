@@ -1,6 +1,5 @@
 # Node build artifacts
 node_modules
-public/images/products
 config/database.js
 npm-debug.log
 .env
