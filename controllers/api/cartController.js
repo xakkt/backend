@@ -33,7 +33,7 @@ exports.listCartProduct = async (req, res) => {
             code:'AZXPN102',
             discount: '20%' 
           }
-        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon:coupon,sub_total:total_price-100 }});
+        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon:coupon,sub_total:(total_price-100).toFixed(2) }});
 
     }catch(err){
         return res.status(400).json({data: err.message});
