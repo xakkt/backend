@@ -15,10 +15,10 @@ exports.listCartProduct = async (req, res) => {
             _store: req.params.store,
            }
        
-        var products = await Cart.find({_user:cartInfo._user,_store:cartInfo._store}).lean();
+        var products = await Cart.find({_user:cartInfo._user,_store:cartInfo._store}).populate('cart._product').lean();
         if(!products.length) return res.json({ message: "No product found", data:""});
 
-       let total_quantity, total_price; 
+       let total_quantity, total_price, coupon, discounted_price; 
        products.forEach((product, index) => {
            total_quantity = product.cart.map(product =>  product.quantity).reduce(function(acc, cur){
                return acc+cur;
@@ -26,10 +26,14 @@ exports.listCartProduct = async (req, res) => {
            total_price = product.cart.map(product =>  product.total_price).reduce(function(acc, cur){
             return acc+cur;
         }) 
-        
+         
         });
-        
-        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price.toFixed(2)}});
+        discounted_price = 20;
+        coupon = { 
+            code:'AZXPN102',
+            discount: '20%' 
+          }
+        return res.json({status: "success", message: "All cart products", data: products, subtotal:{quantity:total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon:coupon,sub_total:total_price-100 }});
 
     }catch(err){
         return res.status(400).json({data: err.message});

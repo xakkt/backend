@@ -12,7 +12,8 @@ exports.list = async (req, res)=>{
 			return res.json({status: "success", message: "", data: department});
 			
 	   }catch(err){
-			res.status(400).json({status: "success", message: "Department added successfully", data: err});
+		   console.log(err)
+			res.status(400).json({status: "success", message: "", data: err});
 	   }
 },
 

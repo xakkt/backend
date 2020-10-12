@@ -6,7 +6,7 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let store = await Store.find().exec();
+			let store = await Store.find().populate('_department','name description no_of_stores').exec();
 			if(!store.length) return res.json({status: "false", message: "No data found", data: store});
 			return res.json({status: "success", message: "", data: store});
 			
@@ -35,13 +35,26 @@ exports.create = async(req, res) => {
 
 				try{
 					const storeinfo =  { 
-							name: req.body.name,
-							description: req.body.description, 
-							contact_no: req.body.contact_no,
-							_user: req.decoded.id,
-							no_of_stores: req.body.no_of_stores,
-							logo: req.body.logo,
-							status:req.body.status, 
+                            _department: req.body._department,
+                            _user: req._user,
+                            contact_no: req.body.contact_no,
+                            address: req.body.address,
+                            city: req.body.city,
+                            state: req.body.state,
+                            _country: req.body._country,
+                            zipcode: req.body.zipcode,
+                            location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
+                            time_schedule: {
+                                 Monday : { startTime: req.body.schedule.monday_stime, endTime: req.body.schedule.monday_etime },
+                                 Tuesday : { startTime: req.body.schedule.tuesday_stime, endTime: req.body.schedule.tuesday_etime },
+                                 Wednesday : { startTime: req.body.schedule.wed_stime, endTime: req.body.schedule.wed_etime },
+                                 Thursday : { startTime: req.body.schedule.thurs_stime, endTime: req.body.schedule.thurs_etime },
+                                 Friday : { startTime: req.body.schedule.fri_stime, endTime: req.body.schedule.fri_etime },
+                                 Saturday : { startTime: req.body.schedule.sat_stime, endTime: req.body.schedule.sat_etime },
+                                 Sunday : { startTime: req.body.schedule.sun_stime, endTime: req.body.schedule.sun_etime },
+                            
+                            }
+                            
 						}
 						
 				
@@ -49,6 +62,7 @@ exports.create = async(req, res) => {
 				res.json({status: "success", message: "Store added successfully", data: store});
 			
 				}catch(err){
+                    console.log(err)
 					res.status(400).json({data: err.message});
 				}				
 					

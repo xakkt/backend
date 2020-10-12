@@ -30,4 +30,4 @@ const departmentSchema = Schema({
 
 departmentSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model('Departments', departmentSchema);
+module.exports = mongoose.model('Department', departmentSchema);

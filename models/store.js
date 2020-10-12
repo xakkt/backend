@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 
 
 const storeSchema = new Schema({ 
-    _department: {
+    _department:[ {
         type: Schema.Types.ObjectId,
-        ref:'User',
-        
+        ref:'Department',
+        required:true,
         validate: {
                 validator: function(v) {
                 return FKHelper(mongoose.model('Department'), v);
@@ -16,7 +16,7 @@ const storeSchema = new Schema({
         message: `Department doesn't exist`
       }
     
-    },
+    }],
     _user: {
         type: String,
         validate: {
@@ -61,15 +61,15 @@ const storeSchema = new Schema({
         type: String,
         required: true
     },
-    time_schedule: [
-        { Monday:{startTime:Date,endTime:Date} },
-        { Tuesday:{startTime:Date,endTime:Date} },
-        { Wednesday:{startTime:Date,endTime:Date} },
-        { Thursday:{startTime:Date,endTime:Date} },
-        { Friday:{startTime:Date,endTime:Date} },
-        { Saturday:{startTime:Date,endTime:Date} },
-        { Sunday:{startTime:Date,endTime:Date} }
-    ]
+    time_schedule: {
+         Monday:{startTime:String,endTime:String} ,
+         Tuesday:{startTime:String,endTime:String} ,
+         Wednesday:{startTime:String,endTime:String} ,
+         Thursday:{startTime:String,endTime:String} ,
+         Friday:{startTime:String,endTime:String} ,
+         Saturday:{startTime:String,endTime:String} ,
+         Sunday:{startTime:String,endTime:String} 
+    }
  });
 
  storeSchema.index({ location: "2dsphere" })
