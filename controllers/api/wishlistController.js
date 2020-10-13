@@ -30,16 +30,20 @@ exports.addPoductToWishlist = async(req, res) => {
 			}; 
 
 exports.deleteProductWishlist = async(req,res)=>{
-    const queryInfo = {
-		_store:req.body._store,
-		_product:req.body._product,
-		_user:req.body._user
-	}
-	Wishlist.deleteOne(queryInfo, function (err, data) {
-		 if (err) return res.json({err:err});
-		 if(!data.deletedCount){ return res.json({status:true, message: "No product found", data:""}); }
-		 return res.json({status:true, message: "Product Removed from Wishlist", data:data});
-	  });
+	try{
+		const queryInfo = {
+			_store:req.body._store,
+			_product:req.body._product,
+			_user:req.decoded.id
+		}
+		Wishlist.deleteOne(queryInfo, function (err, data) {
+			if (err) return res.json({err:err});
+			if(!data.deletedCount){ return res.json({status:true, message: "No product found", data:""}); }
+			return res.json({status:true, message: "Product Removed from Wishlist", data:data});
+		});
+	}catch(err){ console.log(err)
+		return res.status(400).json({status:false, message: "", data:err});
+	}	
 	
 }
 

@@ -3,7 +3,7 @@ const ShoppinglistName = require('../../models/shoppinglist_name')
 var ObjectId = require('mongoose').Types.ObjectId; 
 var moment = require('moment');
 const { validationResult } = require('express-validator');
-
+const _global = require('../../helper/common')
 
 exports.allShoppingLists = async (req, res)=>{
 	
@@ -103,18 +103,33 @@ exports.deleteShoppinglist = async(req, res)=>{
 
 exports.shoppinglistProducts = async(req, res)=> {
     try{
-		let shoppinglist = await Shoppinglist.find({_shoppinglist:req.params.shoplist}).populate('_product','name sku price image').lean();
+		let shoppinglist = await Shoppinglist.find({_shoppinglist:req.params.shoplist}).populate('_product','name sku price image').populate('_shoppinglist','name _store').lean();
 		
 		if(!shoppinglist.length) return res.json({status: "false", message: "No data found", data: shoppinglist});
 
-		shoppinglist = shoppinglist.map( (list) =>{
+		shoppinglist = await Promise.all(shoppinglist.map( async(list) =>{
+			
 			if(!list._product) return
+			var productId = list._product._id.toString();
 			let image_path = (list._product.image)?list._product.image:'not-available-image.jpg';
 			let image  = `${process.env.BASE_URL}/images/products/${image_path}`;
-						
-			return {...list, _product:{ ...list._product,image:image}};
-	   } ).filter(Boolean);
 
+		    var wishList = await _global.wishList(req.decoded.id, list._shoppinglist._store)
+			var shoppingList = await _global.shoppingList(req.decoded.id, list._shoppinglist._store)
+			var cartProducts = await _global.cartProducts(req.decoded.id, list._shoppinglist._store)
+
+			var in_wishlist = (wishList.includes(productId))?1:0; 
+			var in_shoppinglist = (shoppingList.includes(productId))?1:0; 
+			
+			if (productId in cartProductList) {
+				
+			}
+			//return _global.wishList(req.decoded.id, list._shoppinglist._store); 
+			//shoppinglistProductIds = await _global.shoppingList(req.decoded.id, req.params.storeid)
+			//return	Promise.resolve(ww)
+			return {...list, _product:{ ...list._product,image:image, is_favourite:in_wishlist, in_shoppinglist: in_shoppinglist, cart_quantity:10}};
+	   } ));
+	   
 	   	return res.json({status: "success", message: "", data: shoppinglist});
 		
    }catch(err){

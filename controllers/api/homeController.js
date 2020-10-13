@@ -2,19 +2,14 @@ const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 let jwt = require('jsonwebtoken');
 const Setting = require('../../models/setting')
-const { validationResult } = require('express-validator');
-const Wishlist = require('../../models/wishlist')
-const Shoppinglist = require('../../models/shoppinglist')
-const ShoppinglistName = require('../../models/shoppinglist_name')
-const Cart = require('../../models/cart')
-var mongoose = require('mongoose');
+
+const _global = require('../../helper/common')
+
 
 exports.dashboard = async (req, res)=>{
 	var product = [];
-	var wishlistids = [];
-	var cartProductList = {};
-	var shoppinglistids = [];
-	var shoppinglistProductIds = [];
+	var userid;
+	
 	try{
 		let token = req.headers['authorization'];
 		if(token){
@@ -29,36 +24,18 @@ exports.dashboard = async (req, res)=>{
 				success: false,
 				message: 'Token is not valid'
 			  });
-			} else {
-				
-				var cartProducts = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(decoded.id),_store:mongoose.Types.ObjectId(req.params.storeid)} }])
-				
-				cartProducts.map(product => {
-					cartProductList[product.cart._product] = product.cart.quantity
-				})
-
-			    let wishlist = await Wishlist.find({_user:decoded.id,_store:req.params.storeid},'_product').lean();
-			    wishlist.map(data => {
-				wishlistids.push(data._product.toString())
-			  })
-
-			  let allShoppinglist = await ShoppinglistName.find({_user:decoded.id,_store:req.params.storeid},'_id').exec();
-			  allShoppinglist.map(data => {
-				shoppinglistids.push(data._id)
-			  })
-			  let listProducts = await Shoppinglist.find({_shoppinglist:{$in:shoppinglistids}},'_product').lean()
-			 
-			  listProducts.map(data => {
-				shoppinglistProductIds.push(data._product.toString())
-			  })
-			  
 			}
+			userid = decoded.id;
+
 		  });
 		}
 
 		let categories = await ProductCategory.find({_store:req.params.storeid}).populate('_products','name sku price image').lean();
-		
 		if(!categories.length) return res.json({status: "false", message: "No data found", data: categories});
+
+		var cartProductList = await _global.cartProducts(userid, req.params.storeid);
+		var wishlistids = await _global.wishList(userid, req.params.storeid)
+		var shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
 		
 		 categories.map(element => {
 			
