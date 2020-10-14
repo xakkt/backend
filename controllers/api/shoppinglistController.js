@@ -121,14 +121,12 @@ exports.shoppinglistProducts = async(req, res)=> {
 			var in_wishlist = (wishList.includes(productId))?1:0; 
 			var in_shoppinglist = (shoppingList.includes(productId))?1:0; 
 			
-			if (productId in cartProductList) {
-				
-			}
+			var quantity = (productId in cartProducts)? cartProducts[productId] : 0;
 			//return _global.wishList(req.decoded.id, list._shoppinglist._store); 
 			//shoppinglistProductIds = await _global.shoppingList(req.decoded.id, req.params.storeid)
 			//return	Promise.resolve(ww)
-			return {...list, _product:{ ...list._product,image:image, is_favourite:in_wishlist, in_shoppinglist: in_shoppinglist, cart_quantity:10}};
-	   } ));
+			return {...list, _product:{ ...list._product,image:image, is_favourite:in_wishlist, in_shoppinglist: in_shoppinglist, in_cart:quantity}};
+	   } ).filter(Boolean));
 	   
 	   	return res.json({status: "success", message: "", data: shoppinglist});
 		
