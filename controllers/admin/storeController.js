@@ -1,5 +1,6 @@
-const Store = require('../../models/department');
-const store = require('../../models/store');
+const Department = require('../../models/department');
+const Store = require('../../models/store');
+const Country = require('../../models/country')
 const { validationResult } = require('express-validator');
 
 
@@ -27,22 +28,10 @@ exports.show =  async (req, res)=> {
 },
 exports.create = async(req, res) => { 
     
-
-				const errors = await validationResult(req);
-				if (!errors.isEmpty()) {
-					return res.status(400).json({ errors: errors.array() });
-				}
-
 				try{
-					const departmentinfo =  { 
-							name: req.body.name,
-							description: req.body.description, 
-					     	logo: req.file.filename
-						}
-						
-				
-				let department = await Store.create(departmentinfo);
-				res.json({status: "success", message: "Store added successfully", data: department});
+					var countries = await Country.find({}).lean();
+					var departments = await Department.find({}).lean()
+					res.render('admin/store/create', { menu:"store", submenu:"create", departments:departments, countries: countries })
 			
 				}catch(err){
                     console.log(err)
@@ -50,6 +39,43 @@ exports.create = async(req, res) => {
 				}				
 					
 			}; 
+exports.saveStore = async(req, res)=>{
+console.log(req.body); res.send
+	try{
+		const storeinfo =  { 
+				_department: req.body._department,
+				_user: req._user,
+				contact_no: req.body.contact_no,
+				address: req.body.address,
+				city: req.body.city,
+				state: req.body.state,
+				_country: req.body._country,
+				zipcode: req.body.zipcode,
+				location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
+				time_schedule: {
+					 Monday : { startTime: req.body.schedule.monday_stime, endTime: req.body.schedule.monday_etime },
+					 Tuesday : { startTime: req.body.schedule.tuesday_stime, endTime: req.body.schedule.tuesday_etime },
+					 Wednesday : { startTime: req.body.schedule.wed_stime, endTime: req.body.schedule.wed_etime },
+					 Thursday : { startTime: req.body.schedule.thurs_stime, endTime: req.body.schedule.thurs_etime },
+					 Friday : { startTime: req.body.schedule.fri_stime, endTime: req.body.schedule.fri_etime },
+					 Saturday : { startTime: req.body.schedule.sat_stime, endTime: req.body.schedule.sat_etime },
+					 Sunday : { startTime: req.body.schedule.sun_stime, endTime: req.body.schedule.sun_etime },
+				
+				}
+				
+			}
+			
+	
+	let store = await Store.create(storeinfo);
+	res.json({status: "success", message: "Store added successfully", data: store});
+
+	}catch(err){
+		console.log(err)
+		res.status(400).json({data: err.message});
+	}
+
+},
+
 exports.addLocation = async(req,res) => {
 	var storeLocationInfo = {
 		_store: req.body._store,

@@ -1,43 +1,56 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const FKHelper = require('../helper/foreign-key-constraint');
+var uniqueValidator = require('mongoose-unique-validator');
 
 const OrderSchema = Schema({
+  _user: {
+    type: Schema.Types.ObjectId,
+    ref:'User',
+    required: true,
+    validate: {
+      validator: function(v) {
+              return FKHelper(mongoose.model('User'), v);
+          },
+        message: `User doesn't exist`
+      }
+    
+  },
+  _store: {
+    type: Schema.Types.ObjectId,
+    ref:'Store',
+    required: true,
+    validate: {
+      validator: function(v) {
+              return FKHelper(mongoose.model('Store'), v);
+          },
+        message: `Store doesn't exist`
+      }
+    
+  },
   shipping: {
-    _user: {
-      type: Schema.Types.ObjectId,
-      ref:'User',
-      required: true,
-      validate: {
-        validator: function(v) {
-                return FKHelper(mongoose.model('User'), v);
-            },
-          message: `User doesn't exist`
-        }
-      
-    },
-    address: String,
-    city: String,
-    region: String,
-    state: String,
-    country: String,
-    delivery_notes: String,
-
+    
+    address: { type:String, required: true },
+    city:  { type:String, required: true },
+    region:  { type:String, required: true },
+    state:  { type:String, required: true },
+    country:  { type:String, required: true },
+    delivery_notes:  { type:String, required: true },
+    order_id: { type:String,required: true, unique: true  },
     tracking: {
-      company: String,
-      tracking_number: String,
-      status: String,
-      estimated_delivery: Date
+      company:  { type:String },
+      tracking_number:  { type:String },
+      status:  { type:String},
+      estimated_delivery:  { type:String},
     },
   },
-
   payment: {
-    method: String,
-    transaction_id: String
+    method:  { type:String, required: true },
+    transaction_id:  { type:String, required: true },
   },
   products: [
     { 
-      quantity: Number, 
+      quantity:  { type:String, required: true }, 
       _product: {
         type: Schema.Types.ObjectId,
         ref:'Product',
@@ -50,15 +63,16 @@ const OrderSchema = Schema({
           }
         
       },
-      title: String, 
-      unit_cost:Number, 
-      currency:String
+      title:  { type:String, required: true }, 
+      unit_cost: { type:String, required: true }, 
+      currency: { type:String, required: true }
     }
   ]
     
   
 }, {timestampst:true});
 
+OrderSchema.plugin(uniqueValidator)
 module.exports = mongoose.model('orders', OrderSchema);
 
 

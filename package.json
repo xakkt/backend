@@ -21,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
+    "mongodb": "^3.6.2",
     "mongoose": "^5.10.0",
     "mongoose-lean-getters": "^0.1.2",
     "mongoose-seed": "^0.6.0",

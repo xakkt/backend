@@ -37,11 +37,8 @@ router.post('/departments/save',upload.single('logo'),departmentController.creat
 /*------------- Store --------*/
 
 router.get('/stores',storeController.list)
-
-router.get('/store/create',(req, res)=> { 
-    res.render('admin/store/create', { menu:"store", submenu:"create" })
-})
-
+router.get('/store/create',storeController.create)
+router.post('/store/save',storeController.saveStore)
 
 
 /*------------ Products --------*/
