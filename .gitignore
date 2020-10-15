@@ -2,7 +2,7 @@
 node_modules
 config/database.js
 npm-debug.log
-.env
+
 # Local development
 *.dev
 
