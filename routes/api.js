@@ -126,19 +126,19 @@ router.put('/product/:id/update',  verifyjwt.checkToken,productValidation, produ
 
 /*---- cart ---*/
 
-router.post('/cart/add_product', cartValidation,cartController.addPoductToCart);
-router.get('/cart/products/:store', cartController.listCartProduct);
-router.delete('/cart/remove_product', removeProductValidation, cartController.removeProductFromCart);
-router.put('/cart/update_quantity', cartValidation,cartController.updateProductQuantity);
+router.post('/cart/add_product', verifyjwt.checkToken,cartValidation,cartController.addPoductToCart);
+router.get('/cart/products/:store', verifyjwt.checkToken, cartController.listCartProduct);
+router.delete('/cart/remove_product', verifyjwt.checkToken,removeProductValidation, cartController.removeProductFromCart);
+router.put('/cart/update_quantity', verifyjwt.checkToken, cartValidation,cartController.updateProductQuantity);
 
 
 /*--- product category ---*/
-router.post('/category/create', categoryValidation, categoryController.create);
-router.get('/category/:id/products', categoryValidation, categoryController.productsByCategory);
-router.get('/category/list',categoryController.list);
-router.delete('/category/:id/delete', categoryController.delete);
-router.put('/category/:id/update', categoryValidation, categoryController.update);
-router.get('/category/:id',categoryController.show);
+router.post('/category/create', verifyjwt.checkToken,categoryValidation, categoryController.create);
+router.get('/category/:id/products', verifyjwt.checkToken, categoryValidation, categoryController.productsByCategory);
+router.get('/category/list',verifyjwt.checkToken,categoryController.list);
+router.delete('/category/:id/delete', verifyjwt.checkToken, categoryController.delete);
+router.put('/category/:id/update',verifyjwt.checkToken, categoryValidation, categoryController.update);
+router.get('/category/:id', verifyjwt.checkToken, categoryController.show);
 
 /*--- order ---*/
 router.post('/order/create',verifyjwt.checkToken, orderController.creatOrder);
@@ -150,13 +150,13 @@ router.get('/setting/list',settingController.list);
 
 /*---- shoppinglist ----*/
 
-router.post('/shoppinglist/add_product', updateListValidation, shoppingController.addProductToshoppinglist);
+router.post('/shoppinglist/add_product', verifyjwt.checkToken, updateListValidation, shoppingController.addProductToshoppinglist);
 router.post('/shoppinglist/create',verifyjwt.checkToken,shoppinglistValidation, shoppingController.createShoppingList);
 router.post('/shoppinglist',verifyjwt.checkToken,getListValidation,shoppingController.allShoppingLists);
-router.delete('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
+router.delete('/shoppinglist/remove_product/:shoppinglistid',verifyjwt.checkToken,shoppingController.deleteProductFromShoppinglist)
 router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
-router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistProducts)
-router.delete('/shoppinglist/:id/remove',shoppingController.deleteShoppinglist);
+router.get('/shoppinglist/:shoplist/products', verifyjwt.checkToken,shoppingController.shoppinglistProducts)
+router.delete('/shoppinglist/:id/remove',verifyjwt.checkToken,shoppingController.deleteShoppinglist);
 
 /*---- store ----*/
 router.get('/departments', departmentController.list);
