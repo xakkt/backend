@@ -26,8 +26,19 @@ exports.listCartProduct = async (req, res) => {
             total_price = product.cart.map(product => product.total_price).reduce(function (acc, cur) {
                 return acc + cur;
             })
-
+            
         });
+
+        products = products.map((product)=>{
+            return product.cart.map(list =>{
+                    if (!list._product) return
+                    let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
+                    let image = `${process.env.BASE_URL}/images/products/${image_path}`;
+                    return { ...list, _product: { ...list._product, image: image } }
+            })
+            
+        })
+console.log(products)
         discounted_price = 20;
         coupon = {
             code: 'AZXPN102',
