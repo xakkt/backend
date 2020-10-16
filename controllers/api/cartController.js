@@ -15,11 +15,11 @@ exports.listCartProduct = async (req, res) => {
             _store: req.params.store,
         }
 
-        var products = await Cart.find({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
-        if (!products.length) return res.json({ message: "No product found", data: "" });
+        var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
+        if (!data) return res.json({ message: "cart is empty", data: "" });
 
         let total_quantity, total_price, coupon, discounted_price;
-        products.forEach((product, index) => {
+        /*data.cart.forEach((product, index) => {
             total_quantity = product.cart.map(product => product.quantity).reduce(function (acc, cur) {
                 return acc + cur;
             })
@@ -27,24 +27,29 @@ exports.listCartProduct = async (req, res) => {
                 return acc + cur;
             })
             
-        });
+        });*/
 
-        products = products.map((product)=>{
-            return product.cart.map(list =>{
-                    if (!list._product) return
-                    let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
-                    let image = `${process.env.BASE_URL}/images/products/${image_path}`;
-                    return { ...list, _product: { ...list._product, image: image } }
-            })
-            
+        total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+            return acc + cur;
         })
-console.log(products)
+
+        total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        products = data.cart.map((list)=>{
+                if (!list._product) return
+                let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
+                let image = `${process.env.BASE_URL}/images/products/${image_path}`;
+                return { ...list, _product: { ...list._product, image: image } }          
+            }) 
+        data.cart = products;
         discounted_price = 20;
         coupon = {
             code: 'AZXPN102',
             discount: '20%'
         }
-        return res.json({ status: "success", message: "All cart products", data: products, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+        return res.json({ status: "success", message: "All cart products", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
