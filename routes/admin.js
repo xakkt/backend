@@ -9,6 +9,8 @@ const verifyjwt = require('../middlewares/tokenVerification');
 var moment = require('moment');
 const path = require('path')
 
+
+
 var multer  = require('multer')
 var storage =   multer.diskStorage({
     destination: function (req, file, callback) {
@@ -20,6 +22,14 @@ var storage =   multer.diskStorage({
   });
   var upload = multer({ storage : storage})
 
+/*-------- validation -------------*/
+
+const storeValidation = [
+  body('name').not().isEmpty().trim().escape(),
+  body('description').not().isEmpty().trim().escape(),
+  body('contact_no').not().isEmpty().trim().escape(),
+  verifyjwt.checkToken
+]
 
 router.get('/',(req,res)=>{
       res.render('admin/index',{ menu:"dashboard" }) 
@@ -39,7 +49,7 @@ router.post('/departments/save',upload.single('logo'),departmentController.creat
 router.get('/stores',storeController.list)
 router.get('/store/create',storeController.create)
 router.post('/store/save',storeController.saveStore)
-
+router.get('/store/edit/:storeid',storeController.editStore)
 
 /*------------ Products --------*/
 router.get('/products',(req, res)=> {

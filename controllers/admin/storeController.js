@@ -1,6 +1,7 @@
 const Department = require('../../models/department');
 const Store = require('../../models/store');
 const Country = require('../../models/country')
+const Timezone = require('../../models/timezone')
 const { validationResult } = require('express-validator');
 
 
@@ -30,37 +31,60 @@ exports.create = async(req, res) => {
     
 				try{
 					var countries = await Country.find({}).lean();
-					var departments = await Department.find({}).lean()
-					res.render('admin/store/create', { menu:"store", submenu:"create", departments:departments, countries: countries })
+					var departments = await Department.find({}).lean();
+					var timezone = await Timezone.find({}).lean()
+					res.render('admin/store/create', { menu:"store", submenu:"create", departments:departments, countries: countries, timezone: timezone })
 			
 				}catch(err){
                     console.log(err)
 					res.status(400).json({data: err.message});
 				}				
 					
-			}; 
+			}
+exports.editStore = async(req, res) => {
+		try{
+			var store = await Store.findById(req.params.storeid).lean();
+			var countries = await Country.find({}).lean();
+			var departments = await Department.find({}).lean();
+			var timezone = await Timezone.find({}).lean()
+			res.render('admin/store/edit', { menu:"store", submenu:"", store:store, departments:departments, countries: countries, timezone: timezone })
+		}catch(err){
+
+		}
+},			
 exports.saveStore = async(req, res)=>{
-console.log(req.body); res.send
+
 	try{
+		
+		var holiday_date = req.body.holiday.split('-').map((item)=> item.trim() )
+		
 		const storeinfo =  { 
-				_department: req.body._department,
+				name: req.body.name,
+				_department: req.body.department,
 				_user: req._user,
 				contact_no: req.body.contact_no,
 				address: req.body.address,
 				city: req.body.city,
 				state: req.body.state,
-				_country: req.body._country,
+				_country: req.body.country,
+				_timezone: req.body.timezone,
 				zipcode: req.body.zipcode,
+				contact_no: req.body.contactno,
 				location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 				time_schedule: {
-					 Monday : { startTime: req.body.schedule.monday_stime, endTime: req.body.schedule.monday_etime },
-					 Tuesday : { startTime: req.body.schedule.tuesday_stime, endTime: req.body.schedule.tuesday_etime },
-					 Wednesday : { startTime: req.body.schedule.wed_stime, endTime: req.body.schedule.wed_etime },
-					 Thursday : { startTime: req.body.schedule.thurs_stime, endTime: req.body.schedule.thurs_etime },
-					 Friday : { startTime: req.body.schedule.fri_stime, endTime: req.body.schedule.fri_etime },
-					 Saturday : { startTime: req.body.schedule.sat_stime, endTime: req.body.schedule.sat_etime },
-					 Sunday : { startTime: req.body.schedule.sun_stime, endTime: req.body.schedule.sun_etime },
+					 Monday : { startTime: req.body.monday_stime, endTime: req.body.monday_etime },
+					 Tuesday : { startTime: req.body.tuesday_stime, endTime: req.body.tuesday_etime },
+					 Wednesday : { startTime: req.body.wed_stime, endTime: req.body.wed_etime },
+					 Thursday : { startTime: req.body.thurs_stime, endTime: req.body.thurs_etime },
+					 Friday : { startTime: req.body.fri_stime, endTime: req.body.fri_etime },
+					 Saturday : { startTime: req.body.sat_stime, endTime: req.body.sat_etime },
+					 Sunday : { startTime: req.body.sun_stime, endTime: req.body.sun_etime },
 				
+				},
+				holidays: {	
+					startDate: holiday_date[0], 
+            		endDate: holiday_date[1],
+            		message: req.body.holiday_message
 				}
 				
 			}

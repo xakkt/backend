@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 
 
 const storeSchema = new Schema({ 
+    name:{type: String, required: true},
     _department:[ {
         type: Schema.Types.ObjectId,
         ref:'Department',
@@ -18,12 +19,23 @@ const storeSchema = new Schema({
     
     }],
     _user: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:'User',
         validate: {
                 validator: function(v) {
                 return FKHelper(mongoose.model('User'), v);
              },
             message: `User doesn't exist`
+        }
+    },
+    _timezone: {
+        type: Schema.Types.ObjectId,
+        ref:'Timezone',
+        validate: {
+                validator: function(v) {
+                return FKHelper(mongoose.model('Timezone'), v);
+             },
+            message: `Timezone doesn't exist`
         }
     },
     address: {
@@ -39,8 +51,14 @@ const storeSchema = new Schema({
         required: true
     },
     _country: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref:'Country',
+        validate: {
+                validator: function(v) {
+                return FKHelper(mongoose.model('Country'), v);
+             },
+            message: `Country doesn't exist`
+        }
     },
     zipcode: {
         type: String,
@@ -62,15 +80,22 @@ const storeSchema = new Schema({
         required: true
     },
     time_schedule: {
-         Monday:{startTime:String,endTime:String} ,
-         Tuesday:{startTime:String,endTime:String} ,
-         Wednesday:{startTime:String,endTime:String} ,
-         Thursday:{startTime:String,endTime:String} ,
-         Friday:{startTime:String,endTime:String} ,
-         Saturday:{startTime:String,endTime:String} ,
+         Monday:{startTime:String,endTime:String},
+         Tuesday:{startTime:String,endTime:String},
+         Wednesday:{startTime:String,endTime:String},
+         Thursday:{startTime:String,endTime:String},
+         Friday:{startTime:String,endTime:String},
+         Saturday:{startTime:String,endTime:String},
          Sunday:{startTime:String,endTime:String} 
-    }
- });
+    },
+    holidays:[
+        {
+            startDate:Date, 
+            endDate:Date,
+            message:String
+        }
+       ]
+ },{timestamps:true});
 
  storeSchema.index({ location: "2dsphere" })
  storeSchema.plugin(uniqueValidator)

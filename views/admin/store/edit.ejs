@@ -10,26 +10,26 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/fontawesome-free/css/all.min.css">
   <!-- daterange picker -->
-  <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/daterangepicker/daterangepicker.css">
   <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="../../plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- Select2 -->
-  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
-  <link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="../../plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
   <!-- BS Stepper -->
-  <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/bs-stepper/css/bs-stepper.min.css">
   <!-- dropzonejs -->
-  <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/dist/css/adminlte.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -84,38 +84,39 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Name</label>
-                      <input type="text" class="form-control" id="name" name="name" placeholder="Store Name">
+                      <input type="text" class="form-control" id="name" name="name" value="<%=store.name%>">
                     </div>
                     <div class="form-group">
                       <label>Select Departments</label>
                       <select class="select2" name="department" multiple="multiple" style="width: 100%;" placeholder="Select Department">
                         <% departments.forEach((department)=>{ %>
-                        <option value="<%=department._id%>"><%=department.name%></option>
+                             <option <%=(store._department.toString().indexOf(department._id.toString()!=-1))?'selected':''%> value="<%=department._id%>"><%=department.name%></option>
                         <%})%>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="">Address</label>
-                      <input type="text" class="form-control" id="address" name="address" placeholder="Address">
+                      <input type="text" class="form-control" id="address" name="address" value="<%=store.address%>">
                     </div>
 
                     <div class="form-group">
                       <label>Country</label>
                       <select class="select2" data-placeholder="Select a State" name="country" style="width: 100%;">
+                        <option></option>
                         <% countries.forEach(function(country){ %>
-                        <option value="<%=country._id%>"><%=country.name%></option>
+                        <option <%=(country._id.equals(store._country))?'selected':'' %> value="<%=country._id%>"><%=country.name%></option>
                         <%})%>
                       </select>
                     </div>
 
                     <div class="form-group">
                       <label>City</label>
-                      <input type="text" class="form-control" id="city" name="city" placeholder="City">
+                      <input type="text" class="form-control" id="city" name="city" value="<%=store.city%>">
                     </div>
 
                     <div class="form-group">
                       <label>States</label>
-                      <input type="text" class="form-control" id="state" name="state" placeholder="States">
+                      <input type="text" class="form-control" id="state" name="state" value="<%=store.state%>">
                     </div>
 
                   </div>
@@ -129,12 +130,11 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="">Zipcode</label>
-                      <input type="number" class="form-control" id="zipcode" name="zipcode" placeholder="Enter zipcode">
+                      <input type="number" class="form-control" id="zipcode" name="zipcode" value="<%=store.zipcode%>">
                     </div>
                     <div class="form-group">
                       <label for="">Contact no</label>
-                      <input type="text" class="form-control" id="contactno" name="contactno"
-                        placeholder="Enter Contact no">
+                      <input type="text" class="form-control" id="contactno" name="contactno" value="<%=store.contact_no%>" >
                     </div>
                   </div>
 
@@ -143,18 +143,18 @@
                       <label for="tz">Timezone</label>
                       <select class="select2" data-placeholder="Select a Timezone" name="timezone" style="width: 100%;">
                         <% timezone.forEach(function(timezone){ %>
-                        <option value="<%=timezone._id%>"><%=timezone.value%></option>
+                        <option <%=(timezone._id.equals(store._timezone))?'selected':'' %> value="<%=timezone._id%>"><%=timezone.value%></option>
                         <%})%>
                       </select>
                     </div>
                     <div class="row">
                     <div class="col">
                       <label for="lat">Latitude</label>
-                      <input type="number" class="form-control" id="lat" name="lat" placeholder="Enter lat">
+                      <input type="number" class="form-control" id="lat" name="lat" value="<%=store.location.coordinates[0]%>">
                     </div>
                     <div class="col">
                       <label for="long">Longitude</label>
-                      <input type="number" class="form-control" id="long" name="long" placeholder="Enter long">
+                      <input type="number" class="form-control" id="long" name="long" value="<%=store.location.coordinates[1]%>">
                     </div>
                     </div>
                   </div>
@@ -170,80 +170,57 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td> Monday </td>
-                          <td class="form-group"> <input name="monday_stime" type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="monday_etime" type="time" class="form-control"> </td>
-                        </tr>
-                        <tr>
-                          <td> Tuesday </td>
-                          <td class="form-group"> <input name="tuesday_stime" type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="tuesday_etime" type="time" class="form-control"> </td>
-                        </tr>
-                        <tr>
-                          <td> Wednesday </td>
-                          <td class="form-group"> <input name="wed_stime" type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="wed_etime" type="time" class="
-                              form-control"> </td>
-                        </tr>
-                        <tr>
-                          <td> Thursday </td>
-                          <td class="form-group"> <input name="thurs_stime" type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="thurs_etime" type="time" class="form-control"> </td>
-                        </tr>
-                        <tr>
-                          <td> Friday </td>
-                          <td class="form-group"> <input name="fri_stime" required type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="fri_etime" required type="time" class="form-control"> </td>
-                        </tr>
-                        <tr>
-                          <td> Saturday </td>
-                          <td class="form-group"> <input name="sat_stime" type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="sat_etime" type="time" class="form-control"> </td>
-                        </tr>
-                        <tr>
-                          <td> Sunday </td>
-                          <td class="form-group"> <input name="sun_stime" type="time" class="form-control"> </td>
-                          <td class="form-group"> <input name="sun_etime" type="time" class="form-control"> </td>
-                        </tr>
+                         <% for (const [key, value] of Object.entries(store.time_schedule)) { %>
+                            <tr>
+                                <td> <%=key%> </td>
+                                <td class="form-group"> <input name="monday_stime" type="time" value="<%=value.startTime%>" class="form-control"> </td>
+                                <td class="form-group"> <input name="monday_etime" type="time" value="<%=value.endTime%>" class="form-control"> </td>
+                              </tr>
+                         <%}%> 
+                       
+                       
                       </tbody>
                     </table>
                   </div>
 
                   <div class="col-md-6 ">
-                    <div class="card card-primary">
-                      <div class="card-header">
-                        <h3 class="card-title">Holiday</h3>
-                      </div>
-                      <div class="card-body">
-
-                        <!-- Date and time range -->
-                        <div class="form-group">
-                          <label>Date and time range:</label>
-
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="far fa-clock"></i></span>
+                      <%store.holidays.forEach(day => {%>
+                           
+                           <div class="card card-primary">
+                            <div class="card-header">
+                              <h3 class="card-title">Holiday</h3>
                             </div>
-                            <input type="text" class="form-control float-right" name="holiday" id="holiday">
+                            <div class="card-body">
+      
+                              <!-- Date and time range -->
+                              <div class="form-group">
+                                <label>Date and time range:</label>
+      
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                  </div>
+                                  <input type="text" class="form-control float-right" name="holiday" id="holiday">
+                                </div>
+                                <!-- /.input group -->
+                              </div>
+                              <div class="form-group">
+                                <label>Message:</label>
+      
+                                <div class="input-group">
+                                  <textarea class="form-control" rows="4" name="holiday_message"><%=day.message%> </textarea>
+                                </div>
+                                <!-- /.input group -->
+                              </div>
+                              <!-- /.form group -->
+      
+                            </div>
+      
+                            <!-- /.card-body -->
                           </div>
-                          <!-- /.input group -->
-                        </div>
-                        <div class="form-group">
-                          <label>Message:</label>
-
-                          <div class="input-group">
-                            <textarea class="form-control" rows="4" name="holiday_message"></textarea>
-                          </div>
-                          <!-- /.input group -->
-                        </div>
-                        <!-- /.form group -->
-
-                      </div>
-
-                      <!-- /.card-body -->
-                    </div>
-
+                      <%})%>
+                    
+                    
                   </div>
 
                   <!-- /.col -->
@@ -259,7 +236,6 @@
 
           </div>
           <!-- /.card -->
-
 
         </div>
         <!-- /.container-fluid -->
@@ -278,24 +254,23 @@
   <!-- ./wrapper -->
 
   <!-- jQuery -->
-  <script src="../../plugins/jquery/jquery.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
-  <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Select2 -->
-  <script src="../../plugins/select2/js/select2.full.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
 
   <!-- InputMask -->
-  <script src="../../plugins/moment/moment.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/plugins/moment/moment.min.js"></script>
 
   <!-- date-range-picker -->
-  <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-
+  <script src="<%= process.env.BASE_URL %>/plugins/daterangepicker/daterangepicker.js"></script>
 
   <!-- AdminLTE App -->
-  <script src="../../dist/js/adminlte.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/dist/js/adminlte.min.js"></script>
   <!-- jquery-validation -->
-  <script src="../../plugins/jquery-validation/jquery.validate.min.js"></script>
-  <script src="../../plugins/jquery-validation/additional-methods.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
     $(function () {

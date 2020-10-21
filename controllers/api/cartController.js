@@ -19,16 +19,7 @@ exports.listCartProduct = async (req, res) => {
         if (!data) return res.json({ message: "cart is empty", data: "" });
 
         let total_quantity, total_price, coupon, discounted_price;
-        /*data.cart.forEach((product, index) => {
-            total_quantity = product.cart.map(product => product.quantity).reduce(function (acc, cur) {
-                return acc + cur;
-            })
-            total_price = product.cart.map(product => product.total_price).reduce(function (acc, cur) {
-                return acc + cur;
-            })
-            
-        });*/
-
+        
         total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
             return acc + cur;
         })
@@ -41,7 +32,11 @@ exports.listCartProduct = async (req, res) => {
                 if (!list._product) return
                 let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
                 let image = `${process.env.BASE_URL}/images/products/${image_path}`;
-                return { ...list, _product: { ...list._product, image: image } }          
+                let total_price = list.total_price;
+                let quantity = list.quantity;
+                delete(list.total_price)
+                delete(list.quantity)
+                return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price, image: image } }          
             }) 
         data.cart = products;
         discounted_price = 20;
