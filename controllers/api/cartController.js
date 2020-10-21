@@ -36,7 +36,7 @@ exports.listCartProduct = async (req, res) => {
                 let quantity = list.quantity;
                 delete(list.total_price)
                 delete(list.quantity)
-                return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price, image: image } }          
+                return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price.toFixed(2), image: image } }          
             }) 
         data.cart = products;
         discounted_price = 20;
