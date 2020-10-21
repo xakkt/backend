@@ -122,7 +122,36 @@ exports.removeProductFromCart = async (req, res) => {
             // product.cart.id().remove();
             console.log(product)
         }
-        return res.json({ status: "success", message: "Product removed from cart successfully", data: product });
+        var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
+        if (!data) return res.json({ message: "cart is empty", data: "" });
+
+        let total_quantity, total_price, coupon, discounted_price;
+        
+        total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        products = data.cart.map((list)=>{
+                if (!list._product) return
+                let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
+                let image = `${process.env.BASE_URL}/images/products/${image_path}`;
+                let total_price = list.total_price;
+                let quantity = list.quantity;
+                delete(list.total_price)
+                delete(list.quantity)
+                return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price.toFixed(2), image: image } }          
+            }) 
+        data.cart = products;
+        discounted_price = 20;
+        coupon = {
+            code: 'AZXPN102',
+            discount: '20%'
+        }
+        return res.json({ status: "success", message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
     } catch (err) {
         return res.status(400).json({ data: err.message });
     }
@@ -142,6 +171,7 @@ exports.updateProductQuantity = async (req, res) => {
             _user: req.decoded.id,
         }
         var productInfo = await Product.findById(req.body._product);
+        if(!productInfo) return res.json({ message: "cart is empty", data: "" });
         //var cartProduct = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
         var pQuantity = cartInfo.quantity;
         var pPrice = productInfo.price * pQuantity;
@@ -153,7 +183,36 @@ exports.updateProductQuantity = async (req, res) => {
         }, { new: true, upsert: true }).lean();
         //  var product = await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo._product}}},{$set:{cart: {'cart.$.quantity': cartInfo.quantity, 'cart.$.total_price':cartInfo.total_price }}},{new: true});
         if (product?.cart) {
-            return res.json({ status: "success", message: "Cart updated successfully", data: product });
+            var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
+            if (!data) return res.json({ message: "cart is empty", data: "" });
+    
+            let total_quantity, total_price, coupon, discounted_price;
+            
+            total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+                return acc + cur;
+            })
+    
+            total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
+                return acc + cur;
+            })
+    
+            products = data.cart.map((list)=>{
+                    if (!list._product) return
+                    let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
+                    let image = `${process.env.BASE_URL}/images/products/${image_path}`;
+                    let total_price = list.total_price;
+                    let quantity = list.quantity;
+                    delete(list.total_price)
+                    delete(list.quantity)
+                    return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price.toFixed(2), image: image } }          
+                }) 
+            data.cart = products;
+            discounted_price = 20;
+            coupon = {
+                code: 'AZXPN102',
+                discount: '20%'
+            }
+            return res.json({ status: "success", message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
         }
         return res.json({ status: "false", message: "No data found", data: {} });
     } catch (err) {
