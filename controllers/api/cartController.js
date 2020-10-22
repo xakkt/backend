@@ -36,7 +36,7 @@ exports.listCartProduct = async (req, res) => {
                 let quantity = list.quantity;
                 delete(list.total_price)
                 delete(list.quantity)
-                return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price.toFixed(2), image: image } }          
+                return { ...list, _product: { ...list._product, in_cart:quantity, total_price:total_price.toFixed(2), image: image } }          
             }) 
         data.cart = products;
         discounted_price = 20;
@@ -44,7 +44,7 @@ exports.listCartProduct = async (req, res) => {
             code: 'AZXPN102',
             discount: '20%'
         }
-        return res.json({ status: "success", message: "All cart products", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+        return res.json({ status: "success", message: "All cart products", data: data, subtotal: { in_cart: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
@@ -74,14 +74,7 @@ exports.listCartProduct = async (req, res) => {
 
             var product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo.cart._product } } });
             if (product?.cart) {
-
-                /* product =  await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo.cart._product}}},{$set : { 
-                     "cart.$.quantity":product.cart[0].quantity+1
-                 }},{new: true, upsert: true}).lean();
-                */
-
-                return res.json({ status: "false", message: "Product is already in the cart" })
-
+                 return res.json({ status: "false", message: "Product is already in the cart" })
             } else {
 
                 product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store });
@@ -143,7 +136,7 @@ exports.removeProductFromCart = async (req, res) => {
                 let quantity = list.quantity;
                 delete(list.total_price)
                 delete(list.quantity)
-                return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price.toFixed(2), image: image } }          
+                return { ...list, _product: { ...list._product, in_cart:quantity, total_price:total_price.toFixed(2), image: image } }          
             }) 
         data.cart = products;
         discounted_price = 20;
@@ -204,7 +197,7 @@ exports.updateProductQuantity = async (req, res) => {
                     let quantity = list.quantity;
                     delete(list.total_price)
                     delete(list.quantity)
-                    return { ...list, _product: { ...list._product, quantity:quantity, total_price:total_price.toFixed(2), image: image } }          
+                    return { ...list, _product: { ...list._product, in_cart:quantity, total_price:total_price.toFixed(2), image: image } }          
                 }) 
             data.cart = products;
             discounted_price = 20;
