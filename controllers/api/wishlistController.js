@@ -70,8 +70,13 @@ exports.allWishlistProducts = async (req, res) => {
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
-
-			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity } };
+			var wish_price = list.wish_price;
+			var max_price = list.max_price;
+			delete(list.wish_price);
+			delete(list.max_price);
+			delete(list.createdAt)
+			delete(list.updatedAt)
+			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, wish_price:wish_price,max_price:max_price } };
 		}).filter(Boolean));
 		return res.json({ status: "success", message: "", data: wishlist })
 	} catch (err) {
