@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const timezoneSchema = Schema({
 
   value: { type: String },
-  abbr:  { type: Schema.Types.ObjectId, ref: 'Coupon' },
+  abbr:  { type: String },
   offset:{ type:Number },
   text: { type: String }  
 }, {timestamps:true});

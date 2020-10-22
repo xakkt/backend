@@ -2,7 +2,7 @@ const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 let jwt = require('jsonwebtoken');
 const Setting = require('../../models/setting')
-
+const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
 
 
@@ -44,9 +44,9 @@ exports.dashboard = async (req, res) => {
 				var productId = data._id.toString();
 				
 				if (productId in cartProductList) {
-					data = { ...data, type: "product", quantity: cartProductList[productId] }
+					data = { ...data, type: "product", in_cart: cartProductList[productId] }
 				} else {
-					data = { ...data, type: "product", quantity: 0 }
+					data = { ...data, type: "product", in_cart: 0 }
 				}
 
 				if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
@@ -65,14 +65,14 @@ exports.dashboard = async (req, res) => {
 
 		});
 
-		let setting = await Setting.findOne({ key: "home_banner" }).lean();
-		if (!setting) return res.json({ status: "false", message: "No setting found", data: [] })
+		let banners = await Banner.find({ type: "app" }).lean();
+		if (!banners) return res.json({ status: "false", message: "No setting found", data: [] })
 
 		pdata = [
 			{
 				path: `${process.env.BASE_URL}/images/banners/`,
 				type: "banner",
-				banner: setting.value
+				banner: banners
 			},
 			{
 				path: `${process.env.BASE_URL}/images/products/`,

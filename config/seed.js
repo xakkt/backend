@@ -5,11 +5,11 @@ seeder.connect('mongodb://localhost:27017/xakkt', function() {
 
   // Load Mongoose models
   seeder.loadModels([
-      'models/setting'
+      'models/banner'
   ]);
 
   // Clear specified collections
-  seeder.clearModels(['Setting'], function() {
+  seeder.clearModels(['Banner'], function() {
 
     // Callback to populate DB once collections have been cleared
     seeder.populateModels(data, function() {
