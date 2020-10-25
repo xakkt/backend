@@ -16,7 +16,7 @@ exports.listCartProduct = async (req, res) => {
         }
 
         var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
-        if (!data) return res.json({ message: "cart is empty", data: "" });
+        if (!data) return res.json({ success:0, message: "cart is empty", data: "" });
 
         let total_quantity, total_price, coupon, discounted_price;
         
@@ -123,7 +123,7 @@ exports.removeProductFromCart = async (req, res) => {
             console.log(product)
         }
         var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
-        if (!data) return res.json({ message: "cart is empty", data: "" });
+        if (!data) return res.json({ success:0, message: "cart is empty", data: "" });
 
         let total_quantity, total_price, coupon, discounted_price;
         
@@ -171,7 +171,7 @@ exports.updateProductQuantity = async (req, res) => {
             _user: req.decoded.id,
         }
         var productInfo = await Product.findById(req.body._product);
-        if(!productInfo) return res.json({ message: "cart is empty", data: "" });
+        if(!productInfo) return res.json({ success:0, message: "cart is empty", data: "" });
         //var cartProduct = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
         var pQuantity = cartInfo.quantity;
         var pPrice = productInfo.price * pQuantity;
@@ -184,7 +184,7 @@ exports.updateProductQuantity = async (req, res) => {
         //  var product = await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo._product}}},{$set:{cart: {'cart.$.quantity': cartInfo.quantity, 'cart.$.total_price':cartInfo.total_price }}},{new: true});
         if (product?.cart) {
             var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
-            if (!data) return res.json({ message: "cart is empty", data: "" });
+            if (!data) return res.json({ success:0, message: "cart is empty", data: "" });
     
             let total_quantity, total_price, coupon, discounted_price;
             

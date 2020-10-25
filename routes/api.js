@@ -155,8 +155,9 @@ router.post('/shoppinglist/create',verifyjwt.checkToken,shoppinglistValidation, 
 router.post('/shoppinglist',verifyjwt.checkToken,getListValidation,shoppingController.allShoppingLists);
 router.delete('/shoppinglist/remove_product/:shoppinglistid',verifyjwt.checkToken,shoppingController.deleteProductFromShoppinglist)
 router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
+router.delete('/shoppinglist/remove/:id',verifyjwt.checkToken,shoppingController.deleteShoppinglist);
 router.get('/shoppinglist/:shoplist/products', verifyjwt.checkToken,shoppingController.shoppinglistProducts)
-router.delete('/shoppinglist/:id/remove',verifyjwt.checkToken,shoppingController.deleteShoppinglist);
+
 
 /*---- store ----*/
 router.get('/departments', departmentController.list);
