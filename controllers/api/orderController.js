@@ -27,7 +27,61 @@ exports.listOrders = async (req, res) => {
     }
 },
 
-    exports.creatOrder = async (req, res) => {
+exports.orderDetails = async (req, res) => {
+
+    const errors = await validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        var order = await Order.findById(req.params.orderid).lean();
+        console.log(order)
+        if (!order) return res.json({ message: "No Order found", data: "" });
+        return res.json({ status: "success", message: "", data:order});
+
+    } catch (err) {
+        return res.status(400).json({ data: err.message });
+    }
+},
+
+exports.rateOrder = async(req, res) => {
+    
+    const errors = await validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+console.log(req.body)
+    try{
+        var order = await Order.findByIdAndUpdate(req.params.orderid,{ $set :{ "feedback.rating":req.body.rating,"feedback.comment":req.body.comment} },{new:true}).lean();
+        if (!order) return res.json({ message: "No Order found", data: "" });
+        return res.json({ status: "success", message: "", data:order});
+    }catch (err){
+        return res.status(400).json({ data: err.message });
+    }
+}
+
+exports.updateOrderStatus = async (req, res) => {
+
+    const errors = await validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        var order = await Order.findByIdAndUpdate(req.params.orderid,{ $set :{ "shipping.tracking.status":req.body.status} },{new:true}).lean();
+        console.log(order)
+        if (!order) return res.json({ message: "No Order found", data: "" });
+        return res.json({ status: "success", message: "", data:order});
+
+    } catch (err) {
+        return res.status(400).json({ data: err.message });
+    }
+},
+
+
+
+exports.creatOrder = async (req, res) => {
 
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
@@ -47,10 +101,10 @@ exports.listOrders = async (req, res) => {
                     delivery_notes: req.body.delivery_notes,
                     order_id: orderid.generate(),
                     tracking: {
-                        company: req.body.company,
-                        tracking_number: req.body.tracking_number,
-                        status: req.body.status,
-                        estimated_delivery: req.body.estimated_delivery
+                        company: req.body.tracking.company,
+                        tracking_number: req.body.tracking.tracking_number,
+                        status: req.body.tracking.status,
+                        estimated_delivery: req.body.tracking.estimated_delivery
                     }
                 },
 
@@ -68,37 +122,3 @@ exports.listOrders = async (req, res) => {
         }
 
     };
-
-
-
-exports.updateProductQuantity = async (req, res) => {
-    const errors = await validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    try {
-        const cartInfo = {
-            quantity: req.body.quantity,
-            _store: req.body._store,
-            _product: req.body._product,
-            _user: req.decoded.id,
-        }
-        var orderInfo = await Product.findById(req.body._product);
-        //var cartProduct = await Order.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
-        var pQuantity = cartInfo.quantity;
-        var pPrice = orderInfo.price * pQuantity;
-        console.log(orderInfo.price)
-        var product = await Order.findOneAndUpdate({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo._product } } }, {
-            $set: {
-                "cart.$.quantity": pQuantity, 'cart.$.total_price': pPrice
-            }
-        }, { new: true, upsert: true }).lean();
-        //  var product = await Order.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo._product}}},{$set:{cart: {'cart.$.quantity': cartInfo.quantity, 'cart.$.total_price':cartInfo.total_price }}},{new: true});
-        if (product?.cart) {
-            return res.json({ status: "success", message: "Order updated successfully", data: product });
-        }
-        return res.json({ status: "false", message: "No data found", data: {} });
-    } catch (err) {
-        return res.status(400).json({ data: err.message });
-    }
-}

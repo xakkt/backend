@@ -101,10 +101,12 @@ const wishlistValidation = [
 ]
 
 const listProductsVali = [
-        body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+     body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
 ]
 
-
+const orderValidation = [
+   // body('rating').isInt().withMessage('rating should not be empty') 
+]
 /*--- user ---*/
 router.post('/user/create',userValidation,userController.create);
 router.get('/user/list', userController.list);
@@ -142,7 +144,10 @@ router.get('/category/:id', verifyjwt.checkToken, categoryController.show);
 
 /*--- order ---*/
 router.post('/order/create',verifyjwt.checkToken, orderController.creatOrder);
-router.get('/orders/:storeid',verifyjwt.checkToken, orderController.listOrders)
+router.get('/orders/:storeid',verifyjwt.checkToken, orderController.listOrders);
+router.put('/order/feedback/:orderid',orderValidation,verifyjwt.checkToken, orderController.rateOrder);
+router.get('/order/:orderid',verifyjwt.checkToken, orderController.orderDetails);
+router.put('/order/update_status/:orderid',verifyjwt.checkToken, orderController.updateOrderStatus)
 
 /*--- settings ---*/
 router.post('/setting/add', settingValidation, settingController.add);

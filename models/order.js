@@ -40,13 +40,21 @@ const OrderSchema = Schema({
     tracking: {
       company:  { type:String },
       tracking_number:  { type:String },
-      status:  { type:String},
+      status:  { 
+        type: String, 
+        enum: ['pending','recieved','dispatched','cancelled','delivered','refunded','disputed' ],
+        required: true
+      },
       estimated_delivery:  { type:String},
     },
   },
   payment: {
     method:  { type:String, required: true },
     transaction_id:  { type:String, required: true },
+  },
+  feedback: {
+     rating: { type: Number, default: 0 },
+     comment: { type: String, default:null }
   },
   products: [
     { 
