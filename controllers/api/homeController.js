@@ -58,7 +58,7 @@ exports.dashboard = async (req, res) => {
 				} else {
 					data = { ...data, type: "product", is_favourite: 0, in_shoppinglist: 0 }
 				}
-
+				data = { ...data, type: "product", is_favourite: 1, special_price: data.price }
 				product.push(data)
 
 			})

@@ -51,7 +51,7 @@ exports.rateOrder = async(req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-console.log(req.body)
+
     try{
         var order = await Order.findByIdAndUpdate(req.params.orderid,{ $set :{ "feedback.rating":req.body.rating,"feedback.comment":req.body.comment} },{new:true}).lean();
         if (!order) return res.json({ message: "No Order found", data: "" });
