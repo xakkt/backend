@@ -9,7 +9,7 @@ exports.list = async (req, res)=>{
 	
 	  try{
 			let stores = await Store.find().exec();
-			if(!stores.length) return res.render('admin/store/listing',{ menu:"store", submenu:"list", data:"" })
+			if(!stores.length) return res.render('admin/store/listing',{ menu:"store", submenu:"list", stores:"" })
 			return res.render('admin/store/listing',{ menu:"store", submenu:"list", stores:stores })
 			
 	   }catch(err){
@@ -91,7 +91,9 @@ exports.saveStore = async(req, res)=>{
 			
 	
 	let store = await Store.create(storeinfo);
-	res.json({status: "success", message: "Store added successfully", data: store});
+	res.redirect('/admin/stores')
+
+	// res.json({status: "success", message: "Store added successfully", data: store});
 
 	}catch(err){
 		console.log(err)
@@ -137,24 +139,24 @@ exports.nearByStores = async(req, res) =>{
 exports.updateStore = async function(req, res){
 
 	try{
-
 		const errors = await validationResult(req);
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
 				}
-
+	
 		let departmentinfo =  { 
 			name: req.body.name,
 			description: req.body.description, 
-			contact_no: req.body.contact_no,
+			contact_no: req.body.contactno,
 			zipcode: req.body.zipcode, 
 			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 			status:req.body.status, 
 		}
 
 		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
-		const department =  await Store.findByIdAndUpdate({ _id: req.params.id }, departmentinfo,{ new: true,	upsert: true});
-			if(department)return res.json({status:true, message: "Store updated", data:department});
+		const department =  await Store.findByIdAndUpdate({ _id: req.params.id }, departmentinfo,{ new: true,upsert: true});
+			if(department)res.redirect('/admin/stores')
+			// return res.json({status:true, message: "Store updated", data:department});
 			return res.status(400).json({status:false, message: "Store not found"});
 			
 		} catch(err){ console.log(err)
@@ -167,7 +169,8 @@ exports.updateStore = async function(req, res){
 exports.deleteStore = async(req,res)=>{
 	Store.deleteOne({ _id: req.params.id }, function (err) {
 		if (err) return res.status(400).json({data:err});
-		 return res.json({status:true, message: "Store Deleted", data:[]});
+		res.redirect('/admin/stores')
+		//  return res.json({status:true, message: "Store Deleted", data:[]});
 	  });
 }
 

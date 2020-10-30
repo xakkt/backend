@@ -42,6 +42,12 @@ router.get('/departments',departmentController.list)
 router.get('/department/create',(req, res)=> { 
     res.render('admin/department/create', { menu:"departments", submenu:"create" })
 })
+router.get('/departments/delete/:id', departmentController.deleteStore);
+
+router.get('/departments/show/:id', departmentController.show);
+
+router.post('/departments/edit/:id',upload.single('logo'),departmentController.updateStore)
+
 
 router.post('/departments/save',upload.single('logo'),departmentController.create)
 /*------------- Store --------*/
@@ -50,6 +56,9 @@ router.get('/stores',storeController.list)
 router.get('/store/create',storeController.create)
 router.post('/store/save',storeController.saveStore)
 router.get('/store/edit/:storeid',storeController.editStore)
+router.get('/store/delete/:id', storeController.deleteStore);
+router.post('/store/update/:id', storeController.updateStore)
+
 
 /*------------ Products --------*/
 router.get('/products',(req, res)=> {
