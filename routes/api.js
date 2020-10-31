@@ -179,5 +179,6 @@ router.get('/store/:id',storeController.show);
 router.post('/wishlist/add_product',  verifyjwt.checkToken,wishlistValidation, wishController.addPoductToWishlist);
 router.post('/wishlist/products',  verifyjwt.checkToken,listProductsVali, wishController.allWishlistProducts);
 router.delete('/wishlist/remove/product',verifyjwt.checkToken, wishController.deleteProductWishlist);
+router.put('/wishlist/update/:wishlistid',verifyjwt.checkToken, wishController.updateProductWishPrice);
 
 module.exports = router;

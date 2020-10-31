@@ -18,7 +18,7 @@ exports.addPoductToWishlist = async (req, res) => {
 			wish_price: req.body.wish_price,
 			max_price: req.body.max_price
 		}
-
+//get deal price
 		const wishlist = await Wishlist.create(wishlistInfo);
 		return res.json({ status: "success", message: "Product added to wishlist successfully", data: wishlist });
 
@@ -28,6 +28,20 @@ exports.addPoductToWishlist = async (req, res) => {
 	}
 
 };
+
+exports.updateProductWishPrice = async (req, res)=> {
+   try{
+			_wishlist = req.params.wishlistid
+			wish_price = req.body.wish_price
+			max_price = req.body.max_price
+			valid_till = req.body.valid_till
+		
+		const wishlistProduct = await Wishlist.updateOne({_id:_wishlist},{wish_price:wish_price, max_price, valid_till:valid_till});
+		return res.json({status:"success", message:"Wishlist Product Updated", data: wishlistProduct})
+   }catch(err){
+	   return res.status(400).json({ data: err.message });
+   }
+},
 
 exports.deleteProductWishlist = async (req, res) => {
 	try {
