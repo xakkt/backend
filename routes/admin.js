@@ -88,7 +88,7 @@ router.get('/invoice',(req, res)=> {
 
 /*----- product Category ------*/
 router.get('/category',(req, res)=> { 
-    res.render('admin/category/listing',{ menu:"category" })
+    res.render('admin/product-category/create',{ menu:"category" })
 })
 
 router.get('/category/create',(req, res)=> { 
