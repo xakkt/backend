@@ -20,6 +20,9 @@ const userSchema = Schema({
     unique: true,
     required: true
   },
+  profile_pic:{
+    type: String,
+  },
   password:{
     type: String,
     required: true
@@ -48,10 +51,16 @@ const userSchema = Schema({
       type: Date,
       required:true
   },
-  timezone: {
-     type: String,
-     default: null
-  },
+  _timezone: {
+    type: Schema.Types.ObjectId,
+    ref:'Timezone',
+    validate: {
+            validator: function(v) {
+            return FKHelper(mongoose.model('Timezone'), v);
+         },
+        message: `Timezone doesn't exist`
+    }
+},
   coupons: [
     { type: Schema.Types.ObjectId, ref: 'Coupon' }
   ] 

@@ -17,6 +17,8 @@
     "dotenv": "^8.2.0",
     "ejs": "^2.7.4",
     "express": "^4.15.2",
+    "express-flash-message": "^1.0.6",
+    "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
     "flash": "^1.1.0",
     "jsonwebtoken": "^8.5.1",

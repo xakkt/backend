@@ -35,12 +35,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>Departments</h1>
+              <h1>Users</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Departments</li>
+                <li class="breadcrumb-item active">Users</li>
               </ol>
             </div>
           </div>
@@ -50,6 +50,21 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+
+<!--- message section should be common for all-->
+
+            <% if(failure.length){ %> 
+            <div class="alert alert-danger">
+                <strong><%= failure[0] %></strong>
+              </div>
+              <% } %>
+            <% if(success.length){ %>   
+            <div class="alert alert-success">
+                <strong><%= success %></strong> 
+            </div>
+            <% } %>
+
+<!---- end of messages -->              
           <div class="row">
             <div class="col-12">
 
@@ -57,36 +72,39 @@
 
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">All Departments</h3>
+                  <h3 class="card-title">All Users</h3>
                 </div>
+                
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <table id="departments" class="table table-bordered table-striped">
+                  <table id="users" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Name</th>
-                        <th>No of Stores</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Is Active</th>
-                        <th>Create At</th>
+                        <th>Profile Pic</th>
+                        <th>Email</th>
+                         <th>Contact No</th>
+                        <th>DoB</th>
+                        <th>Last login</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                      
 
-                      <% if(departments) departments.forEach(function(department){ %>
+                      <% if(users) users.forEach(function(user){ %>
                       <tr>
-                        <td><%= department.name %></td>
-                        <td><%= department.no_of_stores %></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="/images/departments/<%= department.logo %>" /></td>
-                        <td><%= department.description %></td>
-                        <td><%= department.is_active %> </td>
-                        <td><%= moment(department.createdAt).format('MMMM Do YYYY'); %></td>
-                        <td><a href="/admin/department/delete/<%= department._id %>"
+                        <td><%= user.first_name%> <%=user.last_name%></td>
+                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="/<%= user.profile_pic %>" /></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.contact_no %> </td>
+                        <td><%= moment(user.dob).format('MMMM Do YYYY'); %></td>
+                        <td><%= moment(user.createdAt).format('MMMM Do YYYY'); %></td>
+                        <td><%= user.status %></td>
+                        <td><a href="/admin/user/delete/<%= user._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/department/edit/<%= department._id %>""><i
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/user/edit/<%= user._id %>""><i
                               class="fas fa-pencil-alt"></i></a></td>
                       </tr>
                       <% }) %>
@@ -97,11 +115,13 @@
                       <tr>
                       <tr>
                         <th>Name</th>
-                        <th>No of Stores</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Is Active</th>
-                        <th>Create At</th>
+                        <th>Profile Pic</th>
+                        <th>Email</th>
+                        <th>Timezone</th>
+                        <th>Contact No</th>
+                        <th>DoB</th>
+                        <th>Last login</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>
@@ -154,7 +174,7 @@
   <!-- Page specific script -->
   <script>
     $(function () {
-      $("#departments").DataTable({
+      $("#users").DataTable({
         dom:'Pfrtip',
         language: {
             searchPanes: {
@@ -165,7 +185,7 @@
         "lengthChange": false,
         "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
+      }).buttons().container().appendTo('#users_wrapper .col-md-6:eq(0)');
       
     });
   </script>

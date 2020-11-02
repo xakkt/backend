@@ -15,7 +15,15 @@ exports.list = async (req, res)=>{
 	   }
 },
 
-exports.show =  async (req, res)=> { 
+exports.create = async (req, res)=>{
+	try{
+		res.render('admin/department/create', { menu:"departments", submenu:"create" })
+	}catch(err){
+		res.status(400).json({status: "false", data: err});
+	}
+},
+
+exports.edit =  async (req, res)=> { 
 	try{
 		const departments = await Department.findById(req.params.id).exec();
 		 res.render('admin/department/edit',{status: "success", message: "", departments: departments,menu:"departments", submenu:"create"})
@@ -26,9 +34,8 @@ exports.show =  async (req, res)=> {
 	
 	
 },
-exports.create = async(req, res) => { 
+exports.save = async(req, res) => { 
     
-
 				const errors = await validationResult(req);
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
@@ -44,71 +51,28 @@ exports.create = async(req, res) => {
 				
 				let department = await Department.create(departmentinfo);
 				res.redirect('/admin/departments')
-				// res.json({status: "success", message: "Department added successfully", data: department});
+				
 				}catch(err){
-					console.log(err)
-				 res.status(400).json({data: err.message});
+					 res.status(400).json({data: err.message});
 				}				
 					
 			}; 
-exports.addLocation = async(req,res) => {
-	var storeLocationInfo = {
-		_store: req.body._store,
-		address: req.body.address,
-		city: req.body.city,
-		state: req.body.state,
-		_country: req.body._country,
-		zipcode: req.body.zipcode, 
-		location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
-		contact_no: req.body.contact_no,
-		time_schedule: req.body.time_schedule
-	} 
-}
-exports.nearByStores = async(req, res) =>{
 
-	const errors = await validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
-
-	Department.find({ location :  { $near :	{ $geometry :  
-				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:10000 	}  } 
-		} ).then( departments => {
-			
-		   			if(!departments.length) return res.status(400).json({status:false, message: "No department found nearby"});
-					return res.json({status:true, message: "", data:departments}); 
-								
-		}).catch( err => {
-			res.status(400).json({status:false, message:err});
-  		})
-
-}
-	
-
-exports.updateStore = async function(req, res){
+exports.update = async function(req, res){
 
 	try{
 		const errors = await validationResult(req);
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
 				}
-		 let departmentinfo = {}
-		 if(req.file)
-		 {
-			 departmentinfo =  { 
-				name: req.body.name,
-				description: req.body.description, 
-				logo: req.file.filename
-			}
-		 }
-		 else
-		 {
-			 departmentinfo =  { 
-				name: req.body.name,
-				description: req.body.description, 
-			}
-		 }
-	
+		 
+		const departmentinfo =  { 
+					name: req.body.name,
+					description: req.body.description, 
+				}		
+		 
+		if(req.file) { departmentinfo.logo = req.file.filename}
+		 
 
 		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
 		const department =  await Department.findByIdAndUpdate({ _id: req.params.id }, departmentinfo,{ new: true,	upsert: true});
@@ -123,7 +87,7 @@ exports.updateStore = async function(req, res){
 
 }
 
-exports.deleteStore = async(req,res)=>{
+exports.delete = async(req,res)=>{
 	Department.deleteOne({ _id: req.params.id }, function (err) {
 		if (err) return res.status(400).json({data:err});
 		res.redirect('/admin/departments')
@@ -131,13 +95,5 @@ exports.deleteStore = async(req,res)=>{
 	  });
 }
 
-exports.getStoreByZipcode = async(req, res)=>{
-	try{
-		let departments = await Department.find({zipcode:req.params.zipcode}).lean();
-		if(!departments.length) return res.json({message: "Not department found"});
-		return res.json({status:true, message: "", data:departments});
-	}catch(err){
-		res.status(400).json({data:err});
-	}
-}
+
 

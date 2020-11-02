@@ -3,10 +3,10 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('./config/database')
 const path = require('path')
-
+var { flash } = require('express-flash-message');
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('./config/swagger.json')
-
+var session = require('express-session')
 const PORT = process.env.PORT || 4000
 const app = express();
 var cors = require('cors')
@@ -17,13 +17,17 @@ var moment = require('moment');
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
 //moment.tz.setDefault("America/New_York");
+var sess = {
+  secret: 'keyboard cat',
+  cookie: {}
+}
+/*if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}*/
 
-/*const userRoutes = require('./routes/user');
-const productCategoryRoutes = require('./routes/product_category')
-const settingRoute = require('./routes/setting')
-const wishlistRoute = require('./routes/wishlist')
-const shoppinglistRoute = require('./routes/shoppinglist')
-const cartRoute = require('./routes/cart')*/
+app.use(session(sess))
+app.use(flash({ sessionKeyName: 'xakktFlashMessages' })); 
 const adminRoute = require('./routes/admin')
 const mobileApi = require('./routes/api')
 

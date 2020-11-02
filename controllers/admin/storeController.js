@@ -143,20 +143,39 @@ exports.updateStore = async function(req, res){
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
 				}
-	
-		let departmentinfo =  { 
-			name: req.body.name,
-			description: req.body.description, 
-			contact_no: req.body.contactno,
-			zipcode: req.body.zipcode, 
-			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
-			status:req.body.status, 
-		}
-
-		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
-		const department =  await Store.findByIdAndUpdate({ _id: req.params.id }, departmentinfo,{ new: true,upsert: true});
-			if(department)res.redirect('/admin/stores')
-			// return res.json({status:true, message: "Store updated", data:department});
+				var holiday_date = req.body.holiday.split('-').map((item)=> item.trim() )
+				const storeinfo =  { 
+					name: req.body.name,
+					_department: req.body.department,
+					_user: req._user,
+					contact_no: req.body.contact_no,
+					address: req.body.address,
+					city: req.body.city,
+					state: req.body.state,
+					_country: req.body.country,
+					_timezone: req.body.timezone,
+					zipcode: req.body.zipcode,
+					contact_no: req.body.contactno,
+					location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
+					time_schedule: {
+						 Monday : { startTime: req.body.monday_stime, endTime: req.body.monday_etime },
+						 Tuesday : { startTime: req.body.tuesday_stime, endTime: req.body.tuesday_etime },
+						 Wednesday : { startTime: req.body.wednesday_stime, endTime: req.body.wednesday_etime },
+						 Thursday : { startTime: req.body.thursday_stime, endTime: req.body.thursday_etime },
+						 Friday : { startTime: req.body.friday_stime, endTime: req.body.friday_etime },
+						 Saturday : { startTime: req.body.saturday_stime, endTime: req.body.saturday_etime },
+						 Sunday : { startTime: req.body.sunday_stime, endTime: req.body.sunday_etime },
+					
+					},
+					holidays: {	
+						startDate: holiday_date[0], 
+						endDate: holiday_date[1],
+						message: req.body.holiday_message
+					}
+					
+				}
+		   const store =  await Store.findByIdAndUpdate({ _id: req.params.id }, storeinfo,{  new: true,upsert: true});
+			if(store)res.redirect('/admin/stores')
 			return res.status(400).json({status:false, message: "Store not found"});
 			
 		} catch(err){ console.log(err)

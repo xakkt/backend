@@ -150,11 +150,11 @@
                     <div class="row">
                     <div class="col">
                       <label for="lat">Latitude</label>
-                      <input type="number" class="form-control" id="lat" name="lat" value="<%=store.location.coordinates[0]%>">
+                      <input type="number" class="form-control" id="lat" name="lat" value="<%=store.location.coordinates[1]%>">
                     </div>
                     <div class="col">
                       <label for="long">Longitude</label>
-                      <input type="number" class="form-control" id="long" name="long" value="<%=store.location.coordinates[1]%>">
+                      <input type="number" class="form-control" id="long" name="long" value="<%=store.location.coordinates[0]%>">
                     </div>
                     </div>
                   </div>
@@ -173,8 +173,8 @@
                          <% for (const [key, value] of Object.entries(store.time_schedule)) { %>
                             <tr>
                                 <td> <%=key%> </td>
-                                <td class="form-group"> <input name="monday_stime" type="time" value="<%=value.startTime%>" class="form-control"> </td>
-                                <td class="form-group"> <input name="monday_etime" type="time" value="<%=value.endTime%>" class="form-control"> </td>
+                                <td class="form-group"> <input name="<%=key.toLowerCase()%>_stime" type="time" value="<%=value.startTime%>" class="form-control"> </td>
+                                <td class="form-group"> <input name="<%=key.toLowerCase()%>_etime" type="time" value="<%=value.endTime%>" class="form-control"> </td>
                               </tr>
                          <%}%> 
                        

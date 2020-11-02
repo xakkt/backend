@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 var bodyParser = require('body-parser');
-const cartController = require('../controllers/api/cartController')
+
 const departmentController = require('../controllers/admin/departmentController')
+const userController = require('../controllers/admin/userController')
 const storeController = require('../controllers/admin/storeController')
 const verifyjwt = require('../middlewares/tokenVerification');
 var moment = require('moment');
@@ -14,13 +15,24 @@ const path = require('path')
 var multer  = require('multer')
 var storage =   multer.diskStorage({
     destination: function (req, file, callback) {
-      callback(null, './public/departments');
+      callback(null, './public/images/departments');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
       callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
+
+  var userStorage =   multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, './public/images/users');
+    },
+    filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
+      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+    }
+  });
+
   var upload = multer({ storage : storage})
+  var userUpload = multer({storage: userStorage})
 
 /*-------- validation -------------*/
 
@@ -35,21 +47,22 @@ router.get('/',(req,res)=>{
       res.render('admin/index',{ menu:"dashboard" }) 
 });
 
+/*------------ User ---------*/
+router.get('/users',userController.list)
+router.get('/user/create',userController.create);
+router.post('/user/save',userUpload.single('profile_pic'),userController.save)
+router.get('/user/delete/:userid', userController.delete);
+router.get('/user/edit/:id', userController.edit);
+router.post('/user/update/:id',userUpload.single('profile_pic'),userController.update)
 
 /*------------- Department -------*/
 router.get('/departments',departmentController.list)
+router.get('/department/create',departmentController.create);
+router.post('/department/save',upload.single('logo'),departmentController.save)
+router.get('/department/delete/:id', departmentController.delete);
+router.get('/department/edit/:id', departmentController.edit);
+router.post('/department/update/:id',upload.single('logo'),departmentController.update)
 
-router.get('/department/create',(req, res)=> { 
-    res.render('admin/department/create', { menu:"departments", submenu:"create" })
-})
-router.get('/departments/delete/:id', departmentController.deleteStore);
-
-router.get('/departments/show/:id', departmentController.show);
-
-router.post('/departments/edit/:id',upload.single('logo'),departmentController.updateStore)
-
-
-router.post('/departments/save',upload.single('logo'),departmentController.create)
 /*------------- Store --------*/
 
 router.get('/stores',storeController.list)

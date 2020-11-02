@@ -43,8 +43,8 @@
             
           </li>
           <!-- Users -->
-          <li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">
-            <a href="#" class="nav-link <% if (menu === 'departments') { %> active <% } %>">
+          <li class="nav-item <% if (menu === 'users') { %> menu-open <% } %>">
+            <a href="#" class="nav-link <% if (menu === 'users') { %> active <% } %>">
               <i class="nav-icon fas fa-box-open"></i>
               <p>
                 Users
@@ -54,7 +54,7 @@
             <ul class="nav nav-treeview">
               
               <li class="nav-item">
-                <a href="/admin/department/create" class="nav-link <% if (menu === 'departments' && submenu === 'create' ) { %> active <% } %>">
+                <a href="/admin/user/create" class="nav-link <% if (menu === 'users' && submenu === 'create' ) { %> active <% } %>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New User</p>
                 </a>
@@ -64,9 +64,9 @@
             <ul class="nav nav-treeview">
               
               <li class="nav-item">
-                <a href="/admin/departments" class="nav-link <% if (menu === 'departments' && submenu === 'list' ) { %> active <% } %>">
+                <a href="/admin/users" class="nav-link <% if (menu === 'users' && submenu === 'list' ) { %> active <% } %>">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All Departments</p>
+                  <p>All Users</p>
                 </a>
               </li>
              

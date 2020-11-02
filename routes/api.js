@@ -171,7 +171,6 @@ router.get('/store/list',storeController.list);
 router.get('/store/zipcode/:zipcode',storeController.getStoreByZipcode);
 router.post('/store/nearby/stores', storeNearByValidation,storeController.nearByStores);
 router.put('/store/:id/update', storeValidation, storeController.updateStore);
-router.delete('/store/:id/delete', verifyjwt.checkToken,storeController.deleteStore);
 router.get('/store/:id',storeController.show);
 
 

@@ -54,19 +54,7 @@ exports.create = async(req, res) => {
 				}				
 					
 			}; 
-exports.addLocation = async(req,res) => {
-	var storeLocationInfo = {
-		_store: req.body._store,
-		address: req.body.address,
-		city: req.body.city,
-		state: req.body.state,
-		_country: req.body._country,
-		zipcode: req.body.zipcode, 
-		location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
-		contact_no: req.body.contact_no,
-		time_schedule: req.body.time_schedule
-	} 
-}
+
 exports.nearByStores = async(req, res) =>{
 
 	const errors = await validationResult(req);
@@ -87,11 +75,9 @@ exports.nearByStores = async(req, res) =>{
 
 }
 	
-
 exports.updateStore = async function(req, res){
 
 	try{
-
 		const errors = await validationResult(req);
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
@@ -114,15 +100,6 @@ exports.updateStore = async function(req, res){
 		} catch(err){ console.log(err)
 			res.status(400).json({status:false, message: "Not updated", data:err});
 		}
-	
-
-}
-
-exports.deleteStore = async(req,res)=>{
-	Department.deleteOne({ _id: req.params.id }, function (err) {
-		if (err) return res.status(400).json({data:err});
-		 return res.json({status:true, message: "Department Deleted", data:[]});
-	  });
 }
 
 exports.getStoreByZipcode = async(req, res)=>{
