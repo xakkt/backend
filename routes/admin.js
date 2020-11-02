@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
+const productController = require('../controllers/admin/productController')
+
 const storeController = require('../controllers/admin/storeController')
 const verifyjwt = require('../middlewares/tokenVerification');
 var moment = require('moment');
@@ -30,9 +32,18 @@ var storage =   multer.diskStorage({
       callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
+  var productStorage =   multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, './public/images/products');
+    },
+    filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
+      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+    }
+  });
 
   var upload = multer({ storage : storage})
   var userUpload = multer({storage: userStorage})
+  var productUpload = multer({storage: productStorage})
 
 /*-------- validation -------------*/
 
@@ -77,6 +88,11 @@ router.post('/store/update/:id', storeController.updateStore)
 router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
 })
+router.post('/product/create',productUpload.single('logo'),productController.productsave)
+router.get('/product',productController.productlisting)
+router.get('/product/delete/:id', productController.productdelete);
+router.get('/product/edit/:id',productController.productedit)
+router.post('/product/update/:id',productUpload.single('logo'), productController.productupdate)
 
 router.get('/product/create',(req, res)=> {
       res.render('admin/product/create', { menu:"products", submenu:"create"})
@@ -87,14 +103,17 @@ router.get('/invoice',(req, res)=> {
 })
 
 /*----- product Category ------*/
-router.get('/category',(req, res)=> { 
-    res.render('admin/product-category/create',{ menu:"category" })
-})
+router.get('/category',productController.list)
+router.get('/category/create',productController.create)
+router.post('/category/save',upload.single('logo'),productController.save)
+router.get('/category/delete/:id', productController.delete)
+router.get('/category/edit/:id',productController.edit)
+router.post('/category/update/:id',upload.single('logo'), productController.update)
+
 
 router.get('/category/create',(req, res)=> { 
         res.render('admin/category/create', { menu:"category"})
 })
-
 router.get('/brands',(req, res)=> { 
    
     res.render('admin/brand/listing', { menu:"brands" })

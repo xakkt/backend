@@ -173,12 +173,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>New Product</h1>
+              <h1>Edit Product</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">New Product</li>
+                <li class="breadcrumb-item active">Edit Product</li>
               </ol>
             </div>
           </div>
@@ -191,7 +191,7 @@
           <!-- SELECT2 EXAMPLE -->
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Add Product Details</h3>
+              <h3 class="card-title">Edit Product Details</h3>
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                   <i class="fas fa-minus"></i>
@@ -200,12 +200,12 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <form id="departmentForm" method="post" action="/admin/product/create" enctype="multipart/form-data">
+              <form id="departmentForm" method="post" action="/admin/product/update/<%= product._id %>" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="departmentname">Name</label>
-                      <input type="text" name="en_name" class="form-control" id="departmentname" placeholder="Enter name">
+                      <input type="text" name="en_name" value = "<%= product.name.get('english') %>"class="form-control" id="departmentname" placeholder="Enter name">
                     </div>
                   </div>
                 </div>
@@ -213,7 +213,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Description</label>
-                      <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                      <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."><%= product.description %></textarea>
                     </div>
                   </div>
                 </div>
@@ -221,7 +221,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Short Description</label>
-                      <textarea name="short_description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                      <textarea name="short_description" class="form-control" rows="3" placeholder="Enter ..."><%= product.short_description %></textarea>
                     </div>
                   </div>
                 </div>
@@ -241,27 +241,31 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="departmentname">SKU</label>
-                    <input type="text" name="sku" class="form-control" id="departmentname" placeholder="Enter name">
+                    <input type="text" name="sku" value = "<%= product.sku %>"class="form-control" id="departmentname" placeholder="Enter name">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="departmentname">Price</label>
-                    <input type="number" name="price" class="form-control" id="departmentname" placeholder="Enter price">
+                    <input type="number" name="price" value = "<%= product.price %>" class="form-control" id="departmentname" placeholder="Enter price">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="departmentname">Weight</label>
-                    <input type="text" name="weight" class="form-control" id="departmentname" placeholder="Enter name">
+                    <input type="text" name="weight" value = "<%= product.weight %>" class="form-control" id="departmentname" placeholder="Enter name">
                   </div>
                 </div>
                  <div class="col-md-6">
                   <div class="form-group">
                     <label for="departmentname">Status</label>
                     <select name="status" id="status">
+                        <% console.log("---tests",(product.status == true))%>
+                        <% if(product.status == true) {%>
                       <option value="true">true</option>
+                      <% } else { %>
                       <option value="false">false</option>
+                      <% } %>
                     </select>                
                     </div>
                 </div>
@@ -351,9 +355,7 @@
           description: {
             required: true,
           },
-          logo: {
-            required: true
-          },
+          
         },
         messages: {
           name: {
@@ -362,9 +364,7 @@
           description: {
             required: "Please enter the description",
           },
-          logo: {
-            required: "Please select an image"
-          }
+         
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

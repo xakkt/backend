@@ -13,7 +13,7 @@ const productSchema = new Schema({
   _category: {
     type: Schema.Types.ObjectId,
     ref: 'ProductCategory',
-    required: true,
+    //required: true,
     validate: {
       validator: function(v) {
             return FKHelper(mongoose.model('ProductCategory'), v);
@@ -45,12 +45,12 @@ const productSchema = new Schema({
   },
   valid_from: {
     type: Date,
-    required: true,
+    //required: true,
     get: dateToString
   },
   valid_till: {
     type: Date,
-    required: true,
+    //required: true,
     get: dateToString
   },
   is_bestseller: {
@@ -75,11 +75,11 @@ const productSchema = new Schema({
   },
   price: {
     type: Number,
-    required: true
+    //required: true
   },
   image: {
     type: String,
-    required: true
+    //required: true
   },
   unit_id: {
     type: Number,

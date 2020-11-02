@@ -7,8 +7,8 @@ exports.list = async (req, res)=>{
 	
 	  try{
 			let departments = await Department.find().exec();
-			if(!departments.length) return res.render('admin/department/listing',{ menu:"departments", submenu:"list", departments:"" })
-			return res.render('admin/department/listing',{ menu:"departments", submenu:"list", departments:departments })
+			if(!departments.length) return res.render('admin/department/listing',{ menu:"departments", submenu:"list", departments:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
+			return res.render('admin/department/listing',{ menu:"departments", submenu:"list", departments:departments,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
 			
 	   }catch(err){
 			res.status(400).json({status: "success", message: "Department added successfully", data: err});
@@ -40,22 +40,21 @@ exports.save = async(req, res) => {
 				if (!errors.isEmpty()) {
 					return res.status(400).json({ errors: errors.array() });
 				}
-
 				try{
 					const departmentinfo =  { 
 							name: req.body.name,
 							description: req.body.description, 
 					     	logo: req.file.filename
 						}
-						
-				
 				let department = await Department.create(departmentinfo);
+				await req.flash('success', 'Department added successfully!');
 				res.redirect('/admin/departments')
 				
 				}catch(err){
-					 res.status(400).json({data: err.message});
+					await req.flash('failure', err.message);
+					res.redirect('/admin/departments')
+					//  res.status(400).json({data: err.message});
 				}				
-					
 			}; 
 
 exports.update = async function(req, res){
@@ -74,14 +73,18 @@ exports.update = async function(req, res){
 		if(req.file) { departmentinfo.logo = req.file.filename}
 		 
 
-		//if(req.file){ userinfo.profile_pic=req.file.path.replace('public/',''); }
 		const department =  await Department.findByIdAndUpdate({ _id: req.params.id }, departmentinfo,{ new: true,	upsert: true});
-			if(department)res.redirect('/admin/departments')
-			// return res.json({status:true, message: "Department updated", data:department});
+			if(department)
+			{
+				await req.flash('success', 'Department updated successfully!');
+				 res.redirect('/admin/departments')
+			}
 			return res.status(400).json({status:false, message: "Department not found"});
 
 		} catch(err){ console.log(err)
-			res.status(400).json({status:false, message: "Not updated", data:err});
+			await req.flash('failure', err.message);
+			res.redirect('/admin/departments')
+			// res.status(400).json({status:false, message: "Not updated", data:err});
 		}
 	
 
@@ -90,6 +93,7 @@ exports.update = async function(req, res){
 exports.delete = async(req,res)=>{
 	Department.deleteOne({ _id: req.params.id }, function (err) {
 		if (err) return res.status(400).json({data:err});
+		 req.flash('success', 'Department deleted successfully!');
 		res.redirect('/admin/departments')
 		//  return res.json({status:true, message: "Department Deleted", data:[]});
 	  });

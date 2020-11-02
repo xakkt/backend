@@ -46,7 +46,20 @@
           </div>
         </div><!-- /.container-fluid -->
       </section>
+<!--- message section should be common for all-->
 
+            <% if(failure.length){ %> 
+            <div class="alert alert-danger">
+                <strong><%= failure[0] %></strong>
+              </div>
+              <% } %>
+            <% if(success.length){ %>   
+            <div class="alert alert-success">
+                <strong><%= success %></strong> 
+            </div>
+            <% } %>
+
+<!---- end of messages -->   
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">

@@ -195,7 +195,7 @@
                <!-- SELECT2 EXAMPLE -->
                <div class="card card-primary">
                   <div class="card-header">
-                     <h3 class="card-title">Add Product Category</h3>
+                     <h3 class="card-title">Edit Product Category</h3>
                      <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                            <i class="fas fa-minus"></i>
@@ -204,18 +204,16 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                     <form id="departmentForm" method="post" action="/admin/category/save" enctype="multipart/form-data">
+                     <form id="departmentForm" method="post" action="/admin/category/update/<%= productCategory._id %>" enctype="multipart/form-data">
                         <div class="row">
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label>Parent</label>
                                  <select class="select2" data-placeholder="Select a State" name="parentid"
                                     style="width: 100%;">
-                                    <% console.log("product",product) %>
                                     <% if(product.length > 0) { %>
-                                    <% product.forEach((department)=>{ %>
-                                       <% console.log("department",department) %>
-                                    <option value="<%=department._id%>"><%=department.name%></option>
+                                    <% product.forEach((product)=>{ %>
+                                        <option value="<%=product._id%>"><%=product.name%></option>
                                     <%})%>
                                     <% } else { %>
                                     <option value="">No Category Found</option>
@@ -242,7 +240,7 @@
                         <div class="col-md-12">
                            <div class="form-group">
                               <label for="departmentname">Name</label>
-                              <input type="text" name="name" class="form-control" id="departmentname" placeholder="Enter name">
+                              <input type="text" name="name"  value = "<%= productCategory.name %>" class="form-control" id="departmentname" placeholder="Enter name">
                            </div>
                         </div>
                      </div>
@@ -302,9 +300,7 @@
                                           description: {
                                              required: true,
                                           },
-                                          logo: {
-                                             required: true
-                                          },
+                                         
                                        },
                                        messages: {
                                           name: {
@@ -313,9 +309,7 @@
                                           description: {
                                              required: "Please enter the description",
                                           },
-                                          logo: {
-                                             required: "Please select an image"
-                                          }
+                                        
                                        },
                                        errorElement: 'span',
                                        errorPlacement: function (error, element) {
