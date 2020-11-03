@@ -208,26 +208,32 @@
                       <input type="text" name="en_name" value = "<%= product.name.get('english') %>"class="form-control" id="departmentname" placeholder="Enter name">
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="product_category">Product Category</label>
+                      <input type="text" name="product_category" class="form-control" id="product_category"
+                        placeholder="Enter Product Category">
+                    </div>
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label>Description</label>
                       <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."><%= product.description %></textarea>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label>Short Description</label>
                       <textarea name="short_description" class="form-control" rows="3" placeholder="Enter ..."><%= product.short_description %></textarea>
                     </div>
                   </div>
                 </div>
+                <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="departmentLogo">File input</label>
+                    <label for="departmentLogo">Product image</label>
                     <div class="input-group">
                       <div class="custom-file">
                         <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg" id="departmentLogo">
@@ -244,55 +250,53 @@
                     <input type="text" name="sku" value = "<%= product.sku %>"class="form-control" id="departmentname" placeholder="Enter name">
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Price</label>
-                    <input type="number" name="price" value = "<%= product.price %>" class="form-control" id="departmentname" placeholder="Enter price">
-                  </div>
                 </div>
+                <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="departmentname">Weight</label>
                     <input type="text" name="weight" value = "<%= product.weight %>" class="form-control" id="departmentname" placeholder="Enter name">
                   </div>
                 </div>
-                 <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Status</label>
-                    <select name="status" id="status">
-                        <% console.log('im inside the meta ')%>
+                <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="status">Status</label>
+                      <select name="status" class="form-control custom-select" id="status">
                         <% if(product.status == true) {%>
-                      <option value="true">true</option>
-                      <% } else { %>
-                      <option value="false">false</option>
-                      <% } %>
-                    </select>                
+                        <option value="true" selected>Active</option>
+                        <option value="false">Inactive</option>
+
+                        <% } else { %>
+                        <option value="false"selected>Inactive</option>
+                        <option value="true">Active</option>
+                        <% } %>
+                      </select>
                     </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Set Product as New from Date and End</label>
-                    <input type="text" name="date" class="form-control" id="departmentname" placeholder="Enter name">
                   </div>
-                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Most saved?</label>
-                    <select name="cars" id="status">
-                      <option value="">No</option>
-                      <option value="">Yes</option>
-                    </select>                
+
+                    <div class="form-group">
+                      <label for="mostsaved">Most Saved</label>
+                      <select id="mostsaved" class="form-control custom-select">
+                        <option selected="" disabled="">Most saved?</option>
+                        <option>No</option>
+                        <option>Yes</option>
+                      </select>
                     </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Featured?</label>
-                    <select name="Featured" id="status">
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
-                    </select>                
+
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="featured">Featured?</label>
+                      <select name="Featured" id="status" class="form-control custom-select">
+                        <option value="true">No</option>
+                        <option value="false">Yes</option>
+                      </select>
                     </div>
-                </div>
+                  </div>
+            </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="departmentname">Brand</label>
