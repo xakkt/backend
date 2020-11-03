@@ -12,7 +12,7 @@ const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-//const transporter = require('../../config/transporter-mail');
+const transporter = require('../../config/transporter-mail');
 
 
 class Mail { 
@@ -70,6 +70,7 @@ exports.create = async (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	  }
+	  console.log("---req.body",req.body.email)
 		let userinfo =  { 
 							first_name: req.body.first_name,
 							last_name: req.body.last_name, 
@@ -164,13 +165,13 @@ exports.updatestatus = async (req, res,) => {
 
 	exports.forgotPassword = async (req, res)=>{
 	
-		try{
+		try{ 
 				const password = randomstring.generate({length: 12,	charset: 'alphanumeric' });
-				const info = {email:req.query.email, password:password}
+				const info = {email:req.body.email, password:password}
 				mail = new Mail(info);
 				const encrypted_password = await bcrypt.hashSync(password, saltRounds);
-				const user =  await User.updateOne({ email: req.query.email }, { password: encrypted_password });
-				
+				const user =  await User.updateOne({ email: req.body.email }, { password: encrypted_password });
+
 				if(user.nModified){
 					if(mail.sendmail())
 					{

@@ -81,7 +81,7 @@ const updateListValidation = [
 ]
 
 const userValidation = [
-    body('email').isEmail().normalizeEmail().withMessage('Should be an email'),
+    body('email').isEmail().withMessage('Should be an email'),
     body('first_name').not().isEmpty().trim().escape().withMessage('first_name should not be empty'),
     body('last_name').not().isEmpty().trim().escape().withMessage('last_name should not be empty'),
     body('contact_no').not().isEmpty().trim().escape().withMessage('contact_no should not be empty'),
@@ -89,7 +89,7 @@ const userValidation = [
 ]
 
 const authValidation = [
-    body('email').isEmail().normalizeEmail(),
+    body('email').isEmail(),
     body('password').not().isEmpty().trim().escape()
 ]
 
@@ -108,11 +108,13 @@ const orderValidation = [
    // body('rating').isInt().withMessage('rating should not be empty') 
 ]
 /*--- user ---*/
+router.post('/user/forgetpassword',userController.forgotPassword);
 router.post('/user/create',userValidation,userController.create);
 router.get('/user/list', userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
 router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
+
 
 
 /*--- home ---*/
