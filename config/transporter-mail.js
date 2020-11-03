@@ -4,8 +4,8 @@ var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     auth: {
-        user: "ims.msnegi",
-        pass: "negi@22341"
+        user: "imdev4ios",
+        pass: "xnearhdsgilergdh"
     }
 });
 

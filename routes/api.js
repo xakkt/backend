@@ -114,7 +114,7 @@ router.get('/user/list', userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
 router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
-
+router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
 
 
 /*--- home ---*/
