@@ -12,7 +12,7 @@ const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-const transporter = require('../../config/transporter-mail');
+//const transporter = require('../../config/transporter-mail');
 
 
 class Mail { 

@@ -106,8 +106,10 @@ exports.productsave = async (req,res) =>{
             
         }
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
-        const productCategory = await Product.create(productinfo);
+        const product = await Product.create(productinfo);
         await req.flash('success', 'Product added successfully!');
+        // res.render('admin/product', { status: "success", message: "", product: product, product: product, menu: "Product" })
+
         res.redirect('/admin/product')
     } catch (err) {
         await req.flash('failure', err.message);

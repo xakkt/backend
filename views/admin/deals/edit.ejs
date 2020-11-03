@@ -164,12 +164,12 @@
             <div class="container-fluid">
                <div class="row mb-2">
                   <div class="col-sm-6">
-                     <h1>New Deal</h1>
+                     <h1>Edit Deal</h1>
                   </div>
                   <div class="col-sm-6">
                      <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">New Deal</li>
+                        <li class="breadcrumb-item active">Edit Deal</li>
                      </ol>
                   </div>
                </div>
@@ -182,7 +182,7 @@
                <!-- SELECT2 EXAMPLE -->
                <div class="card card-primary">
                   <div class="card-header">
-                     <h3 class="card-title">Add Deal Details</h3>
+                     <h3 class="card-title">Edit Deal </h3>
                      <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -191,12 +191,12 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                    <form id="dealForm" method="post" action="/admin/deal/save">
+                    <form id="dealForm" method="post" action="/admin/deal/update/<%= deal._id %>">
                      <div class="row">
                         <div class="col-md-6">
                            <div class="form-group">
                               <label for="dealname">Name</label>
-                              <input type="text" name="name" class="form-control" id="dealname" placeholder="Enter name">
+                              <input type="text" name="name" value="<%= deal.name %>" class="form-control" id="dealname" placeholder="Enter name">
                            </div>
                         </div>
                         <!-- /.col -->
@@ -206,7 +206,7 @@
                         <div class="col-md-12">
                            <div class="form-group">
                               <label>Description</label>
-                              <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                              <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."><%= deal.description %></textarea>
                            </div>
                         </div>
                      </div>

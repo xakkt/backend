@@ -6,6 +6,9 @@ var bodyParser = require('body-parser');
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
 const productController = require('../controllers/admin/productController')
+const brandController = require('../controllers/admin/brandController')
+const dealController = require('../controllers/admin/dealController')
+
 
 const storeController = require('../controllers/admin/storeController')
 const verifyjwt = require('../middlewares/tokenVerification');
@@ -40,10 +43,20 @@ var storage =   multer.diskStorage({
       callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
+  var brandStorage =   multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, './public/images/brands');
+    },
+    filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
+      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+    }
+  });
 
   var upload = multer({ storage : storage})
   var userUpload = multer({storage: userStorage})
   var productUpload = multer({storage: productStorage})
+  var brandUpload = multer({storage: brandStorage})
+
 
 /*-------- validation -------------*/
 
@@ -114,19 +127,37 @@ router.post('/category/update/:id',upload.single('logo'), productController.upda
 router.get('/category/create',(req, res)=> { 
         res.render('admin/category/create', { menu:"category"})
 })
-router.get('/brands',(req, res)=> { 
-   
-    res.render('admin/brand/listing', { menu:"brands" })
-})
+/*----------brand ------------*/
+router.get('/brand/create',brandController.create)
+router.get('/brand',brandController.listing)
+router.post('/brand/save',brandUpload.single('logo'),brandController.save)
+router.get('/brand/delete/:id', brandController.delete)
+router.get('/brand/edit/:id',brandController.edit)
+router.post('/brand/update/:id',brandUpload.single('logo'), brandController.update)
 
-router.get('/brand/create',(req, res)=> { 
-       res.render('admin/brand/create',{ menu:"brands" })
-})
+// router.get('/brands',(req, res)=> { 
+   
+//     res.render('admin/brand/listing', { menu:"brands" })
+// })
+
+// router.get('/brand/create',(req, res)=> { 
+//        res.render('admin/brand/create',{ menu:"brands" })
+// })
 
     
 router.get('/mobile/settings', (req, res)=> { 
        res.render('admin/brand/create',{ menu:"mobile" })
 })
+/*----------Deals------*/
+const dealsValidation = [
+  body('name').not().isEmpty().trim().escape(),
+ 
+]
+router.get('/deal/create',dealController.create)
+router.post('/deal/save',dealsValidation,dealController.save)
+router.get('/deal',dealController.listing)
+router.get('/deal/delete/:id', dealController.delete)
+router.get('/deal/edit/:id',dealController.edit)
+router.post('/deal/update/:id',dealController.update)
 
-    
 module.exports = router;
