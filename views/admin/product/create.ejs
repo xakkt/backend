@@ -205,89 +205,96 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="departmentname">Name</label>
-                      <input type="text" name="en_name" class="form-control" id="departmentname" placeholder="Enter name">
+                      <input type="text" name="en_name" class="form-control" id="departmentname"
+                        placeholder="Enter name">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="product_category">Product Category</label>
+                      <input type="text" name="en_name" class="form-control" id="product_category"
+                        placeholder="Enter Product Category">
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label>Description</label>
                       <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
+                
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label>Short Description</label>
-                      <textarea name="short_description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                      <textarea name="short_description" class="form-control" rows="3"
+                        placeholder="Enter ..."></textarea>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentLogo">File input</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg" id="departmentLogo">
-                        <label class="custom-file-label" for="departmentLogo">Choose file</label>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="departmentLogo">Product Image</label>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg"
+                            id="departmentLogo">
+                          <label class="custom-file-label" for="departmentLogo">Choose file</label>
+                        </div>
+
                       </div>
-                      
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="sku">SKU</label>
+                      <input type="text" name="sku" class="form-control" id="sku" placeholder="SKU code">
                     </div>
                   </div>
-                   <!-- /.col -->
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">SKU</label>
-                    <input type="text" name="sku" class="form-control" id="departmentname" placeholder="Enter name">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Price</label>
-                    <input type="number" name="price" class="form-control" id="departmentname" placeholder="Enter price">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Weight</label>
-                    <input type="text" name="weight" class="form-control" id="departmentname" placeholder="Enter name">
-                  </div>
-                </div>
-                 <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Status</label>
-                    <select name="status" id="status">
-                      <option value="true">true</option>
-                      <option value="false">false</option>
-                    </select>                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="weight">Weight</label>
+                      <input type="text" name="weight" class="form-control" id="weight" placeholder="Weight">
                     </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Set Product as New from Date and End</label>
-                    <input type="text" name="date" class="form-control" id="departmentname" placeholder="Enter name">
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Most saved?</label>
-                    <select name="cars" id="status">
-                      <option value="">No</option>
-                      <option value="">Yes</option>
-                    </select>                
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="status">Status</label>
+                      <select name="status" class="form-control custom-select" id="status">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                      </select>
                     </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Featured?</label>
-                    <select name="Featured" id="status">
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
-                    </select>                
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+
+                    <div class="form-group">
+                      <label for="mostsaved">Most Saved</label>
+                      <select id="mostsaved" class="form-control custom-select">
+                        <option selected="" disabled="">Most saved?</option>
+                        <option>No</option>
+                        <option>Yes</option>
+                      </select>
                     </div>
+
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="featured">Featured?</label>
+                      <select name="Featured" id="status" class="form-control custom-select">
+                        <option value="true">No</option>
+                        <option value="false">Yes</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
@@ -296,8 +303,8 @@
                       <option value="">Choose one</option>
                       <option value="No">No</option>
                       <option value="Yes">Yes</option>
-                    </select>                
-                    </div>
+                    </select>
+                  </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

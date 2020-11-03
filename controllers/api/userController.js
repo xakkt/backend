@@ -210,6 +210,7 @@ exports.updatestatus = async (req, res,) => {
 			 
 
 		}catch(err){
+			console.log(err)
 			res.status(400).json({status:false, message: "not updated", data:err});
 		}   
 	}
