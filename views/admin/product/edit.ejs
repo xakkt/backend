@@ -200,7 +200,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <form id="departmentForm" method="post" action="/admin/product/update/<%= product._id %>" enctype="multipart/form-data">
+              <form id="productForm" method="post" action="/admin/product/update/<%= product._id %>" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
@@ -297,16 +297,30 @@
                     </div>
                   </div>
             </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Brand</label>
-                    <select name="Brand" id="status">
-                      <option value="">Choose one</option>
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
-                    </select>                
-                    </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="brands">Brand</label>
+                  <select name="brand" class="form-control custom-select" id="brand">
+                    <option value="">Choose one</option>
+                    <% if(brands) brands.forEach(function(brand){ %>
+                      <option value="<%=brand._id%>"><%=brand.name%></option>
+                    <% }) %>
+                  </select>
                 </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="deals">Deals</label>
+                  <select name="deal" class="form-control custom-select" id="deals">
+                    <option value="">Select Deal</option>
+                    <% if(deals) deals.forEach(function(deal){ %>
+                      <option value="<%=deal._id%>"><%=deal.name%></option>
+                    <% }) %>
+                  </select>
+                </div>
+              </div>
+              </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
@@ -351,7 +365,7 @@
 
     $(function () {
 
-      $('#departmentForm').validate({
+      $('#productForm').validate({
         rules: {
           name: {
             required: true

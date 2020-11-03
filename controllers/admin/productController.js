@@ -1,16 +1,30 @@
 const ProductCategory = require('../../models/product_category');
 const Product = require('../../models/product');
-
+const Brand = require('../../models/brand')
+const Deals = require('../../models/deal')
 const { validationResult } = require('express-validator');
 
 exports.create = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
+       
         res.render('admin/product-category/create', { menu: "ProductCategory", product: product })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
 }
+
+exports.productCreate = async (req, res) => {
+    try{
+        var brands = await Brand.find({}).lean();
+        var deals = await Deals.find({}).lean();
+        var productCategories = await ProductCategory.find({}).lean();
+        return res.render('admin/product/create', { menu:"products", submenu:"create", brands: brands, deals:deals, productCategories: productCategories})
+    }catch(err){
+        res.status(400).json({ data: err.message });
+    }
+},
+
 exports.save = async (req, res) => {
 
     try {
@@ -137,7 +151,10 @@ exports.productdelete = async (req, res) => {
 exports.productedit = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id).exec();
-        res.render('admin/product/edit', { status: "success", message: "", product: product, product: product, menu: "Product" })
+        var brands = await Brand.find({}).lean();
+        var deals = await Deals.find({}).lean();
+        var productCategories = await ProductCategory.find({}).lean();
+        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals:deals, product: product, productCategories: productCategories, menu: "Product" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }

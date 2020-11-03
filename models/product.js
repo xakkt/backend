@@ -41,7 +41,7 @@ const productSchema = new Schema({
   },
   weight: {
     type: Number,
-    //required: true
+    required: true
   },
   valid_from: {
     type: Date,

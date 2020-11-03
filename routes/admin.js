@@ -107,9 +107,7 @@ router.get('/product/delete/:id', productController.productdelete);
 router.get('/product/edit/:id',productController.productedit)
 router.post('/product/update/:id',productUpload.single('logo'), productController.productupdate)
 
-router.get('/product/create',(req, res)=> {
-      res.render('admin/product/create', { menu:"products", submenu:"create"})
-})
+router.get('/product/create', productController.productCreate)
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {
   res.render('admin/invoice', { menu:"invoice", submenu:"create"})
