@@ -2,6 +2,7 @@ const ProductCategory = require('../../models/product_category');
 const Product = require('../../models/product');
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
+const Stores = require('../../models/store')
 const { validationResult } = require('express-validator');
 
 exports.create = async (req, res) => {
@@ -10,6 +11,17 @@ exports.create = async (req, res) => {
        
         res.render('admin/product-category/create', { menu: "ProductCategory", product: product })
     } catch (err) {
+        res.status(400).json({ data: err.message });
+    }
+}
+
+exports.addPrice = async (req, res) => {
+    try{
+        var brands = await Brand.find({}).lean()
+        var deals = await Deals.find({}).lean();
+        var stores = await Stores.find({}).lean();
+        res.render('admin/product/pricing',{ menu: "ProductCategory", brands:brands, deals:deals, stores:stores })
+    }catch(err){
         res.status(400).json({ data: err.message });
     }
 }

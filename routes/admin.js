@@ -108,7 +108,7 @@ router.get('/product',productController.productlisting)
 router.get('/product/delete/:id', productController.productdelete);
 router.get('/product/edit/:id',productController.productedit)
 router.post('/product/update/:id',productUpload.single('logo'), productController.productupdate)
-
+router.get('/product/pricing',productController.addPrice);
 router.get('/product/create', productController.productCreate)
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {
