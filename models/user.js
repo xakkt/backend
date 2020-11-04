@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const mongooseLeanGetters = require('mongoose-lean-getters')
 var uniqueValidator = require('mongoose-unique-validator');
+const FKHelper = require('../helper/foreign-key-constraint');
+
 const Schema = mongoose.Schema;
 
 const bcrypt = require('bcrypt');
@@ -61,6 +63,19 @@ const userSchema = Schema({
         message: `Timezone doesn't exist`
     }
 },
+role_id: [
+  {
+      type: Schema.Types.ObjectId, 
+      ref: 'roles',
+      // required: true,
+      validate: {
+       validator: function(v) {
+               return FKHelper(mongoose.model('roles'), v);
+           },
+         message: `roles doesn't exist`
+       }
+   }
+],
   coupons: [
     { type: Schema.Types.ObjectId, ref: 'Coupon' }
   ] 

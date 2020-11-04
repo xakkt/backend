@@ -1,4 +1,5 @@
 const User = require('../../models/user');
+const Roles = require('../../models/role')
 
 var randomstring = require("randomstring");
 const express = require('express');
@@ -61,8 +62,9 @@ exports.check = function (req, res) {
 
     exports.edit = async (req, res) => {
         try {
+            var role =   await Roles.find({}).lean()
             const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-            res.render('admin/user/edit',{ menu: "users", submenu: "edit",status: "success", message: "", user: user });
+            res.render('admin/user/edit',{ menu: "users", submenu: "edit",status: "success",role:role, message: "", user: user });
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }
@@ -70,9 +72,9 @@ exports.check = function (req, res) {
 
 exports.create = async (req, res) => {
     try {
-        var timezone = await Timezone.find({}).lean();
-        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: timezone })
-
+        // var timezone = await Timezone.find({}).lean();
+          var role =    await Roles.find({}).lean()
+        res.render('admin/user/create', { menu: "users", submenu: "create", role: role })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });
@@ -89,6 +91,7 @@ exports.save = async (req, res) => {
             last_name: req.body.last_name,
             email: req.body.email,
             password: req.body.password,
+            role_id:req.body.role,
             contact_no: req.body.contact_no,
             status: req.body.status,
             last_login: req.body.last_login,
@@ -193,5 +196,6 @@ exports.authenticate = async (req, res) => {
 		  });
 	
     }
+
 
 

@@ -127,8 +127,14 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                    <label for="">Role</label>
-                                   <input type="text" class="form-control" id="role" name="role" placeholder="Role">
-                                </div>
+                                   <!-- <input type="text" class="form-control" id="role" name="role" placeholder="Role"> -->
+                                   <select class="select2" name="role" multiple="multiple" style="width: 100%;" placeholder="Select Role">
+                                    <% role.forEach((role)=>{ %>
+                                    <option value="<%=role._id%>"<%=(user.role_id.includes(role._id))?'selected':''%>><%=role.name%></option>
+                                    <%})%>
+                                  </select>
+                               
+                                 </div>
                              </div>
                               <!-- /.col -->
                            </div>
@@ -178,6 +184,9 @@
      
 <script>
   $(function () {
+   $('.select2').select2({
+        placeholder: "Select Roles"
+      })
     bsCustomFileInput.init();
   });
 

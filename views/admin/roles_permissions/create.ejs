@@ -199,6 +199,19 @@
         </div>
         <!-- /.container-fluid -->
       </section>
+      <div class="container">
+        <!-- Trigger the modal with a button -->
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#roleModal">Add
+          Role</button>
+        <!-- Modal -->
+       
+
+      </div>
+      <div class="container">
+        <!-- Trigger the modal with a button -->
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#permissionModal">Add
+          Permission</button>
+      </div>
       <!-- Main content -->
       <section class="content">
         <div class="container">
@@ -214,109 +227,9 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <div class="container">
-                <!-- Trigger the modal with a button -->
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#roleModal">Add
-                  Role</button>
-                <!-- Modal -->
-                <div class="modal fade" id="roleModal" role="dialog">
-                  <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      </div>
-                      <div class="modal-body">
-                        <form id="departmentForm" method="post" action="/admin/roles/create">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="departmentname">Name</label>
-                                <input type="text" name="name" class="form-control" id="departmentname"
-                                  placeholder="Enter name">
-                              </div>
-                            </div>
-                            <!-- /.col -->
-                            <!-- /.row -->
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label>Description</label>
-                                <textarea name="description" class="form-control" rows="3"
-                                  placeholder="Enter ..."></textarea>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-              </div>
+              
               <br>
-              <div class="container">
-                <!-- Trigger the modal with a button -->
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#permissionModal">Add
-                  Permission11</button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="permissionModal" role="dialog">
-                  <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1>Permission</h1>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      </div>
-                      <div class="modal-body">
-                        <form id="permission_form" method="post" action="/admin/roles/createPermission">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="permission_name">Name</label>
-                                <input type="text" name="permission_name" class="form-control" id="permission_name"
-                                  placeholder="Epermissionsssss">
-                              </div>
-                            </div>
-                            <!-- /.col -->
-                            <!-- /.row -->
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label>Description</label>
-                                <textarea name="permission_description" class="form-control" rows="3"
-                                  placeholder="Enter ..."></textarea>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-              </div>
+           
               <table style="width:100%">
                 <tr>
                   <th></th>
@@ -327,14 +240,13 @@
                 <% permission.forEach(function(permission){ %>
                 <tr>
                   <th><%= permission.name %></th>
-                  <%  roles.forEach(function(role){ %>
-                  <td><input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>" id="checkbox1"
-                      type="checkbox">
+                  <% roles.forEach(function(role){  %>
+                  <td><input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>" type="checkbox"
+                      <%=(role._permission.includes(permission._id))?'checked':''%>>
                   </td>
-                  <%}) %>
+                  <%})%>
                 </tr>
                 <%}) %>
-
               </table>
             </div>
             <!-- /.card -->
@@ -352,6 +264,99 @@
     <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
+  <!-- Pop for permission model -->
+  <div class="modal fade" id="permissionModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1>Permission</h1>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="permission_form" method="post" action="/admin/roles/createPermission">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="permission_name">Name</label>
+                  <input type="text" name="permission_name" class="form-control" id="permission_name"
+                    placeholder="Enter name">
+                </div>
+              </div>
+              <!-- /.col -->
+              <!-- /.row -->
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea name="permission_description" class="form-control" rows="3"
+                    placeholder="Enter ..."></textarea>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ------------popup for permission----- -->
+
+<!-- -------pop for role -------- -->
+
+<div class="modal fade" id="roleModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="departmentForm" method="post" action="/admin/roles/create">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="departmentname">Name</label>
+                <input type="text" name="name" class="form-control" id="departmentname"
+                  placeholder="Enter name">
+              </div>
+            </div>
+            <!-- /.col -->
+            <!-- /.row -->
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" class="form-control" rows="3"
+                  placeholder="Enter ..."></textarea>
+              </div>
+            </div>
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- -------pop for role -------- -->
 
 
   <!-- jQuery -->
@@ -370,24 +375,15 @@
 
   <script>
     $('input[type="checkbox"]').click(function () {
-      console.log("----roleid",)
-      // alert($(this).data("roleid") )
-      if ($(this).prop("checked") == true) {
-        $.ajax({
-          url: '/admin/roles/update',
-          type: 'POST',
-          data: {
-            roleid :$(this).data("roleid"),
-            permissionid :$(this).data("permisionid"),
-            checked:true
-          },
-        });
-
-      }
-      else if ($(this).prop("checked") == false) {
-        alert("wait")
-        // $("#result").html("Checkbox is unchecked.");
-      }
+      $.ajax({
+        url: '/admin/roles/update',
+        type: 'POST',
+        data: {
+          roleid: $(this).data("roleid"),
+          permissionid: $(this).data("permisionid"),
+          checked: $(this).prop("checked") ? 1 : 0
+        },
+      });
     });
     $(function () {
       bsCustomFileInput.init();
