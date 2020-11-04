@@ -9,7 +9,7 @@ const productController = require('../controllers/admin/productController')
 const brandController = require('../controllers/admin/brandController')
 const dealController = require('../controllers/admin/dealController')
 const storeproductController = require('../controllers/admin/storeproductController')
-
+const rpController = require('../controllers/admin/rolesnpermissionController')
 
 
 const storeController = require('../controllers/admin/storeController')
@@ -167,5 +167,7 @@ router.get('/storeproduct/delete/:id', storeproductController.delete)
 router.get('/storeproduct/view/:id',storeproductController.view)
 router.post('/storeproduct/update/:id',storeproductController.update)
 
+/*------------ Roles n Permissions --------*/
+router.get('/roles',rpController.createRole)
 
 module.exports = router;
