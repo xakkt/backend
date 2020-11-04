@@ -117,6 +117,7 @@ exports.productsave = async (req,res) =>{
             price: req.body.price,
             image:req.file.filename,
             status: req.body.status,
+            brand_id:req.body.brand
             
         }
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;

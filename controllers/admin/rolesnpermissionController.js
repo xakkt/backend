@@ -4,20 +4,81 @@ const { validationResult } = require('express-validator');
 
 exports.createRole = async (req, res)=>{
         try{
-            res.render('admin/_permission/create', { menu: "Roles" })
+             let roles = await Roles.find().exec()
+             let permission =  await Permission.find().exec()
+            res.render('admin/roles_permissions/create', { menu: "Roles",roles:roles,permission:permission })
         }catch(err){
             res.status(400).json({ data: err.message });
         }
 },
 exports.create = async (req, res) => {
     try {
-        var product = await ProductCategory.find({}).lean();
-        res.render('admin/product-category/create', { menu: "ProductCategory", product: product })
+        console.log("-----req",req.body)
+       const roleinfo = {
+           name:req.body.name,
+           description:req.body.description
+       }
+    let roles =  await Roles.create(roleinfo)
+    if(!roles) return res.render('admin/roles_permissions')
+
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
 }
+exports.update = async function (req, res) {
 
+    try {
+        // const errors = await validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     return res.status(400).json({ errors: errors.array() });
+        // }
+        console.log("---im here",req.body)
+           if(req.body.checked)
+           {
+         
+            const  permissioninfo = {
+                _permission:req.body.permissionid
+                    }
+                    const permission =    await Roles.findOneAndUpdate({
+                       _id:req.body.roleid,
+                       $push: { _permission: permissioninfo }
+                   })
+                   console.log("--test",permission)
+
+           }
+        // const categoryInfo = {
+        //     name: req.body.name,
+        // }
+
+        // if (req.file) { categoryInfo.logo = req.file.filename }
+        // const productCategory = await ProductCategory.findByIdAndUpdate({ _id: req.params.id }, categoryInfo, { new: true, upsert: true });
+        // if (productCategory){
+        //     await req.flash('success', 'Product updated successfully!');
+        //     res.redirect('/admin/category') }
+        // return res.status(400).json({ status: false, message: "ProductCategory not found" });
+
+    } catch (err) {
+        console.log(err)
+        await req.flash('failure', err.message);
+        res.redirect('/admin/category') 
+    }
+
+
+}
+exports.createPermission = async (req, res)=>{
+    try {
+        const permissioninfo = {
+            name:req.body.permission_name,
+            description:req.body.permission_description
+        }
+     let permissions =  await Permission.create(permissioninfo)
+     console.log("----permissions",permissions)
+     if(!permissions) return res.render('admin/roles_permissions')
+ 
+     } catch (err) {
+         res.status(400).json({ data: err.message });
+     }
+},
 exports.productCreate = async (req, res) => {
     try{
         var brands = await Brand.find({}).lean();
@@ -80,33 +141,7 @@ exports.edit = async (req, res) => {
 
 
 }
-exports.update = async function (req, res) {
 
-    try {
-        const errors = await validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const categoryInfo = {
-            name: req.body.name,
-        }
-
-        if (req.file) { categoryInfo.logo = req.file.filename }
-        const productCategory = await ProductCategory.findByIdAndUpdate({ _id: req.params.id }, categoryInfo, { new: true, upsert: true });
-        if (productCategory){
-            await req.flash('success', 'Product updated successfully!');
-            res.redirect('/admin/category') }
-        return res.status(400).json({ status: false, message: "ProductCategory not found" });
-
-    } catch (err) {
-        console.log(err)
-        await req.flash('failure', err.message);
-        res.redirect('/admin/category') 
-    }
-
-
-}
 exports.productsave = async (req,res) =>{
     try {
         const productinfo = {

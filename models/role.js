@@ -7,10 +7,10 @@ let rolesSchema = Schema({
     name    : { type: String, required: true, unique:true },
     description : { type: String, defualt: null},
     _permission : [
-        { 
+        {
             type: Schema.Types.ObjectId, 
             ref: 'Permission',
-            required: true,
+            // required: true,
             validate: {
              validator: function(v) {
                      return FKHelper(mongoose.model('Permission'), v);

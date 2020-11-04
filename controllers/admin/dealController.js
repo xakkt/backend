@@ -1,9 +1,12 @@
 const Deal = require('../../models/deal');
+const Store = require('../../models/store');
+
 const { validationResult } = require('express-validator');
 
 exports.create = async (req, res) => {
     try {
-        res.render('admin/deals/create', { menu: "deals", submenu: "create" })
+        let stores = await Store.find().exec();
+        res.render('admin/deals/create', { menu: "deals", submenu: "create",stores:stores })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -19,6 +22,7 @@ exports.save = async (req, res) => {
         const dealinfo = {
             name: req.body.name,
             description: req.body.description,
+            store_id:req.body.store
         }
 
         // categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
@@ -54,8 +58,9 @@ exports.delete = async (req, res) => {
 }
 exports.edit = async (req, res) => {
     try {
+        let stores = await Store.find().exec();
         const deal = await Deal.findById(req.params.id).exec();
-        res.render('admin/deals/edit', { status: "success", message: "", deal: deal, menu: "Deal", submenu: "edit" })
+        res.render('admin/deals/edit', { status: "success", message: "", deal: deal,stores:stores, menu: "Deal", submenu: "edit" })
         // res.json({status: "success", message: "", data: departments});
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
@@ -74,7 +79,7 @@ exports.update = async function (req, res) {
         const dealinfo = {
             name: req.body.name,
             description: req.body.description,
-
+            store_id:req.body.store
         }
         const deal = await Deal.findByIdAndUpdate({ _id: req.params.id }, dealinfo, { new: true, upsert: true });
         if (deal) {

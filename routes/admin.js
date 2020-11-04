@@ -169,5 +169,10 @@ router.post('/storeproduct/update/:id',storeproductController.update)
 
 /*------------ Roles n Permissions --------*/
 router.get('/roles',rpController.createRole)
+router.post('/roles/create',rpController.create)
+router.post('/roles/createPermission',rpController.createPermission)
+router.post('/roles/update',rpController.update)
+
+
 
 module.exports = router;

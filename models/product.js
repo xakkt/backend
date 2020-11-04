@@ -10,6 +10,11 @@ const productSchema = new Schema({
     ref:'Brand'
     //required: true,
   },
+  deal_id: {
+    type: Schema.Types.ObjectId,
+    ref:'Deal'
+    //required: true,
+  },
   _category: {
     type: Schema.Types.ObjectId,
     ref: 'ProductCategory',

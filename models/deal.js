@@ -6,6 +6,10 @@ const dealSchema = Schema({
     type: String,
     required: true
   },
+  store_id:{
+      type: Schema.Types.ObjectId,
+      ref:'Store'
+  },
   description: {
     type: String,
     default: null

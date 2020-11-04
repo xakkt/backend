@@ -201,6 +201,22 @@
                         </div>
                         <!-- /.col -->
                         <!-- /.row -->
+                      <% console.log("---test",deal) %>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="brands">Store</label>
+                          <select name="store" class="form-control custom-select" id="store">
+                            <option value="">Choose one</option>
+                            <% if(stores) stores.forEach(function(stores){ %>
+                              <% if(JSON.stringify(deal.store_id) == JSON.stringify(stores._id)) {%>
+                              <option value="<%=stores._id%>" selected><%=stores.name%></option>
+                              <% } else{ %>
+                              <option value="<%=stores._id%>"><%=stores.name%></option>
+                              <%}%>
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
                      </div>
                      <div class="row">
                         <div class="col-md-12">
