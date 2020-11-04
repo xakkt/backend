@@ -8,6 +8,8 @@ const userController = require('../controllers/admin/userController')
 const productController = require('../controllers/admin/productController')
 const brandController = require('../controllers/admin/brandController')
 const dealController = require('../controllers/admin/dealController')
+const storeproductController = require('../controllers/admin/storeproductController')
+
 
 
 const storeController = require('../controllers/admin/storeController')
@@ -157,5 +159,13 @@ router.get('/deal',dealController.listing)
 router.get('/deal/delete/:id', dealController.delete)
 router.get('/deal/edit/:id',dealController.edit)
 router.post('/deal/update/:id',dealController.update)
+
+
+/*------------Store Product ----------*/
+router.post('/storeproduct',storeproductController.save)
+router.get('/storeproduct/delete/:id', storeproductController.delete)
+router.get('/storeproduct/view/:id',storeproductController.view)
+router.post('/storeproduct/update/:id',storeproductController.update)
+
 
 module.exports = router;
