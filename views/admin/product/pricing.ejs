@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/dist/css/adminlte.min.css">
+  
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -200,58 +201,50 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <form id="productForm" method="post" action="/admin/product/create" enctype="multipart/form-data">
-                               
-        
-                <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="brands">Stroes</label>
-                    <select name="store" class="form-control custom-select" id="store">
-                      <option value="">Choose one</option>
-                      <% if(stores) stores.forEach(function(store){ %>
-                        <option value="<%=store._id%>"><%=store.name%></option>
-                      <% }) %>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="deals">Deals</label>
-                    <select name="deal" class="form-control custom-select" id="deals">
-                      <option value="">Select Deal</option>
-                      <% if(deals) deals.forEach(function(deal){ %>
-                        <option value="<%=deal._id%>"><%=deal.name%></option>
-                      <% }) %>
-                    </select>
-                  </div>
-                </div>
-                </div>
-                <div class="row">
+              <form id="productForm" method="post" action="/admin/product_price/create">
+                             <input type="text" name="abc" value="1231" />  
+                   <div class="row">
                     <table class="table table-striped">
                         <thead>
                           <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
+                     
+                            <th>Store</th>
+                            <th>Deals</th>
+                            <th>Deal Type</th>
+                            <th>Deal Price</th>
+                            <th>Regular Price</th>
+                            <th>From</th>
+                            <th>Till</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>john@example.com</td>
-                          </tr>
-                          <tr>
-                            <td>Mary</td>
-                            <td>Moe</td>
-                            <td>mary@example.com</td>
-                          </tr>
-                          <tr>
-                            <td>July</td>
-                            <td>Dooley</td>
-                            <td>july@example.com</td>
-                          </tr>
+                           <% stores.forEach( function (store){ %>
+                            <tr>
+                                
+                                <td><%=store.name%></td>
+                                <td>
+                                    <select name="deal[]" class="form-control custom-select" id="deals">
+                                    <option value="">Select Deal</option>
+                                    <% if(deals) deals.forEach(function(deal){ %>
+                                      <option value="<%=deal._id%>"><%=deal.name%></option>
+                                    <% }) %>
+                                  </select>
+                                </td>
+                                <td>
+                                    <select name="deal_value[]" class="form-control custom-select">
+                                        <option value="">Deal Value</option>
+                                        <option value="percent">Percentage</option>
+                                        <option value="price">Price</option>
+                                      </select>
+                                </td>
+                                <td> <input type="text" name="deal_price[]" class="form-control"> </td>
+                                <td> <input type="text" name="regular_price[]" class="form-control"> </td>
+                                <td> <input type="date" name="stime[]" class="form-control"> </td>
+                                <td> <input type="date" name="etime[]" class="form-control"> </td>
+                              </tr>
+                          <% }) %>
+                          
+                        
                         </tbody>
                       </table>
                 </div>

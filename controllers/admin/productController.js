@@ -15,6 +15,11 @@ exports.create = async (req, res) => {
     }
 }
 
+exports.priceSave = async (req, res) => {
+    console.log(req.body)
+    res.send('dfs')
+}
+
 exports.addPrice = async (req, res) => {
     try{
         var brands = await Brand.find({}).lean()
