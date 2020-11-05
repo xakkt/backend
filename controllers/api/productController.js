@@ -10,8 +10,7 @@ exports.list = async (req, res)=>{
 	
 	  try{
 		
-
-	  let stores  = 	 await StoreProductPricing.find({'_store':req.params.id}).select('-createdAt -updatedAt -__v').populate('_product','name image sku').populate('_deal').lean()
+	  let stores  = await StoreProductPricing.find({'_store':req.params.storeid}).select('-createdAt -updatedAt -__v').populate('_product','name image sku').populate('_deal').lean()
 			// let products = await Product.find().populate('_category','name logo').lean();
 			 if(!stores.length) return res.json({status: "false", message: "No data found", data: []});
 			 stores = stores.map( store =>{

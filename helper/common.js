@@ -3,6 +3,8 @@ const Wishlist = require('../models/wishlist')
 const Shoppinglist = require('../models/shoppinglist')
 const ShoppinglistName = require('../models/shoppinglist_name')
 const Cart = require('../models/cart')
+const StoreProductPricing = require('../models/store_product_pricing')
+ var moment = require('moment')
 var mongoose = require('mongoose');
 
 exports.cartProducts = async (userid, storeid) => {
@@ -51,5 +53,26 @@ exports.shoppingList = async (userid, storeid) => {
     })
 
     return shoppinglistProductIds;
+
+}
+exports.productprice = async (storeid,productid) =>{
+   
+    let store =  await StoreProductPricing.findOne({_store:storeid,_product:productid}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean()
+    
+    var enddate = moment(store.deal_end)
+    console.log("---data",store)
+    var now = moment();
+    if(now >= enddate)
+    {
+        store.deal_price = 0,
+        store.effective_price = store.regular_price
+      
+    }else
+    {
+        store.effective_price = store.deal_price
+    }
+    console.log("---store",store)
+    return store
+
 
 }

@@ -70,8 +70,21 @@ const storeProductPricingSchema = new Schema({
              },
             message: `Country doesn't exist`
         }
+    },
+    deal_start:{
+     type:Date,
+     required:true
+    },
+    deal_end:{
+        type:Date,
+        required:true
     }
  },{timestamps:true});
-
+ storeProductPricingSchema.index({
+    _store: 1,
+    _product: 1
+  }, {
+    unique: true,
+  });
 
 module.exports = mongoose.model('StoreProductPricing', storeProductPricingSchema);
