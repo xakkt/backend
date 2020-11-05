@@ -19,7 +19,8 @@ var moment = require('moment');
 //moment.tz.setDefault("America/New_York");
 var sess = {
   secret: 'keyboard cat',
-  cookie: {}
+  saveUninitialized: true,
+  cookie:{maxAge:3600000}
 }
 /*if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy

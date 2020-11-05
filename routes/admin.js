@@ -10,7 +10,14 @@ const brandController = require('../controllers/admin/brandController')
 const dealController = require('../controllers/admin/dealController')
 const storeproductController = require('../controllers/admin/storeproductController')
 const rpController = require('../controllers/admin/rolesnpermissionController')
+const authController = require('../controllers/admin/authController')
 
+var auth = function(req, res, next) {
+  if (req.session.email)
+      return next();
+  else
+      return res.redirect('/admin/login')
+};
 
 const storeController = require('../controllers/admin/storeController')
 const verifyjwt = require('../middlewares/tokenVerification');
@@ -69,72 +76,72 @@ const storeValidation = [
   verifyjwt.checkToken
 ]
 
-router.get('/',(req,res)=>{
+router.get('/',auth,(req,res)=>{
       res.render('admin/index',{ menu:"dashboard" }) 
 });
 
 /*------------ User ---------*/
-router.get('/users',userController.list)
-router.get('/user/create',userController.create);
-router.post('/user/save',userUpload.single('profile_pic'),userController.save)
-router.get('/user/delete/:userid', userController.delete);
-router.get('/user/edit/:id', userController.edit);
-router.post('/user/update/:id',userUpload.single('profile_pic'),userController.update)
+router.get('/users',auth,userController.list)
+router.get('/user/create',auth,userController.create);
+router.post('/user/save',auth,userUpload.single('profile_pic'),userController.save)
+router.get('/user/delete/:userid',auth, userController.delete);
+router.get('/user/edit/:id',auth, userController.edit);
+router.post('/user/update/:id',userUpload.single('profile_pic'),auth,userController.update)
 
 /*------------- Department -------*/
-router.get('/departments',departmentController.list)
-router.get('/department/create',departmentController.create);
-router.post('/department/save',upload.single('logo'),departmentController.save)
-router.get('/department/delete/:id', departmentController.delete);
-router.get('/department/edit/:id', departmentController.edit);
-router.post('/department/update/:id',upload.single('logo'),departmentController.update)
+router.get('/departments',auth,departmentController.list)
+router.get('/department/create',auth,departmentController.create);
+router.post('/department/save',auth,upload.single('logo'),departmentController.save)
+router.get('/department/delete/:id',auth, departmentController.delete);
+router.get('/department/edit/:id',auth, departmentController.edit);
+router.post('/department/update/:id',auth,upload.single('logo'),departmentController.update)
 
 /*------------- Store --------*/
 
-router.get('/stores',storeController.list)
-router.get('/store/create',storeController.create)
-router.post('/store/save',storeController.saveStore)
-router.get('/store/edit/:storeid',storeController.editStore)
-router.get('/store/delete/:id', storeController.deleteStore);
-router.post('/store/update/:id', storeController.updateStore)
+router.get('/stores',auth,storeController.list)
+router.get('/store/create',auth,storeController.create)
+router.post('/store/save',auth,storeController.saveStore)
+router.get('/store/edit/:storeid',auth,storeController.editStore)
+router.get('/store/delete/:id',auth, storeController.deleteStore);
+router.post('/store/update/:id', auth,storeController.updateStore)
 
 
 /*------------ Products --------*/
 router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
 })
-router.post('/product/create',productUpload.single('logo'),productController.productsave)
-router.get('/product',productController.productlisting)
-router.get('/product/delete/:id', productController.productdelete);
-router.get('/product/edit/:id',productController.productedit)
-router.post('/product/update/:id',productUpload.single('logo'), productController.productupdate)
-router.get('/product/pricing',productController.addPrice);
-router.get('/product/create', productController.productCreate)
-router.post('/product_price/create', productController.priceSave)
+router.post('/product/create',auth,productUpload.single('logo'),productController.productsave)
+router.get('/product',auth,productController.productlisting)
+router.get('/product/delete/:id',auth,productController.productdelete);
+router.get('/product/edit/:id',auth,productController.productedit)
+router.post('/product/update/:id',auth,productUpload.single('logo'), productController.productupdate)
+router.get('/product/pricing',auth,productController.addPrice);
+router.get('/product/create',auth, productController.productCreate)
+router.post('/product_price/create',auth, productController.priceSave)
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {
   res.render('admin/invoice', { menu:"invoice", submenu:"create"})
 })
 
 /*----- product Category ------*/
-router.get('/category',productController.list)
-router.get('/category/create',productController.create)
-router.post('/category/save',upload.single('logo'),productController.save)
-router.get('/category/delete/:id', productController.delete)
-router.get('/category/edit/:id',productController.edit)
-router.post('/category/update/:id',upload.single('logo'), productController.update)
+router.get('/category',auth,productController.list)
+router.get('/category/create',auth,productController.create)
+router.post('/category/save',auth,upload.single('logo'),productController.save)
+router.get('/category/delete/:id',auth, productController.delete)
+router.get('/category/edit/:id',auth,productController.edit)
+router.post('/category/update/:id',auth,upload.single('logo'), productController.update)
 
 
-router.get('/category/create',(req, res)=> { 
+router.get('/category/create',auth,(req, res)=> { 
         res.render('admin/category/create', { menu:"category"})
 })
 /*----------brand ------------*/
-router.get('/brand/create',brandController.create)
-router.get('/brand',brandController.listing)
-router.post('/brand/save',brandUpload.single('logo'),brandController.save)
-router.get('/brand/delete/:id', brandController.delete)
-router.get('/brand/edit/:id',brandController.edit)
-router.post('/brand/update/:id',brandUpload.single('logo'), brandController.update)
+router.get('/brand/create',auth,brandController.create)
+router.get('/brand',auth,brandController.listing)
+router.post('/brand/save',auth,brandUpload.single('logo'),brandController.save)
+router.get('/brand/delete/:id', auth,brandController.delete)
+router.get('/brand/edit/:id',auth,brandController.edit)
+router.post('/brand/update/:id',auth,brandUpload.single('logo'), brandController.update)
 
 // router.get('/brands',(req, res)=> { 
    
@@ -154,26 +161,29 @@ const dealsValidation = [
   body('name').not().isEmpty().trim().escape(),
  
 ]
-router.get('/deal/create',dealController.create)
-router.post('/deal/save',dealsValidation,dealController.save)
-router.get('/deal',dealController.listing)
-router.get('/deal/delete/:id', dealController.delete)
-router.get('/deal/edit/:id',dealController.edit)
-router.post('/deal/update/:id',dealController.update)
+router.get('/deal/create',auth,dealController.create)
+router.post('/deal/save',auth,dealsValidation,dealController.save)
+router.get('/deal',auth,dealController.listing)
+router.get('/deal/delete/:id', auth,dealController.delete)
+router.get('/deal/edit/:id',auth,dealController.edit)
+router.post('/deal/update/:id',auth,dealController.update)
 
 
 /*------------Store Product ----------*/
-router.post('/storeproduct',storeproductController.save)
-router.get('/storeproduct/delete/:id', storeproductController.delete)
-router.get('/storeproduct/view/:id',storeproductController.view)
-router.post('/storeproduct/update/:id',storeproductController.update)
+router.post('/storeproduct',auth,storeproductController.save)
+router.get('/storeproduct/delete/:id', auth,storeproductController.delete)
+router.get('/storeproduct/view/:id',auth,storeproductController.view)
+router.post('/storeproduct/update/:id',auth,storeproductController.update)
 
 /*------------ Roles n Permissions --------*/
-router.get('/roles',rpController.createRole)
-router.post('/roles/create',rpController.create)
-router.post('/roles/createPermission',rpController.createPermission)
-router.post('/roles/update',rpController.update)
+router.get('/roles',auth,rpController.createRole)
+router.post('/roles/create',auth,rpController.create)
+router.post('/roles/createPermission',auth,rpController.createPermission)
+router.post('/roles/update',auth,rpController.update)
 
+/*-------------login -------------- */
+router.get('/login',authController.create)
+router.post('/login',authController.login)
 
 
 module.exports = router;
