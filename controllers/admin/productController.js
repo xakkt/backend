@@ -3,6 +3,7 @@ const Product = require('../../models/product');
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Stores = require('../../models/store')
+const StoreProductPricing = require('../../models/store_product_pricing')
 const { validationResult } = require('express-validator');
 
 exports.create = async (req, res) => {
@@ -16,8 +17,34 @@ exports.create = async (req, res) => {
 }
 
 exports.priceSave = async (req, res) => {
-    console.log(req.body)
-    res.send('dfs')
+     //console.log('deal',req.body.deal_value[0])
+    const arr = [];
+    data = {};
+    for(i=0; i<req.body.no_of_stores; i++){
+        console.log('value of i',i)
+        data.deal = req.body.deal[i];
+        data.deal_price = req.body.deal_price[i];
+        data.deal_value = req.body.deal_value[i];
+        data.deal_price = req.body.deal_price[i]; 
+        data.regular_price = req.body.regular_price[i]; 
+        data.stime = req.body.stime[i];
+        data.etime = req.body.etime[i]; 
+        // console.log(data)      
+        arr.push(data)
+    }
+    console.log("---array,arr",arr)
+    // var productprice = StoreProductPricing.insertMany(arr,function(error, docs) {
+    //     if(error)
+    //     {
+    //         console.log("---err",error)
+    //     }
+    //     else
+    //     {
+    //         console.log('--dics',docs)
+    //     }
+
+    // })
+    res.send(arr)
 }
 
 exports.addPrice = async (req, res) => {

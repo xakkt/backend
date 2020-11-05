@@ -202,7 +202,7 @@
             <!-- /.card-header -->
             <div class="card-body">
               <form id="productForm" method="post" action="/admin/product_price/create">
-                             <input type="text" name="abc" value="1231" />  
+                             
                    <div class="row">
                     <table class="table table-striped">
                         <thead>
@@ -217,8 +217,10 @@
                             <th>Till</th>
                           </tr>
                         </thead>
+                        <input type="hidden" value="<%=stores.length%>" name="no_of_stores"/> 
                         <tbody>
-                           <% stores.forEach( function (store){ %>
+                           <% stores.forEach( function (store, index){ %>
+                            <% var sname = store.name.replace(/ +/g, "").toLowerCase()+'_'+index %>
                             <tr>
                                 
                                 <td><%=store.name%></td>
@@ -234,11 +236,11 @@
                                     <select name="deal_value[]" class="form-control custom-select">
                                         <option value="">Deal Value</option>
                                         <option value="percent">Percentage</option>
-                                        <option value="price">Price</option>
+                                        <option value="fixed">Price</option>
                                       </select>
                                 </td>
-                                <td> <input type="text" name="deal_price[]" class="form-control"> </td>
-                                <td> <input type="text" name="regular_price[]" class="form-control"> </td>
+                                <td> <input type="number" name="deal_price[]" class="form-control"> </td>
+                                <td> <input type="number" name="regular_price[]" class="form-control"> </td>
                                 <td> <input type="date" name="stime[]" class="form-control"> </td>
                                 <td> <input type="date" name="etime[]" class="form-control"> </td>
                               </tr>

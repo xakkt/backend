@@ -30,7 +30,7 @@ app.use(session(sess))
 app.use(flash({ sessionKeyName: 'xakktFlashMessages' })); 
 const adminRoute = require('./routes/admin')
 const mobileApi = require('./routes/api')
-
+app.use(bodyParser.urlencoded({ extended: true }))
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(logger('dev'));
