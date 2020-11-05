@@ -20,9 +20,7 @@ exports.priceSave = async (req, res) => {
    try{
     const arr = [];
     data = {};
-    console.log("---req.body",)
     for(i=0; i<req.body.no_of_stores; i++){
-        console.log('value of i',i)
         data._deal = req.body.deal[i];
         data.deal_price = req.body.deal_price[i];
         data.deal_value = req.body.deal_value[i];

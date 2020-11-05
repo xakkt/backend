@@ -16,23 +16,31 @@ exports.login = async (req, res) => {
         }).exec();
 
         if (!userInfo.role_id.length) return res.status(400).json({ message: "Email does not exist." });
-        if (!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
+        if (!bcrypt.compareSync(req.body.password, userInfo.password))
+        { 
+            await req.flash('failure',"Invalid password!!!" );
+            res.redirect('/admin/login');
+            // return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
+             }
         const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         req.session.email = userInfo.email;
 
         //		return res.json({status:true, message: "user found!!!", data:{user: userInfo, token:token}});	
         return res.redirect('/admin')
     } catch (err) {
-        return res.status(400).json({
-            success: false,
-            message: "Something went wrong",
-            error: err
-        });
+        await req.flash('failure', err.message);
+        res.redirect('/admin/login');
+        // return res.status(400).json({
+        //     success: false,
+        //     message: "Something went wrong",
+        //     error: err
+        // });
     }
 }
 exports.create = async (req, res) => {
     try {
-        res.render('admin/auth/login')
+        // res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        res.render('admin/auth/login',{success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')})
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
