@@ -5,8 +5,9 @@ seeder.connect('mongodb://localhost:27017/xakkt', function() {
 
   // Load Mongoose models
   seeder.loadModels([
-      'models/banner'
-  ]);
+      'models/banner',
+      'models/user'
+    ]);
 
   // Clear specified collections
   seeder.clearModels(['Banner'], function() {
@@ -17,6 +18,14 @@ seeder.connect('mongodb://localhost:27017/xakkt', function() {
     });
 
   });
+  // seeder.clearModels(['User'], function() {
+
+  //   // Callback to populate DB once collections have been cleared
+  //   seeder.populateModels(data, function() {
+  //     seeder.disconnect();
+  //   });
+
+  // });
 });
 
 var data = require('../seeder/')

@@ -122,6 +122,7 @@ exports.update = async function (req, res) {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             email: req.body.email,
+            role_id:req.body.role,
             contact_no: req.body.contact_no,
             status: req.body.status,
             last_login: req.body.last_login,
