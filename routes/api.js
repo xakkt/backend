@@ -122,7 +122,7 @@ router.get('/app/dashboard/:storeid', homeController.dashboard);
 
 /*---- product ---*/
 // router.post('/product/create', verifyjwt.checkToken, productValidation, productController.create);
-router.get('/product/list',productController.list);
+router.get('/product/list/:id',productController.list);
 router.get('/product/:id',productController.show);
 // router.delete('/product/:id/delete', verifyjwt.checkToken, productController.delete);
 // router.put('/product/:id/update',  verifyjwt.checkToken,productValidation, productController.update);
