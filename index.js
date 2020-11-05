@@ -20,7 +20,7 @@ var moment = require('moment');
 var sess = {
   secret: 'keyboard cat',
   saveUninitialized: true,
-  cookie:{maxAge:3600000}
+  cookie:{maxAge:3600000000}
 }
 /*if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy

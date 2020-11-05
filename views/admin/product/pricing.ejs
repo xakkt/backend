@@ -223,7 +223,7 @@
                             <% var sname = store.name.replace(/ +/g, "").toLowerCase()+'_'+index %>
                             <tr>
                                 
-                                <td><%=store.name%></td>
+                                <td><%=store.name%><input type="hidden" name="_store[]" value="<%=store._id %>"  /></td>
                                 <td>
                                     <select name="deal[]" class="form-control custom-select" id="deals">
                                     <option value="">Select Deal</option>
@@ -250,6 +250,7 @@
                         </tbody>
                       </table>
                 </div>
+                <input type="hidden" name="productid" value="<%= productid %>"></input>
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>

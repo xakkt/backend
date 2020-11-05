@@ -187,7 +187,6 @@ exports.authenticate = async (req, res) => {
         }
 
     },
-
      exports.delete =  (req, res) => {
 	
 		User.deleteOne({ _id: req.params.userid }, async (err) => {
@@ -197,6 +196,7 @@ exports.authenticate = async (req, res) => {
 		  });
 	
     }
+   
 
 
 

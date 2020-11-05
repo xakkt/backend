@@ -17,34 +17,33 @@ exports.create = async (req, res) => {
 }
 
 exports.priceSave = async (req, res) => {
-     //console.log('deal',req.body.deal_value[0])
+   try{
     const arr = [];
     data = {};
+    console.log("---req.body",)
     for(i=0; i<req.body.no_of_stores; i++){
         console.log('value of i',i)
-        data.deal = req.body.deal[i];
+        data._deal = req.body.deal[i];
         data.deal_price = req.body.deal_price[i];
         data.deal_value = req.body.deal_value[i];
         data.deal_price = req.body.deal_price[i]; 
         data.regular_price = req.body.regular_price[i]; 
         data.stime = req.body.stime[i];
         data.etime = req.body.etime[i]; 
+        data._store = req.body._store[i]
+        data._product = req.body.productid;
         // console.log(data)      
         arr.push(data)
     }
-    console.log("---array,arr",arr)
-    // var productprice = StoreProductPricing.insertMany(arr,function(error, docs) {
-    //     if(error)
-    //     {
-    //         console.log("---err",error)
-    //     }
-    //     else
-    //     {
-    //         console.log('--dics',docs)
-    //     }
+    // console.log("---array,arr",arr)
+    var productprice = await StoreProductPricing.insertMany(arr);
+    if(!productprice) return res.json({message:"not working"})
+    res.send(productprice)
+}catch(err){
 
-    // })
-    res.send(arr)
+    console.log(err)
+    res.send(err)
+}
 }
 
 exports.addPrice = async (req, res) => {
@@ -52,7 +51,8 @@ exports.addPrice = async (req, res) => {
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();
-        res.render('admin/product/pricing',{ menu: "ProductCategory", brands:brands, deals:deals, stores:stores })
+
+        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals, stores:stores })
     }catch(err){
         res.status(400).json({ data: err.message });
     }

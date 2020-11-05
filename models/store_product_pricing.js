@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 
 
 const storeProductPricingSchema = new Schema({ 
-    name:{type: String, required: true},
-    _product: {
+     _product: {
         type: Schema.Types.ObjectId,
         ref:'Product',
         required:true,
@@ -30,6 +29,7 @@ const storeProductPricingSchema = new Schema({
     _store: {
         type: Schema.Types.ObjectId,
         ref:'Store',
+        required:true,
         validate: {
                 validator: function(v) {
                 return FKHelper(mongoose.model('Store'), v);
@@ -40,6 +40,7 @@ const storeProductPricingSchema = new Schema({
     _deal: {
         type: Schema.Types.ObjectId,
         ref:'Deal',
+        required:true,
         validate: {
                 validator: function(v) {
                 return FKHelper(mongoose.model('Deal'), v);
@@ -53,11 +54,11 @@ const storeProductPricingSchema = new Schema({
         required: true
     },
     regular_price: {
-        type: String,
+        type: Number,
         required: true
     },
     deal_price: {
-        type: String,
+        type: Number,
         required: true
     },
     _country: {

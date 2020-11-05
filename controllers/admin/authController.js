@@ -38,3 +38,16 @@ exports.create = async (req, res) => {
         res.status(400).json({ status: "false", data: err });
     }
 }
+exports.logout = async(req,res) =>{
+    if (req.session) {
+        req.session.destroy(function(err) {
+            if(err) {
+                return next(err);
+            } else {
+                req.session = null;
+                console.log("logout successful");
+                return res.redirect('/admin/login');
+            }
+        });
+    }
+}

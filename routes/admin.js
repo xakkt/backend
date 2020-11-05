@@ -115,7 +115,7 @@ router.get('/product',auth,productController.productlisting)
 router.get('/product/delete/:id',auth,productController.productdelete);
 router.get('/product/edit/:id',auth,productController.productedit)
 router.post('/product/update/:id',auth,productUpload.single('logo'), productController.productupdate)
-router.get('/product/pricing',auth,productController.addPrice);
+router.get('/product/pricing/:productid',auth,productController.addPrice);
 router.get('/product/create',auth, productController.productCreate)
 router.post('/product_price/create',auth, productController.priceSave)
 /*--------- Invoice ---------*/
@@ -184,6 +184,7 @@ router.post('/roles/update',auth,rpController.update)
 /*-------------login -------------- */
 router.get('/login',authController.create)
 router.post('/login',authController.login)
+router.get('/logout',auth,authController.logout)
 
 
 module.exports = router;
