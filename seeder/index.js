@@ -1,7 +1,7 @@
 const settingData = require('./banners')
-const users = require('./users')
+const roles = require('./roles')
 
 module.exports = [ 
     settingData,
-    users
+    roles
 ]

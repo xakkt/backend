@@ -13,8 +13,7 @@ exports.login = async (req, res) => {
         const userInfo = await User.findOne({ email: req.body.email }).populate({
             path: 'role_id',
             match: { name: 'SuperAdmin' }
-        }).
-            exec();
+        }).exec();
 
         if (!userInfo.role_id.length) return res.status(400).json({ message: "Email does not exist." });
         if (!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
