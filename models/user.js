@@ -66,13 +66,13 @@ const userSchema = Schema({
 role_id: [
   {
       type: Schema.Types.ObjectId, 
-      ref: 'roles',
+      ref: 'Role',
       // required: true,
       validate: {
        validator: function(v) {
-               return FKHelper(mongoose.model('roles'), v);
+               return FKHelper(mongoose.model('Role'), v);
            },
-         message: `roles doesn't exist`
+         message: `Role doesn't exist`
        }
    }
 ],

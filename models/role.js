@@ -25,4 +25,4 @@ let rolesSchema = Schema({
 
   rolesSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model('roles', rolesSchema);
+module.exports = mongoose.model('Role', rolesSchema);
