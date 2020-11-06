@@ -4,6 +4,7 @@ let jwt = require('jsonwebtoken');
 const Setting = require('../../models/setting')
 const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
+const StoreProductPricing = require('../../models/store_product_pricing')
 
 
 exports.dashboard = async (req, res) => {
@@ -30,21 +31,23 @@ exports.dashboard = async (req, res) => {
 			});
 		}
 
-		let categories = await ProductCategory.find({ _store: req.params.storeid }).populate('_products', 'name sku price image').lean();
+		let categories = await StoreProductPricing.find({ _store: req.params.storeid }).populate('_product', 'name sku  image').lean();
 		if (!categories.length) return res.json({ status: "false", message: "No data found", data: categories });
 
 		var cartProductList = await _global.cartProducts(userid, req.params.storeid);
 		var wishlistids = await _global.wishList(userid, req.params.storeid)
 		var shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
 
-		categories.map(element => {
+		categories.map(async (element) => {
+			// console.log("--test",element)
 
-			return element._products.map(data => {
-
-				var productId = data._id.toString();
-				
+			// return element._product.map(data => {
+                  var data = {}
+				var productId = element._product._id.toString();
+				var productPrice = await _global.productprice(req.params.storeid,productId)
+				 console.log("---test",productPrice)
 				if (productId in cartProductList) {
-					data = { ...data, type: "product", in_cart: cartProductList[productId] }
+					data = { ...data, type: "product",deal_price:productPrice.deal_price, in_cart: cartProductList[productId] }
 				} else {
 					data = { ...data, type: "product", in_cart: 0 }
 				}
@@ -61,7 +64,7 @@ exports.dashboard = async (req, res) => {
 				data = { ...data, type: "product", is_favourite: 1, special_price: data.price }
 				product.push(data)
 
-			})
+			// })
 
 		});
 

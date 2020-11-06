@@ -26,8 +26,8 @@ exports.priceSave = async (req, res) => {
         data.deal_value = req.body.deal_value[i];
         data.deal_price = req.body.deal_price[i]; 
         data.regular_price = req.body.regular_price[i]; 
-        data.stime = req.body.stime[i];
-        data.etime = req.body.etime[i]; 
+        data.deal_start = req.body.stime[i];
+        data.deal_end = req.body.etime[i]; 
         data._store = req.body._store[i]
         data._product = req.body.productid;
         // console.log(data)      
@@ -35,8 +35,12 @@ exports.priceSave = async (req, res) => {
     }
     // console.log("---array,arr",arr)
     var productprice = await StoreProductPricing.insertMany(arr);
-    if(!productprice) return res.json({message:"not working"})
-    res.send(productprice)
+    if(!productprice) 
+    {
+        await req.flash('failure', "Product price");
+        res.redirect('/admin/product')
+    }
+    res.redirect('/admin/product')
 }catch(err){
 
     console.log(err)
