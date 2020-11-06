@@ -4,9 +4,10 @@ var uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 let permissionSchema = Schema({
-    name    : { type: String, required: true, unique:true },
+    name : { type: String, required: true, unique:true },
+    type : { type: String },
     description : { type: String, defualt: null},
-    _permission : [
+    _roles : [
         { 
             type: Schema.Types.ObjectId, 
             ref: 'Role',
