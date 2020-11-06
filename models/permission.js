@@ -26,4 +26,4 @@ let permissionSchema = Schema({
 
   permissionSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model('permission', permissionSchema);
+module.exports = mongoose.model('Permission', permissionSchema);

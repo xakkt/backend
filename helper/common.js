@@ -4,6 +4,8 @@ const Shoppinglist = require('../models/shoppinglist')
 const ShoppinglistName = require('../models/shoppinglist_name')
 const Cart = require('../models/cart')
 const StoreProductPricing = require('../models/store_product_pricing')
+const Roles = require('../models/role')
+const Permission = require('../models/permission')
  var moment = require('moment')
 var mongoose = require('mongoose');
 
@@ -58,21 +60,23 @@ exports.shoppingList = async (userid, storeid) => {
 exports.productprice = async (storeid,productid) =>{
    
     let store =  await StoreProductPricing.findOne({_store:storeid,_product:productid}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean()
-    
-    var enddate = moment(store.deal_end)
-    console.log("---data",store)
-    var now = moment();
-    if(now >= enddate)
+    var enddate = moment(store.deal_end).format('L')
+    var now = moment().format('L');
+    if(now <= enddate)
+    {
+        store.effective_price = store.deal_price
+    }else
     {
         store.deal_price = 0,
         store.effective_price = store.regular_price
-      
-    }else
-    {
-        store.effective_price = store.deal_price
     }
-    console.log("---store",store)
     return store
 
 
+}
+exports.permission = async (req,res,name,next) => {
+     const permission =await Permission.findOne({name:name, _roles: { $in: req.session.roleid }},{}).exec()
+      if(!permission)return res.json({status:false})
+      next()
+  
 }

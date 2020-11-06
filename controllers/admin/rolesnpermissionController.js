@@ -29,12 +29,18 @@ exports.update = async function (req, res) {
     try {
         console.log("---body",req.body)
         const $cond = parseInt(req.body.checked) ? { $push: { "_permission": req.body.permissionid } } : { $pull: { "_permission": req.body.permissionid } };
-       let role = await Roles.findOneAndUpdate(
+        const $cond1 = parseInt(req.body.checked) ? { $push: { "_roles": req.body.roleid} } : { $pull: { "_roles": req.body.roleid} };
+
+        await Roles.findOneAndUpdate(
             {_id:req.body.roleid},
             $cond,
             { safe: true, upsert: true, new: true },
         )
-        console.log("----test",role)
+        await Permission.findOneAndUpdate(
+            {_id:req.body.permissionid},
+            $cond1,
+            { safe: true, upsert: true, new: true },
+        )
     } catch (err) {
         console.log(err)
         await req.flash('failure', err.message);

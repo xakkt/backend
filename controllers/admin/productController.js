@@ -19,8 +19,8 @@ exports.create = async (req, res) => {
 exports.priceSave = async (req, res) => {
    try{
     const arr = [];
-    data = {};
     for(i=0; i<req.body.no_of_stores; i++){
+        data = {};
         data._deal = req.body.deal[i];
         data.deal_price = req.body.deal_price[i];
         data.deal_value = req.body.deal_value[i];
@@ -30,10 +30,11 @@ exports.priceSave = async (req, res) => {
         data.deal_end = req.body.etime[i]; 
         data._store = req.body._store[i]
         data._product = req.body.productid;
-        // console.log(data)      
         arr.push(data)
+        // console.log("----dat",data)
+       await StoreProductPricing.deleteOne({_store:req.body._store[i]}).exec()
     }
-    // console.log("---array,arr",arr)
+
     var productprice = await StoreProductPricing.insertMany(arr);
     if(!productprice) 
     {
@@ -43,7 +44,7 @@ exports.priceSave = async (req, res) => {
     res.redirect('/admin/product')
 }catch(err){
 
-    console.log(err)
+    console.log('===validation',err)
     res.send(err)
 }
 }
@@ -168,10 +169,10 @@ exports.productsave = async (req,res) =>{
         }
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
-        await req.flash('success', 'Product added successfully!');
+        // await req.flash('success', 'Product added successfully!');
         // res.render('admin/product', { status: "success", message: "", product: product, product: product, menu: "Product" })
-
-        res.redirect('/admin/product')
+        res.redirect("/admin/product/pricing/"+product._id)
+        // res.redirect('/admin/product')
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/product')

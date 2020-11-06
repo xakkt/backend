@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
 
-
 const storeProductPricingSchema = new Schema({ 
      _product: {
         type: Schema.Types.ObjectId,
@@ -80,11 +79,11 @@ const storeProductPricingSchema = new Schema({
         required:true
     }
  },{timestamps:true});
- storeProductPricingSchema.index({
-    _store: 1,
-    _product: 1
-  }, {
-    unique: true,
-  });
+//  storeProductPricingSchema.index({
+//     _store: 1,
+//     _product: 1
+//   }, {
+//     unique: true,
+//   });
 
 module.exports = mongoose.model('StoreProductPricing', storeProductPricingSchema);

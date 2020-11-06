@@ -225,7 +225,7 @@
                                 
                                 <td><%=store.name%><input type="hidden" name="_store[]" value="<%=store._id %>"  /></td>
                                 <td>
-                                    <select name="deal[]" class="form-control custom-select" id="deals">
+                                    <select name="deal[]" class="form-control custom-select" id="deals"required>
                                     <option value="">Select Deal</option>
                                     <% if(deals) deals.forEach(function(deal){ %>
                                       <option value="<%=deal._id%>"><%=deal.name%></option>
@@ -233,16 +233,16 @@
                                   </select>
                                 </td>
                                 <td>
-                                    <select name="deal_value[]" class="form-control custom-select">
+                                    <select name="deal_value[]" class="form-control custom-select" required>
                                         <option value="">Deal Value</option>
                                         <option value="percent">Percentage</option>
                                         <option value="fixed">Price</option>
                                       </select>
                                 </td>
-                                <td> <input type="number" name="deal_price[]" class="form-control"> </td>
-                                <td> <input type="number" name="regular_price[]" class="form-control"> </td>
-                                <td> <input type="date" name="stime[]" class="form-control"> </td>
-                                <td> <input type="date" name="etime[]" class="form-control"> </td>
+                                <td> <input type="number" name="deal_price[]" class="form-control" required> </td>
+                                <td> <input type="number" name="regular_price[]" class="form-control" required> </td>
+                                <td> <input type="date" name="stime[]" class="form-control" required> </td>
+                                <td> <input type="date" name="etime[]" class="form-control" required> </td>
                               </tr>
                           <% }) %>
                           
@@ -295,28 +295,13 @@
 
     $(function () {
 
+
       $('#productForm').validate({
         rules: {
-          en_name: {
-            required: true
-          },
-          description: {
-            required: true,
-          },
-          logo: {
-            required: true
-          },
+       
         },
         messages: {
-          name: {
-            required: "Please enter a department name"
-          },
-          description: {
-            required: "Please enter the description",
-          },
-          logo: {
-            required: "Please select an image"
-          }
+         
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
