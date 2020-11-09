@@ -219,7 +219,8 @@
                         </thead>
                         <tbody >
                           <input type="hidden" id="store" value="" name="no_of_stores"/> 
-                          <% if(price) price.forEach(function(prices){ %>
+                          <% if(price.length>0){  %>
+                            <% price.forEach(function(prices){ %>
                             <tr class="tr_clone">
                                 <td>
                                   <select name="store[]" class="form-control custom-select" id="store"required>
@@ -233,7 +234,6 @@
                                     <% }) %>
                                 </select>
                               </td>
-                             
                                 <td>
                                     <select name="deal[]" class="form-control custom-select" id="deals"required>
                                     <option value="">Select Deal</option>
@@ -269,6 +269,45 @@
                                 </td>
                               </tr>
                         <%})%>
+                        <%} else {%>
+                          <% console.log("----") %>
+                          <tr class="tr_clone">
+                            <td>
+                              <select name="store[]" class="form-control custom-select" id="store"required>
+                              <option value="">Select stores</option>
+                              <% if(stores) stores.forEach(function(storess){ %>
+                                  <option value="<%=storess._id%>" ><%=storess.name%></option>
+                                <% }) %>
+                            </select>
+                          </td>
+                         
+                            <td>
+                                <select name="deal[]" class="form-control custom-select" id="deals"required>
+                                <option value="">Select Deal</option>
+                                <% if(deals) deals.forEach(function(deal){ %>
+                                    <option value="<%=deal._id%>" ><%=deal.name%></option>
+                                <% }) %>
+                              </select>
+                            </td>
+                            <td>
+                                <select name="deal_value[]" class="form-control custom-select" required>
+                                   <option value="">Deal Value</option>
+                                   <option value="fixed" >Price</option>
+                                     <option value="percent">Percentage</option>
+                                    </select>
+                            </td>
+                            <td> <input type="number" name="deal_price[]" class="form-control" required> </td>
+                            <td> <input type="number" name="regular_price[]" class="form-control" required> </td>
+                            <td> <input type="date" name="stime[]"  class="form-control" required> </td>
+                            <td> <input type="date" name="etime[]" class="form-control" required> </td>
+                            <td> <input type="button" name="add" value="Add" class="tr_clone_add">
+                              <td> <input type="button" name="remove" value="Remove" class="tr_clone_remove">
+
+                            </td>
+                          </tr>
+
+
+                          <%}%>
                         </tbody>
                       </table>
                 </div>
