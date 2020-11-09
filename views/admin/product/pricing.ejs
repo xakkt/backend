@@ -223,7 +223,7 @@
                             <% price.forEach(function(prices){ %>
                             <tr class="tr_clone">
                                 <td>
-                                  <select name="store[]" class="form-control custom-select" id="store"required>
+                                  <select name="store[]" class="form-control custom-select" required>
                                   <option value="">Select stores</option>
                                   <% if(stores) stores.forEach(function(storess){ %>
                                     <% if(JSON.stringify(storess._id) == JSON.stringify(prices._store)) {%>
@@ -379,13 +379,7 @@
       });
     });
     $(function () {
-// $(".tr_clone_add").click(function(e) {
 
-//     var $tr    = $(this).closest('.tr_clone');
-//     var $clone = $tr.clone();
-//     $clone.find(':text').val('');
-//     $(".tr_clone:last").after($clone)
-// });
 $(".tr_clone_add").click(function (e) {
 
 var $tr = $('.tr_clone').first();
@@ -400,8 +394,8 @@ $( "form" ).submit(function( event ) {
   $('#store').val(rowCount);
 
 });
-$(".tr_clone_remove").click(function () {
-$('.tr_clone:last').remove();
+$(".tr_clone_remove").on('click',function () {
+$(this).closest('tr').remove();
 });
   </script>
 
