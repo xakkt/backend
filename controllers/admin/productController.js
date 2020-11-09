@@ -5,6 +5,7 @@ const Deals = require('../../models/deal')
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const { validationResult } = require('express-validator');
+var moment = require('moment')
 
 exports.create = async (req, res) => {
     try {
@@ -58,7 +59,7 @@ exports.addPrice = async (req, res) => {
         var stores = await Stores.find({}).lean();
         let price = await StoreProductPricing.find({_product:req.params.productid}).exec()
      if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
-        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:price, stores:stores })
+        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:price, stores:stores,moment:moment })
     }catch(err){
         res.status(400).json({ data: err.message });
     }
