@@ -56,8 +56,9 @@ exports.addPrice = async (req, res) => {
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();
-
-        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals, stores:stores })
+        let price = await StoreProductPricing.find({_product:req.params.productid}).exec()
+     if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
+        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:price, stores:stores })
     }catch(err){
         res.status(400).json({ data: err.message });
     }
@@ -183,9 +184,10 @@ exports.productsave = async (req,res) =>{
 }
 exports.productlisting = async (req,res) =>{
     try {
+        let price =  await StoreProductPricing.find().exec()
         let product = await Product.find().exec();
-        if (!product.length) return res.render('admin/product/listing', { menu: "product", submenu: "list", product: "",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
-        return res.render('admin/product/listing', { menu: "product", submenu: "list", product: product ,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!product.length) return res.render('admin/product/listing', { menu: "product", submenu: "list",price:"", product: "",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
+        return res.render('admin/product/listing', { menu: "product", submenu: "list", product: product,price:price ,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });

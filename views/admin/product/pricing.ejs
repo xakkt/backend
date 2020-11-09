@@ -219,16 +219,18 @@
                         </thead>
                         <tbody >
                           <input type="hidden" id="store" value="" name="no_of_stores"/> 
-                           <% stores.forEach( function (store, index){ %>
-                            <% var sname = store.name.replace(/ +/g, "").toLowerCase()+'_'+index %>
+                          <% if(price) price.forEach(function(prices){ %>
                             <tr class="tr_clone">
-                                <!-- <td><%=store.name%><input type="hidden" name="_store[]" value="<%=store._id %>"  /></td> -->
                                 <td>
                                   <select name="store[]" class="form-control custom-select" id="store"required>
                                   <option value="">Select stores</option>
                                   <% if(stores) stores.forEach(function(storess){ %>
-                                    <option value="<%=storess._id%>"><%=storess.name%></option>
-                                  <% }) %>
+                                    <% if(JSON.stringify(storess._id) == JSON.stringify(prices._store)) {%>
+                                    <option value="<%=storess._id%>" selected><%=storess.name%></option>
+                                    <%} else{ %>
+                                      <option value="<%=storess._id%>" ><%=storess.name%></option>
+                                      <%} %>
+                                    <% }) %>
                                 </select>
                               </td>
                              
@@ -236,34 +238,47 @@
                                     <select name="deal[]" class="form-control custom-select" id="deals"required>
                                     <option value="">Select Deal</option>
                                     <% if(deals) deals.forEach(function(deal){ %>
-                                      <option value="<%=deal._id%>"><%=deal.name%></option>
+                                      <% if(JSON.stringify(deal._id) == JSON.stringify(prices._deal)) {%>
+                                      <option value="<%=deal._id%>" selected><%=deal.name%></option>
+                                      <%} else{ %>
+                                        <option value="<%=deal._id%>" ><%=deal.name%></option>
+                                        <%} %>
                                     <% }) %>
                                   </select>
                                 </td>
                                 <td>
                                     <select name="deal_value[]" class="form-control custom-select" required>
-                                        <option value="">Deal Value</option>
+                                      <% if(prices.deal_value == 'fixed') {%>
+                                        <option value="fixed" selected>Price</option>
+                                      <option value="">Deal Value</option>
                                         <option value="percent">Percentage</option>
-                                        <option value="fixed">Price</option>
-                                      </select>
+                                       <%} else {%>
+                                       <option value="fixed" >Price</option>
+                                       <option value="">Deal Value</option>
+                                         <option value="percent" selected>Percentage</option>
+                                       <%}%>
+                                        </select>
                                 </td>
-                                <td> <input type="number" name="deal_price[]" class="form-control" required> </td>
-                                <td> <input type="number" name="regular_price[]" class="form-control" required> </td>
-                                <td> <input type="date" name="stime[]" class="form-control" required> </td>
+                                <td> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>" class="form-control" required> </td>
+                                <td> <input type="number" name="regular_price[]" value="<%= prices.regular_price %>" class="form-control" required> </td>
+                                <td> <input type="date" name="stime[]" value="<%= prices.deal_start %>" class="form-control" required> </td>
                                 <td> <input type="date" name="etime[]" class="form-control" required> </td>
-                                <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
+                                <td> <input type="button" name="add" value="Add" class="tr_clone_add">
+                                  <td> <input type="button" name="remove" value="Remove" class="tr_clone_remove">
+
+                                </td>
                               </tr>
-                          <% }) %>
-                          
-                        
+                        <%})%>
                         </tbody>
                       </table>
                 </div>
                 <input type="hidden" name="productid" value="<%= productid %>"></input>
                 <!-- /.card-body -->
-                <!-- <span class="input-group-btn">
-                  <button type="button" class="btn btn-success btn-add">+</button>
-              </span> -->
+                <span class="input-group-btn">
+                  <input type="button" name="add" value="Add" id="tr_clone_add" class="tr_clone_add">
+
+                  <!-- <button type="button" class="btn btn-success btn-add">+</button> -->
+              </span>
               <div class="test"></div>
                 <div class="card-footer">
                   <button type="submit" value="submit" class="btn btn-primary">Submit</button>
@@ -329,80 +344,23 @@
         }
       });
     });
-//     (function ($) {
-//     $(function () {
+    $(function () {
+$(".tr_clone_add").click(function(e) {
 
-//         var addFormGroup = function (event) {
-//             event.preventDefault();
-//             var $lastRow = $("[id$=blah] tr:not('.ui-widget-header'):last");          
-//             var $clone = $tr.clone();
-//             $clone.find(':text').val('');
-//             $tr.after($clone);
-
-//             // var $formGroup = $(this).closest('.card-body');
-//             // var $multipleFormGroup = $formGroup.closest('.card-body');
-//             // var $formGroupClone = $formGroup.clone();
-
-//             // $(this)
-//             //     .toggleClass('btn-success btn-add btn-danger btn-remove')
-//             //     .html('–');
-
-//             // $formGroupClone.insertAfter($formGroup);
-//             // var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
-//             // if ($multipleFormGroup.data('max') <= countFormGroup($multipleFormGroup)) {
-//             //     $lastFormGroupLast.find('.btn-add').attr('disabled', true);
-//             // }
-//         };
-
-//         var removeFormGroup = function (event) {
-//             event.preventDefault();
-//             var $formGroup = $(this).closest('.card-body');
-//             var $multipleFormGroup = $formGroup.closest('.card-body');
-
-//             var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
-//             if ($multipleFormGroup.data('max') >= countFormGroup($multipleFormGroup)) {
-//                 $lastFormGroupLast.find('.btn-add').attr('disabled', false);
-//             }
-
-//             $formGroup.remove();
-//         };
-
-//         var selectFormGroup = function (event) {
-//             event.preventDefault();
-
-//             var $selectGroup = $(this).closest('.input-group-select');
-//             var param = $(this).attr("href").replace("#","");
-//             var concept = $(this).text();
-
-//             $selectGroup.find('.concept').text(concept);
-//             $selectGroup.find('.input-group-select-val').val(param);
-
-//         }
-//         // var rowCount = $('#productForm').length;
-//         // alert(rowCount)
-
-
-//         var countFormGroup = function ($form) {
-//             return $form.find('.form-group').length;
-//         };
-
-//         $(document).on('click', '.btn-add', addFormGroup);
-//         $(document).on('click', '.btn-remove', removeFormGroup);
-//         $(document).on('click', '.dropdown-menu a', selectFormGroup);
-
-//     });
-// })(jQuery);
-$("input.tr_clone_add").click(function() {
     var $tr    = $(this).closest('.tr_clone');
     var $clone = $tr.clone();
     $clone.find(':text').val('');
-    $tr.after($clone);
+    $(".tr_clone:last").after($clone)
 });
+    })
 $( "form" ).submit(function( event ) {
   var rowCount = $("#gatePass tr").length -1;
  
   $('#store').val(rowCount);
 
+});
+$(".tr_clone_remove").click(function () {
+$('.tr_clone:last').remove();
 });
   </script>
 
