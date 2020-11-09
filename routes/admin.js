@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 var bodyParser = require('body-parser');
+const _global = require('../helper/common')
 
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
@@ -97,7 +98,7 @@ router.get('/department/edit/:id',auth, departmentController.edit);
 router.post('/department/update/:id',auth,upload.single('logo'),departmentController.update)
 
 /*------------- Store --------*/
-
+// _global.permission('store_edit'),
 router.get('/stores',auth,storeController.list)
 router.get('/store/create',auth,storeController.create)
 router.post('/store/save',auth,storeController.saveStore)

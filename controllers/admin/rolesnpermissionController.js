@@ -27,7 +27,6 @@ exports.createRole = async (req, res) => {
 exports.update = async function (req, res) {
 
     try {
-        console.log("---body",req.body)
         const $cond = parseInt(req.body.checked) ? { $push: { "_permission": req.body.permissionid } } : { $pull: { "_permission": req.body.permissionid } };
         const $cond1 = parseInt(req.body.checked) ? { $push: { "_roles": req.body.roleid} } : { $pull: { "_roles": req.body.roleid} };
 

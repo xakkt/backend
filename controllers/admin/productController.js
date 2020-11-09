@@ -18,8 +18,10 @@ exports.create = async (req, res) => {
 
 exports.priceSave = async (req, res) => {
    try{
+       console.log("---",req.body)
     const arr = [];
     for(i=0; i<req.body.no_of_stores; i++){
+
         data = {};
         data._deal = req.body.deal[i];
         data.deal_price = req.body.deal_price[i];
@@ -28,11 +30,11 @@ exports.priceSave = async (req, res) => {
         data.regular_price = req.body.regular_price[i]; 
         data.deal_start = req.body.stime[i];
         data.deal_end = req.body.etime[i]; 
-        data._store = req.body._store[i]
+        data._store = req.body.store[i]
         data._product = req.body.productid;
         arr.push(data)
-        // console.log("----dat",data)
-       await StoreProductPricing.deleteOne({_store:req.body._store[i]}).exec()
+
+       await StoreProductPricing.deleteOne({_store:req.body.store[i]}).exec()
     }
 
     var productprice = await StoreProductPricing.insertMany(arr);

@@ -74,9 +74,12 @@ exports.productprice = async (storeid,productid) =>{
 
 
 }
-exports.permission = async (req,res,name,next) => {
-     const permission =await Permission.findOne({name:name, _roles: { $in: req.session.roleid }},{}).exec()
-      if(!permission)return res.json({status:false})
+exports.permission =  (value) => {
+    return async(req,res,next) =>{
+      const role =  await Roles.findOne({name:'SUPERADMIN' ,_id:req.session.roleid}).exec()
+      if(role) return next()
+      const permission =await Permission.findOne({name:value, _roles: { $in: req.session.roleid }},{}).exec()
+       if(!permission)return res.json({status:false,message:"You are not allowed for this route"})
       next()
-  
+    }
 }
