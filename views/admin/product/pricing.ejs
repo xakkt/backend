@@ -218,11 +218,14 @@
                           </tr>
                         </thead>
                         <tbody >
+
                           <input type="hidden" id="store" value="" name="no_of_stores"/> 
                           <% if(price.length>0){  %>
                             <% price.forEach(function(prices){ %>
                             <tr class="tr_clone">
+
                                 <td>
+                                  
                                   <select name="store[]" class="form-control custom-select" required>
                                   <option value="">Select stores</option>
                                   <% if(stores) stores.forEach(function(storess){ %>
@@ -264,7 +267,9 @@
                                 <td> <input type="date" name="stime[]" value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
                                   class="form-control" required> </td>
                                 <td> <input type="date" name="etime[]" class="form-control" value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required> </td>
-                                  <td> <input type="button" name="remove" value="Remove" class="tr_clone_remove">
+                                  <td>    
+                                   
+                                    <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>" aria-hidden="true"></i>
 
                                 </td>
                               </tr>
@@ -272,7 +277,7 @@
                         <%} else {%>
                           <tr class="tr_clone">
                             <td>
-                              <select name="store[]" class="form-control custom-select" id="store"required>
+                              <select name="store[]" class="form-control custom-select" required>
                               <option value="">Select stores</option>
                               <% if(stores) stores.forEach(function(storess){ %>
                                   <option value="<%=storess._id%>" ><%=storess.name%></option>
@@ -394,7 +399,16 @@ $( "form" ).submit(function( event ) {
   $('#store').val(rowCount);
 
 });
+
 $(".tr_clone_remove").on('click',function () {
+  // console.log("----price",$(this).data("id"))
+      $.ajax({
+        url: '/admin/product_price/remove',
+        type: 'POST',
+        data: {
+          _id: $(this).data("id"),
+        },
+      });
 $(this).closest('tr').remove();
 });
   </script>
