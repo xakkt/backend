@@ -4,6 +4,8 @@ const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
+const RegularPrice = require('../../models/product_regular_pricing');
+
 const { validationResult } = require('express-validator');
 var moment = require('moment')
 var waterfall = require('async-waterfall');
@@ -52,25 +54,39 @@ exports.priceSave = async (req, res) => {
 
 exports.addPrice = async (req, res) => {
     try{
+        var prices = [];
+
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();
-        let price = await StoreProductPricing.find({_product:req.params.productid}).exec()
-        waterfall([
-            function(callback){
-                StoreProductPricing.find({_product:req.params.productid},callback)
-            //   callback(null, 'one', 'two');
-            },
-            function(arg1, callback){
+        var regularPrice= await RegularPrice.find({}).lean()
 
-              callback(null, 'three');
-            }
-          ], function (err, result) {
-            // result now equals 'done'
-          });
-     if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
-        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:price, stores:stores,moment:moment })
+        let price = await StoreProductPricing.find({_product:req.params.productid}).lean()
+       if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
+      
+       price.map((element) => {
+              var data = {}
+            var productId = element._product.toString();
+            var storeId = element._store.toString()
+            regularPrice.forEach(regular =>{
+                if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
+                 console.log("---regularpreice",regular.regular_price)
+                    data = { ...element, regularprice:regular.regular_price}
+                    // prices.push(data)
+                }
+                // else
+                // {
+                //     data = { ...element, regularprice:''}
+                // }
+            })
+            prices.push(data)
+
+        })
+        
+    //  console.log("---logs",prices)
+       res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:prices, stores:stores,moment:moment })
     }catch(err){
+        console.log("--err",err)
         res.status(400).json({ data: err.message });
     }
 }
