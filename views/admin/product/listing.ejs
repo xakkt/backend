@@ -81,6 +81,7 @@
                         <th>Image</th>
                         <th>Description</th>
                         <th>Price</th>
+                        <th>Regular Price</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -92,6 +93,9 @@
                         <td><%= product.description %></td>
                         <td>
                           <a href="/admin/product/pricing/<%= product._id %>"> <i class="fas fa-plus"></i></a>
+                        </td>
+                        <td>
+                          <a href="/admin/regularprice/create/<%= product._id %>"> <i class="fas fa-plus"></i></a>
                         </td>
 
                         <td><a href="/admin/product/delete/<%= product._id %>"
@@ -110,6 +114,7 @@
                         <th>Image</th>
                         <th>Description</th>
                         <th>Price</th>
+                        <th>Regular Price</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

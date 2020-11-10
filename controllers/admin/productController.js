@@ -6,6 +6,7 @@ const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const { validationResult } = require('express-validator');
 var moment = require('moment')
+var waterfall = require('async-waterfall');
 
 exports.create = async (req, res) => {
     try {
@@ -27,7 +28,6 @@ exports.priceSave = async (req, res) => {
         data.deal_price = req.body.deal_price[i];
         data.deal_value = req.body.deal_value[i];
         data.deal_price = req.body.deal_price[i]; 
-        data.regular_price = req.body.regular_price[i]; 
         data.deal_start = req.body.stime[i];
         data.deal_end = req.body.etime[i]; 
         data._store = req.body.store[i]
@@ -56,6 +56,18 @@ exports.addPrice = async (req, res) => {
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();
         let price = await StoreProductPricing.find({_product:req.params.productid}).exec()
+        waterfall([
+            function(callback){
+                StoreProductPricing.find({_product:req.params.productid},callback)
+            //   callback(null, 'one', 'two');
+            },
+            function(arg1, callback){
+
+              callback(null, 'three');
+            }
+          ], function (err, result) {
+            // result now equals 'done'
+          });
      if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
         res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:price, stores:stores,moment:moment })
     }catch(err){

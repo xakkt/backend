@@ -52,10 +52,6 @@ const storeProductPricingSchema = new Schema({
         enum: ['percentange','fixed'],
         required: true
     },
-    regular_price: {
-        type: Number,
-        required: true
-    },
     deal_price: {
         type: Number,
         required: true

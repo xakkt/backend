@@ -24,8 +24,8 @@ exports.login = async (req, res) => {
       }
         const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         req.session.email = userInfo.email;
+        req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id
-        // console.log("---login",)
 
         return res.redirect('/admin')
     } catch (err) {
