@@ -98,7 +98,7 @@ router.get('/department/edit/:id',auth, departmentController.edit);
 router.post('/department/update/:id',auth,upload.single('logo'),departmentController.update)
 
 /*------------- Store --------*/
-// _global.permission('store_edit'),
+// _global.permission('store_edit')
 router.get('/stores',auth,storeController.list)
 router.get('/store/create',auth,storeController.create)
 router.post('/store/save',auth,storeController.saveStore)

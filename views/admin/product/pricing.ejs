@@ -32,7 +32,11 @@
   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/dist/css/adminlte.min.css">
-  
+  <style>
+    .tr_clone_remove {
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -202,126 +206,136 @@
             <!-- /.card-header -->
             <div class="card-body">
               <form id="productForm" method="post" action="/admin/product_price/create">
-                             
-                   <div  class="row">
-                    <table  id="gatePass"  class="table table-striped">
-                        <thead>
-                          <tr>
-                     
-                            <th>Store</th>
-                            <th>Deals</th>
-                            <th>Deal Type</th>
-                            <th>Deal Price</th>
-                            <th>Regular Price</th>
-                            <th>From</th>
-                            <th>Till</th>
-                          </tr>
-                        </thead>
-                        <tbody >
 
-                          <input type="hidden" id="store" value="" name="no_of_stores"/> 
-                          <% if(price.length>0){  %>
-                            <% price.forEach(function(prices){ %>
-                            <tr class="tr_clone">
+                <div class="row">
+                  <table id="gatePass" class="table table-striped">
+                    <thead>
+                      <tr>
 
-                                <td>
-                                  
-                                  <select name="store[]" class="form-control custom-select" required>
-                                  <option value="">Select stores</option>
-                                  <% if(stores) stores.forEach(function(storess){ %>
-                                    <% if(JSON.stringify(storess._id) == JSON.stringify(prices._store)) {%>
-                                    <option value="<%=storess._id%>" selected><%=storess.name%></option>
-                                    <%} else{ %>
-                                      <option value="<%=storess._id%>" ><%=storess.name%></option>
-                                      <%} %>
-                                    <% }) %>
-                                </select>
-                              </td>
-                                <td>
-                                    <select name="deal[]" class="form-control custom-select" id="deals"required>
-                                    <option value="">Select Deal</option>
-                                    <% if(deals) deals.forEach(function(deal){ %>
-                                      <% if(JSON.stringify(deal._id) == JSON.stringify(prices._deal)) {%>
-                                      <option value="<%=deal._id%>" selected><%=deal.name%></option>
-                                      <%} else{ %>
-                                        <option value="<%=deal._id%>" ><%=deal.name%></option>
-                                        <%} %>
-                                    <% }) %>
-                                  </select>
-                                </td>
-                                <td>
-                                    <select name="deal_value[]" class="form-control custom-select" required>
-                                      <% if(prices.deal_value == 'fixed') {%>
-                                        <option value="fixed" selected>Price</option>
-                                      <option value="">Deal Value</option>
-                                        <option value="percentange">Percentage</option>
-                                       <%} else {%>
-                                       <option value="fixed" >Price</option>
-                                       <option value="">Deal Value</option>
-                                         <option value="percentange" selected>Percentage</option>
-                                       <%}%>
+                        <th>Store</th>
+                        <th>Deals</th>
+                        <th>Deal Type</th>
+                        <th>Deal Price</th>
+                        <th>Regular Price</th>
+                        <th>From</th>
+                        <th>Till</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <input type="hidden" id="store" value="" name="no_of_stores" />
+                      <% if(price.length>0){  %>
+                      <% price.forEach(function(prices){ %>
+                      <tr class="tr_clone">
+
+                        <td>
+
+                          <select name="store[]" class="form-control custom-select" required>
+                            <option value="">Select stores</option>
+                            <% if(stores) stores.forEach(function(storess){ %>
+                            <% if(JSON.stringify(storess._id) == JSON.stringify(prices._store)) {%>
+                            <option value="<%=storess._id%>" selected><%=storess.name%></option>
+                            <%} else{ %>
+                            <option value="<%=storess._id%>"><%=storess.name%></option>
+                            <%} %>
+                            <% }) %>
+                          </select>
+                        </td>
+                        <td>
+                          <select name="deal[]" class="form-control custom-select" required>
+                            <option value="">Select Deal</option>
+                            <% if(deals) deals.forEach(function(deal){ %>
+                            <% if(JSON.stringify(deal._id) == JSON.stringify(prices._deal)) {%>
+                            <option value="<%=deal._id%>" selected><%=deal.name%></option>
+                            <%} else{ %>
+                            <option value="<%=deal._id%>"><%=deal.name%></option>
+                            <%} %>
+                            <% }) %>
+                          </select>
+                        </td>
+                        <td>
+                          <select name="deal_value[]" class="form-control custom-select" required>
+                            <% if(prices.deal_value == 'fixed') {%>
+                            <option value="fixed" selected>Price</option>
+                            <option value="">Deal Value</option>
+                            <option value="percentange">Percentage</option>
+                            <%} else {%>
+                            <option value="fixed">Price</option>
+                            <option value="">Deal Value</option>
+                            <option value="percentange" selected>Percentage</option>
+                            <%}%>
                                         </select>
                                 </td>
-                                <td> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>" class="form-control" required> </td>
-                                <td> <input type="number" name="regular_price[]" value="<%= prices.regular_price %>" class="form-control" required> </td>
-                                <td> <input type="date" name="stime[]" value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
-                                  class="form-control" required> </td>
-                                <td> <input type="date" name="etime[]" class="form-control" value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required> </td>
-                                  <td>    
-                                   
-                                    <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>" aria-hidden="true"></i>
+                                <td> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
+                            class="form-control" required> </td>
+                        <td> <input type="number" name="regular_price[]" value="<%= prices.regular_price %>"
+                            class="form-control" required> </td>
+                        <td> <input type="date" name="stime[]"
+                            value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>" class="form-control"
+                            required> </td>
+                        <td> <input type="date" name="etime[]" class="form-control"
+                            value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required> </td>
+                        <td>
 
-                                </td>
-                              </tr>
-                        <%})%>
-                        <%} else {%>
-                          <tr class="tr_clone">
-                            <td>
-                              <select name="store[]" class="form-control custom-select" required>
-                              <option value="">Select stores</option>
-                              <% if(stores) stores.forEach(function(storess){ %>
-                                  <option value="<%=storess._id%>" ><%=storess.name%></option>
-                                <% }) %>
-                            </select>
-                          </td>
-                         
-                            <td>
-                                <select name="deal[]" class="form-control custom-select" id="deals"required>
-                                <option value="">Select Deal</option>
-                                <% if(deals) deals.forEach(function(deal){ %>
-                                    <option value="<%=deal._id%>" ><%=deal.name%></option>
-                                <% }) %>
-                              </select>
-                            </td>
-                            <td>
-                                <select name="deal_value[]" class="form-control custom-select" required>
-                                   <option value="">Deal Value</option>
-                                   <option value="fixed" >Price</option>
-                                     <option value="percentange">Percentage</option>
-                                    </select>
-                            </td>
-                            <td> <input type="number" name="deal_price[]" class="form-control" required> </td>
-                            <td> <input type="number" name="regular_price[]" class="form-control" required> </td>
-                            <td> <input type="date" name="stime[]"  class="form-control" required> </td>
-                            <td> <input type="date" name="etime[]" class="form-control" required> </td>
-                          <td> <input type="button" name="remove" value="Remove" class="tr_clone_remove">
+                          <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>" onclick="myFunction(this)"
+                            aria-hidden="true"></i>
 
-                            </td>
-                          </tr>
+                        </td>
+                      </tr>
+                      <%})%>
+                      <%} else {%>
+                      <tr class="tr_clone">
+                        <td style="width:18%">
+                          <select name="store[]" class="form-control custom-select" required>
+                            <option value="">Select stores</option>
+                            <% if(stores) stores.forEach(function(storess){ %>
+                            <option value="<%=storess._id%>"><%=storess.name%></option>
+                            <% }) %>
+                          </select>
+                        </td>
+
+                        <td style="width:15%">
+                          <select name="deal[]" class="form-control custom-select" required>
+                            <option value="">Select Deal</option>
+                            <% if(deals) deals.forEach(function(deal){ %>
+                            <option value="<%=deal._id%>"><%=deal.name%></option>
+                            <% }) %>
+                          </select>
+                        </td>
+                        <td style="width:10%">
+                          <select name="deal_value[]" class="form-control custom-select" required>
+                            <option value="">Deal Value</option>
+                            <option value="fixed">Price</option>
+                            <option value="percentange">Percentage</option>
+                          </select>
+                        </td>
+                        <td style="width:10%"> <input type="number" name="deal_price[]" class="form-control" required>
+                        </td>
+                        <td style="width:10%"> <input type="number" name="regular_price[]" class="form-control"
+                            required> </td>
+                        <td> <input type="date" name="stime[]" class="form-control" required> </td>
+                        <td> <input type="date" name="etime[]" class="form-control" required> </td>
+                        <td>
+                          <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)" data-id=""
+                            aria-hidden="true"></i>
+
+                        </td>
+                      </tr>
 
 
-                          <%}%>
+                      <%}%>
                         </tbody>
                       </table>
                 </div>
                 <input type="hidden" name="productid" value="<%= productid %>"></input>
-                <!-- /.card-body -->
-                <span class="input-group-btn">
-                  <input type="button" name="add" value="Add" id="tr_clone_add" class="tr_clone_add">
-              </span>
-                <div class="card-footer">
-                  <button type="submit" value="submit" class="btn btn-primary">Submit</button>
-                </div>
+                      <!-- /.card-body -->
+                      <span class="input-group-btn">
+                      </span>
+                      <div class="card-footer">
+                        <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add">
+                        <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                      </div>
               </form>
             </div>
             <!-- /.card -->
@@ -365,10 +379,10 @@
 
       $('#productForm').validate({
         rules: {
-       
+
         },
         messages: {
-         
+
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
@@ -385,32 +399,40 @@
     });
     $(function () {
 
-$(".tr_clone_add").click(function (e) {
+      $(".tr_clone_add").click(function (e) {
 
-var $tr = $('.tr_clone').first();
-var $clone = $tr.clone();
-$clone.find(':text').val('');
-$(".tr_clone:last").after($clone)
-});
+        var $tr = $('.tr_clone').first();
+        var $clone = $tr.clone();
+        $clone.find(':text').val('');
+        $(".tr_clone:last").after($clone)
+      });
     })
-$( "form" ).submit(function( event ) {
-  var rowCount = $("#gatePass tr").length -1;
- 
-  $('#store').val(rowCount);
+    $("form").submit(function (event) {
+      var rowCount = $("#gatePass tr").length - 1;
 
-});
+      $('#store').val(rowCount);
 
-$(".tr_clone_remove").on('click',function () {
-  // console.log("----price",$(this).data("id"))
+    });
+    function myFunction(that) {
+
+      if ($(that).data("id").trim() == "") {
+        return $(that).closest('tr').remove()
+      }
+
       $.ajax({
         url: '/admin/product_price/remove',
         type: 'POST',
         data: {
-          _id: $(this).data("id"),
+          _id: $(that).data("id"),
         },
+
+      }).done((data) => {
+        if (data.status) {
+          $(that).closest('tr').remove();
+        }
       });
-$(this).closest('tr').remove();
-});
+
+    }
   </script>
 
 </body>
