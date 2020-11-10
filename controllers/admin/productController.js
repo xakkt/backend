@@ -160,6 +160,7 @@ exports.productsave = async (req,res) =>{
             },
             description: req.body.description,
             sku: req.body.sku,
+            _category:req.body._category,
             weight: req.body.weight,
             short_description: req.body.short_description,
             is_featured:req.body.is_featured,
@@ -171,14 +172,10 @@ exports.productsave = async (req,res) =>{
         }
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
-        // await req.flash('success', 'Product added successfully!');
-        // res.render('admin/product', { status: "success", message: "", product: product, product: product, menu: "Product" })
         res.redirect("/admin/product/pricing/"+product._id)
-        // res.redirect('/admin/product')
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/product')
-        // res.status(400).json({ data: err.message });
     }
 }
 exports.productlisting = async (req,res) =>{
@@ -225,6 +222,7 @@ exports.productupdate = async function (req, res) {
             },
             description: req.body.description,
             sku: req.body.sku,
+            _category:req.body._category,
             weight: req.body.weight,
             short_description: req.body.short_description,
             is_featured:req.body.is_featured,

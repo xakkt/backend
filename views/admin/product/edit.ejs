@@ -85,9 +85,13 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="product_category">Product Category</label>
-                      <input type="text" name="product_category" class="form-control" id="product_category"
-                        placeholder="Enter Product Category">
+                      <label for="_category">Product Category</label>
+                      <select name="_category" class="form-control custom-select" id="_category">
+                        <option value="">Choose one</option>
+                        <% if(productCategories) productCategories.forEach(function(category){ %>
+                          <option <%=(product._category.equals(category._id))?'selected':''%> value="<%=category._id%>()"><%=category.name%></option>
+                        <% }) %>
+                      </select>
                     </div>
                   </div>
                   </div>

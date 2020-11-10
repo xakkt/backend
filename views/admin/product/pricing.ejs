@@ -230,15 +230,10 @@
                       <tr class="tr_clone">
 
                         <td>
-
                           <select name="store[]" class="form-control custom-select" required>
                             <option value="">Select stores</option>
-                            <% if(stores) stores.forEach(function(storess){ %>
-                            <% if(JSON.stringify(storess._id) == JSON.stringify(prices._store)) {%>
-                            <option value="<%=storess._id%>" selected><%=storess.name%></option>
-                            <%} else{ %>
-                            <option value="<%=storess._id%>"><%=storess.name%></option>
-                            <%} %>
+                            <% if(stores) stores.forEach(function(store){ %>
+                            <option <%=(store._id.equals(prices._store))?'selected':''%> value="<%=store._id%>"><%=store.name%></option>
                             <% }) %>
                           </select>
                         </td>
@@ -246,11 +241,7 @@
                           <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
-                            <% if(JSON.stringify(deal._id) == JSON.stringify(prices._deal)) {%>
-                            <option value="<%=deal._id%>" selected><%=deal.name%></option>
-                            <%} else{ %>
-                            <option value="<%=deal._id%>"><%=deal.name%></option>
-                            <%} %>
+                            <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>" ><%=deal.name%></option>
                             <% }) %>
                           </select>
                         </td>
@@ -289,8 +280,8 @@
                         <td style="width:18%">
                           <select name="store[]" class="form-control custom-select" required>
                             <option value="">Select stores</option>
-                            <% if(stores) stores.forEach(function(storess){ %>
-                            <option value="<%=storess._id%>"><%=storess.name%></option>
+                            <% if(stores) stores.forEach(function(store){ %>
+                            <option value="<%=store._id%>"><%=store.name%></option>
                             <% }) %>
                           </select>
                         </td>
