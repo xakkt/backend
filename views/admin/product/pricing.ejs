@@ -229,7 +229,7 @@
                       <% price.forEach(function(prices){ %>
                       <tr class="tr_clone">
 
-                        <td>
+                        <td style="width:18%">
                           <select name="store[]" class="form-control custom-select" required>
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
@@ -237,7 +237,7 @@
                             <% }) %>
                           </select>
                         </td>
-                        <td>
+                        <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
@@ -245,7 +245,7 @@
                             <% }) %>
                           </select>
                         </td>
-                        <td>
+                        <td style="width:10%">
                           <select name="deal_value[]" class="form-control custom-select" required>
                             <% if(prices.deal_value == 'fixed') {%>
                             <option value="fixed" selected>Price</option>
@@ -258,9 +258,9 @@
                             <%}%>
                                         </select>
                                 </td>
-                                <td> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
+                                <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
                             class="form-control" required> </td>
-                        <td> <input type="number" name="regular_price[]" value="<%= prices.regular_price %>"
+                        <td style="width:10%"> <input type="number" name="regular_price[]" value="<%= prices.regular_price %>"
                             class="form-control" required> </td>
                         <td> <input type="date" name="stime[]"
                             value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>" class="form-control"
