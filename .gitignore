@@ -1,7 +1,6 @@
 # Node build artifacts
 node_modules
 config/database.js
-public/images
 npm-debug.log
 
 # Local development
