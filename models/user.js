@@ -67,7 +67,7 @@ role_id: [
   {
       type: Schema.Types.ObjectId, 
       ref: 'Role',
-      // required: true,
+      required: true,
       validate: {
        validator: function(v) {
                return FKHelper(mongoose.model('Role'), v);

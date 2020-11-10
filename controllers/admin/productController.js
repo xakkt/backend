@@ -19,7 +19,6 @@ exports.create = async (req, res) => {
 
 exports.priceSave = async (req, res) => {
    try{
-       console.log("---",req.body)
     const arr = [];
     for(i=0; i<req.body.no_of_stores; i++){
 
@@ -251,14 +250,10 @@ exports.productupdate = async function (req, res) {
 
 exports.remove = async (req, res) => {
     try{
-        console.log("----im here")
       let remove =  await StoreProductPricing.deleteOne({_id:req.body._id}).exec()
-     
       if(!remove) return res.json({status:false})
           return res.json({status:true})
  }catch(err){
- 
-     console.log('===validation',err)
      res.send(err)
  }
  }

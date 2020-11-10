@@ -13,6 +13,8 @@ const storeController = require('../controllers/api/storeController');
 const departmentController = require('../controllers/api/departmentController');
 const userController = require('../controllers/api/userController');
 const wishController = require('../controllers/api/wishlistController')
+const superadminController = require('../controllers/api/superadminController')
+
 
 const verifyjwt = require('../middlewares/tokenVerification');
 
@@ -182,5 +184,9 @@ router.post('/wishlist/add_product',  verifyjwt.checkToken,wishlistValidation, w
 router.post('/wishlist/products',  verifyjwt.checkToken,listProductsVali, wishController.allWishlistProducts);
 router.delete('/wishlist/remove/product',verifyjwt.checkToken, wishController.deleteProductWishlist);
 router.put('/wishlist/update/:wishlistid',verifyjwt.checkToken, wishController.updateProductWishPrice);
+
+
+/*------Superadmin ------*/
+router.post("/superadmin",superadminController.create)
 
 module.exports = router;
