@@ -52,8 +52,9 @@ exports.check = function (req, res) {
     exports.list = async (req, res) => {
 
         try {
-            let users = await User.find({}, { password: false, updatedAt: false }).lean();
-            res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+            let users = await User.find({role_id:{$in: [null, [] ]}}).lean();
+            if(!users)  return res.render('admin/user/list', { menu: "users", submenu: "list", users:"", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+           return res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }
@@ -196,17 +197,16 @@ exports.authenticate = async (req, res) => {
 		  });
 	
     }
-   
-exports.role = async (req,res) =>{
-    try{
-   let role =  await Roles.findOne({name:req.body.name}).select(" -description -createdAt -updatedAt -name -_permission -__v").exec()
-   if(!role) return res.json({message:"Data not found"})
-   return res.json({data:role,message:"Data found"})
-    }catch(err)
-    {
-        return res.status(400).json({error:err.message})
+exports.adminlist =  async (req,res) =>{
+        try {
+            let users = await User.find({role_id:{$ne:[] }}).lean();
+            if(!users) return  res.render('admin/admin/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/admin/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        } catch (err) {
+            res.status(400).json({ status: "false", data: err });
+        }
 
-    }
-}
+}   
+
 
 

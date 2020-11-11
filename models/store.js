@@ -60,6 +60,16 @@ const storeSchema = new Schema({
             message: `Country doesn't exist`
         }
     },
+    lastupdatedby: {
+        type: Schema.Types.ObjectId,
+        ref:'User',
+        validate: {
+                validator: function(v) {
+                return FKHelper(mongoose.model('User'), v);
+             },
+            message: `User doesn't exist`
+        }
+    },
     zipcode: {
         type: String,
         required: true

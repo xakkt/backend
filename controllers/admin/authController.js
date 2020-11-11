@@ -1,4 +1,6 @@
+const Role = require('../../models/role');
 const User = require('../../models/user');
+
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken');
 
@@ -10,19 +12,16 @@ exports.login = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const userInfo = await User.findOne({ email: req.body.email }).populate({
-            path: 'role_id',
-            match: { name: 'SUPERADMIN' }
-        }).
-            exec();
-        if (!userInfo.role_id.length) return res.status(400).json({ message: "Email does not exist." });
+        const userInfo = await User.findOne({ email: req.body.email,role_id:{$in:req.body.role} }).exec()
+        
+            
+        if (!userInfo.role_id.length){await req.flash('failure',"Email does not exist." ); return res.redirect('/admin/login')};
         if (!bcrypt.compareSync(req.body.password, userInfo.password))
         { 
             await req.flash('failure',"Invalid password!!!" );
             res.redirect('/admin/login');
-            // return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
       }
-        const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        // const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id
@@ -31,17 +30,14 @@ exports.login = async (req, res) => {
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/login');
-        // return res.status(400).json({
-        //     success: false,
-        //     message: "Something went wrong",
-        //     error: err
-        // });
+       
     }
 }
 exports.create = async (req, res) => {
     try {
+        let role =  await Role.find({}).lean()
         // res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        res.render('admin/auth/login',{success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')})
+        res.render('admin/auth/login',{success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure'),role:role})
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }

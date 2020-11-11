@@ -29,18 +29,18 @@
           </div>
         </div>
       </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+             
           <li class="nav-item">
             <a href="/admin" class="nav-link <% if (menu === 'dashboard') { %> active <% } %>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p> Dashboard  </p>
             </a>
-            
+          
           </li>
           <!-- Users -->
           <li class="nav-item <% if (menu === 'users') { %> menu-open <% } %>">
@@ -74,7 +74,7 @@
             <ul class="nav nav-treeview">
               
               <li class="nav-item">
-                <a href="/admin/admin" class="nav-link <% if (menu === 'users' && submenu === 'list' ) { %> active <% } %>">
+                <a href="/admin/managers" class="nav-link <% if (menu === 'users' && submenu === 'list' ) { %> active <% } %>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Admin Users</p>
                 </a>
@@ -445,3 +445,4 @@
     </div>
     <!-- /.sidebar -->
   </aside>
+  
