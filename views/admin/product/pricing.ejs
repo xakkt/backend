@@ -413,10 +413,14 @@ $.ajax({
         },
 
       }).done((data) => {
-        if (data.message) {
-            console.log("regular",data.message.regular_price)
-          // $(that).closest('tr').remove();
+        
+        if (data.status) {
           $(that).closest('.tr_clone').find('.rgprice').val(data.message.regular_price)
+        }
+        else
+        {
+          $(that).closest('.tr_clone').find('.rgprice').val('')
+          alert("Regular price not added ")
         }
       });
 

@@ -44,7 +44,10 @@ exports.priceSave = async (req, res) => {
         await req.flash('failure', "Product price");
         res.redirect('/admin/product')
     }
-    res.redirect('/admin/product')
+    // res.redirect('/admin/product')
+
+        res.redirect('/admin/product')
+
 }catch(err){
 
     console.log('===validation',err)
@@ -63,27 +66,18 @@ exports.addPrice = async (req, res) => {
 
         let price = await StoreProductPricing.find({_product:req.params.productid}).lean()
        if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
-      
+         console
        price.map((element) => {
               var data = {}
-            var productId = element._product.toString();
-            var storeId = element._store.toString()
             regularPrice.forEach(regular =>{
                 if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
-                 console.log("---regularpreice",regular.regular_price)
                     data = { ...element, regularprice:regular.regular_price}
-                    // prices.push(data)
                 }
-                // else
-                // {
-                //     data = { ...element, regularprice:''}
-                // }
+                
             })
             prices.push(data)
 
         })
-        
-    //  console.log("---logs",prices)
        res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:prices, stores:stores,moment:moment })
     }catch(err){
         console.log("--err",err)
@@ -200,7 +194,8 @@ exports.productsave = async (req,res) =>{
         }
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
-        res.redirect("/admin/product/pricing/"+product._id)
+        res.redirect("/admin/regularprice/create/"+product._id)
+
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/product')

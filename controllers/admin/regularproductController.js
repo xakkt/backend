@@ -23,7 +23,6 @@ exports.addprice = async (req, res) => {
         data._product =req.body.productid
         data._user = req.session.userid
         arr.push(data)
-    //    await StoreProductPricing.deleteOne({_store:req.body.store[i]}).exec()
     }
 
     var regularPrice = await RegularPrice.insertMany(arr);
@@ -32,7 +31,8 @@ exports.addprice = async (req, res) => {
         await req.flash('failure', "Regular price");
         res.redirect('/admin/product')
     }
-    res.redirect('/admin/product')
+    res.redirect('/admin/product/pricing/'+req.body.productid)
+
 }catch(err){
 
     console.log('===validation',err)
@@ -56,7 +56,7 @@ exports.get = async (req, res) => {
     try {
 
         var regularPrice = await RegularPrice.findOne({_product:req.body.productid,_store:req.body.storeid}).lean();
-        if(!regularPrice)   return res.json({status:false})
+        if(!regularPrice)   return res.json({status:false,message:"Not found"})
       return res.json({status:true,message:regularPrice})
     } catch (err) {
         res.status(400).json({ data: err.message });
