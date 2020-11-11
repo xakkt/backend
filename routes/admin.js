@@ -12,6 +12,8 @@ const dealController = require('../controllers/admin/dealController')
 const storeproductController = require('../controllers/admin/storeproductController')
 const rpController = require('../controllers/admin/rolesnpermissionController')
 const authController = require('../controllers/admin/authController')
+const regularproductController = require('../controllers/admin/regularproductController')
+
 
 var auth = function(req, res, next) {
   if (req.session.email)
@@ -188,6 +190,12 @@ router.post('/roles/update',auth,rpController.update)
 router.get('/login',authController.create)
 router.post('/login',authController.login)
 router.get('/logout',auth,authController.logout)
+ 
+/*-----------Regular Product -------*/
 
+router.get('/regularprice/create/:productid',auth,regularproductController.create)
+router.post('/regularprice/update',auth,regularproductController.addprice)
+router.post('/regularprice/remove',auth,regularproductController.remove)
+router.post('/regularprice/get',auth,regularproductController.get)
 
 module.exports = router;

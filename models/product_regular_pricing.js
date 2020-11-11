@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
 
-const storeProductPricingSchema = new Schema({ 
+const productRegularPricingSchema = new Schema({ 
      _product: {
         type: Schema.Types.ObjectId,
         ref:'Product',
@@ -18,6 +18,7 @@ const storeProductPricingSchema = new Schema({
     _user: {
         type: Schema.Types.ObjectId,
         ref:'User',
+        required:true,
         validate: {
                 validator: function(v) {
                 return FKHelper(mongoose.model('User'), v);
@@ -36,50 +37,14 @@ const storeProductPricingSchema = new Schema({
             message: `Store doesn't exist`
         }
     },
-    _deal: {
-        type: Schema.Types.ObjectId,
-        ref:'Deal',
-        required:true,
-        validate: {
-                validator: function(v) {
-                return FKHelper(mongoose.model('Deal'), v);
-             },
-            message: `Deal doesn't exist`
-        }
-    },
-    deal_value: {
+    product_status: {
         type: String,
-        enum: ['percentange','fixed'],
-        required: true
+        enum: ['Active','Inactive'],
     },
-    deal_price: {
+    regular_price: {
         type: Number,
         required: true
     },
-    _country: {
-        type: Schema.Types.ObjectId,
-        ref:'Country',
-        validate: {
-                validator: function(v) {
-                return FKHelper(mongoose.model('Country'), v);
-             },
-            message: `Country doesn't exist`
-        }
-    },
-    deal_start:{
-     type:Date,
-     required:true
-    },
-    deal_end:{
-        type:Date,
-        required:true
-    }
  },{timestamps:true});
-//  storeProductPricingSchema.index({
-//     _store: 1,
-//     _product: 1
-//   }, {
-//     unique: true,
-//   });
 
-module.exports = mongoose.model('StoreProductPricing', storeProductPricingSchema);
+module.exports = mongoose.model('ProductRegularPricing', productRegularPricingSchema);
