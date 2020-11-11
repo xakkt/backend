@@ -236,6 +236,8 @@
                             <% }) %>
                           </select>
                         </td>
+                        <td style="width:10%"> <input type="text" class="form-control rgprice" value="<%= prices.regularprice %>"
+                          class="form-control" readonly> </td>
                         <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select"  required>
                             <option value="">Select Deal</option>
@@ -259,8 +261,7 @@
                                 </td>
                                 <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
                             class="form-control" required> </td>
-                        <td style="width:10%"> <input type="text" class="form-control rgprice" value="<%= prices.regularprice %>"
-                            class="form-control" readonly> </td>
+                        
                         <td> <input type="date" name="stime[]"
                             value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>" class="form-control"
                             required> </td>
