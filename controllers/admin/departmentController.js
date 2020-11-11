@@ -27,7 +27,6 @@ exports.edit =  async (req, res)=> {
 	try{
 		const departments = await Department.findById(req.params.id).exec();
 		 res.render('admin/department/edit',{status: "success", message: "", departments: departments,menu:"departments", submenu:"create"})
-		 // res.json({status: "success", message: "", data: departments});
 	 }catch(err){
 		res.status(400).json({status: "false", data: err});
    }

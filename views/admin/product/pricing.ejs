@@ -171,8 +171,21 @@
     <!-- /.navbar -->
     <!-- Main Sidebar Container -->
     <%- include('../../_partials/_admin/sidebar.ejs'); %>
+
+
+   
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+      <% if(failure.length){ %> 
+        <div class="alert alert-danger">
+            <strong><%= failure[0] %></strong>
+          </div>
+          <% } %>
+        <% if(success.length){ %>   
+        <div class="alert alert-success">
+            <strong><%= success %></strong> 
+        </div>
+        <% } %>
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <div class="container-fluid">

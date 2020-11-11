@@ -197,6 +197,16 @@ exports.authenticate = async (req, res) => {
 	
     }
    
+exports.role = async (req,res) =>{
+    try{
+   let role =  await Roles.findOne({name:req.body.name}).select(" -description -createdAt -updatedAt -name -_permission -__v").exec()
+   if(!role) return res.json({message:"Data not found"})
+   return res.json({data:role,message:"Data found"})
+    }catch(err)
+    {
+        return res.status(400).json({error:err.message})
 
+    }
+}
 
 

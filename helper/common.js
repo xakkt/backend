@@ -83,3 +83,14 @@ exports.permission =  (value) => {
       next()
     }
 }
+exports.role =  async (value) =>{
+    try{
+   let role =  await Roles.findOne({name:value}).select(" -description -createdAt -updatedAt -name -_permission -__v").exec()
+   if(!role) return res.json({message:"Data not found",data:""})
+   return res.json({data:role,message:"Data found"})
+    }catch(err)
+    {
+        return res.status(400).json({error:err.message})
+
+    }
+}

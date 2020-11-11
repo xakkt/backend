@@ -16,7 +16,7 @@ var waterfall = require('async-waterfall');
 exports.create = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
-       
+
         res.render('admin/product-category/create', { menu: "ProductCategory", product: product })
     } catch (err) {
         res.status(400).json({ data: err.message });
@@ -26,39 +26,39 @@ exports.create = async (req, res) => {
 * Listing of Product Category
 */
 exports.productCreate = async (req, res) => {
-    try{
+    try {
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
         var productCategories = await ProductCategory.find({}).lean();
-        return res.render('admin/product/create', { menu:"products", submenu:"create", brands: brands, deals:deals, productCategories: productCategories})
-    }catch(err){
+        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, deals: deals, productCategories: productCategories })
+    } catch (err) {
         res.status(400).json({ data: err.message });
     }
 },
-/*
-* Add new Product Category
-*params[name,filename]
-*/
-exports.save = async (req, res) => {
+    /*
+    * Add new Product Category
+    *params[name,filename]
+    */
+    exports.save = async (req, res) => {
 
-    try {
-        const categoryInfo = {
-            name: req.body.name,
-            logo: req.file.filename
+        try {
+            const categoryInfo = {
+                name: req.body.name,
+                logo: req.file.filename
+            }
+            categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
+
+            const productCategory = await ProductCategory.create(categoryInfo);
+            await req.flash('success', 'ProductCategory added successfully!');
+            res.redirect('/admin/category')
+
+        } catch (err) {
+            await req.flash('failure', err.message);
+            res.redirect('/admin/category')
         }
-        categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
 
-        const productCategory = await ProductCategory.create(categoryInfo);
-        await req.flash('success', 'ProductCategory added successfully!');
-        res.redirect('/admin/category')
 
-    } catch (err) {
-        await req.flash('failure', err.message);
-        res.redirect('/admin/category')
     }
-
-
-}
 /*
 *Listing of Product Category
 */
@@ -66,8 +66,8 @@ exports.list = async (req, res) => {
 
     try {
         let productCategory = await ProductCategory.find().exec();
-        if (!productCategory.length) return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: "",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
-        return res.render('admin/product-category/listing', { menu: "departments", submenu: "list", productCategory: productCategory ,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!productCategory.length) return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product-category/listing', { menu: "departments", submenu: "list", productCategory: productCategory, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ status: "success", message: "Department added successfully", data: err });
@@ -116,15 +116,16 @@ exports.update = async function (req, res) {
 
         if (req.file) { categoryInfo.logo = req.file.filename }
         const productCategory = await ProductCategory.findByIdAndUpdate({ _id: req.params.id }, categoryInfo, { new: true, upsert: true });
-        if (productCategory){
+        if (productCategory) {
             await req.flash('success', 'Product updated successfully!');
-            res.redirect('/admin/category') }
+            res.redirect('/admin/category')
+        }
         return res.status(400).json({ status: false, message: "ProductCategory not found" });
 
     } catch (err) {
         console.log(err)
         await req.flash('failure', err.message);
-        res.redirect('/admin/category') 
+        res.redirect('/admin/category')
     }
 
 
@@ -132,27 +133,27 @@ exports.update = async function (req, res) {
 /*
 *Create new product
 */
-exports.productsave = async (req,res) =>{
+exports.productsave = async (req, res) => {
     try {
         const productinfo = {
-            name:{
-                english:req.body.en_name
+            name: {
+                english: req.body.en_name
             },
             description: req.body.description,
             sku: req.body.sku,
-            _category:req.body._category,
+            _category: req.body._category,
             weight: req.body.weight,
             short_description: req.body.short_description,
-            is_featured:req.body.is_featured,
+            is_featured: req.body.is_featured,
             price: req.body.price,
-            image:req.file.filename,
+            image: req.file.filename,
             status: req.body.status,
-            brand_id:req.body.brand
-            
+            brand_id: req.body.brand
+
         }
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
-        res.redirect("/admin/regularprice/create/"+product._id)
+        res.redirect("/admin/regularprice/create/" + product._id)
 
     } catch (err) {
         await req.flash('failure', err.message);
@@ -162,12 +163,12 @@ exports.productsave = async (req,res) =>{
 /*
 * Product listing
 */
-exports.productlisting = async (req,res) =>{
+exports.productlisting = async (req, res) => {
     try {
-        let price =  await StoreProductPricing.find().exec()
+        let price = await StoreProductPricing.find().exec()
         let product = await Product.find().exec();
-        if (!product.length) return res.render('admin/product/listing', { menu: "product", submenu: "list",price:"", product: "",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
-        return res.render('admin/product/listing', { menu: "product", submenu: "list", product: product,price:price ,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!product.length) return res.render('admin/product/listing', { menu: "product", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product/listing', { menu: "product", submenu: "list", product: product, price: price, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });
@@ -194,7 +195,7 @@ exports.productedit = async (req, res) => {
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
         var productCategories = await ProductCategory.find({}).lean();
-        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals:deals, product: product, productCategories: productCategories, menu: "Product" })
+        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals: deals, product: product, productCategories: productCategories, menu: "Product" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -213,30 +214,31 @@ exports.productupdate = async function (req, res) {
             return res.status(400).json({ errors: errors.array() });
         }
         const productinfo = {
-            name:{
-                english:req.body.en_name
+            name: {
+                english: req.body.en_name
             },
             description: req.body.description,
             sku: req.body.sku,
-            _category:req.body._category,
+            _category: req.body._category,
             weight: req.body.weight,
             short_description: req.body.short_description,
-            is_featured:req.body.is_featured,
+            is_featured: req.body.is_featured,
             price: req.body.price,
             status: req.body.status,
-            
+
         }
         if (req.file) { productinfo.image = req.file.filename }
         const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: true, upsert: true });
-        if (product){
+        if (product) {
             await req.flash('success', 'Product updated successfully!');
-            res.redirect('/admin/product') }
+            res.redirect('/admin/product')
+        }
         return res.status(400).json({ status: false, message: "ProductCategory not found" });
 
     } catch (err) {
         console.log(err)
         await req.flash('failure', err.message);
-        res.redirect('/admin/product') 
+        res.redirect('/admin/product')
     }
 
 
@@ -246,81 +248,89 @@ exports.productupdate = async function (req, res) {
 *params[id]
 */
 exports.remove = async (req, res) => {
-    try{
-      let remove =  await StoreProductPricing.deleteOne({_id:req.body._id}).exec()
-      if(!remove) return res.json({status:false})
-          return res.json({status:true})
- }catch(err){
-     res.send(err)
- }
- }
- /*
- * Add deal price 
- * params[no_of_stores,deal,deal_price,deal_value,stime,etime,store,productid]
- */
- exports.priceSave = async (req, res) => {
-    try{
-     const arr = [];
-     for(i=0; i<req.body.no_of_stores; i++){
- 
-         data = {};
-         data._deal = req.body.deal[i];
-         data.deal_price = req.body.deal_price[i];
-         data.deal_value = req.body.deal_value[i];
-         data.deal_price = req.body.deal_price[i]; 
-         data.deal_start = req.body.stime[i];
-         data.deal_end = req.body.etime[i]; 
-         data._store = req.body.store[i]
-         data._product = req.body.productid;
-         arr.push(data)
-        await StoreProductPricing.deleteOne({_store:req.body.store[i]}).exec()
-     }
- 
-     var productprice = await StoreProductPricing.insertMany(arr);
-     if(!productprice) 
-     {
-         await req.flash('failure', "Product price");
-         res.redirect('/admin/product')
-     }
-     // res.redirect('/admin/product')
- 
-         res.redirect('/admin/product')
- 
- }catch(err){
- 
-     console.log('===validation',err)
-     res.send(err)
- }
- }
+    try {
+        let remove = await StoreProductPricing.deleteOne({ _id: req.body._id }).exec()
+        if (!remove) return res.json({ status: false })
+        return res.json({ status: true })
+    } catch (err) {
+        res.send(err)
+    }
+}
 /*
+* Add deal price 
+* params[no_of_stores,deal,deal_price,deal_value,stime,etime,store,productid]
+*/
+exports.priceSave = async (req, res) => {
+    try {
+        const arr = [];
+        for (i = 0; i < req.body.no_of_stores; i++) {
+            for (k = i + 1; k < req.body.no_of_stores; k++) {
+                if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
+                    if (req.body.etime[i] >= req.body.stime[k]) {
+                        await req.flash('failure', "Cannot select two  same dates for same deals");
+                        return res.redirect('/admin/product/pricing/' + req.body.productid)
+                    }
+                }
+            }
+        }
+
+
+        for (i = 0; i < req.body.no_of_stores; i++) {
+            data = {};
+            data._deal = req.body.deal[i];
+            data.deal_price = req.body.deal_price[i];
+            data.deal_value = req.body.deal_value[i];
+            data.deal_price = req.body.deal_price[i];
+            data.deal_start = req.body.stime[i];
+            data.deal_end = req.body.etime[i];
+            data._store = req.body.store[i]
+            data._product = req.body.productid;
+            arr.push(data)
+            await StoreProductPricing.deleteOne({ _store: req.body.store[i] }).exec()
+        }
+
+        var productprice = await StoreProductPricing.insertMany(arr);
+        if (!productprice) {
+            await req.flash('failure', "Product price");
+            res.redirect('/admin/product')
+        }
+        res.redirect('/admin/product')
+
+    } catch (err) {
+
+        console.log('===validation', err)
+        res.send(err)
+    }
+}
+/*
+* product price view
 * get regular_price with store list
 * params[req.params.productid]
 */
- exports.addPrice = async (req, res) => {
-    try{
+exports.addPrice = async (req, res) => {
+    try {
         var prices = [];
-
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();
-        var regularPrice= await RegularPrice.find({}).lean()
+        var regularPrice = await RegularPrice.find({}).lean()
 
-        let price = await StoreProductPricing.find({_product:req.params.productid}).lean()
-       if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
-         console
-       price.map((element) => {
-              var data = {}
-            regularPrice.forEach(regular =>{
+        let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
+        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        console
+        price.map((element) => {
+            var data = {}
+            regularPrice.forEach(regular => {
                 if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
-                    data = { ...element, regularprice:regular.regular_price}
+                    data = { ...element, regularprice: regular.regular_price }
                 }
             })
             prices.push(data)
 
         })
-       res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:prices, stores:stores,moment:moment })
-    }catch(err){
-        console.log("--err",err)
+        res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+    } catch (err) {
+        console.log("--err", err)
         res.status(400).json({ data: err.message });
     }
 }
