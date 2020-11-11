@@ -213,10 +213,10 @@
                       <tr>
 
                         <th>Store</th>
-                        <th>Deals</th>
-                        <th>Deal Type</th>
-                        <th>Deal Price</th>
                         <th>Regular Price</th>
+                        <th>Deal Type</th>
+                        <th>Deal %</th>
+                        <th>Deal Price</th>
                         <th>From</th>
                         <th>Till</th>
                         <th>Action</th>
@@ -284,7 +284,8 @@
                             <% }) %>
                           </select>
                         </td>
-
+                        <td style="width:10%"> <input type="text" class="rgprice form-control"
+                          readonly required> </td>
                         <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
@@ -302,8 +303,7 @@
                         </td>
                         <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control" required>
                         </td>
-                        <td style="width:10%"> <input type="text" class="rgprice form-control"
-                          readonly required> </td>
+                       
                         <td> <input type="date" name="stime[]" class="form-control" required> </td>
                         <td> <input type="date" name="etime[]" class="form-control" required> </td>
                         <td>
