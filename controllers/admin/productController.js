@@ -10,6 +10,9 @@ const { validationResult } = require('express-validator');
 var moment = require('moment')
 var waterfall = require('async-waterfall');
 
+/*
+* View of product category
+*/
 exports.create = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
@@ -19,72 +22,9 @@ exports.create = async (req, res) => {
         res.status(400).json({ data: err.message });
     }
 }
-
-exports.priceSave = async (req, res) => {
-   try{
-    const arr = [];
-    for(i=0; i<req.body.no_of_stores; i++){
-
-        data = {};
-        data._deal = req.body.deal[i];
-        data.deal_price = req.body.deal_price[i];
-        data.deal_value = req.body.deal_value[i];
-        data.deal_price = req.body.deal_price[i]; 
-        data.deal_start = req.body.stime[i];
-        data.deal_end = req.body.etime[i]; 
-        data._store = req.body.store[i]
-        data._product = req.body.productid;
-        arr.push(data)
-       await StoreProductPricing.deleteOne({_store:req.body.store[i]}).exec()
-    }
-
-    var productprice = await StoreProductPricing.insertMany(arr);
-    if(!productprice) 
-    {
-        await req.flash('failure', "Product price");
-        res.redirect('/admin/product')
-    }
-    // res.redirect('/admin/product')
-
-        res.redirect('/admin/product')
-
-}catch(err){
-
-    console.log('===validation',err)
-    res.send(err)
-}
-}
-
-exports.addPrice = async (req, res) => {
-    try{
-        var prices = [];
-
-        var brands = await Brand.find({}).lean()
-        var deals = await Deals.find({}).lean();
-        var stores = await Stores.find({}).lean();
-        var regularPrice= await RegularPrice.find({}).lean()
-
-        let price = await StoreProductPricing.find({_product:req.params.productid}).lean()
-       if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
-         console
-       price.map((element) => {
-              var data = {}
-            regularPrice.forEach(regular =>{
-                if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
-                    data = { ...element, regularprice:regular.regular_price}
-                }
-                
-            })
-            prices.push(data)
-
-        })
-       res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:prices, stores:stores,moment:moment })
-    }catch(err){
-        console.log("--err",err)
-        res.status(400).json({ data: err.message });
-    }
-}
-
+/*
+* Listing of Product Category
+*/
 exports.productCreate = async (req, res) => {
     try{
         var brands = await Brand.find({}).lean();
@@ -95,7 +35,10 @@ exports.productCreate = async (req, res) => {
         res.status(400).json({ data: err.message });
     }
 },
-
+/*
+* Add new Product Category
+*params[name,filename]
+*/
 exports.save = async (req, res) => {
 
     try {
@@ -106,18 +49,19 @@ exports.save = async (req, res) => {
         categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
 
         const productCategory = await ProductCategory.create(categoryInfo);
-        await req.flash('success', 'Product added successfully!');
+        await req.flash('success', 'ProductCategory added successfully!');
         res.redirect('/admin/category')
 
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/category')
-        // res.status(400).json({ data: err.message });
     }
 
 
 }
-
+/*
+*Listing of Product Category
+*/
 exports.list = async (req, res) => {
 
     try {
@@ -129,6 +73,10 @@ exports.list = async (req, res) => {
         res.status(400).json({ status: "success", message: "Department added successfully", data: err });
     }
 }
+/*
+*Delete Product Category using productcategory id
+*params[req.params.id]
+*/
 exports.delete = async (req, res) => {
     ProductCategory.deleteOne({ _id: req.params.id }, function (err) {
         if (err) return res.status(400).json({ data: err });
@@ -136,6 +84,10 @@ exports.delete = async (req, res) => {
         res.redirect('/admin/category')
     });
 }
+/*
+*View product category detail
+*params:[req.params.id]
+*/
 exports.edit = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
@@ -147,6 +99,9 @@ exports.edit = async (req, res) => {
 
 
 }
+/*
+*Update product category
+*/
 exports.update = async function (req, res) {
 
     try {
@@ -174,6 +129,9 @@ exports.update = async function (req, res) {
 
 
 }
+/*
+*Create new product
+*/
 exports.productsave = async (req,res) =>{
     try {
         const productinfo = {
@@ -201,6 +159,9 @@ exports.productsave = async (req,res) =>{
         res.redirect('/admin/product')
     }
 }
+/*
+* Product listing
+*/
 exports.productlisting = async (req,res) =>{
     try {
         let price =  await StoreProductPricing.find().exec()
@@ -212,6 +173,10 @@ exports.productlisting = async (req,res) =>{
         res.status(400).json({ data: err.message });
     }
 }
+/*
+*Delete product 
+params:[req.params.id]
+*/
 exports.productdelete = async (req, res) => {
     Product.deleteOne({ _id: req.params.id }, function (err) {
         if (err) return res.status(400).json({ data: err });
@@ -219,6 +184,10 @@ exports.productdelete = async (req, res) => {
         res.redirect('/admin/product')
     });
 }
+/*
+* View product
+*param:[req.params.id] 
+*/
 exports.productedit = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id).exec();
@@ -232,6 +201,10 @@ exports.productedit = async (req, res) => {
 
 
 }
+/*
+* Update product
+* params:[en_name,description,sku,_category,weight,short_description,is_featured,price,status]
+*/
 exports.productupdate = async function (req, res) {
 
     try {
@@ -268,7 +241,10 @@ exports.productupdate = async function (req, res) {
 
 
 }
-
+/*
+* delete storeproduct price 
+*params[id]
+*/
 exports.remove = async (req, res) => {
     try{
       let remove =  await StoreProductPricing.deleteOne({_id:req.body._id}).exec()
@@ -278,4 +254,73 @@ exports.remove = async (req, res) => {
      res.send(err)
  }
  }
+ /*
+ * Add deal price 
+ * params[no_of_stores,deal,deal_price,deal_value,stime,etime,store,productid]
+ */
+ exports.priceSave = async (req, res) => {
+    try{
+     const arr = [];
+     for(i=0; i<req.body.no_of_stores; i++){
  
+         data = {};
+         data._deal = req.body.deal[i];
+         data.deal_price = req.body.deal_price[i];
+         data.deal_value = req.body.deal_value[i];
+         data.deal_price = req.body.deal_price[i]; 
+         data.deal_start = req.body.stime[i];
+         data.deal_end = req.body.etime[i]; 
+         data._store = req.body.store[i]
+         data._product = req.body.productid;
+         arr.push(data)
+        await StoreProductPricing.deleteOne({_store:req.body.store[i]}).exec()
+     }
+ 
+     var productprice = await StoreProductPricing.insertMany(arr);
+     if(!productprice) 
+     {
+         await req.flash('failure', "Product price");
+         res.redirect('/admin/product')
+     }
+     // res.redirect('/admin/product')
+ 
+         res.redirect('/admin/product')
+ 
+ }catch(err){
+ 
+     console.log('===validation',err)
+     res.send(err)
+ }
+ }
+/*
+* get regular_price with store list
+* params[req.params.productid]
+*/
+ exports.addPrice = async (req, res) => {
+    try{
+        var prices = [];
+
+        var brands = await Brand.find({}).lean()
+        var deals = await Deals.find({}).lean();
+        var stores = await Stores.find({}).lean();
+        var regularPrice= await RegularPrice.find({}).lean()
+
+        let price = await StoreProductPricing.find({_product:req.params.productid}).lean()
+       if(!price) res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:'', stores:stores })
+         console
+       price.map((element) => {
+              var data = {}
+            regularPrice.forEach(regular =>{
+                if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
+                    data = { ...element, regularprice:regular.regular_price}
+                }
+            })
+            prices.push(data)
+
+        })
+       res.render('admin/product/pricing',{ menu: "ProductCategory",productid:req.params.productid, brands:brands, deals:deals,price:prices, stores:stores,moment:moment })
+    }catch(err){
+        console.log("--err",err)
+        res.status(400).json({ data: err.message });
+    }
+}
