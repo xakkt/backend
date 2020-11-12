@@ -156,9 +156,9 @@
                   <div class="col-md-6">
 
                     <div class="form-group">
-                      <label for="mostsaved">Most Saved</label>
+                      <label for="mostsaved">Temporary1</label>
                       <select id="mostsaved" class="form-control custom-select">
-                        <option selected="" disabled="">Most saved?</option>
+                        <option selected="" disabled="">Select one</option>
                         <option>No</option>
                         <option>Yes</option>
                       </select>
@@ -167,7 +167,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="featured">Featured?</label>
+                      <label for="featured">Temporary2</label>
                       <select name="featured" id="status" class="form-control custom-select">
                         <option value="true">No</option>
                         <option value="false">Yes</option>
@@ -189,9 +189,9 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="deals">Deals</label>
+                    <label for="deals">Temporary3</label>
                     <select name="deal" class="form-control custom-select" id="deals">
-                      <option value="">Select Deal</option>
+                      <option value="">Select one</option>
                       <% if(deals) deals.forEach(function(deal){ %>
                         <option value="<%=deal._id%>"><%=deal.name%></option>
                       <% }) %>

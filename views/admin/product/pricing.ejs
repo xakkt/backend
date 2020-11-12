@@ -252,7 +252,7 @@
                           </select>
                         </td>
                         <td style="width:10%"> <input type="text" class="form-control rgprice"
-                            value="<%= prices.regularprice %>" class="form-control" readonly> </td>
+                            value="<%= prices.regularprice %>"  name="regular_price[]" class="form-control" readonly> </td>
                         <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
@@ -265,7 +265,7 @@
                         <td style="width:10%">
                           <select class="form-control custom-select select2" data-placeholder="Select a percentange"
                             name="deal_value[]" style="width: 100%;">
-                            <% for (var i = 1; i <= 100; i++) { %>
+                            <% for (var i = 0; i <= 100; i++) { %>
                             <option <%=(prices.deal_percentage == i) ?'selected' :"" %> value="<%= i %>"><%= i %>
                             </option>
                             <%}%>
@@ -298,7 +298,7 @@
                             <% }) %>
                           </select>
                         </td>
-                        <td style="width:10%"> <input type="text" name="regular_price" class="rgprice form-control"
+                        <td style="width:10%"> <input type="text" name="regular_price[]" class="rgprice form-control"
                             readonly required> </td>
                         <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select" required>
@@ -311,7 +311,7 @@
                         <td style="width:10%">
                           <select class="form-control custom-select select2" data-placeholder="Select a percentange"
                             name="deal_value[]" style="width: 100%;">
-                            <% for (var i = 1; i <= 100; i++) { %>
+                            <% for (var i = 0; i <= 100; i++) { %>
                             <option value="<%= i %>"><%= i %></option>
                             <%}%>
                           </select>

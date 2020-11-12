@@ -64,11 +64,11 @@ exports.productprice = async (storeid,productid) =>{
     var now = moment().format('L');
     if(now <= enddate)
     {
-        store.effective_price = store.deal_price
+        (store.deal_percentage >0)?store.deal_price = store.percentag_discount_price:store.deal_price 
     }else
     {
         store.deal_price = 0,
-        store.effective_price = store.regular_price
+         store.regular_price
     }
     return store
 
