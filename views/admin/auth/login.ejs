@@ -52,6 +52,18 @@
             </div>
           </div>
         </div>
+        <div class="input-group mb-3">
+              <select name="role" class="form-control custom-select" id="roles">
+                <option value="">Select Role</option>
+                <% if(role) role.forEach(function(role){ %>
+                  <option value="<%=role._id%>"><%=role.name%></option>
+                <% }) %>
+              </select>
+        </div>
+
+
+
+
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
