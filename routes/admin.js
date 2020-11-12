@@ -14,6 +14,7 @@ const storeproductController = require('../controllers/admin/storeproductControl
 const rpController = require('../controllers/admin/rolesnpermissionController')
 const authController = require('../controllers/admin/authController')
 const regularproductController = require('../controllers/admin/regularproductController')
+const unitController = require('../controllers/admin/unitController')
 
 
 var auth = function(req, res, next) {
@@ -199,5 +200,16 @@ router.get('/regularprice/create/:productid',rbac,regularproductController.creat
 router.post('/regularprice/update',rbac,regularproductController.addprice)
 router.post('/regularprice/remove',rbac,regularproductController.remove)
 router.post('/regularprice/get',rbac,regularproductController.get)
+
+/*---------Unit --------------*/
+router.get('/unit/create',rbac,unitController.create)
+router.post('/unit/create',rbac,unitController.save)
+router.get('/unit',rbac,unitController.listing)
+router.get('/unit/edit/:id',rbac,unitController.edit)
+router.post('/unit/edit/:id',rbac,unitController.update)
+router.get('/unit/delete/:id',rbac,unitController.delete)
+
+
+
 
 module.exports = router;

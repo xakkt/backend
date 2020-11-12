@@ -2,6 +2,8 @@ const ProductCategory = require('../../models/product_category');
 const Product = require('../../models/product');
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
+const Unit = require('../../models/unit')
+
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const RegularPrice = require('../../models/product_regular_pricing');
@@ -23,14 +25,16 @@ exports.create = async (req, res) => {
     }
 }
 /*
-* Listing of Product Category
+*  Form of product
 */
 exports.productCreate = async (req, res) => {
     try {
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
+        var unit = await Unit.find({}).lean();
+
         var productCategories = await ProductCategory.find({}).lean();
-        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, deals: deals, productCategories: productCategories })
+        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, unit:unit,deals: deals, productCategories: productCategories })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -145,6 +149,7 @@ exports.productsave = async (req, res) => {
             weight: req.body.weight,
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
+            _unit:req.body.unit,
             price: req.body.price,
             image: req.file.filename,
             status: req.body.status,
@@ -224,6 +229,8 @@ exports.productupdate = async function (req, res) {
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             price: req.body.price,
+            _unit:req.body.unit,
+
             status: req.body.status,
 
         }

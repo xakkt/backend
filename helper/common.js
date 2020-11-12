@@ -4,6 +4,8 @@ const Shoppinglist = require('../models/shoppinglist')
 const ShoppinglistName = require('../models/shoppinglist_name')
 const Cart = require('../models/cart')
 const StoreProductPricing = require('../models/store_product_pricing')
+const ProductRegularPricing = require('../models/product_regular_pricing')
+
 const Roles = require('../models/role')
 const Permission = require('../models/permission')
  var moment = require('moment')
@@ -58,17 +60,19 @@ exports.shoppingList = async (userid, storeid) => {
 
 }
 exports.productprice = async (storeid,productid) =>{
-   
+
+      let price = await ProductRegularPricing.findOne({_store:storeid,_product:productid}).lean()
     let store =  await StoreProductPricing.findOne({_store:storeid,_product:productid}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean()
     var enddate = moment(store.deal_end).format('L')
     var now = moment().format('L');
-    if(now <= enddate)
+    store.regular_price = price.regular_price
+     if(now <= enddate)
     {
         (store.deal_percentage >0)?store.deal_price = store.percentag_discount_price:store.deal_price 
     }else
     {
         store.deal_price = 0,
-         store.regular_price
+       store.regular_price
     }
     return store
 

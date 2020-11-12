@@ -33,13 +33,10 @@ exports.list = async (req, res)=>{
 
 exports.show =  async (req, res)=> { 
 	try{
-		console.log("----logsss")
 		var productPrice = await _global.productprice(req.body.storeid,req.body.productid)
 		const product = await Product.findById(req.body.productid).select("-meta_title -meta_keywords -meta_description -updatedAt -createdAt -__v").lean();
 		if(!product) return res.json({status: "success", message: "Product not found", data: []});
-		console.log("----logsss",productPrice.regular_price)
-
-		product.price = productPrice.effective_price
+		product.price = productPrice.regular_price
 		product.deal_price =  productPrice.deal_price
 		return res.json({status: "success", message: "", data: product});
 	 }catch(err){

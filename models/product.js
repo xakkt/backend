@@ -26,6 +26,17 @@ const productSchema = new Schema({
         message: `ProductCategory doesn't exist`
     } 
   },
+  _unit: {
+    type: Schema.Types.ObjectId,
+    ref: 'Unit',
+    required: true,
+    validate: {
+      validator: function(v) {
+            return FKHelper(mongoose.model('Unit'), v);
+        },
+        message: `Unit doesn't exist`
+    } 
+  },
   name:{
       type: Map,
       of: String,
