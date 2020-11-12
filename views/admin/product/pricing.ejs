@@ -173,19 +173,19 @@
     <%- include('../../_partials/_admin/sidebar.ejs'); %>
 
 
-   
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-      <% if(failure.length){ %> 
-        <div class="alert alert-danger">
-            <strong><%= failure[0] %></strong>
-          </div>
-          <% } %>
-        <% if(success.length){ %>   
-        <div class="alert alert-success">
-            <strong><%= success %></strong> 
-        </div>
-        <% } %>
+      <% if(failure.length){ %>
+      <div class="alert alert-danger">
+        <strong><%= failure[0] %></strong>
+      </div>
+      <% } %>
+      <% if(success.length){ %>
+      <div class="alert alert-success">
+        <strong><%= success %></strong>
+      </div>
+      <% } %>
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <div class="container-fluid">
@@ -242,39 +242,38 @@
                       <tr class="tr_clone">
 
                         <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select" required  onclick="changeLanguage(this)"> 
+                          <select name="store[]" class="form-control custom-select" required
+                            onclick="changeLanguage(this)">
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
-                            <option <%=(store._id.equals(prices._store))?'selected':''%> value="<%=store._id%>"><%=store.name%></option>
+                            <option <%=(store._id.equals(prices._store))?'selected':''%> value="<%=store._id%>">
+                              <%=store.name%></option>
                             <% }) %>
                           </select>
                         </td>
-                        <td style="width:10%"> <input type="text" class="form-control rgprice" value="<%= prices.regularprice %>"
-                          class="form-control" readonly> </td>
+                        <td style="width:10%"> <input type="text" class="form-control rgprice"
+                            value="<%= prices.regularprice %>" class="form-control" readonly> </td>
                         <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select"  required>
+                          <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
-                            <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>" ><%=deal.name%></option>
+                            <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>">
+                              <%=deal.name%></option>
                             <% }) %>
                           </select>
                         </td>
                         <td style="width:10%">
-                          <select name="deal_value[]" class="form-control custom-select" required>
-                            <% if(prices.deal_value == 'fixed') {%>
-                            <option value="fixed" selected>Price</option>
-                            <option value="">Deal Value</option>
-                            <option value="percentange">Percentage</option>
-                            <%} else {%>
-                            <option value="fixed">Price</option>
-                            <option value="">Deal Value</option>
-                            <option value="percentange" selected>Percentage</option>
+                          <select class="form-control custom-select select2" data-placeholder="Select a percentange"
+                            name="deal_value[]" style="width: 100%;">
+                            <% for (var i = 1; i <= 100; i++) { %>
+                            <option <%=(prices.deal_percentage == i) ?'selected' :"" %> value="<%= i %>"><%= i %>
+                            </option>
                             <%}%>
                                         </select>
                                 </td>
                                 <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
-                            class="form-control" required> </td>
-                        
+                            class="form-control" > </td>
+
                         <td> <input type="date" name="stime[]"
                             value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>" class="form-control"
                             required> </td>
@@ -291,15 +290,16 @@
                       <%} else {%>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select" required onclick="changeLanguage(this)">
+                          <select name="store[]" class="form-control custom-select" required
+                            onclick="changeLanguage(this)">
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
                             <option value="<%=store._id%>"><%=store.name%></option>
                             <% }) %>
                           </select>
                         </td>
-                        <td style="width:10%"> <input type="text" class="rgprice form-control"
-                          readonly required> </td>
+                        <td style="width:10%"> <input type="text" name="regular_price" class="rgprice form-control"
+                            readonly required> </td>
                         <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
@@ -309,13 +309,15 @@
                           </select>
                         </td>
                         <td style="width:10%">
-                          <select name="deal_value[]" class="form-control custom-select" required>
-                            <option value="">Deal Value</option>
-                            <option value="fixed">Price</option>
-                            <option value="percentange">Percentage</option>
+                          <select class="form-control custom-select select2" data-placeholder="Select a percentange"
+                            name="deal_value[]" style="width: 100%;">
+                            <% for (var i = 1; i <= 100; i++) { %>
+                            <option value="<%= i %>"><%= i %></option>
+                            <%}%>
                           </select>
+
                         </td>
-                        <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control" required>
+                        <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control" >
                         </td>
                        
                         <td> <input type="date" name="stime[]" class="form-control" required> </td>
@@ -329,17 +331,17 @@
 
 
                       <%}%>
-                        </tbody>
-                      </table>
+                    </tbody>
+                  </table>
                 </div>
                 <input type="hidden" id="productid" name="productid" value="<%= productid %>"></input>
-                      <!-- /.card-body -->
-                      <span class="input-group-btn">
-                      </span>
-                      <div class="card-footer">
-                        <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add">
-                        <button type="submit" value="submit" class="btn btn-primary">Submit</button>
-                      </div>
+                <!-- /.card-body -->
+                <span class="input-group-btn">
+                </span>
+                <div class="card-footer">
+                  <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add">
+                  <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                </div>
               </form>
             </div>
             <!-- /.card -->
@@ -368,6 +370,7 @@
   <!-- AdminLTE App -->
   <script src="<%= process.env.BASE_URL %>/dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
+  <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
 
   <!-- jquery-validation -->
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -379,7 +382,9 @@
     });
 
     $(function () {
-
+      $('.select2').select2({
+        placeholder: "Select Percentage"
+      })
 
       $('#productForm').validate({
         rules: {
@@ -418,21 +423,20 @@
 
     });
     function changeLanguage(that) {
-$.ajax({
+      $.ajax({
         url: '/admin/regularprice/get',
         type: 'POST',
         data: {
           storeid: $(that).val(),
-          productid:$('#productid').val(),
+          productid: $('#productid').val(),
         },
 
       }).done((data) => {
-        
+
         if (data.status) {
           $(that).closest('.tr_clone').find('.rgprice').val(data.message.regular_price)
         }
-        else
-        {
+        else {
           $(that).closest('.tr_clone').find('.rgprice').val('')
           alert("Regular price not added ")
         }
