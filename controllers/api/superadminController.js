@@ -1,27 +1,37 @@
 const User = require('../../models/user');
+const Roles = require('../../models/role')
+
 var moment = require('moment');
 
 exports.create = async(req,res) =>{
 
     try{
-        console.log("---test",req.body)
+
+     let role =  await Roles.findOne({name:req.body.role_name}).exec()
+   if(!role) return res.json({message:"Role not found"})
+   console.log("--role",role)
         const superadmininfo = {
             first_name: 'Admin',
             last_name: 'Admin',
-            email: 'Admin@gmail.com',
-            password: 'Admin@123',
-            role_id:req.body.role,
+            email: req.body.email,
+            password: req.body.password,
+            role_id:role._id,
             contact_no: 99999999,
             dob: moment('Mon 03-Jul-2020, 11:00 AM').format('YYYY-MM-DD')   
         }
     //    const user =  await User.create(superadmininfo).exec()
-    User.create(superadmininfo,function (err, result) {
-        if (err) return res.status(400).json({ data: err.message }); 
+   const user = await User.create(superadmininfo)
+   if(!user) return res.json({message:"Data not inserted"})
+   return res.json({status: "success", message: "User Created.", data: user});
 
-        //mail.sendmail();
-        return res.json({status: "success", message: "User Created.", data: result});
+
+    // ,function (err, result) {
+    //     if (err) return res.status(400).json({ data: err.message }); 
+
+    //     //mail.sendmail();
+    //     return res.json({status: "success", message: "User Created.", data: result});
         
-        });
+    //     });
     }catch(err)
     {
         console.log("----err",err)

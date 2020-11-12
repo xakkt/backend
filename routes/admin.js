@@ -81,7 +81,7 @@ const storeValidation = [
 ]
 
 router.get('/',rbac,(req,res)=>{
-      res.render('admin/index',{ menu:"dashboard" }) 
+      res.render('admin/index',{ menu:"dashboard"}) 
 });
 
 /*------------ User ---------*/

@@ -262,6 +262,7 @@ exports.remove = async (req, res) => {
 */
 exports.priceSave = async (req, res) => {
     try {
+        console.log("---body",req.body)
         const arr = [];
         for (i = 0; i < req.body.no_of_stores; i++) {
             for (k = i + 1; k < req.body.no_of_stores; k++) {
@@ -279,7 +280,7 @@ exports.priceSave = async (req, res) => {
             data = {};
             data._deal = req.body.deal[i];
             data.deal_price = req.body.deal_price[i];
-            data.deal_value = req.body.deal_value[i];
+            data.deal_percentage = req.body.deal_value[i];
             data.deal_price = req.body.deal_price[i];
             data.deal_start = req.body.stime[i];
             data.deal_end = req.body.etime[i];

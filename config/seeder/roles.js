@@ -4,41 +4,31 @@ module.exports =
     'documents': [
   
                     {
-                        "name" : "MM ADMINISTRATOR",
-                        "description" : "MM ADMINISTRATOR"
+                        "name" : "PRODUCT ADMINISTRATOR",
+                        "description" : "PRODUCT ADMINISTRATOR"
                     },
                     {
-                        "name" : "STORE ADMIN",
-                        "description" : "STORE ADMIN"
+                        "name" : "STORE ADMININSTRATOR",
+                        "description" : "STORE ADMININSTRATOR"
                     },
                     {
-                        "name" : "PRODUCT MANAGER",
-                        "description" : "PRODUCT MANAGER"
+                        "name" : "SYSTEM ADMININSTRATOR",
+                        "description" : "SYSTEM ADMININSTRATOR"
                     },
                     {
-                        "name" : "PRODUCT SUPER USER",
-                        "description" : "PRODUCT SUPER USER"
+                        "name" : " SECURITY ADMININSTRATOR",
+                        "description" : "SECURITY ADMININSTRATOR"
                     },
                     {
-                        "name" : "SECURITY SUPER USER",
-                        "description" : "SECURITY SUPER USER"
-                    },
-                    {
-                        "name" : "ORG ADMINISTRATOR",
-                        "description" : "ORG ADMINISTRATOR"
-                    },
-                    {
-                        "name" : "DEAL MANAGER",
-                        "description" : "DEAL MANAGER"
+                        "name" : "DEAL ANALYST",
+                        "description" : "DEAL ANALYST"
                     },
                     {
                         "name" : "REPORTING ANALYST",
                         "description" : "REPORTING ANALYST"
                     },
-                    {
-                        "name" : "SUPERADMIN",
-                        "description" : "SUPERADMIN"
-                    },
+                   
+                   
                     
                     
     ]

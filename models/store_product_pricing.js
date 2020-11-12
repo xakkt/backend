@@ -47,14 +47,11 @@ const storeProductPricingSchema = new Schema({
             message: `Deal doesn't exist`
         }
     },
-    deal_value: {
-        type: String,
-        enum: ['percentange','fixed'],
-        required: true
+    deal_percentage: {
+        type: Number,
     },
     deal_price: {
         type: Number,
-        required: true
     },
     _country: {
         type: Schema.Types.ObjectId,
