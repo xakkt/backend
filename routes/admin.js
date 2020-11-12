@@ -3,7 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
-var rbac = require('../middlewares/rbac')
+var isloggedin = require('../middlewares/isloggedin')
 
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
@@ -17,12 +17,12 @@ const regularproductController = require('../controllers/admin/regularproductCon
 const unitController = require('../controllers/admin/unitController')
 
 
-var auth = function(req, res, next) {
-  if (req.session.email)
-      return next();
-  else
-      return res.redirect('/admin/login')
-};
+// var auth = function(req, res, next) {
+//   if (req.session.email)
+//       return next();
+//   else
+//       return res.redirect('/admin/login')
+// };
 
 const storeController = require('../controllers/admin/storeController')
 const verifyjwt = require('../middlewares/tokenVerification');
@@ -81,50 +81,50 @@ const storeValidation = [
   verifyjwt.checkToken
 ]
 
-router.get('/',rbac,(req,res)=>{
+router.get('/',isloggedin,(req,res)=>{
       res.render('admin/index',{ menu:"dashboard"}) 
 });
 
 /*------------ User ---------*/
-router.get('/users',rbac,userController.list)
-router.get('/managers',rbac,userController.adminlist)
-router.get('/user/create',rbac,userController.create);
-router.post('/user/save',rbac,userUpload.single('profile_pic'),userController.save)
-router.get('/user/delete/:userid',rbac, userController.delete);
-router.get('/user/edit/:id',rbac, userController.edit);
-router.post('/user/update/:id',userUpload.single('profile_pic'),rbac,userController.update)
+router.get('/users',isloggedin,userController.list)
+router.get('/managers',isloggedin,userController.adminlist)
+router.get('/user/create',isloggedin,userController.create);
+router.post('/user/save',isloggedin,userUpload.single('profile_pic'),userController.save)
+router.get('/user/delete/:userid',isloggedin, userController.delete);
+router.get('/user/edit/:id',isloggedin, userController.edit);
+router.post('/user/update/:id',userUpload.single('profile_pic'),isloggedin,userController.update)
 
 /*------------- Department -------*/
-router.get('/departments',rbac,departmentController.list)
-router.get('/department/create',rbac,departmentController.create);
-router.post('/department/save',rbac,upload.single('logo'),departmentController.save)
-router.get('/department/delete/:id',rbac, departmentController.delete);
-router.get('/department/edit/:id',rbac, departmentController.edit);
-router.post('/department/update/:id',rbac,upload.single('logo'),departmentController.update)
+router.get('/departments',isloggedin,departmentController.list)
+router.get('/department/create',isloggedin,departmentController.create);
+router.post('/department/save',isloggedin,upload.single('logo'),departmentController.save)
+router.get('/department/delete/:id',isloggedin, departmentController.delete);
+router.get('/department/edit/:id',isloggedin, departmentController.edit);
+router.post('/department/update/:id',isloggedin,upload.single('logo'),departmentController.update)
 
 /*------------- Store --------*/
 // _global.permission('store_edit')
-router.get('/stores',rbac,storeController.list)
-router.get('/store/create',rbac,storeController.create)
-router.post('/store/save',rbac,storeController.saveStore)
-router.get('/store/edit/:storeid',rbac,storeController.editStore)
-router.get('/store/delete/:id',rbac, storeController.deleteStore);
-router.post('/store/update/:id', rbac,storeController.updateStore)
+router.get('/stores',isloggedin,storeController.list)
+router.get('/store/create',isloggedin,storeController.create)
+router.post('/store/save',isloggedin,storeController.saveStore)
+router.get('/store/edit/:storeid',isloggedin,storeController.editStore)
+router.get('/store/delete/:id',isloggedin, storeController.deleteStore);
+router.post('/store/update/:id', isloggedin,storeController.updateStore)
 
 
 /*------------ Products --------*/
 router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
 })
-router.post('/product/create',rbac,productUpload.single('logo'),productController.productsave)
-router.get('/product',rbac,productController.productlisting)
-router.get('/product/delete/:id',rbac,productController.productdelete);
-router.get('/product/edit/:id',rbac,productController.productedit)
-router.post('/product/update/:id',rbac,productUpload.single('logo'), productController.productupdate)
-router.get('/product/pricing/:productid',rbac,productController.addPrice);
-router.get('/product/create',rbac, productController.productCreate)
-router.post('/product_price/create',rbac, productController.priceSave)
-router.post('/product_price/remove',rbac, productController.remove)
+router.post('/product/create',isloggedin,productUpload.single('logo'),productController.productsave)
+router.get('/product',isloggedin,productController.productlisting)
+router.get('/product/delete/:id',isloggedin,productController.productdelete);
+router.get('/product/edit/:id',isloggedin,productController.productedit)
+router.post('/product/update/:id',isloggedin,productUpload.single('logo'), productController.productupdate)
+router.get('/product/pricing/:productid',isloggedin,productController.addPrice);
+router.get('/product/create',isloggedin, productController.productCreate)
+router.post('/product_price/create',isloggedin, productController.priceSave)
+router.post('/product_price/remove',isloggedin, productController.remove)
 
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {
@@ -132,24 +132,24 @@ router.get('/invoice',(req, res)=> {
 })
 
 /*----- product Category ------*/
-router.get('/category',rbac,productController.list)
-router.get('/category/create',rbac,productController.create)
-router.post('/category/save',rbac,upload.single('logo'),productController.save)
-router.get('/category/delete/:id',rbac, productController.delete)
-router.get('/category/edit/:id',rbac,productController.edit)
-router.post('/category/update/:id',rbac,upload.single('logo'), productController.update)
+router.get('/category',isloggedin,productController.list)
+router.get('/category/create',isloggedin,productController.create)
+router.post('/category/save',isloggedin,upload.single('logo'),productController.save)
+router.get('/category/delete/:id',isloggedin, productController.delete)
+router.get('/category/edit/:id',isloggedin,productController.edit)
+router.post('/category/update/:id',isloggedin,upload.single('logo'), productController.update)
 
 
-router.get('/category/create',auth,(req, res)=> { 
+router.get('/category/create',isloggedin,(req, res)=> { 
         res.render('admin/category/create', { menu:"category"})
 })
 /*----------brand ------------*/
-router.get('/brand/create',rbac,brandController.create)
-router.get('/brand',rbac,brandController.listing)
-router.post('/brand/save',rbac,brandUpload.single('logo'),brandController.save)
-router.get('/brand/delete/:id', auth,brandController.delete)
-router.get('/brand/edit/:id',rbac,brandController.edit)
-router.post('/brand/update/:id',rbac,brandUpload.single('logo'), brandController.update)
+router.get('/brand/create',isloggedin,brandController.create)
+router.get('/brand',isloggedin,brandController.listing)
+router.post('/brand/save',isloggedin,brandUpload.single('logo'),brandController.save)
+router.get('/brand/delete/:id', isloggedin,brandController.delete)
+router.get('/brand/edit/:id',isloggedin,brandController.edit)
+router.post('/brand/update/:id',isloggedin,brandUpload.single('logo'), brandController.update)
 
 // router.get('/brands',(req, res)=> { 
    
@@ -169,45 +169,45 @@ const dealsValidation = [
   body('name').not().isEmpty().trim().escape(),
  
 ]
-router.get('/deal/create',rbac,dealController.create)
-router.post('/deal/save',rbac,dealsValidation,dealController.save)
-router.get('/deal',rbac,dealController.listing)
-router.get('/deal/delete/:id', rbac,dealController.delete)
-router.get('/deal/edit/:id',rbac,dealController.edit)
-router.post('/deal/update/:id',rbac,dealController.update)
+router.get('/deal/create',isloggedin,dealController.create)
+router.post('/deal/save',isloggedin,dealsValidation,dealController.save)
+router.get('/deal',isloggedin,dealController.listing)
+router.get('/deal/delete/:id', isloggedin,dealController.delete)
+router.get('/deal/edit/:id',isloggedin,dealController.edit)
+router.post('/deal/update/:id',isloggedin,dealController.update)
 
 
 /*------------Store Product ----------*/
-router.post('/storeproduct',rbac,storeproductController.save)
-router.get('/storeproduct/delete/:id', rbac,storeproductController.delete)
-router.get('/storeproduct/view/:id',rbac,storeproductController.view)
-router.post('/storeproduct/update/:id',rbac,storeproductController.update)
+router.post('/storeproduct',isloggedin,storeproductController.save)
+router.get('/storeproduct/delete/:id', isloggedin,storeproductController.delete)
+router.get('/storeproduct/view/:id',isloggedin,storeproductController.view)
+router.post('/storeproduct/update/:id',isloggedin,storeproductController.update)
 
 /*------------ Roles n Permissions --------*/
-router.get('/roles',rbac,rpController.createRole)
-router.post('/roles/create',rbac,rpController.create)
-router.post('/roles/createPermission',rbac,rpController.createPermission)
-router.post('/roles/update',rbac,rpController.update)
+router.get('/roles',isloggedin,rpController.createRole)
+router.post('/roles/create',isloggedin,rpController.create)
+router.post('/roles/createPermission',isloggedin,rpController.createPermission)
+router.post('/roles/update',isloggedin,rpController.update)
 
 /*-------------login -------------- */
 router.get('/login',authController.create)
 router.post('/login',authController.login)
-router.get('/logout',rbac,authController.logout)
+router.get('/logout',isloggedin,authController.logout)
  
 /*-----------Regular Product -------*/
 
-router.get('/regularprice/create/:productid',rbac,regularproductController.create)
-router.post('/regularprice/update',rbac,regularproductController.addprice)
-router.post('/regularprice/remove',rbac,regularproductController.remove)
-router.post('/regularprice/get',rbac,regularproductController.get)
+router.get('/regularprice/create/:productid',isloggedin,regularproductController.create)
+router.post('/regularprice/update',isloggedin,regularproductController.addprice)
+router.post('/regularprice/remove',isloggedin,regularproductController.remove)
+router.post('/regularprice/get',isloggedin,regularproductController.get)
 
 /*---------Unit --------------*/
-router.get('/unit/create',rbac,unitController.create)
-router.post('/unit/create',rbac,unitController.save)
-router.get('/unit',rbac,unitController.listing)
-router.get('/unit/edit/:id',rbac,unitController.edit)
-router.post('/unit/edit/:id',rbac,unitController.update)
-router.get('/unit/delete/:id',rbac,unitController.delete)
+router.get('/unit/create',isloggedin,unitController.create)
+router.post('/unit/create',isloggedin,unitController.save)
+router.get('/unit',isloggedin,unitController.listing)
+router.get('/unit/edit/:id',isloggedin,unitController.edit)
+router.post('/unit/edit/:id',isloggedin,unitController.update)
+router.get('/unit/delete/:id',isloggedin,unitController.delete)
 
 
 
