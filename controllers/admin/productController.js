@@ -2,6 +2,8 @@ const ProductCategory = require('../../models/product_category');
 const Product = require('../../models/product');
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
+const Unit = require('../../models/unit')
+
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const RegularPrice = require('../../models/product_regular_pricing');
@@ -23,14 +25,16 @@ exports.create = async (req, res) => {
     }
 }
 /*
-* Listing of Product Category
+*  Form of product
 */
 exports.productCreate = async (req, res) => {
     try {
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
+        var unit = await Unit.find({}).lean();
+
         var productCategories = await ProductCategory.find({}).lean();
-        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, deals: deals, productCategories: productCategories })
+        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, unit:unit,deals: deals, productCategories: productCategories })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -145,6 +149,7 @@ exports.productsave = async (req, res) => {
             weight: req.body.weight,
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
+            _unit:req.body.unit,
             price: req.body.price,
             image: req.file.filename,
             status: req.body.status,
@@ -224,6 +229,8 @@ exports.productupdate = async function (req, res) {
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             price: req.body.price,
+            _unit:req.body.unit,
+
             status: req.body.status,
 
         }
@@ -273,16 +280,23 @@ exports.priceSave = async (req, res) => {
                     }
                 }
             }
+            if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
+            {
+                await req.flash('failure', "Only one value is selected from Deal% and Deal price");
+                return res.redirect('/admin/product/pricing/' + req.body.productid) 
+            }
         }
 
 
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
+            var discount = req.body.regular_price[i] - (req.body.regular_price[i] *req.body.deal_value[i]/100)
             data._deal = req.body.deal[i];
-            data.deal_price = req.body.deal_price[i];
+            // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
             data.deal_price = req.body.deal_price[i];
             data.deal_start = req.body.stime[i];
+            data.percentag_discount_price = discount
             data.deal_end = req.body.etime[i];
             data._store = req.body.store[i]
             data._product = req.body.productid;

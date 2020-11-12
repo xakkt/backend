@@ -13,7 +13,6 @@ var Timezone = require('../../models/timezone')
 const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
 //const transporter = require('../../config/transporter-mail');
 
 

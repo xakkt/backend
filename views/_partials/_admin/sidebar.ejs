@@ -5,7 +5,6 @@
       <img src="<%= process.env.userId%>/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">ElsuperMarket 2.0</span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -41,7 +40,6 @@
               <p> Dashboard  </p>
             </a>
           </li>
-          <% console.log("----awaittt", check('user_view',user)) %>
           <!-- Users -->
           <li class="nav-item <% if (menu === 'users') { %> menu-open <% } %>">
             <a href="#" class="nav-link <% if (menu === 'users') { %> active <% } %>">
@@ -231,6 +229,43 @@
              
             </ul>
           </li>
+          <!--------------Unit--------->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                 Unit
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+             
+              <li class="nav-item">
+                <a href="/admin/unit/create" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add New Unit</p>
+                </a>
+              </li>
+              
+            </ul>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="/admin/unit" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manage Units</p>
+                </a>
+              </li>
+             
+            </ul>
+          </li>
+
+
+
+
+
+
+
           <!----- Deals ---->
           <li class="nav-item">
             <a href="#" class="nav-link">
