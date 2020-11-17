@@ -83,6 +83,7 @@
         <%}%>
 
       <!--- Departments ---->
+      <% if(await admin("SYSTEM ADMININSTRATOR",user)) {%>
        <li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">
           <a href="#" class="nav-link <% if (menu === 'departments') { %> active <% } %>">
             <i class="nav-icon fas fa-box-open"></i>
@@ -112,6 +113,8 @@
            
           </ul>
         </li>
+        <%}%>
+
         <!-- Store -->
         <% if(await check("store_view",roleid) || await admin("SYSTEM ADMININSTRATOR",user)  ) {%>
         <li class="nav-item <% if (menu === 'store') { %> menu-open <% } %>">
