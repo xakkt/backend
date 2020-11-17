@@ -104,12 +104,12 @@ router.post('/department/update/:id',isloggedin,upload.single('logo'),department
 
 /*------------- Store --------*/
 // _global.permission('store_edit')
-router.get('/stores',isloggedin,storeController.list)
-router.get('/store/create',isloggedin,storeController.create)
-router.post('/store/save',isloggedin,storeController.saveStore)
-router.get('/store/edit/:storeid',isloggedin,storeController.editStore)
-router.get('/store/delete/:id',isloggedin, storeController.deleteStore);
-router.post('/store/update/:id', isloggedin,storeController.updateStore)
+router.get('/stores',isloggedin,_global.permission('store_view'),storeController.list)
+router.get('/store/create',isloggedin,_global.permission('store_add'),storeController.create)
+router.post('/store/save',isloggedin,_global.permission('store_add'),storeController.saveStore)
+router.get('/store/edit/:storeid',isloggedin,_global.permission('store_edit'),storeController.editStore)
+router.get('/store/delete/:id',isloggedin,_global.permission('store_delete'), storeController.deleteStore);
+router.post('/store/update/:id', isloggedin,_global.permission('store_edit'),storeController.updateStore)
 
 
 /*------------ Products --------*/

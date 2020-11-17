@@ -5,7 +5,7 @@ var randomstring = require("randomstring");
 const express = require('express');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');    
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 
@@ -86,6 +86,7 @@ exports.save = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        // profile_pic: req.file.path.replace('public/', ''),
         let userinfo = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
@@ -98,7 +99,7 @@ exports.save = async (req, res) => {
             ncrStatus: req.body.ncrStatus,
             superbuckId: req.body.superbuckId,
             timezone: req.body.timezone,
-            profile_pic: req.file.path.replace('public/', ''),
+            profile_pic:  req.file.path.replace(/public/g, ""),
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
         
@@ -132,7 +133,7 @@ exports.update = async function (req, res) {
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
 
-        if (req.file) { userinfo.profile_pic = req.file.path.replace('public/', ''); }
+        if (req.file) { userinfo.profile_pic = req.file.path.replace(/public/g, ""); }
         if(req.body.password.trim()) {  userinfo.password = req.body.password  }
         const user = await User.findByIdAndUpdate({ _id: req.params.id }, userinfo, { new: true, upsert: true });
 
@@ -198,7 +199,7 @@ exports.authenticate = async (req, res) => {
     }
 exports.adminlist =  async (req,res) =>{
         try {
-            let users = await User.find({role_id:{$ne:[] }}).lean();
+            let users = await User.find({role_id:{$nin:[ [],null  ]  }}).lean();
             if(!users) return  res.render('admin/admin/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/admin/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {
