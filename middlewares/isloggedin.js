@@ -4,10 +4,6 @@ const Permission = require('../models/permission');
 const { check } = require('../controllers/admin/userController');
 
 
-abc = function(value,id){
-    return value
- }
-
 module.exports =  (req, res, next)=>{
     if (req.session.email) { 
         res.locals.user = req.session.userid
