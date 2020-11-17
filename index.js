@@ -9,6 +9,7 @@ const swaggerDocument = require('./config/swagger.json')
 var session = require('express-session')
 const PORT = process.env.PORT || 4000
 const app = express();
+let ejs = require('ejs')
 var cors = require('cors')
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -45,6 +46,20 @@ app.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+let ejsOptions = {
+  // delimiter: '?', Adding this to tell you do NOT use this like I've seen in other docs, does not work for Express 4
+  async: true
+};
+
+// The engine is using a callback method for async rendering
+app.engine('ejs', async (path, data, cb) => {
+  try{
+    let html = await ejs.renderFile(path, data, ejsOptions);
+    cb(null, html);
+  }catch (e){
+    cb(e, '');
+  }
+});
 app.locals.moment = require('moment');
 
 io.on('connection', function (socket) {
