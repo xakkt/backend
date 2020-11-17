@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,20 +45,20 @@
           </div>
         </div><!-- /.container-fluid -->
       </section>
-<!--- message section should be common for all-->
+      <!--- message section should be common for all-->
 
-            <% if(failure.length){ %> 
-            <div class="alert alert-danger">
-                <strong><%= failure[0] %></strong>
-              </div>
-              <% } %>
-            <% if(success.length){ %>   
-            <div class="alert alert-success">
-                <strong><%= success %></strong> 
-            </div>
-            <% } %>
+      <% if(failure.length){ %>
+      <div class="alert alert-danger">
+        <strong><%= failure[0] %></strong>
+      </div>
+      <% } %>
+      <% if(success.length){ %>
+      <div class="alert alert-success">
+        <strong><%= success %></strong>
+      </div>
+      <% } %>
 
-<!---- end of messages -->   
+      <!---- end of messages -->
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
@@ -80,29 +81,41 @@
                         <th>Description</th>
                         <th>Promotion</th>
                         <th>Price</th>
-                        <th>Action</th>
+                        <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
+                          <th>Action</th>
+                        <%}%>
                       </tr>
                     </thead>
                     <tbody>
-                      <% if(product) product.forEach(function(product){ %>
+                      <% if(product) {%>
+                      <% for (const products of product) { %>
                       <tr>
-                        <td><%= product.name.get('english') %></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="/images/products/<%= product.image %>" /></td>
-                        <td><%= product.description %></td>
+                        <td><%= products.name.get('english') %></td>
+                        <td><img class="img-thumbnail" style="width: 6em;height: 4em"
+                            src="/images/products/<%= products.image %>" /></td>
+                        <td><%= products.description %></td>
                         <td>
-                          <a href="/admin/product/pricing/<%= product._id %>"> <i class="fas fa-plus"></i></a>
+                          <a href="/admin/product/pricing/<%= products._id %>"> <i class="fas fa-plus"></i></a>
                         </td>
                         <td>
-                          <a href="/admin/regularprice/create/<%= product._id %>"> <i class="fas fa-plus"></i></a>
+                          <a href="/admin/regularprice/create/<%= products._id %>"> <i class="fas fa-plus"></i></a>
                         </td>
-
-                        <td><a href="/admin/product/delete/<%= product._id %>"
+                        <% if(await admin("SYSTEM ADMININSTRATOR",user) || (await check ("product_delete",roleid) && await check ("product_edit",roleid))) { %>
+                        <td><a href="/admin/product/delete/<%= products._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/product/edit/<%= product._id %>"><i
-                              class="fas fa-pencil-alt"></i></a></td>
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
+                            href="/admin/product/edit/<%= products._id %>"><i class="fas fa-pencil-alt"></i></a></td>
+                        <%} else if(await check ("product_delete",roleid)){ %>
+                        <td><a href="/admin/product/delete/<%= products._id %>"
+                            onclick="return confirm('Are you sure you want to Active this.')">
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;</td>
+                        <%} else if(await check ("product_edit",roleid)){ %>
+                        <td><a href="/admin/product/edit/<%= products._id %>"><i class="fas fa-pencil-alt"></i></a></td>
+
+                        <%}%>
                       </tr>
-                      <% }) %>
-                    
+                      <% }} %>
+
                     </tbody>
                     <tfoot>
                       <tr>
@@ -112,7 +125,9 @@
                         <th>Description</th>
                         <th>Promotion</th>
                         <th>Price</th>
-                        <th>Action</th>
+                        <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
+                          <th>Action</th>
+                          <%}%>
                       </tr>
                     </tfoot>
                   </table>
@@ -165,18 +180,18 @@
   <script>
     $(function () {
       $("#departments").DataTable({
-        dom:'Pfrtip',
+        dom: 'Pfrtip',
         language: {
-            searchPanes: {
-                emptyPanes: 'There are no panes to display. :/'
-            }
+          searchPanes: {
+            emptyPanes: 'There are no panes to display. :/'
+          }
         },
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
-      
+
     });
   </script>
 </body>
