@@ -300,7 +300,7 @@ exports.priceSave = async (req, res) => {
             data._store = req.body.store[i]
             data._product = req.body.productid;
             arr.push(data)
-            await StoreProductPricing.deleteOne({ _store: req.body.store[i] }).exec()
+            await StoreProductPricing.deleteOne({ _store: req.body.store[i],_product:req.body.productid }).exec()
         }
 
         var productprice = await StoreProductPricing.insertMany(arr);
