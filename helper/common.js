@@ -63,7 +63,6 @@ exports.productprice = async (storeid,productid) =>{
     var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     let price = await ProductRegularPricing.findOne({_store:storeid,_product:productid}).lean()
     let store =  await StoreProductPricing.findOne({$and: [ {_store:storeid},{_product:productid}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean()
-    // console.log("---store",store)
     var enddate = moment(store.deal_end).format('L')
     var now = moment().format('L');
     store.regular_price = price.regular_price

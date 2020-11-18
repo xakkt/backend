@@ -40,16 +40,15 @@ exports.dashboard = async (req, res) => {
 		var wishlistids = await _global.wishList(userid, req.params.storeid)
 		var shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
 
-
-
+    console.log("---hello",categories)
 
 		await Promise.all(categories.map(async (element) => {
 			var data = {}
+			console.log("---log",element)
 			var productId = element._product._id.toString();
 			var productPrice = await _global.productprice(req.params.storeid, productId)
-
+           console.log("--product",element._product._id)
 			data = { ...data, type: "product", _id: element._product._id, is_favourite: 0, in_shoppinglist: 0, in_cart: 0, image: element._product.image, deal_price: productPrice.deal_price, regular_price: productPrice.regular_price }
-			console.log("-price", productPrice)
 			if (productId in cartProductList) {
 				data.in_cart = cartProductList[productId]
 
@@ -67,7 +66,9 @@ exports.dashboard = async (req, res) => {
 
 		})
 		)
+		console.log("----lproduct",product)
 		product = getUniqueListBy(product, '_id')
+		console.log("----afterlproduct",product)
 
 		let banners = await Banner.find({ type: "app" }).lean();
 		if (!banners) return res.json({ status: "false", message: "No setting found", data: [] })
