@@ -51,6 +51,10 @@ exports.check = function (req, res) {
     exports.list = async (req, res) => {
 
         try {
+            // let list =  await Roles.find({_id:req.session.roleid,name:'SYSTEM ADMININSTRATOR'}).lean()
+            // var cond ;
+            // (list)?cond={role_id:{$in: [null, [] ]}}:cond={user_id:req.session.userid}
+        
             let users = await User.find({role_id:{$in: [null, [] ]}}).lean();
             if(!users)  return res.render('admin/user/list', { menu: "users", submenu: "list", users:"", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
            return res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
@@ -95,6 +99,7 @@ exports.save = async (req, res) => {
             role_id:req.body.role,
             contact_no: req.body.contact_no,
             status: req.body.status,
+            user_id:req.session.userid,
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
             superbuckId: req.body.superbuckId,
@@ -126,6 +131,7 @@ exports.update = async function (req, res) {
             role_id:req.body.role,
             contact_no: req.body.contact_no,
             status: req.body.status,
+            user_id:req.session.userid,
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
             superbuckId: req.body.superbuckId,
