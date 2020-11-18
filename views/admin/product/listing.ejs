@@ -95,10 +95,10 @@
                             src="/images/products/<%= products.image %>" /></td>
                         <td><%= products.description %></td>
                         <td>
-                          <a href="/admin/product/pricing/<%= products._id %>"> <i class="fas fa-plus"></i></a>
+                          <a href="/admin/product/pricing/<%= products._id %>"> <i class="fa fa-tags" aria-hidden="true"></i></a>
                         </td>
                         <td>
-                          <a href="/admin/regularprice/create/<%= products._id %>"> <i class="fas fa-plus"></i></a>
+                          <a href="/admin/regularprice/create/<%= products._id %>"> <i class="fa fa-tags" aria-hidden="true"></i></a>
                         </td>
                         <% if(await admin("SYSTEM ADMININSTRATOR",user) || (await check ("product_delete",roleid) && await check ("product_edit",roleid))) { %>
                         <td><a href="/admin/product/delete/<%= products._id %>"
