@@ -65,7 +65,7 @@ exports.addPoductToCart = async (req, res) => {
            let productprice =   await _global.productprice(req.body._store,req.body._product)
            console.log("---productprice",productprice)
            if (!productInfo) return res.json({ status: "false", message: "Product with this id not exists" })
-            const cartInfo = {
+           const cartInfo = {
                 _user: req.decoded.id,
                 _store: req.body._store,
                 cart: {
@@ -100,6 +100,7 @@ exports.addPoductToCart = async (req, res) => {
             })
             return res.json({ status: "success", message: "Product added to cart successfully", data: product });
         } catch (err) {
+            console.log("--errr",err)
             return res.status(400).json({ data: err.message });
         }
 
