@@ -49,8 +49,8 @@ exports.dashboard = async (req, res) => {
 			var productPrice = await _global.productprice(req.params.storeid, productId)
 			console.log("--product", element._product._id)
 
-			data = { ...data, type: "product", _id: element._product._id, name: element._product.name, is_favourite: 0, in_shoppinglist: 0, in_cart: 0, image: `${process.env.BASE_URL}/images/products/${element._product.image}`, deal_price: productPrice.deal_price, regular_price: productPrice.regular_price }
-			
+			data = { ...data, type: "product", _id: element._product._id, name: element._product.name, is_favourite: 0, in_shoppinglist: 0, in_cart: 0, image: `${process.env.BASE_URL}/images/products/${element._product.image}`, deal_price: productPrice.deal_price.toFixed(2), regular_price: productPrice.regular_price.toFixed(2) }
+
 			if (productId in cartProductList) {
 				data.in_cart = cartProductList[productId]
 
