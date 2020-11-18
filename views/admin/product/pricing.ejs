@@ -254,13 +254,14 @@
                         <td style="width:10%"> <input type="text" class="form-control rgprice"
                             value="<%= prices.regularprice %>"  name="regular_price[]" class="form-control" readonly> </td>
                         <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select" required>
+                          <input type="number" name="deal_value[]" value="<%= prices._deal" class="form-control" required>
+                          <!-- <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
                             <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>">
                               <%=deal.name%></option>
                             <% }) %>
-                          </select>
+                          </select> -->
                         </td>
                         <td style="width:10%">
                           <select class="form-control custom-select select2" data-placeholder="Select a percentange"
