@@ -269,7 +269,6 @@ exports.remove = async (req, res) => {
 */
 exports.priceSave = async (req, res) => {
     try {
-        console.log("---body",req.body)
         const arr = [];
         for (i = 0; i < req.body.no_of_stores; i++) {
             for (k = i + 1; k < req.body.no_of_stores; k++) {
@@ -332,7 +331,7 @@ exports.addPrice = async (req, res) => {
 
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
         if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        console
+        
         price.map((element) => {
             var data = {}
             regularPrice.forEach(regular => {

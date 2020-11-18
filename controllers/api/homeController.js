@@ -8,8 +8,8 @@ const StoreProductPricing = require('../../models/store_product_pricing')
 
 
 exports.dashboard = async (req, res) => {
-	var product = [];
 	var userid;
+	var product = [];
 
 	try {
 		let token = req.headers['authorization'];
@@ -37,13 +37,13 @@ exports.dashboard = async (req, res) => {
 		var wishlistids = await _global.wishList(userid, req.params.storeid)
 		var shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
 
-		categories.map(async (element) => {
-			// console.log("--test",element)
+		await Promise.all(categories.map(async (element) => {
 
 			// return element._product.map(data => {
                   var data = {}
 				var productId = element._product._id.toString();
 				var productPrice = await _global.productprice(req.params.storeid,productId)
+			     console.log("-price",productPrice)
 				if (productId in cartProductList) {
 					data = { ...data, type: "product", in_cart: cartProductList[productId] }
 				} else {
@@ -60,11 +60,13 @@ exports.dashboard = async (req, res) => {
 					data = { ...data, type: "product", is_favourite: 0, in_shoppinglist: 0 }
 				}
 				data = { ...data, type: "product", is_favourite: 1,deal_price:productPrice.deal_price,regular_price:productPrice.regular_price }
+				
 				product.push(data)
-
 			// })
 
-		});
+		})
+		)
+		console.log("----data",product)
 
 		let banners = await Banner.find({ type: "app" }).lean();
 		if (!banners) return res.json({ status: "false", message: "No setting found", data: [] })
