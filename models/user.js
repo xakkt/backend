@@ -77,7 +77,11 @@ role_id: [
 ],
   coupons: [
     { type: Schema.Types.ObjectId, ref: 'Coupon' }
-  ] 
+  ],
+  user_id:{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  } 
 }, {timestamps:true});
 
 userSchema.plugin(mongooseLeanGetters)

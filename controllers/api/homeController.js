@@ -17,7 +17,6 @@ exports.dashboard = async (req, res) => {
 			if (token.startsWith(process.env.JWT_SECRET)) {
 				token = token.slice(7, token.length);
 			}
-
 			await jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
 				if (err) {
 

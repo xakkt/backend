@@ -61,7 +61,7 @@ exports.saveStore = async(req, res)=>{
 		const storeinfo =  { 
 				name: req.body.name,
 				_department: req.body.department,
-				_user: req._user,
+				_user: req.session.userid,
 				contact_no: req.body.contact_no,
 				address: req.body.address,
 				city: req.body.city,
