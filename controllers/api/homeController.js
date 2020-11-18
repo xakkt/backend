@@ -6,6 +6,9 @@ const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
 const StoreProductPricing = require('../../models/store_product_pricing')
 
+function getUniqueListBy(product, key) {
+	return [...new Map(product.map(item => [item[key], item])).values()]
+}
 
 exports.dashboard = async (req, res) => {
 	var userid;
@@ -37,36 +40,34 @@ exports.dashboard = async (req, res) => {
 		var wishlistids = await _global.wishList(userid, req.params.storeid)
 		var shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
 
+
+
+
 		await Promise.all(categories.map(async (element) => {
+			var data = {}
+			var productId = element._product._id.toString();
+			var productPrice = await _global.productprice(req.params.storeid, productId)
 
-			// return element._product.map(data => {
-                  var data = {}
-				var productId = element._product._id.toString();
-				var productPrice = await _global.productprice(req.params.storeid,productId)
-			     console.log("-price",productPrice)
-				if (productId in cartProductList) {
-					data = { ...data, type: "product", in_cart: cartProductList[productId] }
-				} else {
-					data = { ...data, type: "product", in_cart: 0 }
-				}
+			data = { ...data, type: "product", _id: element._product._id, is_favourite: 0, in_shoppinglist: 0, in_cart: 0, image: element._product.image, deal_price: productPrice.deal_price, regular_price: productPrice.regular_price }
+			console.log("-price", productPrice)
+			if (productId in cartProductList) {
+				data.in_cart = cartProductList[productId]
 
-				if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
-					data = { ...data, type: "product", is_favourite: 1, in_shoppinglist: 1 }
-				} else if (shoppinglistProductIds.includes(productId)) {
-					data = { ...data, type: "product", is_favourite: 0, in_shoppinglist: 1 }
-				} else if (wishlistids.includes(productId)) {
-					data = { ...data, type: "product", is_favourite: 1, in_shoppinglist: 0 }
-				} else {
-					data = { ...data, type: "product", is_favourite: 0, in_shoppinglist: 0 }
-				}
-				data = { ...data, type: "product", is_favourite: 1,deal_price:productPrice.deal_price,regular_price:productPrice.regular_price }
-				
-				product.push(data)
-			// })
+			}
+
+			if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
+				data.is_favourite = 1,
+					data.in_shoppinglist = 1
+			} else if (shoppinglistProductIds.includes(productId)) {
+				data.in_shoppinglist = 1
+			} else if (wishlistids.includes(productId)) {
+				data.is_favourite = 1
+			}
+			product.push(data)
 
 		})
 		)
-		console.log("----data",product)
+		product = getUniqueListBy(product, '_id')
 
 		let banners = await Banner.find({ type: "app" }).lean();
 		if (!banners) return res.json({ status: "false", message: "No setting found", data: [] })
