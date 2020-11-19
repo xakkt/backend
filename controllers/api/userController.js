@@ -223,6 +223,7 @@ exports.updatestatus = async (req, res,) => {
 				city:req.body.city,
 				country:req.body.country,
 				region:req.body.region,
+				pincode:req.body.pincode,
 				state:req.body.state
 			})
 			

@@ -149,6 +149,7 @@ router.put('/category/:id/update',verifyjwt.checkToken, categoryValidation, cate
 router.get('/category/:id', verifyjwt.checkToken, categoryController.show);
 
 /*--- order ---*/
+router.get('/order/myorder',verifyjwt.checkToken, orderController.myorder);
 router.post('/order/create',verifyjwt.checkToken, orderController.creatOrder);
 router.get('/orders/:storeid',verifyjwt.checkToken, orderController.listOrders);
 router.put('/order/feedback/:orderid',orderValidation,verifyjwt.checkToken, orderController.rateOrder);
