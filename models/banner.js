@@ -1,30 +1,35 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const FKHelper = require('../helper/foreign-key-constraint');
 
 const bannerSchema = Schema({
-  name: {
-    type: String,
-    required: true
-  },
   image: {
      type: String,
      required: true
   },
-  description: {
-    type: String,
-    default: null
-  },
-  url: {
-      type: String,
-      default: null
-  },
-  type: {
-    type: String,
-    enum: ['app', 'web'],
-  },
-  language:{
-    type: String
-  }
+  _store: {
+    type: Schema.Types.ObjectId,
+    ref:'Store',
+    required:true,
+    validate: {
+            validator: function(v) {
+            return FKHelper(mongoose.model('Store'), v);
+         },
+        message: `Store doesn't exist`
+    }
+},
+  _deal: {
+    type: Schema.Types.ObjectId,
+    ref:'Deal',
+    required:true,
+    validate: {
+            validator: function(v) {
+            return FKHelper(mongoose.model('Deal'), v);
+         },
+        message: `Deal doesn't exist`
+    }
+},
+ 
 }, {timestampst:true});
 
 

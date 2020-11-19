@@ -248,6 +248,48 @@
           </ul>
         </li>
         <%}%>
+<!-----------Banner------------>
+<li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">
+  <a href="#" class="nav-link <% if (menu === 'departments') { %> active <% } %>">
+    <i class="nav-icon fas fa-box-open"></i>
+    <p>
+      Banner
+      <i class="fas fa-angle-left right"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    
+    <li class="nav-item">
+      <a href="/admin/banner" class="nav-link <% if (menu === 'departments' && submenu === 'create' ) { %> active <% } %>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Add New Banner</p>
+      </a>
+    </li>
+    
+  </ul>
+  <!-- <ul class="nav nav-treeview">
+    
+    <li class="nav-item">
+      <a href="" class="nav-link <% if (menu === 'departments' && submenu === 'list' ) { %> active <% } %>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Manage Banner</p>
+      </a>
+    </li>
+   
+  </ul> -->
+</li>
+
+
+
+
+
+
+
+
+
+
+
+        <!--------Banner--------->
         <!--------------Unit--------->
         <% if(await check("unit_view",roleid) || await admin("SYSTEM ADMININSTRATOR",user)  ) {%>
         <li class="nav-item">

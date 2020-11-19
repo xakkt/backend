@@ -1,5 +1,4 @@
 const User = require('../../models/user');
-
 var randomstring = require("randomstring");
 const express = require('express');
 const bcrypt = require('bcrypt');	
@@ -36,7 +35,6 @@ class Mail {
 	 }
 
 }
-
 
 exports.check = function(req, res){
 
