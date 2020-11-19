@@ -12,6 +12,9 @@ const childSchema = new Schema({
   address:{
     type:String,
   },
+  pincode:{
+   type:Number
+    },
   city:{
     type:String
   },

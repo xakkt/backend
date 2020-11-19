@@ -122,3 +122,14 @@ exports.creatOrder = async (req, res) => {
         }
 
     };
+exports.myorder = async (req,res) =>{
+    try {
+        var order = await Order.find({_user: req.decoded.id}).lean();
+        // console.log(order)
+        if (!order.length) return res.json({ message: "No Order found", data: "" });
+        return res.json({ status: "success", message: "", data:order});
+
+    } catch (err) {
+        return res.status(400).json({ data: err.message });
+    }
+}
