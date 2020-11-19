@@ -10,6 +10,7 @@ const Roles = require('../models/role')
 const Permission = require('../models/permission')
  var moment = require('moment')
 var mongoose = require('mongoose');
+const { json } = require('body-parser')
 
 exports.cartProducts = async (userid, storeid) => {
     cartProductList = [];
@@ -63,8 +64,11 @@ exports.productprice = async (storeid,productid) =>{
     var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     let price = await ProductRegularPricing.findOne({_store:storeid,_product:productid}).lean()
     let store =  await StoreProductPricing.findOne({$and: [ {_store:storeid},{_product:productid}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean()
+    if(store)
+    {
     var enddate = moment(store.deal_end).format('L')
     var now = moment().format('L');
+
     store.regular_price = price.regular_price
      if(now <= enddate)
     {
@@ -76,8 +80,16 @@ exports.productprice = async (storeid,productid) =>{
        store.effective_price =  store.regular_price
     }
     return store
-
-
+    }
+    else if(price)
+    {
+        price.deal_price = 0,
+        price.effective_price =  price.regular_price
+        return price
+    }
+    else{
+        return 
+    }
 }
 exports.permission =  (value) => {
     return async(req,res,next) =>{

@@ -7,6 +7,24 @@ const Schema = mongoose.Schema;
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const childSchema = new Schema({ 
+
+  address:{
+    type:String,
+  },
+  city:{
+    type:String
+  },
+  region:{
+    type:String
+  },
+  state:{
+    type:String
+  },
+  country:{
+    type:String
+  }
+});
 
 const userSchema = Schema({
   first_name: {
@@ -53,6 +71,8 @@ const userSchema = Schema({
       type: Date,
       required:true
   },
+  address:[childSchema],
+
   _timezone: {
     type: Schema.Types.ObjectId,
     ref:'Timezone',

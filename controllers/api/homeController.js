@@ -32,7 +32,6 @@ exports.dashboard = async (req, res) => {
 
 			});
 		}
-
 		let categories = await StoreProductPricing.find({ _store: req.params.storeid }).populate('_product', 'name sku  image').lean();
 		console.log(categories)
 		if (!categories.length) return res.json({ status: "false", message: "No data found", data: categories });
@@ -44,10 +43,8 @@ exports.dashboard = async (req, res) => {
 
 		await Promise.all(categories.map(async (element) => {
 			var data = {}
-			console.log("---log", element)
 			var productId = element._product._id.toString();
 			var productPrice = await _global.productprice(req.params.storeid, productId)
-			console.log("--product", element._product._id)
 
 			data = { ...data, type: "product", _id: element._product._id, name: element._product.name, is_favourite: 0, in_shoppinglist: 0, in_cart: 0, image: `${process.env.BASE_URL}/images/products/${element._product.image}`, deal_price: productPrice.deal_price.toFixed(2), regular_price: productPrice.regular_price.toFixed(2) }
 

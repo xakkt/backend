@@ -63,7 +63,7 @@ exports.addPoductToCart = async (req, res) => {
         try {
             var productInfo = await Product.findById(req.body._product);
            let productprice =   await _global.productprice(req.body._store,req.body._product)
-           console.log("---productprice",productprice)
+           if(!productprice) return res.json({status:false,message:"Product Price of this id not set yet"})
            if (!productInfo) return res.json({ status: "false", message: "Product with this id not exists" })
            const cartInfo = {
                 _user: req.decoded.id,
@@ -89,7 +89,6 @@ exports.addPoductToCart = async (req, res) => {
                     product.cart.push(cartInfo.cart)
                     await product.save();
                 }
-
             }
             var prod = product.toObject();
 

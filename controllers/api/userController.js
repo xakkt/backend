@@ -70,7 +70,6 @@ exports.create = async (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	  }
-	  console.log("---req.body",req.body.email)
 		let userinfo =  { 
 							first_name: req.body.first_name,
 							last_name: req.body.last_name, 
@@ -215,4 +214,39 @@ exports.updatestatus = async (req, res,) => {
 		}   
 	}
 
+	exports.address = async (req, res) => {
 
+		try {
+			var address_array = [];
+			address_array.push({
+				address: req.body.address,
+				city:req.body.city,
+				country:req.body.country,
+				region:req.body.region,
+				state:req.body.state
+			})
+			
+			let user = await User.findOneAndUpdate({ _id: req.decoded.id }, { $push: { address: address_array }}, { returnOriginal: false }).exec()
+			if (!user) return res.json({ status: true, message: "Data not found" })
+			return res.json({ status: true, message: "Data saved successfully" })
+	
+		} catch (err) {
+			console.log("--log",err)
+			return res.status(404).json({ message: err.message })
+		}
+	}
+	exports.addresslist = async (req, res) => {
+
+		try {
+			let user = await User.findOne({ _id: req.decoded.id },'address').select('-_id').lean()
+			if(!user) return res.json({status:false,message:"Data not found"})
+			return res.json({state:true,data:user})
+	
+	
+		} catch (err) {
+			console.log("--err", err)
+			return res.status(404).json({ message: err.message })
+	
+		}
+	
+	}
