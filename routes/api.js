@@ -114,10 +114,11 @@ router.post('/user/forgetpassword',userController.forgotPassword);
 router.post('/user/create',userValidation,userController.create);
 router.get('/user/list', userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
+router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
+router.post('/user/address', verifyjwt.checkToken,userController.address)
+router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
 router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
-router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
-
 
 /*--- home ---*/
 router.get('/app/dashboard/:storeid', homeController.dashboard);
@@ -188,5 +189,6 @@ router.put('/wishlist/update/:wishlistid',verifyjwt.checkToken, wishController.u
 
 /*------Superadmin ------*/
 router.post("/superadmin",superadminController.create)
+/**------------Address----- */
 
 module.exports = router;
