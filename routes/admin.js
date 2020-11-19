@@ -15,6 +15,7 @@ const rpController = require('../controllers/admin/rolesnpermissionController')
 const authController = require('../controllers/admin/authController')
 const regularproductController = require('../controllers/admin/regularproductController')
 const unitController = require('../controllers/admin/unitController')
+const bannerController = require('../controllers/admin/bannerController.js')
 
 
 // var auth = function(req, res, next) {
@@ -65,11 +66,20 @@ var storage =   multer.diskStorage({
       callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
+  var bannerStorage =   multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, './public/images/banners');
+    },
+    filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
+      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+    }
+  });
 
   var upload = multer({ storage : storage})
   var userUpload = multer({storage: userStorage})
   var productUpload = multer({storage: productStorage})
   var brandUpload = multer({storage: brandStorage})
+  var bannerUpload = multer({storage: bannerStorage})
 
 
 /*-------- validation -------------*/
@@ -209,6 +219,10 @@ router.get('/unit/edit/:id',isloggedin,unitController.edit)
 router.post('/unit/edit/:id',isloggedin,unitController.update)
 router.get('/unit/delete/:id',isloggedin,unitController.delete)
 
+ /*----------Banner -------*/
+ router.get('/banner',isloggedin,bannerController.create)
+ router.post('/banner/deal',isloggedin,bannerController.deals)
+ router.post('/banner/save',isloggedin,bannerUpload.single('logo'),bannerController.save)
 
 
 

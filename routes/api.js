@@ -14,6 +14,8 @@ const departmentController = require('../controllers/api/departmentController');
 const userController = require('../controllers/api/userController');
 const wishController = require('../controllers/api/wishlistController')
 const superadminController = require('../controllers/api/superadminController')
+const paymentController = require('../controllers/api/paymentController');
+
 
 
 const verifyjwt = require('../middlewares/tokenVerification');
@@ -190,6 +192,8 @@ router.put('/wishlist/update/:wishlistid',verifyjwt.checkToken, wishController.u
 
 /*------Superadmin ------*/
 router.post("/superadmin",superadminController.create)
-/**------------Address----- */
+/**------------Payment------------ */
+router.post("/payment",verifyjwt.checkToken,paymentController.payment)
+
 
 module.exports = router;

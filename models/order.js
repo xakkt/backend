@@ -49,8 +49,13 @@ const OrderSchema = Schema({
     },
   },
   payment: {
-    method:  { type:String, required: true },
+    method:{
+      type:String,
+      enum: ['NetBanking','Stripe','Cash on Delivery'],
+      required: true
+    },
     transaction_id:  { type:String, required: true },
+    payment_date:{type:String }
   },
   feedback: {
      rating: { type: Number, default: 0 },
