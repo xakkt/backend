@@ -15,6 +15,7 @@ const userController = require('../controllers/api/userController');
 const wishController = require('../controllers/api/wishlistController')
 const superadminController = require('../controllers/api/superadminController')
 const paymentController = require('../controllers/api/paymentController');
+const bannerController = require('../controllers/api/bannerController');
 
 
 
@@ -121,6 +122,7 @@ router.post('/user/address', verifyjwt.checkToken,userController.address)
 router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
 router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
+router.get('/user/delete/:id', verifyjwt.checkToken,userController.deleteaddress);
 
 /*--- home ---*/
 router.get('/app/dashboard/:storeid', homeController.dashboard);
@@ -195,5 +197,6 @@ router.post("/superadmin",superadminController.create)
 /**------------Payment------------ */
 router.post("/payment",verifyjwt.checkToken,paymentController.payment)
 
-
+/*----------------Banner ----------*/
+router.post("/bannerproduct",verifyjwt.checkToken,bannerController.bannderproduct)
 module.exports = router;

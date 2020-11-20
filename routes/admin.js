@@ -223,7 +223,11 @@ router.get('/unit/delete/:id',isloggedin,unitController.delete)
  router.get('/banner',isloggedin,bannerController.create)
  router.post('/banner/deal',isloggedin,bannerController.deals)
  router.post('/banner/save',isloggedin,bannerUpload.single('logo'),bannerController.save)
-
+ router.get('/banner/list',isloggedin,bannerController.list)
+ router.get('/banner/delete/:id',isloggedin,bannerController.delete)
+ router.get('/banner/edit/:id',isloggedin,bannerController.edit)
+ router.post('/banner/update/:id',isloggedin,bannerUpload.single('logo'),bannerController.update)
+ router.get('/banner/agreement',isloggedin,bannerController.agreement)
 
 
 module.exports = router;

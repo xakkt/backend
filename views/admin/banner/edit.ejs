@@ -50,12 +50,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>New Banner</h1>
+                            <h1>Edit Banner</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">New Banner</li>
+                                <li class="breadcrumb-item active">Edit Banner</li>
                             </ol>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                     <!-- SELECT2 EXAMPLE -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Add Bannner Details</h3>
+                            <h3 class="card-title">Edit Bannner Details</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
@@ -77,8 +77,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <form id="bannerForm" method="post" action="/admin/banner/save"
-                                enctype="multipart/form-data">
+                            <form id="bannerForm" method="post" action="/admin/banner/update/<%= data._id %>" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -86,7 +85,8 @@
                                             <select name="store" class="form-control custom-select" id="store">
                                                 <option value="">Choose one</option>
                                                 <% if(store) store.forEach(function(store){ %>
-                                                <option value="<%=store._id%>"><%=store.name%></option>
+                                                <option <%= (data._store.equals(store._id) )? 'selected':'' %>
+                                                    value="<%=store._id%>"><%=store.name%></option>
                                                 <% }) %>
                                             </select>
                                         </div>
@@ -122,10 +122,15 @@
                                         <div class="form-group">
                                             <label for="brands">Device</label>
                                             <select name="device" class="form-control custom-select" id="device">
+                                                <% if(data.type == 'app')  { %>
                                                 <option value="">Choose one</option>
-                                                <option value="app">App</option>
+                                                <option value="app" selected>App</option>
                                                 <option value="web">Web</option>
-
+                                               <%} else{%>
+                                                <option value="">Choose one</option>
+                                                <option value="app" >App</option>
+                                                <option value="web" selected>Web</option>
+                                                <%}%>
                                             </select>
                                         </div>
                                     </div>
@@ -174,6 +179,34 @@
 
         $(function () {
 
+            if ($('#store').val()) {
+                $.ajax({
+                    url: '/admin/banner/deal',
+                    type: 'POST',
+                    data: {
+                        storeid: $('#store').val(),
+                    },
+
+                }).done((data) => {
+                    var option = ``;
+                    $('#deal option:gt(0)').remove();
+                    for (var i = 0; i < data.value.length; i++) {
+                        var id = '<%-data._deal%>'
+                        if (data.value[i]._deal._id == id) {
+                            option += `<option value=${data.value[i]._deal._id} selected >${data.value[i]._deal.name} </option>`;
+                        }
+                        else {
+                            option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
+
+                        }
+                    }
+                    $('#deal').append(option);
+                });
+
+
+
+
+            }
             $('#store').click(function () {
                 $.ajax({
                     url: '/admin/banner/deal',
@@ -181,13 +214,13 @@
                     data: {
                         storeid: $(this).val(),
                     },
-                    
+
                 }).done((data) => {
                     var option = ``;
                     $('#deal option:gt(0)').remove();
-                    console.log("---data",data.value[0])
-                    for (var i=0;i<data.value.length;i++){
-                    option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
+                    console.log("---data", data.value[0])
+                    for (var i = 0; i < data.value.length; i++) {
+                        option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
                     }
                     $('#deal').append(option);
                 });

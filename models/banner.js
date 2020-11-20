@@ -5,7 +5,7 @@ const FKHelper = require('../helper/foreign-key-constraint');
 const bannerSchema = Schema({
   image: {
      type: String,
-     required: true
+     required:true,
   },
   _store: {
     type: Schema.Types.ObjectId,
@@ -29,6 +29,11 @@ const bannerSchema = Schema({
         message: `Deal doesn't exist`
     }
 },
+type: {
+  type: String,
+  enum: ['app', 'web'],
+  default : 'app'
+  },
  
 }, {timestampst:true});
 
