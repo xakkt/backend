@@ -249,3 +249,18 @@ exports.updatestatus = async (req, res,) => {
 		}
 	
 	}
+	exports.deleteaddress = async (req,res) =>{
+		
+		try {
+			let user = await User.findOneAndUpdate({ _id: req.decoded.id },
+				{ $pull: { address: { _id: req.params.id} } },
+				{ new: true }).lean()
+			if(!user) return res.json({status:false,message:"Data not found"})
+			return res.json({state:true,message:"Address deleted successfully"})
+	
+	
+		} catch (err) {
+			return res.status(404).json({ message: err.message })
+	
+		}
+	}
