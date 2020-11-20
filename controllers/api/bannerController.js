@@ -11,7 +11,7 @@ exports.bannderproduct = async (req, res) => {
             { _deal: req.body.dealid  },
             { deal_start:{$lte:date} },{ deal_end:{$gte:date} }
           ],  }).populate('_product').lean()
-          
+          console.log("----store",store)
         if (!store) return res.json({ status: false, message: "Data not found" })
         return res.json({ status: true, message: "Listing", data: store })
 
