@@ -56,6 +56,7 @@ exports.list = async (req,res) =>{
     try{
      const banner = await Banner.find().populate('_store','name')
         .populate('_deal','name').exec() 
+        console.log("---logsss",banner)
         if(!banner) return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
         return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
 
