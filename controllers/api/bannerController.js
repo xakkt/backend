@@ -12,7 +12,7 @@ exports.bannderproduct = async (req, res) => {
             { deal_start:{$lte:date} },{ deal_end:{$gte:date} }
           ],  }).populate('_product').lean()
           console.log("----store",store)
-        if (!store) return res.json({ status: false, message: "Data not found" })
+        if (!store.length) return res.json({ status: false, message: "Data not found" })
         return res.json({ status: true, message: "Listing", data: store })
 
     } catch (err) {
