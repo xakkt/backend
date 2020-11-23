@@ -49,6 +49,15 @@ exports.check = function (req, res) {
 },
 
     exports.list = async (req, res) => {
+        let filter = {
+            limit: 10,
+            skip: 10,
+            search: '',
+            sort: 'ASC',
+            sort:{
+                name: 'asc'
+            }
+        }
 
         try {
             // let list =  await Roles.find({_id:req.session.roleid,name:'SYSTEM ADMININSTRATOR'}).lean()
@@ -56,6 +65,7 @@ exports.check = function (req, res) {
             // (list)?cond={role_id:{$in: [null, [] ]}}:cond={user_id:req.session.userid}
         
             let users = await User.find({role_id:{$in: [null, [] ]}}).lean();
+            console.log("---user",users)
             if(!users)  return res.render('admin/user/list', { menu: "users", submenu: "list", users:"", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
            return res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {

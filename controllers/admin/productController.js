@@ -3,6 +3,7 @@ const Product = require('../../models/product');
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
+const Banner = require('../../models/banner')
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -285,8 +286,6 @@ exports.priceSave = async (req, res) => {
                 return res.redirect('/admin/product/pricing/' + req.body.productid) 
             }
         }
-
-
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
             var discount = req.body.regular_price[i] - (req.body.regular_price[i] *req.body.deal_value[i]/100)
@@ -300,6 +299,16 @@ exports.priceSave = async (req, res) => {
             data._store = req.body.store[i]
             data._product = req.body.productid;
             arr.push(data)
+            
+         const banner =   await Banner.findOne({ _store: req.body.store[i],_deal:req.body.deal[i] }).exec()
+         if(!banner)
+          {
+              const bannerinfo = {
+                _deal: req.body.deal[i],
+                _store: req.body.store[i],
+              }
+             await Banner.create(bannerinfo);
+          }
             await StoreProductPricing.deleteOne({ _store: req.body.store[i],_product:req.body.productid }).exec()
         }
 

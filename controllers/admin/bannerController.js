@@ -1,6 +1,7 @@
 const Banner = require('../../models/banner');
 const Store = require('../../models/store');
 const Deal = require('../../models/deal');
+var moment = require('moment')
 
 const Store_product_pricing = require('../../models/store_product_pricing');
 
@@ -20,8 +21,19 @@ exports.create = async (req, res)=>{
 
 exports.deals = async(req,res) =>{
     try{
-        const store= await Store_product_pricing.find({_store:req.body.storeid}).populate('_deal','name').select('-deal_percentage -deal_price -deal_start -percentag_discount_price -deal_end -product -createdAt -updatedAt -_product -_store').lean()
-          return res.json({status:true,value:store})
+        var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        const store= await Store_product_pricing.find({$and: [ {_store:req.body.storeid}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).populate('_deal','name').select('-deal_percentage -deal_price -deal_start -percentag_discount_price -deal_end -product -createdAt -updatedAt -_product -_store').lean()
+        // const store =   Store_product_pricing.aggregate([
+        //     {
+        //         $match:{
+        //             _store:req.body.storeid
+        //         },
+        //     },
+        //     {$group : {_deal}},
+        // ]).exec()
+        // console.log("--logss",store)
+    
+        return res.json({status:true,value:store})
     }catch(err)
     {
         res.status(400).json({status: "false", data: err});
@@ -54,7 +66,9 @@ exports.save = async (req, res) => {
 exports.list = async (req,res) =>{
 
     try{
-     const banner = await Banner.find().populate('_store','name')
+        var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        // const banner = await Store_product_pricing.find({$and: [{ deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).populate('_store','name').populate('_deal','name').exec() 
+         const banner = await Banner.find().populate('_store','name')
         .populate('_deal','name').exec() 
         if(!banner) return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
         return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
@@ -77,10 +91,9 @@ exports.delete = async (req,res) =>{
 
 exports.edit = async (req,res) =>{
     try{
-        const store = await Store.find({}).lean()
-        // const store_product_pricing = await Store_product_pricing.find({}).lean()
-		const banner = await Banner.findById(req.params.id).exec();
-		 res.render('admin/banner/edit',{status: "success", data: banner,store:store,menu:"banner", submenu:"edit"})
+        // const store = await Store.find({}).lean()
+        const banner = await Banner.findById(req.params.id).exec();
+		 res.render('admin/banner/edit',{status: "success",data:banner,menu:"banner", submenu:"edit"})
 	 }catch(err){
 		res.status(400).json({status: "false", data: err});
    }
@@ -97,14 +110,11 @@ exports.agreement = async (req,res) =>{
 }
 exports.update = async (req,res) =>{
     try{
-        const brandinfo = {
-            _deal: req.body.deal,
-            _store: req.body.store,
-             type:req.body.device
-        }
-        if(req.file) { brandinfo.image = req.file.filename}
-        // (req.file)? brandinfo.image = req.file.filename: brandinfo.image= null
-        const banner = await Banner.findOneAndUpdate({_id:req.params.id},brandinfo,{returnOriginal: false});
+        const baanerinfo = {}
+        if(req.file) { baanerinfo.image = req.file.filename}
+    
+        // const banner = await Store_product_pricing.findOneAndUpdate({_id:req.params.id},brandinfo,{new:true}).exec()     // (req.file)? brandinfo.image = req.file.filename: brandinfo.image= null
+        const banner = await Banner.findOneAndUpdate({_id:req.params.id},baanerinfo,{returnOriginal: false});
         if(!banner) return res.json({status:false,message:"Data not saved"})
         await req.flash('success', 'Banner updated successfully!');
         res.redirect('/admin/banner/list')
