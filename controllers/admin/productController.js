@@ -287,21 +287,20 @@ exports.priceSave = async (req, res) => {
 
                 }
             }
-            if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
-            {
-                await req.flash('failure', "Only one value is selected from Deal% and Deal price");
-                return res.redirect('/admin/product/pricing/' + req.body.productid) 
-            }
+            // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
+            // {
+            //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
+            //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
+            // }
         }
+        console.log("--body",req.body)
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
-            var discount = req.body.regular_price[i] - (req.body.regular_price[i] *req.body.deal_value[i]/100)
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
             data.deal_price = req.body.deal_price[i];
             data.deal_start = req.body.stime[i];
-            data.percentag_discount_price = discount
             data.deal_end = req.body.etime[i];
             data._store = req.body.store[i]
             data._product = req.body.productid;

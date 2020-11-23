@@ -53,9 +53,6 @@ const storeProductPricingSchema = new Schema({
     deal_price: {
         type: Number,
     },
-    percentag_discount_price:{
-      type:Number
-    },
     _country: {
         type: Schema.Types.ObjectId,
         ref:'Country',

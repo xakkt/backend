@@ -240,7 +240,7 @@
                       <% if(price.length>0){  %>
                       <% price.forEach(function(prices){ %>
                       <tr class="tr_clone">
-                            <% console.log("---price",prices) %>
+                        <% console.log("---price",prices) %>
                         <td style="width:18%">
                           <select name="store[]" class="form-control custom-select" required
                             onclick="changeLanguage(this)">
@@ -252,7 +252,8 @@
                           </select>
                         </td>
                         <td style="width:10%"> <input type="text" class="form-control rgprice"
-                            value="<%= prices.regularprice %>"  name="regular_price[]" class="form-control" readonly> </td>
+                            value="<%= prices.regularprice %>" name="regular_price[]" class="form-control" readonly>
+                        </td>
                         <td style="width:15%">
                           <select name="deal[]" class="form-control custom-select" required>
                             <option value="">Select Deal</option>
@@ -263,11 +264,12 @@
                           </select>
                         </td>
                         <td style="width:20%">
-                          <input type="number" name="deal_value[]"  value="<%= prices.deal_percentage %>" class="form-control" required>
+                          <input type="number" name="deal_value[]" value="<%= prices.deal_percentage %>"
+                            class="form-control" required>
 
-                                </td>
-                                <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
-                            class="form-control" > </td>
+                        </td>
+                        <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
+                            class="form-control"> </td>
 
                         <td> <input type="date" name="stime[]"
                             value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>" class="form-control"
@@ -304,11 +306,11 @@
                           </select>
                         </td>
                         <td style="width:20%">
-                          <input type="number" name="deal_value[]" data-id="deal_value" class="form-control" required >
+                          <input type="number" name="deal_value[]" class="form-control deal" required>
                         </td>
-                        <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control" >
+                        <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control deal_price">
                         </td>
-                       
+
                         <td> <input type="date" name="stime[]" class="form-control" required> </td>
                         <td> <input type="date" name="etime[]" class="form-control" required> </td>
                         <td>
@@ -322,13 +324,14 @@
                   </table>
                 </div>
                 <input type="hidden" id="productid" name="productid" value="<%= productid %>"></input>
-                <!-- /.card-body -->
-                <span class="input-group-btn">
-                </span>
-                <div class="card-footer">
-                  <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add">
-                  <button type="submit" value="submit" class="btn btn-primary">Submit</button>
-                </div>
+                      <!-- /.card-body -->
+                      <span class="input-group-btn">
+                      </span>
+                      <div class="card-footer">
+                        <input type="button" name="add" value="Add" id="tr_clone_add"
+                          class="btn btn-primary tr_clone_add">
+                        <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                      </div>
               </form>
             </div>
             <!-- /.card -->
@@ -392,17 +395,31 @@
       });
     });
     $(function () {
-      $('#deal_value').on('input', function() {
-  });
- 
       $(".tr_clone_add").click(function (e) {
-        $(".select2").select2('destroy'); 
+        $(".select2").select2('destroy');
         var $tr = $('.tr_clone').first();
         var $clone = $tr.clone();
         // $clone.find(':text').val('');
         $(".tr_clone:last").after($clone)
       });
     })
+
+
+    $(document).on("input", '.deal', function (e) {
+      let that = e.target
+      let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
+      let dealPrice = 0, dealPercentage = that.value
+      dealPrice = eval(regularPrice * dealPercentage) / 100
+      that.parentElement.parentElement.getElementsByClassName("deal_price")[0].value = dealPrice
+    });
+    $(document).on("input", '.deal_price', function (e) {
+      let that = e.target
+      let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
+      let dealPrice = that.value, dealPercentage = 0
+      dealPercentage = eval((dealPrice / regularPrice)*100)
+      that.parentElement.parentElement.getElementsByClassName("deal")[0].value = dealPercentage
+    });
+
     $("form").submit(function (event) {
       var rowCount = $("#gatePass tr").length - 1;
 

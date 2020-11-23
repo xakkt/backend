@@ -72,7 +72,7 @@ exports.productprice = async (storeid,productid) =>{
     store.regular_price = price.regular_price
      if(now <= enddate)
     {
-        (store.deal_percentage >0)?store.deal_price = store.percentag_discount_price:store.deal_price 
+        // (store.deal_percentage >0)?store.deal_price = store.percentag_discount_price:store.deal_price 
         store.effective_price =  store.deal_price
     }else
     {
