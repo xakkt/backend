@@ -5,7 +5,8 @@ const { validationResult } = require('express-validator');
 exports.createRole = async (req, res) => {
     try {
         let roles = await Roles.find().exec()
-        let permission = await Permission.find().exec()
+        let permission = await Permission.find().sort([['type', 'ascending']]).exec()
+        console.log("--permission",permission)
         res.render('admin/roles_permissions/create', { menu: "Roles", roles: roles, permission: permission })
     } catch (err) {
         res.status(400).json({ data: err.message });

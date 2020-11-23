@@ -278,6 +278,13 @@ exports.priceSave = async (req, res) => {
                         await req.flash('failure', "Cannot select two  same dates for same deals");
                         return res.redirect('/admin/product/pricing/' + req.body.productid)
                     }
+                }else if(req.body.store[i])
+                {
+                    if (req.body.etime[i] >= req.body.stime[k]) {
+                        await req.flash('failure', "Cannot select two  same dates for same deals");
+                        return res.redirect('/admin/product/pricing/' + req.body.productid)
+                    }
+
                 }
             }
             if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
