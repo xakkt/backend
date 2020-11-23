@@ -7,11 +7,10 @@ exports.bannderproduct = async (req, res) => {
     try {
         var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
         let store = await StoreProductPricing.find({$and: [
-            { _store: req.body.storeid },
-            { _deal: req.body.dealid  },
+            { _store: req.body._store },
+            { _deal: req.body._deal },
             { deal_start:{$lte:date} },{ deal_end:{$gte:date} }
           ],  }).populate('_product').lean()
-          console.log("----store",store)
         if (!store.length) return res.json({ status: false, message: "Data not found" })
         return res.json({ status: true, message: "Listing", data: store })
 

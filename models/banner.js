@@ -5,7 +5,6 @@ const FKHelper = require('../helper/foreign-key-constraint');
 const bannerSchema = Schema({
   image: {
      type: String,
-     required:true,
   },
   _store: {
     type: Schema.Types.ObjectId,
