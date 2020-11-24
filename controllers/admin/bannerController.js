@@ -66,7 +66,7 @@ exports.list = async (req,res) =>{
 
     try{
         var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-         const banner = await Banner.find().populate('_store','name')
+         const banner = await Banner.find({$and: [{ deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).populate('_store','name')
         .populate('_deal','name').exec()
         if(!banner) return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
         return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner,moment:moment,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
