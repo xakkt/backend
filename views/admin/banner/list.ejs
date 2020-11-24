@@ -18,6 +18,37 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
+<style>
+  #loader {
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    position: fixed;
+    background: #00000094;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 0;
+  }
+
+  #bannerimage {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+    max-width: 100%;
+    width: 6em;
+    height: 4em;
+    z-index: -1 !important;
+  }
+
+  .fa-spin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+</style>
 
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
@@ -51,20 +82,11 @@
       <section class="content">
         <div class="container-fluid">
 
-<!--- message section should be common for all-->
+          <!--- message section should be common for all-->
+          <div id="successMessage" style="display:none;"> Image updated successfully</div>
 
-            <% if(failure.length){ %> 
-            <div class="alert alert-danger">
-                <strong><%= failure[0] %></strong>
-              </div>
-              <% } %>
-            <% if(success.length){ %>   
-            <div class="alert alert-success">
-                <strong><%= success %></strong> 
-            </div>
-            <% } %>
 
-<!---- end of messages -->              
+          <!---- end of messages -->
           <div class="row">
             <div class="col-12">
 
@@ -74,15 +96,17 @@
                 <!-- <div class="card-header">
                   <h3 class="card-title">All Users</h3>
                 </div> -->
-                
+
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table id="users" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Store_Name</th>
-                        <th>Deal_Name</th>
+                        <th>Store Name</th>
+                        <th>Deal</th>
                         <th>Image</th>
+                        <th>From</th>
+                        <th>Till</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -92,22 +116,35 @@
                       <tr>
                         <td><%= data._store.name %></td>
                         <td><%= data._deal.name %></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="/images/banners/<%= data.image %>" /></td>
+                        <td>
+                          <div id='loader' style='display: none;'>
+                            <i class="fa fa-spinner fa-spin" style="font-size:48px;color:red"></i>
+                            <!-- <img src='/reload.gif'> -->
+                          </div>
+                          <img id="bannerimage" class="img-thumbnail" style="width: 6em;height: 4em"
+                            src="/images/banners/<%= data.image %>" />
+                          <label for="upload"><i class="fa fa-upload" aria-hidden="true"></i>
+                          </label>
+                          <input type="file" style="display:none;" name="file" id="upload" data-id="<%= data._id %>" />
+                        </td>
+                        <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
+                        <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td>
                         <td><a href="/admin/banner/delete/<%= data._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/banner/edit/<%= data._id %>""><i
-                              class="fas fa-pencil-alt"></i></a></td>
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;</td>
                       </tr>
                       <% }) %>
-                      
+
 
                     </tbody>
                     <tfoot>
                       <tr>
                       <tr>
-                        <th>Store_Name</th>
-                        <th>Deal_Name</th>
+                        <th>Store Name</th>
+                        <th>Deal</th>
                         <th>Image</th>
+                        <th>From</th>
+                        <th>Till</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>
@@ -160,19 +197,52 @@
   <!-- Page specific script -->
   <script>
     $(function () {
-      $("#users").DataTable({
-        dom:'Pfrtip',
-        language: {
-            searchPanes: {
-                emptyPanes: 'There are no panes to display. :/'
+
+      $('#upload').change(function () {
+
+        var images = $('#upload').prop('files')[0]
+        var data;
+        var formdata = new FormData();
+        formdata.append('banner_image', $('#upload').prop('files')[0]);
+        $.ajax({
+          url: '/admin/banner/update/' + $(this).data("id"),
+          type: 'POST',
+          processData: false,
+          contentType: false,
+          dataType: "json",
+          mimeType: 'multipart/form-data',
+          data: formdata,
+          beforeSend: function () {
+            $("#loader").show();
+          },
+
+          success: function (data) {
+            if (data.status) {
+              $("#successMessage").css('display', 'block');
+              $("#loader").hide();
+              var output = document.getElementById('bannerimage');
+              output.src = URL.createObjectURL($('#upload').prop('files')[0]);
+              output.onload = function () {
+                URL.revokeObjectURL(output.src)
+              }
             }
+          }
+        })
+      })
+
+      $("#users").DataTable({
+        dom: 'Pfrtip',
+        language: {
+          searchPanes: {
+            emptyPanes: 'There are no panes to display. :/'
+          }
         },
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#users_wrapper .col-md-6:eq(0)');
-      
+
     });
   </script>
 </body>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -171,9 +170,6 @@
     <!-- /.navbar -->
     <!-- Main Sidebar Container -->
     <%- await include('../../_partials/_admin/sidebar.ejs'); %>
-
-
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <% if(failure.length){ %>
@@ -224,7 +220,6 @@
                   <table id="gatePass" class="table table-striped">
                     <thead>
                       <tr>
-
                         <th>Store</th>
                         <th>Regular Price</th>
                         <th>Deal Type</th>
@@ -280,7 +275,6 @@
 
                           <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>" onclick="myFunction(this)"
                             aria-hidden="true"></i>
-
                         </td>
                       </tr>
                       <%})%>

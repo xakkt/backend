@@ -41,7 +41,6 @@ exports.deals = async(req,res) =>{
     }
 }
 exports.save = async (req, res) => {
-
     try {
         const brandinfo = {
             _deal: req.body.deal,
@@ -67,12 +66,10 @@ exports.list = async (req,res) =>{
 
     try{
         var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-        // const banner = await Store_product_pricing.find({$and: [{ deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).populate('_store','name').populate('_deal','name').exec() 
          const banner = await Banner.find().populate('_store','name')
         .populate('_deal','name').exec()
         if(!banner) return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
-        
-        return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
+        return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner,moment:moment,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
 
     }catch(err)
     {
@@ -111,15 +108,13 @@ exports.agreement = async (req,res) =>{
 }
 exports.update = async (req,res) =>{
     try{
+
         const baanerinfo = {}
         if(req.file) { baanerinfo.image = req.file.filename}
-    
-        // const banner = await Store_product_pricing.findOneAndUpdate({_id:req.params.id},brandinfo,{new:true}).exec()     // (req.file)? brandinfo.image = req.file.filename: brandinfo.image= null
         const banner = await Banner.findOneAndUpdate({_id:req.params.id},baanerinfo,{returnOriginal: false});
         if(!banner) return res.json({status:false,message:"Data not saved"})
-        await req.flash('success', 'Banner updated successfully!');
-        res.redirect('/admin/banner/list')
-        
+        return res.json({status:true,message:"Data Updated"})
+            
     }catch(err)
     {
         console.log("--err",err)

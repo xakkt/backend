@@ -293,7 +293,6 @@ exports.priceSave = async (req, res) => {
             //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
             // }
         }
-        console.log("--body",req.body)
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
             data._deal = req.body.deal[i];
@@ -306,12 +305,14 @@ exports.priceSave = async (req, res) => {
             data._product = req.body.productid;
             arr.push(data)
             
-         const banner =   await Banner.findOne({ _store: req.body.store[i],_deal:req.body.deal[i] }).exec()
+         const banner =  await Banner.findOne({ _store: req.body.store[i],_deal:req.body.deal[i] }).exec()
          if(!banner)
           {
               const bannerinfo = {
                 _deal: req.body.deal[i],
                 _store: req.body.store[i],
+                deal_start : req.body.stime[i],
+                deal_end : req.body.etime[i]
               }
              await Banner.create(bannerinfo);
           }
