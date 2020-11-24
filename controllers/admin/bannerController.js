@@ -109,6 +109,7 @@ exports.agreement = async (req,res) =>{
 exports.update = async (req,res) =>{
     try{
 
+        console.log("req.pra",req.params.id)
         const baanerinfo = {}
         if(req.file) { baanerinfo.image = req.file.filename}
         const banner = await Banner.findOneAndUpdate({_id:req.params.id},baanerinfo,{returnOriginal: false});

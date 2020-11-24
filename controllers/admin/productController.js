@@ -305,9 +305,9 @@ exports.priceSave = async (req, res) => {
             data._product = req.body.productid;
             arr.push(data)
             
-         const banner =  await Banner.findOne({ _store: req.body.store[i],_deal:req.body.deal[i] }).exec()
-         if(!banner)
-          {
+        //  const banner =  await Banner.findOne({ _store: req.body.store[i],_deal:req.body.deal[i] }).exec()
+        //  if(!banner)
+        //   {
               const bannerinfo = {
                 _deal: req.body.deal[i],
                 _store: req.body.store[i],
@@ -315,7 +315,7 @@ exports.priceSave = async (req, res) => {
                 deal_end : req.body.etime[i]
               }
              await Banner.create(bannerinfo);
-          }
+        //   }
             await StoreProductPricing.deleteOne({ _store: req.body.store[i],_product:req.body.productid }).exec()
         }
 

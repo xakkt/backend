@@ -121,11 +121,11 @@
                             <i class="fa fa-spinner fa-spin" style="font-size:48px;color:red"></i>
                             <!-- <img src='/reload.gif'> -->
                           </div>
-                          <img id="bannerimage" class="img-thumbnail" style="width: 6em;height: 4em"
+                          <img id="bannerimage" class="img-thumbnail bannerimage" style="width: 6em;height: 4em"
                             src="/images/banners/<%= data.image %>" />
-                          <label for="upload"><i class="fa fa-upload" aria-hidden="true"></i>
+                          <label for='<%= data._id %>'><i class="fa fa-upload" aria-hidden="true"></i>
                           </label>
-                          <input type="file" style="display:none;" name="file" id="upload" data-id="<%= data._id %>" />
+                          <input type="file" style="display:none;" class="uploads" name="uploads" id='<%= data._id %>' onchange="myFunction(this)" data-id="<%= data._id %>" />
                         </td>
                         <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
                         <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td>
@@ -134,7 +134,6 @@
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;</td>
                       </tr>
                       <% }) %>
-
 
                     </tbody>
                     <tfoot>
@@ -196,16 +195,13 @@
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
   <script>
-    $(function () {
-
-      $('#upload').change(function () {
-
-        var images = $('#upload').prop('files')[0]
+        function myFunction(that) {
+        console.log(that.closest('td'));
         var data;
         var formdata = new FormData();
-        formdata.append('banner_image', $('#upload').prop('files')[0]);
+        formdata.append('banner_image', $(that).prop('files')[0]);
         $.ajax({
-          url: '/admin/banner/update/' + $(this).data("id"),
+          url: '/admin/banner/update/' + $(that).data("id"),
           type: 'POST',
           processData: false,
           contentType: false,
@@ -215,20 +211,52 @@
           beforeSend: function () {
             $("#loader").show();
           },
-
           success: function (data) {
+             console.log("--value",data)
             if (data.status) {
               $("#successMessage").css('display', 'block');
               $("#loader").hide();
-              var output = document.getElementById('bannerimage');
-              output.src = URL.createObjectURL($('#upload').prop('files')[0]);
-              output.onload = function () {
-                URL.revokeObjectURL(output.src)
-              }
+              $(that).closest('td').find('.bannerimage').attr('src', URL.createObjectURL($(that).prop('files')[0]));
+
+      
             }
           }
-        })
-      })
+        })}
+    $(function () {
+
+  
+      // $('.uploads').change(function (e) {
+      //    console.log("--eeee",e.target.getAttribute('data-id'))
+      //   // console.log("---value", $(this).data("id"))
+      //   var images = $('.uploads').prop('files')[0]
+      //   var data;
+      //   var formdata = new FormData();
+      //   formdata.append('banner_image', $('.uploads').prop('files')[0]);
+      //   $.ajax({
+      //     url: '/admin/banner/update/' + $(this).data("id"),
+      //     type: 'POST',
+      //     processData: false,
+      //     contentType: false,
+      //     dataType: "json",
+      //     mimeType: 'multipart/form-data',
+      //     data: formdata,
+      //     beforeSend: function () {
+      //       $("#loader").show();
+      //     },
+
+      //     success: function (data) {
+      //       if (data.status) {
+      //         $("#successMessage").css('display', 'block');
+      //         $("#loader").hide();
+      //         var output = document.getElementById('bannerimage');
+      //         output.src = URL.createObjectURL($('#upload').prop('files')[0]);
+      //         output.onload = function () {
+      //           URL.revokeObjectURL(output.src)
+      //         }
+      //       }
+      //     }
+      //   })
+      // })
 
       $("#users").DataTable({
         dom: 'Pfrtip',
