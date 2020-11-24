@@ -312,7 +312,7 @@ exports.priceSave = async (req, res) => {
                 _deal: req.body.deal[i],
                 _store: req.body.store[i],
                 deal_start : req.body.stime[i],
-                deal_end : req.body.etime[i]
+                deal_end : req.body.etime[i],
               }
              await Banner.create(bannerinfo);
         //   }

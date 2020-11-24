@@ -30,7 +30,10 @@
     margin: 0 auto;
     top: 0;
   }
-
+  .container {
+  position: relative;
+  width: 50%;
+}
   #bannerimage {
     padding: .25rem;
     background-color: #fff;
@@ -48,6 +51,39 @@
     top: 50%;
     left: 50%;
   }
+  .bannerimage {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.container:hover .bannerimage {
+  opacity: 0.3;
+}
+
+.container:hover .middle {
+  opacity: 1;
+}
+.icon{
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  padding: 16px 32px;
+
+}
 </style>
 
 <body class="hold-transition sidebar-mini">
@@ -113,7 +149,6 @@
                     <tbody>
 
                       <% if(data) data.forEach(function(data){ %>
-                        <% console.log("----value",data) %>
                       <tr>
                         <td><%= data._store.name %></td>
                         <td><%= data._deal.name %></td>
@@ -122,12 +157,15 @@
                             <i class="fa fa-spinner fa-spin" style="font-size:48px;color:red"></i>
                             <!-- <img src='/reload.gif'> -->
                           </div>
+                          <div class="container">
                           <img id="bannerimage" class="img-thumbnail bannerimage" style="width: 6em;height: 4em"
                             src="/images/banners/<%= data.image %>" />
-                          <label for='<%= data._id %>'><i class="fa fa-upload" aria-hidden="true"></i>
+                            <div class="middle">
+                          <label for='<%= data._id %>'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>
                           </label>
+                          </div>
                           <input type="file" style="display:none;" class="uploads" name="uploads" id='<%= data._id %>'
-                            onchange="myFunction(this)" data-id="<%= data._id %>" />
+                            onchange="myFunction(this)" data-id="<%= data._id %>" /></div>
                         </td>
                         <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
                         <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td>

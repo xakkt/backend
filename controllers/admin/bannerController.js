@@ -65,11 +65,18 @@ exports.save = async (req, res) => {
 exports.list = async (req,res) =>{
 
     try{
+        var banner_image = []
         var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
          const banner = await Banner.find({$and: [{ deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).populate('_store','name')
-        .populate('_deal','name').exec()
+        .populate('_deal','name').lean()
+         banner.map((element) =>{
+             var data = {}
+             data = {...element}
+             if(!element.image) data.image = 'no-image.jpeg' 
+             banner_image.push(data)
+         })
         if(!banner) return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
-        return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner,moment:moment,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
+        return res.render('admin/banner/list',{ menu:"banner", submenu:"list", data:banner_image,moment:moment,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
 
     }catch(err)
     {
