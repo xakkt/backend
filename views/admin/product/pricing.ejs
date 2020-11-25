@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -111,7 +112,7 @@
                       <% price.forEach(function(prices){ %>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select" required
+                          <select name="store[]" class="form-control custom-select store-name" required
                             onclick="changeLanguage(this)">
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
@@ -124,7 +125,7 @@
                             value="<%= prices.regularprice %>" name="regular_price[]" class="form-control" readonly>
                         </td>
                         <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select" required>
+                          <select name="deal[]" class="form-control custom-select deal-name" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
                             <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>">
@@ -141,9 +142,9 @@
                             class="form-control deal_price"> </td>
 
                         <td> <input type="date" name="stime[]"
-                            value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>" class="form-control"
-                            required> </td>
-                        <td> <input type="date" name="etime[]" class="form-control"
+                            value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
+                            class="form-control from-date" required> </td>
+                        <td> <input type="date" name="etime[]" class="form-control to-date"
                             value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required> </td>
                         <td>
 
@@ -155,7 +156,7 @@
                       <%} else {%>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select" required
+                          <select name="store[]" class="form-control custom-select store-name" required
                             onclick="changeLanguage(this)">
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
@@ -166,7 +167,7 @@
                         <td style="width:10%"> <input type="text" name="regular_price[]" class="rgprice form-control"
                             readonly required> </td>
                         <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select" required>
+                          <select name="deal[]" class="form-control custom-select deal-name" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
                             <option value="<%=deal._id%>"><%=deal.name%></option>
@@ -179,8 +180,8 @@
                         <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control deal_price">
                         </td>
 
-                        <td> <input type="date" name="stime[]" class="form-control" required> </td>
-                        <td> <input type="date" name="etime[]" class="form-control" required> </td>
+                        <td> <input type="date" name="stime[]" class="form-control from-date" required> </td>
+                        <td> <input type="date" name="etime[]" class="form-control to-date" required> </td>
                         <td>
                           <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)" data-id=""
                             aria-hidden="true"></i>
@@ -233,7 +234,9 @@
   <!-- jquery-validation -->
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/jquery.validate.min.js"></script>
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+    integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+    crossorigin="anonymous"></script>
   <script>
     $(function () {
       bsCustomFileInput.init();
@@ -276,6 +279,7 @@
 
     $(document).on("input", '.deal', function (e) {
       let that = e.target
+      checkDuplicateEntry(that)
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = 0, dealPercentage = that.value
       dealPrice = eval(regularPrice * dealPercentage) / 100
@@ -283,9 +287,10 @@
     });
     $(document).on("input", '.deal_price', function (e) {
       let that = e.target
+      checkDuplicateEntry(that)
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = that.value, dealPercentage = 0
-      dealPercentage = eval((dealPrice / regularPrice)*100)
+      dealPercentage = eval((dealPrice / regularPrice) * 100)
       that.parentElement.parentElement.getElementsByClassName("deal")[0].value = dealPercentage
     });
 
@@ -335,8 +340,39 @@
           $(that).closest('tr').remove();
         }
       });
-
     }
+    function checkDuplicateEntry(that) {
+      let parentEle = that.parentElement.parentElement
+      let store = parentEle.getElementsByClassName("store-name")[0].value
+      let dealType = parentEle.getElementsByClassName("deal-name")[0].value
+      let from = moment(parentEle.getElementsByClassName("from-date")[0].value,"YYYY/MM/DD") 
+      let to = moment(parentEle.getElementsByClassName("to-date")[0].value, "YYYY/MM/DD")
+      let stores = document.getElementsByClassName("store-name")
+      let dealTypes = document.getElementsByClassName("deal-name")
+      let fromDates = document.getElementsByClassName("from-date")
+      let toDates = document.getElementsByClassName("to-date")
+      let flag = 0
+      let totalRows = stores.length
+
+      for (var i = 0; i < totalRows; i++) {
+        if (stores[i].value == store && dealTypes[i].value == dealType) {
+          // var compareDate = moment(, "YYYY/MM/DD");
+          let startDate = moment(fromDates[i].value, "YYYY/MM/DD");
+          let endDate = moment(toDates[i].value, "YYYY/MM/DD");
+          console.log(from, '=====', startDate, '=====', endDate)
+          if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)){
+            flag += 1
+          }else console.log('outside------')
+        } else console.log('outer outside')
+      }
+      if(flag > 1){
+        parentEle.getElementsByClassName("from-date")[0].style.border = '1px solid red'
+        parentEle.getElementsByClassName("to-date")[0].style.border = '1px solid red'
+        // parentEle.style.border = '1px solid red'
+      }
+      console.log('flag===========', flag)
+    }
+
   </script>
 
 </body>
