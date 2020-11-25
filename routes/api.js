@@ -198,5 +198,5 @@ router.post("/superadmin",superadminController.create)
 router.post("/payment",verifyjwt.checkToken,paymentController.payment)
 
 /*----------------Banner ----------*/
-router.post("/bannerproduct",verifyjwt.checkToken,bannerController.bannderproduct)
+router.post("/bannerproduct",bannerController.bannderproduct)
 module.exports = router;
