@@ -268,7 +268,7 @@
         var $tr = $('.tr_clone').first();
         var $clone = $tr.clone();
         $clone.find('input').val('');
-        
+        $clone.find('select').val('')
         $(".tr_clone:last").after($clone)
       });
     })

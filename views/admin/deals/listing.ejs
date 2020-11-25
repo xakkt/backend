@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>XAKKT 2.0</title>
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -153,15 +152,14 @@
   <!-- Page specific script -->
   <script>
     $(function () {
-      $('#deal').on( 'page.dt', function ( e, len ) {
-    console.log( 'New page length: '+len );
-} );
+      var info = $('#deal').DataTable().page.info();
+      console.log("==value",info.page)
       $('#deal').DataTable({
         "paging": true,
         "processing": true,
         "serverSide": true,
         "ajax": {
-          "url": "/admin/deal/list",
+          "url": "/admin/deal/list?"+info.page+"",
           "type": "get",
         },
         "columns": [
@@ -173,9 +171,6 @@
         }
       });
     });
-
-
-
 
     //   $("#departments").DataTable({
     //     dom: 'Pfrtip',

@@ -74,11 +74,11 @@ exports.list = async (req, res) => {
             if (!element.image) data.image = 'no-image.jpeg'
             banner_image.push(data)
         })
+        
         if (!banner) return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: banner_image, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
-        console.log("--log", err)
         res.status(400).json({ data: err.message });
 
     }
