@@ -76,6 +76,9 @@
         <!-- /.container-fluid -->
       </section>
       <!-- Main content -->
+      <div class ="message" style="display:none;">
+        <span>For this deal type and store  type already selected Please select another date</span>
+      </div>
       <section class="content">
         <div class="container">
           <!-- SELECT2 EXAMPLE -->
@@ -125,7 +128,7 @@
                             value="<%= prices.regularprice %>" name="regular_price[]" class="form-control" readonly>
                         </td>
                         <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select deal-name" required>
+                          <select name="deal[]" class="form-control custom-select deal-name" onchange="dealchange(this)" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
                             <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>">
@@ -141,7 +144,7 @@
                         <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
                             class="form-control deal_price"> </td>
 
-                        <td> <input type="date" name="stime[]"
+                        <td> <input type="date" name="stime[]" onchange="handler(this)"
                             value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
                             class="form-control from-date" required> </td>
                         <td> <input type="date" name="etime[]" class="form-control to-date"
@@ -167,7 +170,7 @@
                         <td style="width:10%"> <input type="text" name="regular_price[]" class="rgprice form-control"
                             readonly required> </td>
                         <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select deal-name" required>
+                          <select name="deal[]" class="form-control custom-select deal-name" onclick="dealchange(this)" required>
                             <option value="">Select Deal</option>
                             <% if(deals) deals.forEach(function(deal){ %>
                             <option value="<%=deal._id%>"><%=deal.name%></option>
@@ -180,7 +183,7 @@
                         <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control deal_price">
                         </td>
 
-                        <td> <input type="date" name="stime[]" class="form-control from-date" required> </td>
+                        <td> <input type="date" name="stime[]" class="form-control from-date" onchange="handler(this);" required> </td>
                         <td> <input type="date" name="etime[]" class="form-control to-date" required> </td>
                         <td>
                           <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)" data-id=""
@@ -276,10 +279,8 @@
       });
     })
 
-
     $(document).on("input", '.deal', function (e) {
       let that = e.target
-      checkDuplicateEntry(that)
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = 0, dealPercentage = that.value
       dealPrice = eval(regularPrice * dealPercentage) / 100
@@ -287,7 +288,6 @@
     });
     $(document).on("input", '.deal_price', function (e) {
       let that = e.target
-      checkDuplicateEntry(that)
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = that.value, dealPercentage = 0
       dealPercentage = eval((dealPrice / regularPrice) * 100)
@@ -296,9 +296,7 @@
 
     $("form").submit(function (event) {
       var rowCount = $("#gatePass tr").length - 1;
-
       $('#store').val(rowCount);
-
     });
     function changeLanguage(that) {
       $.ajax({
@@ -327,14 +325,12 @@
       if ($(that).data("id").trim() == "") {
         return $(that).closest('tr').remove()
       }
-
       $.ajax({
         url: '/admin/product_price/remove',
         type: 'POST',
         data: {
           _id: $(that).data("id"),
         },
-
       }).done((data) => {
         if (data.status) {
           $(that).closest('tr').remove();
@@ -366,13 +362,22 @@
         } else console.log('outer outside')
       }
       if(flag > 1){
+        $('.message').show();
         parentEle.getElementsByClassName("from-date")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("to-date")[0].style.border = '1px solid red'
         // parentEle.style.border = '1px solid red'
       }
       console.log('flag===========', flag)
     }
-
+   function dealchange(that)
+   {
+    checkDuplicateEntry(that)
+    }
+   function handler(that)
+   {
+    // alert(e.target.value);
+    checkDuplicateEntry(that)
+   }
   </script>
 
 </body>
