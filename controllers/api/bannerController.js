@@ -15,7 +15,7 @@ exports.bannderproduct = async (req, res) => {
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
         }).populate('_product').select(' -deal_start -deal_end -deal_percentage -createdAt -updatedAt').lean()
-        console.log("--value",store)
+        console.log("--store",store)
         await Promise.all(store.map(async (element) => {
             var data = {}
             var _store = element._store
