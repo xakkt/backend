@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
 
-        res.render('admin/product-category/create', { menu: "ProductCategory", product: product })
+        res.render('admin/product-category/create', { menu: "productCategory",submenu:"create", product: product })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -72,10 +72,10 @@ exports.list = async (req, res) => {
     try {
         let productCategory = await ProductCategory.find().exec();
         if (!productCategory.length) return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product-category/listing', { menu: "departments", submenu: "list", productCategory: productCategory, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: productCategory, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
-        res.status(400).json({ status: "success", message: "Department added successfully", data: err });
+        res.status(400).json({ status: "success", message:err });
     }
 }
 /*
@@ -173,8 +173,8 @@ exports.productlisting = async (req, res) => {
     try {
         let price = await StoreProductPricing.find().exec()
         let product = await Product.find().exec();
-        if (!product.length) return res.render('admin/product/listing', { menu: "product", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product/listing', { menu: "product", submenu: "list", product: product, price: price, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: product, price: price, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });

@@ -3,7 +3,7 @@ const { validationResult } = require('express-validator');
 
 exports.create = async (req, res) => {
     try {
-        res.render('admin/brand/create', { menu: "brand", submenu: "create" })
+        res.render('admin/brand/create', { menu: "brands", submenu: "create" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -35,8 +35,8 @@ exports.listing = async (req, res) => {
 
     try {
         let brand = await Brand.find().exec();
-        if (!brand.length) return res.render('admin/brand/listing', { menu: "brand", submenu: "list", brand: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/brand/listing', { menu: "brand", submenu: "list", brand: brand, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!brand.length) return res.render('admin/brand/listing', { menu: "brands", submenu: "list", brand: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/brand/listing', { menu: "brands", submenu: "list", brand: brand, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
 
     } catch (err) {

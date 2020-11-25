@@ -74,7 +74,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <table id="departments" class="table table-bordered table-striped">
+                  <table id="deal" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -153,21 +153,42 @@
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
   <script>
-    $(function () {
-      $("#departments").DataTable({
-        dom: 'Pfrtip',
-        language: {
-          searchPanes: {
-            emptyPanes: 'There are no panes to display. :/'
-          }
+  $(function () {
+    $('#deal').DataTable( {
+      "paging": true,
+        "processing": true,
+         "dataType": "json",
+        "serverSide": true,
+        "ajax": {
+            "url": "/admin/deal/list",
+            "type": "get",
         },
-        "responsive": true,
-        "lengthChange": false,
-        "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
+        "columns": [
+        { "data": "" },
+      ],
+        success:function(done){
+          console.log("--ab",done)
+        }
+    } );
+} );
 
-    });
+
+
+  
+    //   $("#departments").DataTable({
+    //     dom: 'Pfrtip',
+    //     language: {
+    //       searchPanes: {
+    //         emptyPanes: 'There are no panes to display. :/'
+    //       }
+    //     },
+    //     "responsive": true,
+    //     "lengthChange": false,
+    //     "autoWidth": false,
+    //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    //   }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
+
+    // });
   </script>
 </body>
 

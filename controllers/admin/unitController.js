@@ -5,8 +5,8 @@ exports.listing = async (req, res)=>{
 	
 	  try{
 			let unit = await Unit.find().exec();
-			if(!unit.length) return res.render('admin/unit/listing',{ menu:"unit", submenu:"list", unit:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
-			return res.render('admin/unit/listing',{ menu:"unit", submenu:"list", unit:unit,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
+			if(!unit.length) return res.render('admin/unit/listing',{ menu:"units", submenu:"list", unit:"",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
+			return res.render('admin/unit/listing',{ menu:"units", submenu:"list", unit:unit,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
 			
 	   }catch(err){
 			res.status(400).json({status: "success", message: "Department added successfully", data: err});
@@ -15,7 +15,7 @@ exports.listing = async (req, res)=>{
 
 exports.create = async (req, res)=>{
 	try{
-		res.render('admin/unit/create', { menu:"unit", submenu:"create" })
+		res.render('admin/unit/create', { menu:"units", submenu:"create" })
 	}catch(err){
 		res.status(400).json({status: "false", data: err});
 	}

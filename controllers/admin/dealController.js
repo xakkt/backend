@@ -6,7 +6,7 @@ const { validationResult } = require('express-validator');
 exports.create = async (req, res) => {
     try {
         let stores = await Store.find().exec();
-        res.render('admin/deals/create', { menu: "deals", submenu: "create",stores:stores })
+        res.render('admin/deals/create', { menu: "deals", submenu: "create", stores: stores })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -22,7 +22,7 @@ exports.save = async (req, res) => {
         const dealinfo = {
             name: req.body.name,
             description: req.body.description,
-            store_id:req.body.store
+            store_id: req.body.store
         }
 
         // categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
@@ -31,7 +31,7 @@ exports.save = async (req, res) => {
         await req.flash('success', 'Deal added successfully!');
         res.redirect('/admin/deal')
 
-    }catch(err){
+    } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/deal')
         // res.status(400).json({ data: err.message });
@@ -41,10 +41,12 @@ exports.save = async (req, res) => {
 }
 exports.listing = async (req, res) => {
     try {
-        let deal = await Deal.find().exec();
+        //         var perPage = 10 ,
+        //    page = Math.max(0, req.param('page'))
+        let deal = await Deal.find().limit(10).sort('name').exec();
         if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: deal, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-    }catch(err){
+    } catch (err) {
         res.status(400).json({ data: err.message });
     }
 }
@@ -60,7 +62,7 @@ exports.edit = async (req, res) => {
     try {
         let stores = await Store.find().exec();
         const deal = await Deal.findById(req.params.id).exec();
-        res.render('admin/deals/edit', { status: "success", message: "", deal: deal,stores:stores, menu: "Deal", submenu: "edit" })
+        res.render('admin/deals/edit', { status: "success", message: "", deal: deal, stores: stores, menu: "Deal", submenu: "edit" })
         // res.json({status: "success", message: "", data: departments});
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
@@ -79,7 +81,7 @@ exports.update = async function (req, res) {
         const dealinfo = {
             name: req.body.name,
             description: req.body.description,
-            store_id:req.body.store
+            store_id: req.body.store
         }
         const deal = await Deal.findByIdAndUpdate({ _id: req.params.id }, dealinfo, { new: true, upsert: true });
         if (deal) {
@@ -96,4 +98,20 @@ exports.update = async function (req, res) {
     }
 
 
+}
+exports.list = async function (req, res) {
+    try {
+        var page = parseInt(req.query.page) || 0; //for next page pass 1 here
+        var limit = parseInt(req.query.limit) || 10;
+        console.log("--im here")
+        let deal = await Deal.find()
+            .skip(page * limit) //Notice here
+            .limit(limit)
+            .lean();
+       let total = await Deal.find().lean()
+        if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.json({ draw: page,recordsTotal:total.length, data: deal })
+    } catch (err) {
+        res.status(400).json({ data: err.message });
+    }
 }

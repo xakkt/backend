@@ -217,7 +217,7 @@ exports.adminlist =  async (req,res) =>{
         try {
             let users = await User.find({role_id:{$nin:[ [],null  ]  }}).lean();
             if(!users) return  res.render('admin/admin/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/admin/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/admin/list', { menu: "users", submenu: "adminlist", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }

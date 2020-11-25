@@ -73,7 +73,7 @@
           <ul class="nav nav-treeview">
             
             <li class="nav-item">
-              <a href="/admin/managers" class="nav-link <% if (menu === 'users' && submenu === 'list' ) { %> active <% } %>">
+              <a href="/admin/managers" class="nav-link <% if (menu === 'users' && submenu === 'adminlist' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Admin Users</p>
               </a>
@@ -184,8 +184,8 @@
         <%}%>
         <!---- Product Categories ---->
         <% if(await check("product_category_view",roleid) || await admin("SYSTEM ADMININSTRATOR",user)  ) {%>
-        <li class="nav-item">
-          <a href="#" class="nav-link <% if (menu === 'category') { %> active <% } %>">
+        <li class="nav-item <% if (menu === 'productCategory') { %> menu-open <% } %>">
+          <a href="#" class="nav-link <% if (menu === 'productCategory') { %> active <% } %>">
             <i class="nav-icon fas fa-edit"></i>
             <p>
               Product Categories
@@ -195,7 +195,7 @@
           <ul class="nav nav-treeview">
             
             <li class="nav-item">
-              <a href="/admin/category/create" class="nav-link">
+              <a href="/admin/category/create" class="nav-link <% if (menu === 'productCategory' && submenu === 'create' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Add New Category</p>
               </a>
@@ -205,7 +205,7 @@
           <ul class="nav nav-treeview">
             
             <li class="nav-item">
-              <a href="/admin/category" class="nav-link">
+              <a href="/admin/category" class="nav-link  <% if (menu === 'productCategory' && submenu === 'list' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Manage Categories</p>
               </a>
@@ -228,7 +228,7 @@
           <ul class="nav nav-treeview">
            
             <li class="nav-item">
-              <a href="/admin/brand/create" class="nav-link">
+              <a href="/admin/brand/create" class="nav-link <% if (menu === 'brands' && submenu === 'create' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Add New Brand</p>
               </a>
@@ -239,7 +239,7 @@
           <ul class="nav nav-treeview">
             
             <li class="nav-item">
-              <a href="/admin/brand" class="nav-link">
+              <a href="/admin/brand" class="nav-link <% if (menu === 'brands' && submenu === 'list' ) { %> active <% } %>"">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Manage Brands</p>
               </a>
@@ -249,8 +249,8 @@
         </li>
         <%}%>
 <!-----------Banner------------>
-<li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">
-  <a href="#" class="nav-link <% if (menu === 'departments') { %> active <% } %>">
+<li class="nav-item <% if (menu === 'banner') { %> menu-open <% } %>">
+  <a href="#" class="nav-link <% if (menu === 'banner') { %> active <% } %>">
     <i class="nav-icon fas fa-box-open"></i>
     <p>
       Banner
@@ -260,17 +260,7 @@
   <ul class="nav nav-treeview">
     
     <li class="nav-item">
-      <a href="/admin/banner" class="nav-link <% if (menu === 'departments' && submenu === 'create' ) { %> active <% } %>">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Add New Banner</p>
-      </a>
-    </li>
-    
-  </ul>
-  <ul class="nav nav-treeview">
-    
-    <li class="nav-item">
-      <a href="/admin/banner/list" class="nav-link <% if (menu === 'departments' && submenu === 'list' ) { %> active <% } %>">
+      <a href="/admin/banner/list" class="nav-link <% if (menu === 'banner' && submenu === 'list' ) { %> active <% } %>">
         <i class="far fa-circle nav-icon"></i>
         <p>Manage Banner</p>
       </a>
@@ -278,14 +268,11 @@
    
   </ul>
 </li>
-
-
-
         <!--------Banner--------->
         <!--------------Unit--------->
         <% if(await check("unit_view",roleid) || await admin("SYSTEM ADMININSTRATOR",user)  ) {%>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item  <% if (menu === 'units') { %> menu-open <% } %>">
+          <a href="#" class="nav-link  <% if (menu === 'units') { %> active <% } %>">
             <i class="nav-icon fas fa-edit"></i>
             <p>
                Unit
@@ -296,7 +283,7 @@
           <ul class="nav nav-treeview">
            
             <li class="nav-item">
-              <a href="/admin/unit/create" class="nav-link">
+              <a href="/admin/unit/create" class="nav-link <% if (menu === 'units' && submenu === 'create' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Add New Unit</p>
               </a>
@@ -307,7 +294,7 @@
           <ul class="nav nav-treeview">
             
             <li class="nav-item">
-              <a href="/admin/unit" class="nav-link">
+              <a href="/admin/unit" class="nav-link <% if (menu === 'units' && submenu === 'list' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Manage Units</p>
               </a>
@@ -319,8 +306,8 @@
 
         <!----- Deals ---->
         <% if(await check("deal_view",roleid) || await admin("SYSTEM ADMININSTRATOR",user)) {%>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item <% if (menu === 'deals') { %> menu-open <% } %>">
+          <a href="#" class="nav-link  <% if (menu === 'deals') { %> active <% } %>">
             <i class="nav-icon fas fa-edit"></i>
             <p>
                Deals
@@ -330,36 +317,33 @@
           <% if(await check("deal_add",roleid) || await admin("SYSTEM ADMININSTRATOR",user)) {%>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/deal/create" class="nav-link">
+              <a href="/admin/deal/create" class="nav-link <% if (menu === 'deals' && submenu === 'create' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Add New Deal</p>
               </a>
             </li>
             <%}%>
             <li class="nav-item">
-              <a href="/admin/deal" class="nav-link">
+              <a href="/admin/deal" class="nav-link <% if (menu === 'deals' && submenu === 'list' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Manage Deals</p>
               </a>
             </li>
-            
           </ul>
           <!-- <ul class="nav nav-treeview">
-            
             <li class="nav-item">
               <a href="pages/tables/data.html" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>DataTables</p>
               </a>
             </li>
-           
           </ul> -->
         </li>
         <%}%>
          <!----- Roles n Permissions ---->
          <% if(await admin("SYSTEM ADMININSTRATOR",user)) {%>
-         <li class="nav-item">
-          <a href="#" class="nav-link">
+         <li class="nav-item  <% if (menu === 'roles') { %> menu-open <% } %>"">
+          <a href="#" class="nav-link <% if (menu === 'roles') { %> active <% } %>">
             <i class="nav-icon fas fa-edit"></i>
             <p>
                Roles n Permissions
@@ -368,21 +352,19 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/roles" class="nav-link">
+              <a href="/admin/roles" class="nav-link <% if (menu === 'roles' && submenu === 'list' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Roles</p>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="pages/forms/advanced.html" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Permissions</p>
               </a>
-            </li>
-            
+            </li> -->
           </ul>
-          <ul class="nav nav-treeview">
-            
+          <!-- <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="pages/tables/data.html" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
@@ -390,7 +372,7 @@
               </a>
             </li>
            
-          </ul>
+          </ul> -->
         </li>
         <%}%>
         <!----- Payments ---->
@@ -420,11 +402,10 @@
                 <p>DataTables</p>
               </a>
             </li>
-           
           </ul>
         </li>
         <!--- Reports -->
-        <li class="nav-header">REPORTS</li>
+        <!-- <li class="nav-header">REPORTS</li>
         <li class="nav-item">
           <a href="pages/calendar.html" class="nav-link">
             <i class="nav-icon far fa-calendar-alt"></i>
@@ -530,7 +511,7 @@
           </a>
         </li>
 
-      </ul>
+      </ul> -->
     </nav>
     <!-- /.sidebar-menu -->
   </div>

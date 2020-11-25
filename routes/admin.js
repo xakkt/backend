@@ -182,6 +182,7 @@ const dealsValidation = [
 router.get('/deal/create',isloggedin,dealController.create)
 router.post('/deal/save',isloggedin,dealsValidation,dealController.save)
 router.get('/deal',isloggedin,dealController.listing)
+router.get('/deal/list',isloggedin,dealController.list)
 router.get('/deal/delete/:id', isloggedin,dealController.delete)
 router.get('/deal/edit/:id',isloggedin,dealController.edit)
 router.post('/deal/update/:id',isloggedin,dealController.update)
