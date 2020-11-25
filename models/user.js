@@ -7,25 +7,25 @@ const Schema = mongoose.Schema;
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const childSchema = new Schema({ 
+const childSchema = new Schema({
 
-  address:{
-    type:String,
+  address: {
+    type: String,
   },
-  pincode:{
-   type:Number
-    },
-  city:{
-    type:String
+  pincode: {
+    type: Number
   },
-  region:{
-    type:String
+  city: {
+    type: String
   },
-  state:{
-    type:String
+  region: {
+    type: String
   },
-  country:{
-    type:String
+  state: {
+    type: String
+  },
+  country: {
+    type: String
   }
 });
 
@@ -38,84 +38,88 @@ const userSchema = Schema({
     type: String,
     required: true
   },
-  email:{
+  email: {
     type: String,
     unique: true,
     required: true
   },
-  profile_pic:{
+  profile_pic: {
     type: String,
   },
-  password:{
+  password: {
     type: String,
     required: true
   },
-  contact_no:{
-      type: String,
-      required: true
+  contact_no: {
+    type: String,
+    required: true
   },
-  status:{
-      type: Boolean,
-      default: false
+  status: {
+    type: Boolean,
+    default: false
   },
   last_login: {
     type: Date,
     get: dateToString
   },
   ncrStatus: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false
   },
   superbuckId: {
-      type: Number,
-      default: 0
+    type: Number,
+    default: 0
   },
-  dob:{
-      type: Date,
-      required:true
+  dob: {
+    type: Date,
+    required: true
   },
-  address:[childSchema],
+  address: [childSchema],
 
   _timezone: {
     type: Schema.Types.ObjectId,
-    ref:'Timezone',
+    ref: 'Timezone',
     validate: {
-            validator: function(v) {
-            return FKHelper(mongoose.model('Timezone'), v);
-         },
-        message: `Timezone doesn't exist`
+      validator: function (v) {
+        return FKHelper(mongoose.model('Timezone'), v);
+      },
+      message: `Timezone doesn't exist`
     }
-},
-role_id: [
-  {
-      type: Schema.Types.ObjectId, 
+  },
+  role_id: [
+    {
+      type: Schema.Types.ObjectId,
       ref: 'Role',
       validate: {
-       validator: function(v) {
-               return FKHelper(mongoose.model('Role'), v);
-           },
-         message: `Role doesn't exist`
-       }
-   }
-],
+        validator: function (v) {
+          return FKHelper(mongoose.model('Role'), v);
+        },
+        message: `Role doesn't exist`
+      }
+    },
+
+  ],
+  last_login: {
+    type: Date,
+    default: Date.now
+  },
   coupons: [
     { type: Schema.Types.ObjectId, ref: 'Coupon' }
   ],
-  user_id:{
+  _supervisor: {
     type: Schema.Types.ObjectId,
     ref: 'User'
-  } 
-}, {timestamps:true});
+  }
+}, { timestamps: true });
 
 userSchema.plugin(mongooseLeanGetters)
 userSchema.plugin(uniqueValidator)
-
-userSchema.pre('save', async function() {
+userSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, saltRounds);
 });
 
-function dateToString(date){
-  if(date) return new Date(date).toISOString();
+function dateToString(date) {
+  if (date) return new Date(date).toISOString();
 }
 
 module.exports = mongoose.model('User', userSchema);

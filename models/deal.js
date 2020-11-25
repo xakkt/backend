@@ -14,6 +14,7 @@ const dealSchema = Schema({
     type: String,
     default: null
   },
+  
 }, {timestampst:true});
 
 module.exports = mongoose.model('Deal', dealSchema);

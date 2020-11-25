@@ -16,6 +16,7 @@ const authController = require('../controllers/admin/authController')
 const regularproductController = require('../controllers/admin/regularproductController')
 const unitController = require('../controllers/admin/unitController')
 const bannerController = require('../controllers/admin/bannerController.js')
+const compController = require('../controllers/admin/compController.js')
 
 
 // var auth = function(req, res, next) {
@@ -230,5 +231,15 @@ router.get('/unit/delete/:id',isloggedin,unitController.delete)
  router.post('/banner/update/:id',isloggedin,bannerUpload.single('banner_image'),bannerController.update)
  router.get('/banner/agreement',isloggedin,bannerController.agreement)
 
+
+
+ /*---------Company--------- */
+ 
+ router.get('/company/create',isloggedin,compController.create)
+ router.post('/company/save',isloggedin,compController.save)
+ router.get('/company/list',isloggedin,compController.list)
+ router.get('/company/delete/:id',isloggedin,compController.delete)
+ router.get('/company/edit/:id',isloggedin,compController.edit)
+ router.post('/company/update/:id',isloggedin,compController.update)
 
 module.exports = router;

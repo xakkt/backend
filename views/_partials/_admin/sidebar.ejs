@@ -342,7 +342,7 @@
         <%}%>
          <!----- Roles n Permissions ---->
          <% if(await admin("SYSTEM ADMININSTRATOR",user)) {%>
-         <li class="nav-item  <% if (menu === 'roles') { %> menu-open <% } %>"">
+         <li class="nav-item  <% if (menu === 'roles') { %> menu-open <% } %>">
           <a href="#" class="nav-link <% if (menu === 'roles') { %> active <% } %>">
             <i class="nav-icon fas fa-edit"></i>
             <p>
@@ -400,6 +400,34 @@
               <a href="pages/tables/data.html" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>DataTables</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <!-------Company------->
+        <li class="nav-item <% if (menu === 'company') { %> menu-open <% } %> " >
+          <a href="#" class="nav-link <% if (menu === 'company') { %> active <% } %>">
+            <i class="nav-icon fab fa-cc-stripe"></i>
+            <p>
+              Company
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            
+            <li class="nav-item">
+              <a href="/admin/company/create" class="nav-link <% if (menu === 'company' && submenu === 'create' ) { %> active <% } %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add New Company</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            
+            <li class="nav-item">
+              <a href="/admin/company/list" class="nav-link <% if (menu === 'company' && submenu === 'list' ) { %> active <% } %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Manage Company</p>
               </a>
             </li>
           </ul>

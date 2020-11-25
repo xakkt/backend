@@ -35,12 +35,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>Deals</h1>
+              <h1>Companies</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Deals</li>
+                <li class="breadcrumb-item active">Companies</li>
               </ol>
             </div>
           </div>
@@ -67,41 +67,47 @@
             <div class="col-12">
 
               <!-- /.card -->
-
               <div class="card">
-                <!-- <div class="card-header">
-                  <h3 class="card-title">All Brand</h3>
-                </div> -->
+                <div class="card-header">
+                  <h3 class="card-title">All company</h3>
+                </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <table id="deal" class="table table-bordered table-striped">
+                  <table id="departments" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Name</th>
+                        <th>Email</th>
                         <th>Description</th>
-                        <!-- <th>Action</th> -->
+                        <th>Address</th>
+                        <th>Contact-no</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-
-
-                      <% if(deal) deal.forEach(function(deal){ %>
+                      <% if(data) data.forEach(function(data){ %>
                       <tr>
-                        <td><%= deal.name %></td>
-                        <td><%= deal.description %></td>
-
-                        <!-- <td><a href="/admin/deal/delete/<%= deal._id %>"
+                        <td><%= data.name %></td>
+                        <td><%= data.email %></td>
+                        <td><%= data.description %></td>
+                        <td><%= data.address %> </td>
+                        <td><%= data.contact %> </td>
+                        <td><a href="/admin/company/delete/<%= data._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/deal/edit/<%= deal._id %>""><i
-                              class=" fas fa-pencil-alt"></i></a></td> -->
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/company/edit/<%= data._id %>""><i
+                              class=" fas fa-pencil-alt"></i></a></td>
                       </tr>
                       <% }) %>
                     </tbody>
                     <tfoot>
                       <tr>
+                      <tr>
                         <th>Name</th>
+                        <th>Email</th>
                         <th>Description</th>
-                        <!-- <th>Action</th> -->
+                        <th>Address</th>
+                        <th>Contact-no</th>
+                        <th>Action</th>
                       </tr>
                     </tfoot>
                   </table>
@@ -153,44 +159,20 @@
   <!-- Page specific script -->
   <script>
     $(function () {
-      $('#deal').on( 'page.dt', function ( e, len ) {
-    console.log( 'New page length: '+len );
-} );
-      $('#deal').DataTable({
-        "paging": true,
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-          "url": "/admin/deal/list",
-          "type": "get",
+      $("#departments").DataTable({
+        dom: 'Pfrtip',
+        language: {
+          searchPanes: {
+            emptyPanes: 'There are no panes to display. :/'
+          }
         },
-        "columns": [
-          { "data": "name" },
-          { "data": "description" },
-        ],
-        success: function (done) {
-          console.log("--ab", done)
-        }
-      });
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
+
     });
-
-
-
-
-    //   $("#departments").DataTable({
-    //     dom: 'Pfrtip',
-    //     language: {
-    //       searchPanes: {
-    //         emptyPanes: 'There are no panes to display. :/'
-    //       }
-    //     },
-    //     "responsive": true,
-    //     "lengthChange": false,
-    //     "autoWidth": false,
-    //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    //   }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
-
-    // });
   </script>
 </body>
 

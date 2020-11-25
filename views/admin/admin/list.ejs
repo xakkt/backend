@@ -100,7 +100,7 @@
                         <td><%= user.email %></td>
                         <td><%= user.contact_no %> </td>
                         <td><%= moment(user.dob).format('MMMM Do YYYY'); %></td>
-                        <td><%= moment(user.createdAt).format('MMMM Do YYYY'); %></td>
+                        <td><%= (user.last_login)?moment(user.last_login).format('MMMM Do YYYY'):moment(user.createdAt).format('MMMM Do YYYY') %></td>
                         <td><%= user.status %></td>
                         <td><a href="/admin/user/delete/<%= user._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">

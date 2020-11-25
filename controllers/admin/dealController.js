@@ -41,9 +41,7 @@ exports.save = async (req, res) => {
 }
 exports.listing = async (req, res) => {
     try {
-        //         var perPage = 10 ,
-        //    page = Math.max(0, req.param('page'))
-        let deal = await Deal.find().limit(10).sort('name').exec();
+        let deal = await Deal.find().limit(5).sort('name').exec();
         if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: deal, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
@@ -101,8 +99,8 @@ exports.update = async function (req, res) {
 }
 exports.list = async function (req, res) {
     try {
-        var page = parseInt(req.query.page) || 0; //for next page pass 1 here
-        var limit = parseInt(req.query.limit) || 10;
+        var page = parseInt(req.query.page) || 1; //for next page pass 1 here
+        var limit = parseInt(req.query.limit) || 5;
         console.log("--im here")
         let deal = await Deal.find()
             .skip(page * limit) //Notice here

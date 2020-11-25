@@ -16,15 +16,17 @@ exports.login = async (req, res) => {
         if (!userInfo){await req.flash('failure',"Email is not valid" ); return res.redirect('/admin/login')};
         if (!bcrypt.compareSync(req.body.password, userInfo.password))
         { 
-            await req.flash('failure',"Invalid password!!!" );
+         await req.flash('failure',"Invalid password!!!" );
             res.redirect('/admin/login');
         }
+        await User.findOneAndUpdate({email:req.body.email},{last_login: Date.now()}).lean()   
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id
 
         return res.redirect('/admin')
     } catch (err) {
+        console.log("--err",err)
         await req.flash('failure', "Please enter valid email and password");
         res.redirect('/admin/login');
        
