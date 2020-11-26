@@ -71,7 +71,7 @@ exports.list = async (req, res) => {
         banner.map((element) => {
             var data = {}
             data = { ...element }
-            if (!element.image) data.image = 'no-image.jpeg'
+            if (!element.image) data.image = 'no-image_1606218971.jpeg'
             banner_image.push(data)
         })
         
