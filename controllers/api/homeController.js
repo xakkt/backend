@@ -5,14 +5,17 @@ const Setting = require('../../models/setting')
 const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
 const StoreProductPricing = require('../../models/store_product_pricing')
+var moment = require('moment');
 
 function getUniqueListBy(product, key) {
 	return [...new Map(product.map(item => [item[key], item])).values()]
 }
 
+
 exports.dashboard = async (req, res) => {
 	var userid;
 	var product = [];
+    var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
 	try {
 		let token = req.headers['authorization'];
@@ -68,7 +71,13 @@ exports.dashboard = async (req, res) => {
 	
 		product = getUniqueListBy(product, '_id')
 		
-		let banners = await Banner.find({ type: "app" }).lean();
+		let banners = await Banner.find({
+			$and: [
+				{ type: "app" },
+                { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
+            ],
+		}
+			).lean();
 		if (!banners) return res.json({ status: "false", message: "No setting found", data: [] })
 
 		pdata = [

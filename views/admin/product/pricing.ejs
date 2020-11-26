@@ -202,7 +202,7 @@
                       <div class="card-footer">
                         <input type="button" name="add" value="Add" id="tr_clone_add"
                           class="btn btn-primary tr_clone_add">
-                        <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" value="submit" class="btn btn-primary submit">Submit</button>
                       </div>
               </form>
             </div>
@@ -355,7 +355,7 @@
           // var compareDate = moment(, "YYYY/MM/DD");
           let startDate = moment(fromDates[i].value, "YYYY/MM/DD");
           let endDate = moment(toDates[i].value, "YYYY/MM/DD");
-          console.log(from, '=====', startDate, '=====', endDate)
+          // console.log(from, '=====', startDate, '=====', endDate)
           if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)){
             flag += 1
           }else console.log('outside------')
@@ -363,10 +363,16 @@
       }
       if(flag > 1){
         $('.message').show();
+        $('.submit').prop('disabled', true).css('background-color','red');
         parentEle.getElementsByClassName("deal-name")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("from-date")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("to-date")[0].style.border = '1px solid red'
         // parentEle.style.border = '1px solid red'
+      }
+      else{
+        $('.submit').prop('disabled', false);
+        $('.submit').addClass('btn btn-primary ').css('background-color','')
+
       }
       console.log('flag===========', flag)
     }
@@ -376,7 +382,6 @@
     }
    function handler(that)
    {
-    // alert(e.target.value);
     checkDuplicateEntry(that)
    }
   </script>
