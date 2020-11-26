@@ -17,14 +17,13 @@ exports.bannderproduct = async (req, res) => {
             ],
         }).populate('_product').select(' -deal_start -deal_end -deal_percentage -createdAt -updatedAt').lean()
         await Promise.all(store.map(async (element) => {
-            console.log("---images",element._product.image)
             var data = {}
             var _store = element._store
             var _product = element._product._id
             let productPrice = await _global.productprice(_store, _product)
             data = { ...element }
             if (productPrice) {
-                data._product.image = `${process.env.BASE_URL}/images/banners/${element._product.image}`,
+                data._product.image = `${process.env.BASE_URL}/images/products/${element._product.image}`,
                 data._product.regular_price = productPrice.regular_price
                 data._product.deal_price = productPrice.deal_price
             }
