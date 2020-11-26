@@ -23,6 +23,7 @@ exports.bannderproduct = async (req, res) => {
             let productPrice = await _global.productprice(_store, _product)
             data = { ...element }
             if (productPrice) {
+                data._product.image = `${process.env.BASE_URL}/images/banners/${element._product.image}`,
                 data._product.regular_price = productPrice.regular_price
                 data._product.deal_price = productPrice.deal_price
             }
