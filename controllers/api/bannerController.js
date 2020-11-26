@@ -16,7 +16,6 @@ exports.bannderproduct = async (req, res) => {
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
         }).populate('_product').select(' -deal_start -deal_end -deal_percentage -createdAt -updatedAt').lean()
-        console.log("--store",store)
         await Promise.all(store.map(async (element) => {
             var data = {}
             var _store = element._store
@@ -30,7 +29,6 @@ exports.bannderproduct = async (req, res) => {
             delete (data.deal_price)
             storePrice.push(data)
         }))
-        console.log("--value",storePrice)
         if (!store.length) return res.json({ status: false, message: "Data not found" })
         return res.json({ status: true, message: "Listing", data: storePrice })
 
