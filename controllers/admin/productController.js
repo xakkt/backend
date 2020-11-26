@@ -4,6 +4,8 @@ const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
 const Banner = require('../../models/banner')
+const Wishlist = require('../../models/wishlist')
+
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -12,6 +14,7 @@ const RegularPrice = require('../../models/product_regular_pricing');
 const { validationResult } = require('express-validator');
 var moment = require('moment')
 var waterfall = require('async-waterfall');
+const _global = require('../../helper/notification');
 
 /*
 * View of product category
@@ -20,7 +23,7 @@ exports.create = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
 
-        res.render('admin/product-category/create', { menu: "productCategory",submenu:"create", product: product })
+        res.render('admin/product-category/create', { menu: "productCategory", submenu: "create", product: product })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -35,7 +38,7 @@ exports.productCreate = async (req, res) => {
         var unit = await Unit.find({}).lean();
 
         var productCategories = await ProductCategory.find({}).lean();
-        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, unit:unit,deals: deals, productCategories: productCategories })
+        return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, unit: unit, deals: deals, productCategories: productCategories })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -75,7 +78,7 @@ exports.list = async (req, res) => {
         return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: productCategory, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
-        res.status(400).json({ status: "success", message:err });
+        res.status(400).json({ status: "success", message: err });
     }
 }
 /*
@@ -150,7 +153,7 @@ exports.productsave = async (req, res) => {
             weight: req.body.weight,
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
-            _unit:req.body.unit,
+            _unit: req.body.unit,
             price: req.body.price,
             image: req.file.filename,
             status: req.body.status,
@@ -230,7 +233,7 @@ exports.productupdate = async function (req, res) {
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             price: req.body.price,
-            _unit:req.body.unit,
+            _unit: req.body.unit,
 
             status: req.body.status,
 
@@ -278,9 +281,9 @@ exports.priceSave = async (req, res) => {
                         await req.flash('failure', "Cannot select two  same dates for same deals");
                         return res.redirect('/admin/product/pricing/' + req.body.productid)
                     }
-                }else if(req.body.store[i])
-                {
-                    if (req.body.etime[i] >= req.body.stime[k]) {
+                }
+                else if (req.body.store[i]) {
+                    if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
                         await req.flash('failure', "Cannot select two  same dates for same deals");
                         return res.redirect('/admin/product/pricing/' + req.body.productid)
                     }
@@ -304,19 +307,18 @@ exports.priceSave = async (req, res) => {
             data._store = req.body.store[i]
             data._product = req.body.productid;
             arr.push(data)
-            
-        //  const banner =  await Banner.findOne({ _store: req.body.store[i],_deal:req.body.deal[i] }).exec()
-        //  if(!banner)
-        //   {
-              const bannerinfo = {
-                _deal: req.body.deal[i],
-                _store: req.body.store[i],
-                deal_start : req.body.stime[i],
-                deal_end : req.body.etime[i],
-              }
-             await Banner.create(bannerinfo);
-        //   }
-            await StoreProductPricing.deleteOne({ _store: req.body.store[i],_product:req.body.productid }).exec()
+            await _global.wishlist(req.body.store[i], req.body.productid, req.body.deal_price[i])
+            const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte: req.body.stime[i] }, deal_end: { $lte: req.body.etime[i] } }, { deal_end: req.body.etime[i] }, { returnOriginal: false }).exec()
+            if (!banner) {
+                const bannerinfo = {
+                    _deal: req.body.deal[i],
+                    _store: req.body.store[i],
+                    deal_start: req.body.stime[i],
+                    deal_end: req.body.etime[i],
+                }
+                await Banner.create(bannerinfo);
+            }
+            await StoreProductPricing.deleteOne({ _store: req.body.store[i], _product: req.body.productid }).exec()
         }
 
         var productprice = await StoreProductPricing.insertMany(arr);
@@ -327,11 +329,11 @@ exports.priceSave = async (req, res) => {
         res.redirect('/admin/product')
 
     } catch (err) {
-
         console.log('===validation', err)
         res.send(err)
     }
 }
+
 /*
 * product price view
 * get regular_price with store list
@@ -347,7 +349,7 @@ exports.addPrice = async (req, res) => {
 
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
         if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        
+
         price.map((element) => {
             var data = {}
             regularPrice.forEach(regular => {

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const DeviceSchema = Schema({
+const deviceSchema = Schema({
   device_id: {
     type: String,
     required: true,
@@ -23,4 +23,4 @@ const DeviceSchema = Schema({
   }
 }, {timestampst:true});
 
-module.exports = mongoose.model('users', userSchema);
+module.exports = mongoose.model('Device', deviceSchema);

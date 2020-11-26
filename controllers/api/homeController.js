@@ -11,7 +11,6 @@ function getUniqueListBy(product, key) {
 	return [...new Map(product.map(item => [item[key], item])).values()]
 }
 
-
 exports.dashboard = async (req, res) => {
 	var userid;
 	var product = [];
@@ -25,14 +24,12 @@ exports.dashboard = async (req, res) => {
 			}
 			await jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
 				if (err) {
-
 					return res.json({
 						success: false,
 						message: 'Token is not valid'
 					});
 				}
 				userid = decoded.id;
-
 			});
 		}
 		let categories = await StoreProductPricing.find({ _store: req.params.storeid }).populate('_product', 'name sku  image').lean();
@@ -53,7 +50,6 @@ exports.dashboard = async (req, res) => {
 
 			if (productId in cartProductList) {
 				data.in_cart = cartProductList[productId]
-
 			}
 
 			if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
@@ -68,7 +64,6 @@ exports.dashboard = async (req, res) => {
 
 		})
 		)
-	
 		product = getUniqueListBy(product, '_id')
 		
 		let banners = await Banner.find({
@@ -101,8 +96,6 @@ exports.dashboard = async (req, res) => {
 			}
 		];
 		return res.json({ status: "true", data: pdata })
-
-
 	} catch (err) {
 		console.log(err)
 		res.status(400).json({ status: "false", message: "", data: err });

@@ -113,7 +113,8 @@
                       <input type="hidden" id="store" value="" name="no_of_stores" />
                       <% if(price.length>0){  %>
                       <% price.forEach(function(prices){ %>
-                      <tr class="tr_clone">
+                        <div id="item_details" >
+                      <tr class="tr_clone" id="parent">
                         <td style="width:18%">
                           <select name="store[]" class="form-control custom-select store-name" required
                             onclick="changeLanguage(this)">
@@ -155,9 +156,11 @@
                             aria-hidden="true"></i>
                         </td>
                       </tr>
+                      </div>
                       <%})%>
                       <%} else {%>
-                      <tr class="tr_clone">
+                        <div id="item_details" >
+                      <tr class="tr_clone" id="parent">
                         <td style="width:18%">
                           <select name="store[]" class="form-control custom-select store-name" required
                             onclick="changeLanguage(this)">
@@ -191,6 +194,7 @@
 
                         </td>
                       </tr>
+                      </div>
                       <%}%>
                     </tbody>
                   </table>
@@ -273,6 +277,7 @@
         $(".select2").select2('destroy');
         var $tr = $('.tr_clone').first();
         var $clone = $tr.clone();
+        $clone.attr('id', '');
         $clone.find('input').val('');
         $clone.find('select').val('')
         $(".tr_clone:last").after($clone)
@@ -321,7 +326,13 @@
     }
 
     function myFunction(that) {
+      // alert($(this).closest('tbody').closest('.table-bordered').attr('id'));
 
+      // var parentDiv = $(that).closest('tbody').closest('tr').attr('id');
+      //   console.log('=>',parentDiv.attr('id'));
+        // if(parentDiv.attr('id') !== 'item_name') {
+        //   return  parentDiv.remove();
+        // }
       if ($(that).data("id").trim() == "") {
         return $(that).closest('tr').remove()
       }
@@ -355,7 +366,6 @@
           // var compareDate = moment(, "YYYY/MM/DD");
           let startDate = moment(fromDates[i].value, "YYYY/MM/DD");
           let endDate = moment(toDates[i].value, "YYYY/MM/DD");
-          // console.log(from, '=====', startDate, '=====', endDate)
           if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)){
             flag += 1
           }else console.log('outside------')
