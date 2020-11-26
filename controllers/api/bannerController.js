@@ -17,6 +17,7 @@ exports.bannderproduct = async (req, res) => {
             ],
         }).populate('_product').select(' -deal_start -deal_end -deal_percentage -createdAt -updatedAt').lean()
         await Promise.all(store.map(async (element) => {
+            console.log("---images",element._product.image)
             var data = {}
             var _store = element._store
             var _product = element._product._id
