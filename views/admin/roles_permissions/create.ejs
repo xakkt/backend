@@ -75,27 +75,28 @@
         </div>
         <!-- /.container-fluid -->
       </section>
-     
+
       <div class="row">
         <!-- Trigger the modal with a button -->
         <div class="col-md-8"></div>
         <div class="col-md-4" style="text-align:right">
-        <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#roleModal">Add
-          Role</a>
-          
-        <!-- Modal -->
-     
-        <!-- Trigger the modal with a button -->
-        <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#permissionModal">Add
-          Permission</a>
-          </div>
+          <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#roleModal">Add
+            Role</a>
+
+          <!-- Modal -->
+
+          <!-- Trigger the modal with a button -->
+          <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal"
+            data-target="#permissionModal">Add
+            Permission</a>
         </div>
+      </div>
       <!-- Main content -->
       <section class="content">
         <div class="container">
           <!-- SELECT2 EXAMPLE -->
           <div class="card card-primary">
-            
+
             <div class="card-header">
               <h3 class="card-title">Roles and Permissions</h3>
               <div class="card-tools">
@@ -107,9 +108,9 @@
 
             <!-- /.card-header -->
             <div class="card-body">
-              
+
               <br>
-            
+
               <table style="width:100%">
                 <tr>
                   <th></th>
@@ -119,20 +120,26 @@
                 </tr>
                 <% permissionType = "" %>
                 <% permission.forEach(function(permission){ %>
-                   <% if(permissionType != permission.type){ %>
-                   <% permissionType = permission.type %>
-                 <tr><th colspan="<%=roles.length+1%>"><%=permission.type.toUpperCase()%></th></tr> 
-                  <% } %>
-                    
+
+                <% if(permissionType != permission.type){ %>
+                <% permissionType = permission.type %>
+
+                <tr class="parent">
+                  <th colspan="<%=roles.length+1%>"><%=permission.type.toUpperCase()%></th>
+                </tr>
                 <tr>
-                  <th><%= permission.name %></th>
+                <% } %>
+
+                <tr class="child">
+                  <th><%= permission.description %></th>
                   <% roles.forEach(function(role){  %>
                   <td>
-                     <input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>" type="checkbox"
+                    <input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>" type="checkbox"
                       <%=(role._permission.includes(permission._id))?'checked':''%>>
                   </td>
                   <%})%>
                 </tr>
+
                 <%}) %>
               </table>
             </div>
@@ -183,7 +190,7 @@
                     <option value="user">User</option>
                     <option value="role">Role</option>
                     <option value="audit">Audit</option>
-                   </select>
+                  </select>
                 </div>
               </div>
               <!-- /.col -->
@@ -211,54 +218,52 @@
     </div>
   </div>
 
-<!-- ------------popup for permission----- -->
+  <!-- ------------popup for permission----- -->
 
-<!-- -------pop for role -------- -->
+  <!-- -------pop for role -------- -->
 
-<div class="modal fade" id="roleModal" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal fade" id="roleModal" role="dialog">
+    <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="departmentForm" method="post" action="/admin/roles/create">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="departmentname">Name</label>
-                <input type="text" name="name" class="form-control" id="departmentname"
-                  placeholder="Enter name">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="departmentForm" method="post" action="/admin/roles/create">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="departmentname">Name</label>
+                  <input type="text" name="name" class="form-control" id="departmentname" placeholder="Enter name">
+                </div>
+              </div>
+              <!-- /.col -->
+              <!-- /.row -->
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                </div>
               </div>
             </div>
-            <!-- /.col -->
-            <!-- /.row -->
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" class="form-control" rows="3"
-                  placeholder="Enter ..."></textarea>
-              </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-          </div>
-          <!-- /.card-body -->
-          <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+
     </div>
-
   </div>
-</div>
-<!-- -------pop for role -------- -->
+  <!-- -------pop for role -------- -->
 
 
   <!-- jQuery -->
@@ -280,7 +285,7 @@
       $(this).bootstrapSwitch('state', $(this).prop('checked'));
     });*/
     $('input[type="checkbox"]').bootstrapSwitch();
-    $('input[type="checkbox"]').on('switchChange.bootstrapSwitch',function () {
+    $('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function () {
       $.ajax({
         url: '/admin/roles/update',
         type: 'POST',
