@@ -137,7 +137,7 @@
                             <% }) %>
                           </select>
                         </td>
-                        <td style="width:20%">
+                        <td style="width:10%">
                           <input type="number" name="deal_value[]" value="<%= prices.deal_percentage %>"
                             class="form-control deal" required>
 
@@ -180,7 +180,7 @@
                             <% }) %>
                           </select>
                         </td>
-                        <td style="width:20%">
+                        <td style="width:10%">
                           <input type="number" name="deal_value[]" class="form-control deal" required>
                         </td>
                         <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control deal_price">
@@ -288,14 +288,14 @@
       let that = e.target
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = 0, dealPercentage = that.value
-      dealPrice = eval(regularPrice * dealPercentage) / 100
+      dealPrice =  eval(regularPrice- (regularPrice * dealPercentage) / 100)
       that.parentElement.parentElement.getElementsByClassName("deal_price")[0].value = dealPrice
     });
     $(document).on("input", '.deal_price', function (e) {
       let that = e.target
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = that.value, dealPercentage = 0
-      dealPercentage = eval((dealPrice / regularPrice) * 100)
+      dealPercentage = eval(((regularPrice - dealPrice) / regularPrice) * 100)
       that.parentElement.parentElement.getElementsByClassName("deal")[0].value = dealPercentage
     });
 

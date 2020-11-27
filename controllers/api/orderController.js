@@ -2,6 +2,7 @@ const Order = require('../../models/order')
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 const orderid = require('order-id')(process.env.ORDER_SECRET);
+const _time = require('../../helper/storetimezone')
 
 
 exports.listOrders = async (req, res) => {
@@ -16,11 +17,10 @@ exports.listOrders = async (req, res) => {
             _user: req.decoded.id,
             _store: req.params.storeid,
         }
-
+       await _time.store_time(req.params.storeid)
         var order = await Order.find(orderInfo).lean();
-        console.log(order)
         if (!order.length) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status: "success", message: "", data:order});
+        return res.json({ status: "success", message: "Order Listing", data:order});
 
     } catch (err) {
         return res.status(400).json({ data: err.message });

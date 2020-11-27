@@ -21,7 +21,7 @@ exports.create = async (req, res) => {
 
     exports.deals = async (req, res) => {
         try {
-            var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+            var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
             const store = await Store_product_pricing.find({ $and: [{ _store: req.body.storeid }, { deal_start: { $lte: date } }, { deal_end: { $gte: date } }] }).populate('_deal', 'name').select('-deal_percentage -deal_price -deal_start -percentag_discount_price -deal_end -product -createdAt -updatedAt -_product -_store').lean()
             // const store =   Store_product_pricing.aggregate([
             //     {
@@ -65,7 +65,8 @@ exports.list = async (req, res) => {
 
     try {
         var banner_image = []
-        var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        console.log("--currentdate",date)
         const banner = await Banner.find({ $and: [{ deal_start: { $lte: date } }, { deal_end: { $gte: date } }] }).populate('_store', 'name')
             .populate('_deal', 'name').lean()
         banner.map((element) => {

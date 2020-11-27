@@ -4,6 +4,8 @@ let jwt = require('jsonwebtoken');
 const Setting = require('../../models/setting')
 const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
+const _time = require('../../helper/storetimezone')
+
 const StoreProductPricing = require('../../models/store_product_pricing')
 var moment = require('moment');
 
@@ -14,8 +16,9 @@ function getUniqueListBy(product, key) {
 exports.dashboard = async (req, res) => {
 	var userid;
 	var product = [];
-    var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
+	await _time.store_time(req.params.storeid)
+	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+	// console.log("--date",date)
 	try {
 		let token = req.headers['authorization'];
 		if (token) {
@@ -33,7 +36,6 @@ exports.dashboard = async (req, res) => {
 			});
 		}
 		let categories = await StoreProductPricing.find({ _store: req.params.storeid }).populate('_product', 'name sku  image').lean();
-		console.log(categories)
 		if (!categories.length) return res.json({ status: "false", message: "No data found", data: categories });
 
 		var cartProductList = await _global.cartProducts(userid, req.params.storeid);
@@ -65,14 +67,14 @@ exports.dashboard = async (req, res) => {
 		})
 		)
 		product = getUniqueListBy(product, '_id')
-		
+
 		let banners = await Banner.find({
 			$and: [
 				{ type: "app" },
-                { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
-            ],
+				{ deal_start: { $lte: date } }, { deal_end: { $gte: date } }
+			],
 		}
-			).lean();
+		).lean();
 		if (!banners) return res.json({ status: "false", message: "No setting found", data: [] })
 
 		pdata = [

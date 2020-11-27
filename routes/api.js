@@ -174,7 +174,6 @@ router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppingl
 router.delete('/shoppinglist/remove/:id',verifyjwt.checkToken,shoppingController.deleteShoppinglist);
 router.get('/shoppinglist/:shoplist/products', verifyjwt.checkToken,shoppingController.shoppinglistProducts)
 
-
 /*---- store ----*/
 router.get('/departments', departmentController.list);
 router.post('/store/create', storeController.create);

@@ -22,6 +22,7 @@ exports.addPoductToWishlist = async (req, res) => {
 		}
 		//get deal price
 		var productPrice = await _global.productprice(req.body._store, req.body._product)
+		if(!productPrice) return res.json({status:false,message:"_Store and _Product are invalid"})
 		if (productPrice.effective_price <= req.body.wish_price) {
 			return res.json({ status: false, message: "Wish price should be less than  product price" })
 		}
@@ -36,6 +37,7 @@ exports.addPoductToWishlist = async (req, res) => {
 		return res.json({ status: "success", message: "Product added to wishlist successfully", data: wishlist });
 
 	} catch (err) {
+		console.log("--value",err)
 		if (err.code == 11000) return res.status(400).json({ data: "Product with this name already exist" });
 		return res.status(400).json({ data: err.message });
 	}

@@ -2,20 +2,22 @@ const Banner = require('../../models/banner');
 const StoreProductPricing = require('../../models/store_product_pricing');
 var moment = require('moment')
 const _global = require('../../helper/common');
+const _time = require('../../helper/storetimezone')
 
 exports.bannderproduct = async (req, res) => {
 
     try {
         var storePrice = []
-        var date = moment().utc().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-        // console.log("--date",date)
+        await _time.store_time(req.body._store)
+        var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        console.log("---value",date)
         let store = await StoreProductPricing.find({
             $and: [
                 { _store: req.body._store },
                 { _deal: req.body._deal },
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
-        }).populate('_product').select(' -deal_start -deal_end -deal_percentage -createdAt -updatedAt').lean()
+        }).populate('_product').select(' -deal_percentage -createdAt -updatedAt').lean()
         await Promise.all(store.map(async (element) => {
             var data = {}
             var _store = element._store

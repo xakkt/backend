@@ -1,4 +1,6 @@
 let jwt = require('jsonwebtoken');
+var moment = require('moment-timezone');
+const User = require('../models/user');
 
 
 let checkToken = (req, res, next) => { 
@@ -17,9 +19,14 @@ let checkToken = (req, res, next) => {
           message: 'Token is not valid'
         });
       } else {
-        req.decoded = decoded;
-        next();
+      //  User.findOne({_id:decoded.id}).populate('_timezone').select('abbr').exec(function (err, story) {
+      //    var date = moment.tz.setDefault(story._timezone.abbr);
+      //    req._timezone = date
+       
+      //  })
       }
+      req.decoded = decoded;
+      next();
     });
   } else {
     return res.json({

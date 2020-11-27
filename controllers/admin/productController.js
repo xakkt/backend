@@ -5,6 +5,7 @@ const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
 const Banner = require('../../models/banner')
 const Wishlist = require('../../models/wishlist')
+var waterfall = require('async-waterfall');
 
 
 const Stores = require('../../models/store')
@@ -302,22 +303,57 @@ exports.priceSave = async (req, res) => {
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
             data.deal_price = req.body.deal_price[i];
-            data.deal_start = req.body.stime[i];
-            data.deal_end = req.body.etime[i];
+            data.deal_start = moment(req.body.stime[i]).startOf('day').toISOString();
+            data.deal_end = moment(req.body.etime[i]).endOf('day').toISOString();
             data._store = req.body.store[i]
             data._product = req.body.productid;
             arr.push(data)
             await _global.wishlist(req.body.store[i], req.body.productid, req.body.deal_price[i])
-            const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte: req.body.stime[i] }, deal_end: { $lte: req.body.etime[i] } }, { deal_end: req.body.etime[i] }, { returnOriginal: false }).exec()
-            if (!banner) {
-                const bannerinfo = {
-                    _deal: req.body.deal[i],
-                    _store: req.body.store[i],
-                    deal_start: req.body.stime[i],
-                    deal_end: req.body.etime[i],
-                }
-                await Banner.create(bannerinfo);
+            const bannerinfo = {
+                _deal: req.body.deal[i],
+                _store: req.body.store[i],
+                deal_start: moment(req.body.stime[i]).startOf('day').toISOString(),
+                deal_end: moment(req.body.etime[i]).endOf('day').toISOString()
             }
+            const banner = {
+                _deal: req.body.deal[i],
+                _store: req.body.store[i],
+            }
+            waterfall([
+                function (callback) {
+                    Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }, function (err, result) {
+                        callback(err, result);
+                    })
+                },
+                function (result, callback) {
+                    if (result) callback(null, result);
+                    else
+                        Banner.findOne(banner, function (err, result1) {
+                            callback(err, result1);
+                        })
+                },
+                function (result1, callback) {
+                    if (result1)
+                        callback(null, result1);
+                    else {
+                        Banner.create(bannerinfo)
+                    }
+                }
+            ], function (err, result) {
+                // result now equals 'done'
+                console.log("--errr", result)
+            });
+
+            // const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte:moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end:moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }).exec()
+            // if (!banner) {
+            //     const bannerinfo = {
+            //         _deal: req.body.deal[i],
+            //         _store: req.body.store[i],
+            //         deal_start:moment(req.body.stime[i]).startOf('day').toISOString(),
+            //         deal_end:moment(req.body.etime[i]).endOf('day').toISOString()
+            //     }
+            //     await Banner.create(bannerinfo);
+            // }
             await StoreProductPricing.deleteOne({ _store: req.body.store[i], _product: req.body.productid }).exec()
         }
 
