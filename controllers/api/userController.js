@@ -6,6 +6,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');				
 var moment = require('moment');
 const { validationResult } = require('express-validator');
+const Device = require('../../models/device')
 
 const app = express();
 var server = require('http').Server(app);
@@ -132,14 +133,23 @@ exports.authenticate = async (req, res) => {
 			return res.status(400).json({ errors: errors.array() });
 		}
 		const userInfo = await User.findOne({email:req.body.email}).exec();
+		console.log("--userinfo",userInfo._id)
 		if(!userInfo) return res.status(400).json({message: "User does not exist with this email."}); 
 		
 		if(!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({status:false, message: "Invalid password!!!", data:null});
-		
+	    const deviceinfo = {
+			user_id:userInfo._id,
+			device_type:req.body.device_type,
+			device_token:req.body.device_token
+		}
+		let login =  await Device.findOne( {user_id:userInfo._id}).exec()
+		if(login) await Device.findOneAndUpdate({_id:login._id},{device_token:req.body.device_token,device_type:req.body.device_type},{returnOriginal:false}).lean()
+		else await Device.create(deviceinfo)
 		const token = await jwt.sign({id: userInfo._id}, process.env.JWT_SECRET, { expiresIn: '30d' }); 
 		return res.json({status:true, message: "user found!!!", data:{user: userInfo, token:token}});	
 	
 	}catch(err){
+		console.log("--err",err)
 		res.status(400).json({status:false, message: "", data:err});
 	}
 	

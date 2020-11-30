@@ -1,5 +1,6 @@
 const User = require('../../models/user');
 const Roles = require('../../models/role')
+const Device = require('../../models/device')
 
 var randomstring = require("randomstring");
 const express = require('express');
@@ -177,10 +178,13 @@ exports.authenticate = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
         const userInfo = await User.findOne({ email: req.body.email }).exec();
+        console.log("--userinfo",userInfo)
         if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
 
         if (!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
-
+           let login =  await Device.findOne( {_user:userInfo._id}).exec()
+           if(login)console.log("--login",login)
+           else console.log("--notttt",not)
         const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
         return res.json({ status: true, message: "user found!!!", data: { user: userInfo, token: token } });
 
