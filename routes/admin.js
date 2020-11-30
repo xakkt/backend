@@ -17,6 +17,7 @@ const regularproductController = require('../controllers/admin/regularproductCon
 const unitController = require('../controllers/admin/unitController')
 const bannerController = require('../controllers/admin/bannerController.js')
 const compController = require('../controllers/admin/compController.js')
+const uploadController = require('../controllers/admin/uploadController.js')
 
 
 // var auth = function(req, res, next) {
@@ -75,11 +76,19 @@ var storage =   multer.diskStorage({
       callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
+  var csvStorage =   multer.diskStorage({
+    destination: './public/images/files',
+    filename: function (req, file, callback) {
+      callback(null, Date.now() + "-" + file.originalname);
+    }
+  });
 
   var upload = multer({ storage : storage})
   var userUpload = multer({storage: userStorage})
   var productUpload = multer({storage: productStorage})
   var brandUpload = multer({storage: brandStorage})
+  var csvUpload = multer({storage: csvStorage})
+
   var bannerUpload = multer({storage: bannerStorage})
 
 
@@ -242,4 +251,7 @@ router.get('/unit/delete/:id',isloggedin,unitController.delete)
  router.get('/company/edit/:id',isloggedin,compController.edit)
  router.post('/company/update/:id',isloggedin,compController.update)
 
+
+/******-------upload */
+ router.post('/upload', csvUpload.single('file'),uploadController.upload)
 module.exports = router;

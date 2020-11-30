@@ -318,13 +318,14 @@ exports.priceSave = async (req, res) => {
             const banner = {
                 _deal: req.body.deal[i],
                 _store: req.body.store[i],
-                deal_end:{ $lt:  moment(req.body.stime[i]).startOf('day').toISOString()},
+                deal_end:{ $gte:  moment(req.body.stime[i]).startOf('day').toISOString()},
 
             }
+            // console.log("--valueeeee",moment(req.body.stime[i]).startOf('day').toISOString())
             waterfall([
                 function (callback) {
-                    Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }, function (err, result) {
-                       console.log("--valuie",result)
+                    Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $lt: moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }, function (err, result) {
+                    //    console.log("--valuie",result)
                         callback(err, result);
                     })
                 },
@@ -332,16 +333,15 @@ exports.priceSave = async (req, res) => {
                     if (result) callback(null, result);
                     else
                         Banner.findOne(banner, function (err, result1) {
-                            console.log("--second ",result1)
                             callback(err, result1);
                         })
                 },
                 function (result1, callback) {
+                    console.log("----logss",result1)
                     if (result1)
                         callback(null, result1);
                     else {
-                        console.log("---test ")
-                        Banner.create(bannerinfo)
+                         Banner.create(bannerinfo)
                     }
                 }
             ], function (err, result) {

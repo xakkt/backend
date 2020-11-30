@@ -29,7 +29,7 @@ const productSchema = new Schema({
   _unit: {
     type: Schema.Types.ObjectId,
     ref: 'Unit',
-    required: true,
+    // required: true,
     validate: {
       validator: function(v) {
             return FKHelper(mongoose.model('Unit'), v);

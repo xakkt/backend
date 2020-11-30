@@ -133,7 +133,6 @@ exports.authenticate = async (req, res) => {
 			return res.status(400).json({ errors: errors.array() });
 		}
 		const userInfo = await User.findOne({email:req.body.email}).exec();
-		console.log("--userinfo",userInfo._id)
 		if(!userInfo) return res.status(400).json({message: "User does not exist with this email."}); 
 		
 		if(!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({status:false, message: "Invalid password!!!", data:null});
