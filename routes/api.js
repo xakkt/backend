@@ -189,13 +189,12 @@ router.post('/wishlist/add_product',  verifyjwt.checkToken,wishlistValidation, w
 router.post('/wishlist/products',  verifyjwt.checkToken,listProductsVali, wishController.allWishlistProducts);
 router.delete('/wishlist/remove/product',verifyjwt.checkToken, wishController.deleteProductWishlist);
 router.put('/wishlist/update/:wishlistid',verifyjwt.checkToken, wishController.updateProductWishPrice);
-
-
 /*------Superadmin ------*/
 router.post("/superadmin",superadminController.create)
-/**------------Payment------------ */
+/*------------Payment------------ */
 router.post("/payment",verifyjwt.checkToken,paymentController.payment)
 
 /*----------------Banner ----------*/
 router.post("/bannerproduct",bannerController.bannderproduct)
+
 module.exports = router;
