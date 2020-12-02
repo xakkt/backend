@@ -43,7 +43,7 @@ exports.listing = async (req, res) => {
     try {
         let deal = await Deal.find().limit(5).sort('name').exec();
         if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: deal, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -99,16 +99,16 @@ exports.update = async function (req, res) {
 }
 exports.list = async function (req, res) {
     try {
-        var page = parseInt(req.query.page) || 1; //for next page pass 1 here
-        var limit = parseInt(req.query.limit) || 5;
-        console.log("--im here")
+        var pagno = req.query.start/req.query.length + 1
+        var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
+        var limit = parseInt(req.query.length) || 5;
         let deal = await Deal.find()
-            .skip(page * limit) //Notice here
+            .skip((pagno-1) * limit) //Notice here
             .limit(limit)
             .lean();
        let total = await Deal.find().lean()
-        if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.json({ draw: page,recordsTotal:total.length, data: deal })
+        // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.json({ draw: page,recordsTotal:total.length,recordsFiltered:total.length,data: deal })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }

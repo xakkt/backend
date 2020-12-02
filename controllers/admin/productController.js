@@ -175,10 +175,10 @@ exports.productsave = async (req, res) => {
 */
 exports.productlisting = async (req, res) => {
     try {
-        let price = await StoreProductPricing.find().exec()
-        let product = await Product.find().exec();
-        if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: product, price: price, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        // let price = await StoreProductPricing.find().exec()
+        // let product = await Product.find().limit(20).sort('name asec').exec();
+        // if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: '', price: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });

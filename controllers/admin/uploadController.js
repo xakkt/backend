@@ -6,7 +6,6 @@ let csvToJson = require('csvtojson');
 const Queues = require('bee-queue');
 const queue = new Queues('upload');
 exports.upload = (req, res) => {
-  console.log("--im herr")
     let filepath = req.file.path
     if (!filepath)
         return res.status(400).send('No files were uploaded.');
@@ -23,13 +22,15 @@ exports.upload = (req, res) => {
             });
             queue.on('job failed', (jobId, err) => {
             console.log('errrrrrr',err.message + 'iddd',jobId);
+              // queue.getJob(jobId).then((job) => console.log("---jobbb",job.data))
+              // console.log('errrrrrr',err.message + 'iddd',jobId);
             });
 
             queue.process(3,async (job) => {
               var declare = 'test'
                  for(var i = 0;i<job.data.length;i++)
                     {
-                      const productinfo = {
+                      const productinfo = {                                                 
                         name: {
                             english: job.data[i].Name
                         },
@@ -41,7 +42,7 @@ exports.upload = (req, res) => {
                         is_featured: job.data[i].is_featured,
                         _unit: job.data[i].unit,
                         price: job.data[i].price,
-                        image: job.data[i].filename,
+                        image: job.data[i].image,
                         status: job.data[i].status,
                         brand_id: job.data[i].brand
                     }

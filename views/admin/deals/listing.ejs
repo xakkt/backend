@@ -82,19 +82,6 @@
                       </tr>
                     </thead>
                     <tbody>
-
-
-                      <% if(deal) deal.forEach(function(deal){ %>
-                      <tr>
-                        <td><%= deal.name %></td>
-                        <td><%= deal.description %></td>
-
-                        <!-- <td><a href="/admin/deal/delete/<%= deal._id %>"
-                            onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/deal/edit/<%= deal._id %>""><i
-                              class=" fas fa-pencil-alt"></i></a></td> -->
-                      </tr>
-                      <% }) %>
                     </tbody>
                     <tfoot>
                       <tr>
@@ -151,15 +138,15 @@
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
   <script>
-    $(function () {
-      var info = $('#deal').DataTable().page.info();
-      console.log("==value",info.page)
+     
+$(document).ready(function() {
       $('#deal').DataTable({
         "paging": true,
         "processing": true,
         "serverSide": true,
+        "ordering"  : false,
         "ajax": {
-          "url": "/admin/deal/list?"+info.page+"",
+          "url": "/admin/deal/list",
           "type": "get",
         },
         "columns": [
