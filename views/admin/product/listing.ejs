@@ -73,6 +73,10 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
+                  <form>
+                    <input type="file" name="csv" id="fileinput" />
+                    <input type="button" id="btn" value="Submit"/>
+                  </form>
                   <table id="departments" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -178,6 +182,30 @@
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
   <script>
+      $("#btn").click(function() {
+        console.log("--files",$('#fileinput').prop('files')[0])
+      var data;
+      var formdata = new FormData();
+      formdata.append('file', $('#fileinput').prop('files')[0]);
+      $.ajax({
+        url: '/admin/upload',
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        mimeType: 'multipart/form-data',
+        data: formdata,
+        // beforeSend: function () {
+        //   $("#loader").show();
+        // },
+        success: function (data) {
+          if (data.status) {
+        console.log("--test",data)
+
+          }
+        }
+      })
+    })
     $(function () {
       $("#departments").DataTable({
         dom: 'Pfrtip',
