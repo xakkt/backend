@@ -78,7 +78,7 @@
                       <tr>
                         <th>Name</th>
                         <th>Description</th>
-                        <!-- <th>Action</th> -->
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -87,7 +87,7 @@
                       <tr>
                         <th>Name</th>
                         <th>Description</th>
-                        <!-- <th>Action</th> -->
+                        <th>Action</th>
                       </tr>
                     </tfoot>
                   </table>
@@ -138,13 +138,13 @@
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
   <script>
-     
-$(document).ready(function() {
+
+    $(document).ready(function () {
       $('#deal').DataTable({
         "paging": true,
         "processing": true,
         "serverSide": true,
-        "ordering"  : false,
+        "ordering": false,
         "ajax": {
           "url": "/admin/deal/list",
           "type": "get",
@@ -152,6 +152,19 @@ $(document).ready(function() {
         "columns": [
           { "data": "name" },
           { "data": "description" },
+          {
+            data: "ID",
+            render: function (data, type, row) {
+              console.log(`${row._id}`)
+              var ab = `  <a href="/admin/deal/delete/${row._id}"
+                            onclick="return confirm('Are you sure you want to Active this.')">
+                            <i class="far fa-trash-alt"></i></a>`;
+                      
+                            ab += '&nbsp'
+              ab += `<a href="/admin/deal/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+              return ab
+            }
+          },
         ],
         success: function (done) {
           console.log("--ab", done)

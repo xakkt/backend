@@ -16,6 +16,7 @@ const wishController = require('../controllers/api/wishlistController')
 const superadminController = require('../controllers/api/superadminController')
 const paymentController = require('../controllers/api/paymentController');
 const bannerController = require('../controllers/api/bannerController');
+const ratingController = require('../controllers/api/ratingController');
 
 
 
@@ -196,5 +197,8 @@ router.post("/payment",verifyjwt.checkToken,paymentController.payment)
 
 /*----------------Banner ----------*/
 router.post("/bannerproduct",bannerController.bannderproduct)
+
+/*----------------Rating ----------*/
+router.post("/rating",verifyjwt.checkToken,ratingController.add)
 
 module.exports = router;

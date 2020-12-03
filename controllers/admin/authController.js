@@ -23,9 +23,9 @@ exports.login = async (req, res) => {
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
         let utc = await Store.findOne({ _user: userInfo._id }).populate('_timezone', 'abbr').exec()
-        console.log("--utc", utc._timezone.abbr)
-        var date = moment.tz.setDefault(utc._timezone.abbr);
-        req.session.date = date
+        // console.log("--utc", utc._timezone.abbr)
+        // var date = moment.tz.setDefault(utc._timezone.abbr);
+        // req.session.date = date
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id

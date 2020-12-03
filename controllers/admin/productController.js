@@ -175,10 +175,10 @@ exports.productsave = async (req, res) => {
 */
 exports.productlisting = async (req, res) => {
     try {
-        let price = await StoreProductPricing.find().exec()
-        let product = await Product.find().limit(20).sort('name asec').exec();
-        if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product/listing', { menu: "products", submenu: "list", product:product, price: price, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        // let price = await StoreProductPricing.find().exec()
+        // let product = await Product.find().exec();
+        // if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product/listing', { menu: "products", submenu: "list", product:'', price: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });
@@ -404,6 +404,24 @@ exports.addPrice = async (req, res) => {
         res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
         console.log("--err", err)
+        res.status(400).json({ data: err.message });
+    }
+}
+exports.product_listing = async(req,res)=>{
+    try{
+        console.log("--im here",req.query)
+        var pagno = req.query.start/req.query.length + 1
+        var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
+        var limit = parseInt(req.query.length) || 5;
+        let product = await Product.find()
+            .skip((pagno-1) * limit) //Notice here
+            .limit(limit)
+            .lean();
+       let total = await Product.find().lean()
+        // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.json({ draw: page,recordsTotal:total.length,recordsFiltered:total.length,data: product })
+    }catch(err)
+    {
         res.status(400).json({ data: err.message });
     }
 }
