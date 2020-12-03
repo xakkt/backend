@@ -28,17 +28,18 @@ exports.upload = (req, res) => {
 
             queue.process(3,async (job) => {
               var declare = 'test'
+              console.log("--logs",job)
                  for(var i = 0;i<job.data.length;i++)
                     {
                       const productinfo = {                                                 
                         name: {
-                            english: job.data[i].Name
+                            english: job.data[i].name
                         },
-                        description: job.data[i].Description,
-                        sku: job.data[i].Sku,
+                        description: job.data[i].description,
+                        sku: job.data[i].sku,
                         _category:job.data[i]._category,
-                        weight: job.data[i].Weight,
-                        short_description: job.data[i].Short_description,
+                        weight: job.data[i].weight,
+                        short_description: job.data[i].short_description,
                         is_featured: job.data[i].is_featured,
                         _unit: job.data[i].unit,
                         price: job.data[i].price,
@@ -46,6 +47,7 @@ exports.upload = (req, res) => {
                         status: job.data[i].status,
                         brand_id: job.data[i].brand
                     }
+                    console.log("---value",productinfo)
                     let product = await Product.findOneAndUpdate({sku:job.data[i].sku},productinfo,{returnOriginal:false})
                       if(!product)
                       {
