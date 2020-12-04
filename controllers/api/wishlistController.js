@@ -107,6 +107,7 @@ exports.allWishlistProducts = async (req, res) => {
 			delete (list.updatedAt)
 			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, wish_price: wish_price, max_price: max_price } };
 		}).filter(Boolean));
+		console.log("--logs",wishlist)
 		return res.json({ status: "success", message: "", data: wishlist })
 	} catch (err) {
 		console.log(err)

@@ -53,7 +53,7 @@ exports.listCartProduct = async (req, res) => {
     }
 },
 
-exports.addPoductToCart = async (req, res) => {
+    exports.addPoductToCart = async (req, res) => {
 
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
@@ -62,10 +62,10 @@ exports.addPoductToCart = async (req, res) => {
 
         try {
             var productInfo = await Product.findById(req.body._product);
-           let productprice =   await _global.productprice(req.body._store,req.body._product)
-           if(!productprice) return res.json({status:false,message:"Product Price of this id not set yet"})
-           if (!productInfo) return res.json({ status: "false", message: "Product with this id not exists" })
-           const cartInfo = {
+            let productprice = await _global.productprice(req.body._store, req.body._product)
+            if (!productprice) return res.json({ status: false, message: "Product Price of this id not set yet" })
+            if (!productInfo) return res.json({ status: "false", message: "Product with this id not exists" })
+            const cartInfo = {
                 _user: req.decoded.id,
                 _store: req.body._store,
                 cart: {
@@ -99,7 +99,7 @@ exports.addPoductToCart = async (req, res) => {
             })
             return res.json({ status: "success", message: "Product added to cart successfully", data: product });
         } catch (err) {
-            console.log("--errr",err)
+            console.log("--errr", err)
             return res.status(400).json({ data: err.message });
         }
 
@@ -175,12 +175,12 @@ exports.updateProductQuantity = async (req, res) => {
             _user: req.decoded.id,
         }
         var productInfo = await Product.findById(req.body._product);
-        let productprice =   await _global.productprice(req.body._store,req.body._product)
+        let productprice = await _global.productprice(req.body._store, req.body._product)
         if (!productInfo) return res.json({ success: 0, message: "cart is empty", data: "" });
         //var cartProduct = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
         var pQuantity = cartInfo.quantity;
         var pPrice = productprice.effective_price * pQuantity;
-        console.log("--vlaue",pPrice)
+        console.log("--vlaue", pPrice)
         // console.log(productInfo.price)
         var product = await Cart.findOneAndUpdate({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo._product } } }, {
             $set: {
@@ -222,7 +222,7 @@ exports.updateProductQuantity = async (req, res) => {
         }
         return res.json({ status: "false", message: "No data found", data: {} });
     } catch (err) {
-        console.log("--err",err)
+        console.log("--err", err)
         return res.status(400).json({ data: err.message });
     }
 }
