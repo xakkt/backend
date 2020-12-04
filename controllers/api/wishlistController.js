@@ -87,7 +87,6 @@ exports.allWishlistProducts = async (req, res) => {
 		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate('_product', 'name image price').lean();
 		if (!wishlist.length) return res.json({ status: "success", message: "no data found", data: [] })
 		wishlist = await Promise.all(wishlist.map(async (list) => {
-			console.log("---_product",list._product)
 			if (!list._product) return
 			var productId = list._product._id.toString();
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
@@ -108,7 +107,6 @@ exports.allWishlistProducts = async (req, res) => {
 			delete (list.updatedAt)
 			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, wish_price: wish_price, max_price: max_price } };
 		}).filter(Boolean));
-		console.log("--logs",wishlist)
 		return res.json({ status: "success", message: "", data: wishlist })
 	} catch (err) {
 		console.log(err)
