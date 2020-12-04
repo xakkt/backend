@@ -222,6 +222,7 @@ exports.updateProductQuantity = async (req, res) => {
         }
         return res.json({ status: "false", message: "No data found", data: {} });
     } catch (err) {
+        console.log("--err",err)
         return res.status(400).json({ data: err.message });
     }
 }
