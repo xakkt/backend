@@ -87,7 +87,7 @@ exports.allWishlistProducts = async (req, res) => {
 		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate('_product', 'name image price').lean();
 		if (!wishlist.length) return res.json({ status: "success", message: "no data found", data: [] })
 		wishlist = await Promise.all(wishlist.map(async (list) => {
-			console.log("---logs",list)
+			console.log("---_product",list._product)
 			if (!list._product) return
 			var productId = list._product._id.toString();
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
