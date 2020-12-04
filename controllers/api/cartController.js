@@ -180,7 +180,8 @@ exports.updateProductQuantity = async (req, res) => {
         //var cartProduct = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
         var pQuantity = cartInfo.quantity;
         var pPrice = productprice.effective_price * pQuantity;
-        console.log(productInfo.price)
+        console.log("--vlaue",pPrice)
+        // console.log(productInfo.price)
         var product = await Cart.findOneAndUpdate({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo._product } } }, {
             $set: {
                 "cart.$.quantity": pQuantity, 'cart.$.total_price': pPrice
