@@ -175,10 +175,11 @@ exports.updateProductQuantity = async (req, res) => {
             _user: req.decoded.id,
         }
         var productInfo = await Product.findById(req.body._product);
+        let productprice =   await _global.productprice(req.body._store,req.body._product)
         if (!productInfo) return res.json({ success: 0, message: "cart is empty", data: "" });
         //var cartProduct = await Cart.aggregate([{ $unwind: '$cart'},{$match:{_user:mongoose.Types.ObjectId(cartInfo._user),_store:mongoose.Types.ObjectId(cartInfo._store),"cart._product":mongoose.Types.ObjectId(cartInfo._product)} }])
         var pQuantity = cartInfo.quantity;
-        var pPrice = productInfo.price * pQuantity;
+        var pPrice = productprice.effective_price * pQuantity;
         console.log(productInfo.price)
         var product = await Cart.findOneAndUpdate({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo._product } } }, {
             $set: {
@@ -216,7 +217,7 @@ exports.updateProductQuantity = async (req, res) => {
                 code: 'AZXPN102',
                 discount: '20%'
             }
-            return res.json({ status: "success", message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+            return res.json({ status: "success", message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
         }
         return res.json({ status: "false", message: "No data found", data: {} });
     } catch (err) {

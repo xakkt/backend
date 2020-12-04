@@ -337,7 +337,7 @@ exports.priceSave = async (req, res) => {
                         })
                 },
                 function (result1, callback) {
-                    console.log("----logss",result1)
+                   bannerinfo.image = 'no-image_1606218971.jpeg'
                     if (result1)
                         callback(null, result1);
                     else {
@@ -409,7 +409,6 @@ exports.addPrice = async (req, res) => {
 }
 exports.product_listing = async(req,res)=>{
     try{
-        console.log("--im here",req.query)
         var pagno = req.query.start/req.query.length + 1
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;

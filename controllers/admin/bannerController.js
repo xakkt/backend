@@ -66,18 +66,18 @@ exports.list = async (req, res) => {
     try {
         var banner_image = []
         var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-        console.log("--currentdate",date)
+        // console.log("--currentdate",date)
         const banner = await Banner.find({ $and: [{ deal_start: { $lte: date } }, { deal_end: { $gte: date } }] }).populate('_store', 'name')
             .populate('_deal', 'name').lean()
-        banner.map((element) => {
-            var data = {}
-            data = { ...element }
-            if (!element.image) data.image = 'no-image_1606218971.jpeg'
-            banner_image.push(data)
-        })
+        // banner.map((element) => {
+        //     var data = {}
+        //     data = { ...element }
+        //     if (!element.image) data.image = 'no-image_1606218971.jpeg'
+        //     banner_image.push(data)
+        // })
         
         if (!banner) return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: banner_image, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: banner, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });

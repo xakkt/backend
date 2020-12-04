@@ -165,7 +165,6 @@
   <script>
     // /product/list'
     $(document).ready(function () {
-      // var b ='<% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) %>'
      var admin =  $('#admin').val()
      console.log("--admin",admin)
       $('#products').DataTable({
@@ -186,7 +185,6 @@
             }
         }, 
           { "data": "description" },
-
           {
             data: "ID",
             render: function (data, type, row) {
@@ -199,7 +197,7 @@
               return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
             }
           },
-          {          
+          {         
             data: "ID",
             
               "visible": (admin)?true:false,
