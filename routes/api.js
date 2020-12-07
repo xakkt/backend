@@ -201,6 +201,6 @@ router.post("/bannerproduct",bannerController.bannderproduct)
 
 /*----------------Rating ----------*/
 router.post("/rating",verifyjwt.checkToken,ratingController.add)
-router.get("/push",pushController.push)
+router.post("/push",pushController.firebase)
 
 module.exports = router;
