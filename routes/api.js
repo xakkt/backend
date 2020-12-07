@@ -17,6 +17,7 @@ const superadminController = require('../controllers/api/superadminController')
 const paymentController = require('../controllers/api/paymentController');
 const bannerController = require('../controllers/api/bannerController');
 const ratingController = require('../controllers/api/ratingController');
+const pushController = require('../controllers/api/pushController');
 
 
 
@@ -200,5 +201,6 @@ router.post("/bannerproduct",bannerController.bannderproduct)
 
 /*----------------Rating ----------*/
 router.post("/rating",verifyjwt.checkToken,ratingController.add)
+router.get("/push",pushController.push)
 
 module.exports = router;

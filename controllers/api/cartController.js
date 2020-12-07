@@ -19,9 +19,8 @@ exports.listCartProduct = async (req, res) => {
 
         var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
         if (!data) return res.json({ success: 0, message: "cart is empty", data: "" });
-
         let total_quantity, total_price, coupon, discounted_price;
-
+        console.log("---value",data)
         total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
             return acc + cur;
         })
