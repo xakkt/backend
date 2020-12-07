@@ -2,10 +2,11 @@ const Cart = require('../../models/cart')
 const Product = require('../../models/product');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
-const _global = require('../../helper/common')
+const _global = require('../../helper/common');
+const product_category = require('../../models/product_category');
 
 exports.listCartProduct = async (req, res) => {
-
+     var pro = []
     const errors = await validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -29,17 +30,23 @@ exports.listCartProduct = async (req, res) => {
             return acc + cur;
         })
 
-        products = data.cart.map((list) => {
+       await Promise.all(products = data.cart.map(async(list) => {
+            // console.log("---product",list)
+            var data ={}
             if (!list._product) return
+             let product_price = await  _global.productprice(req.params.store,list._product._id)
+             console.log("--log",product_price)
             let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
             let image = `${process.env.BASE_URL}/images/products/${image_path}`;
             let total_price = list.total_price;
             let quantity = list.quantity;
             delete (list.total_price)
             delete (list.quantity)
-            return { ...list, _product: { ...list._product, in_cart: quantity, total_price: total_price.toFixed(2), image: image } }
+            data = { ...list, _product: { ...list._product, in_cart: quantity, total_price: total_price.toFixed(2), image: image,regular_price:product_price.regular_price,deal_price:product_price.deal_price} }
+            pro.push(data)
         })
-        data.cart = products;
+       )
+        data.cart = pro;
         discounted_price = 20;
         coupon = {
             code: 'AZXPN102',
