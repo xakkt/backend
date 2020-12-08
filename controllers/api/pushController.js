@@ -5,7 +5,8 @@ const notification_options = {
   };
 exports.firebase = async(req,res) =>{
     try{
-    const  registrationToken = 'eKwLWOdcD05cs56p0sS0Lf:APA91bH3g9Znv89NoervuQGVMty6Jv7lgnAsqM_5kUOQmQtvtye654b1nlUKNTjNWenn0rZKkbgHsyQ5GBHpr8qSqVZE1iaAXCRdZ5cy8HangxaurqimqCoB7QtdooSg_wIvq8hTX9E-'
+    const  registrationToken = req.body.registrationToken
+    console.log("---logs0",registrationToken)
     const message = req.body.message
     const options = {
         priority: 'high',
