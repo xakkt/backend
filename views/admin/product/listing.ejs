@@ -74,15 +74,19 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <form>
+                    <input type="hidden" value=<%= (await check ('product_delete',roleid)) ? roleid:"" %> id="delete" />
+                    <input type="hidden" value=<%= (await check ('product_edit',roleid)) ? roleid:"" %> id="edit" />
+
                     <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
-                      <input type="hidden" value="<%= user %>" name="admin" id="admin" />
-                      <%} else if(await check ("product_delete",roleid) ) {%>
-                        <input type="hidden" value="<%= roleid %>" name="both" id="" />
-                      <%} else if(await check ("product_delete",roleid) ) {%>
-                        <input type="hidden" value="<%= roleid %>" name="delete" id="" />
-                        <%}else if(await check ("product_edit",roleid)) {%>
-                          <input type="hidden" value="<%= roleid %>" name="edit" id="" />
-                          <%}%>
+                    <input type="hidden" value=<%= (await check ('SYSTEM ADMININSTRATOR',user)) ? user:"" %>
+                      id="admin" />
+                    <%} else if(await check ("product_delete",roleid) ) {%>
+                    <input type="hidden" value="<%= roleid %>" name="both" id="" />
+                    <%} else if(await check ("product_delete",roleid) ) {%>
+                    <input type="hidden" value="<%= roleid %>" name="delete" id="" />
+                    <%}else if(await check ("product_edit",roleid)) {%>
+                    <input type="hidden" value="<%= roleid %>" name="edit" id="" />
+                    <%}%>
                     <input type="file" name="csv" id="fileinput" />
                     <input type="button" id="btn" value="Submit"/>
                   </form>
@@ -95,8 +99,8 @@
                         <th>Promotion</th>
                         <th>Price</th>
                         <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
-                          <th>Action</th>
-                        <%}%>
+                    <th>Action</th>
+                    <%}%>
                       </tr>
                     </thead>
                     <tbody>
@@ -111,8 +115,8 @@
                         <th>Promotion</th>
                         <th>Price</th>
                         <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
-                          <th>Action</th>
-                          <%}%>
+                    <th>Action</th>
+                    <%}%>
                       </tr>
                     </tfoot>
                   </table>
@@ -132,137 +136,126 @@
     <!-- /.content-wrapper -->
     <%- await include('../../_partials/_admin/footer.ejs'); %>
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-  </div>
-  <!-- ./wrapper -->
+                    <!-- Control Sidebar -->
+                    <aside class="control-sidebar control-sidebar-dark">
+                      <!-- Control sidebar content goes here -->
+                    </aside>
+                    <!-- /.control-sidebar -->
+                </div>
+                <!-- ./wrapper -->
 
-  <!-- jQuery -->
-  <script src="../../plugins/jquery/jquery.min.js"></script>
-  <!-- Bootstrap 4 -->
-  <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- DataTables  & Plugins -->
-  <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-  <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-  <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-  <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-  <script src="../../plugins/jszip/jszip.min.js"></script>
-  <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-  <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-  <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-  <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-  <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-  <!-- AdminLTE App -->
-  <script src="../../dist/js/adminlte.min.js"></script>
-  <!-- AdminLTE for demo purposes -->
-  <script src="../../dist/js/demo.js"></script>
-  <!-- Page specific script -->
-  <script>
-    // /product/list'
-    $(document).ready(function () {
-     var admin =  $('#admin').val()
-     console.log("--admin",admin)
-      $('#products').DataTable({
-        "paging": true,
-        "processing": true,
-        "serverSide": true,
-        "ordering": false,
-        "ajax": {
-          "url": "/admin/product/list",
-          "type": "get",
-        },
-        "columns": [
-          { "data": "name.english" },
-          { "data": "ID",
-          render: function (data, type, row) {
-              return `<img class="img-thumbnail" style="width: 6em;height: 4em"
+                <!-- jQuery -->
+                <script src="../../plugins/jquery/jquery.min.js"></script>
+                <!-- Bootstrap 4 -->
+                <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+                <!-- DataTables  & Plugins -->
+                <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+                <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+                <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+                <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+                <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+                <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+                <script src="../../plugins/jszip/jszip.min.js"></script>
+                <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+                <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+                <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+                <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+                <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+                <!-- AdminLTE App -->
+                <script src="../../dist/js/adminlte.min.js"></script>
+                <!-- AdminLTE for demo purposes -->
+                <script src="../../dist/js/demo.js"></script>
+                <!-- Page specific script -->
+                <script>
+                  // /product/list'
+                  $(document).ready(function () {
+                    var admin = $('#admin').val();
+                    var del = $('#delete').val()
+                    var edit = $('#edit').val()
+                    $('#products').DataTable({
+                      "paging": true,
+                      "processing": true,
+                      "serverSide": true,
+                      "ordering": false,
+                      "ajax": {
+                        "url": "/admin/product/list",
+                        "type": "get",
+                      },
+                      "columns": [
+                        { "data": "name.english" },
+                        {
+                          "data": "ID",
+                          render: function (data, type, row) {
+                            return `<img class="img-thumbnail" style="width: 6em;height: 4em"
                             src="/images/products/${row.image}">`;
-            }
-        }, 
-          { "data": "description" },
-          {
-            data: "ID",
-            render: function (data, type, row) {
-              return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
-            }
-          },
-          {
-            data: "ID",
-            render: function (data, type, row) {
-              return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
-            }
-          },
-          {         
-            data: "ID",
-            
-              "visible": (admin)?true:false,
-            render: function (data, type, row) {
-               return  ` <a href="/admin/product/delete/${row._id}"
+                          }
+                        },
+                        { "data": "description" },
+                        {
+                          data: "ID",
+                          render: function (data, type, row) {
+                            return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                          }
+                        },
+                        {
+                          data: "ID",
+                          render: function (data, type, row) {
+                            return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                          }
+                        },
+                        {
+                          data: "ID",
+                          "visible": (admin || del || edit) ? true : false,
+                          render: function (data, type, row) {
+                            if (admin || (del && edit)) {
+                              return ` <a href="/admin/product/delete/${row._id}"
                             onclick="return confirm('Are you sure you want to Active this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
-                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`}
-            }
- 
+                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+                            } else if (del) {
+                              return ` <a href="/admin/product/delete/${row._id}"
+                            onclick="return confirm('Are you sure you want to Active this.')">
+                            <i class="far fa-trash-alt"></i></a>`
+                            }else if(edit)
+                            {
+                              return `<a
+                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+                            }
+                            return ` <a href="/admin/product/delete/${row._id}"
+                            onclick="return confirm('Are you sure you want to Active this.')">
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
+                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+                          }
+                        }
 
-        ],
-        success: function (done) {
-          // console.log("--ab", done)
-        }
-      });
-    });
-    
-    
-    
-    
-    
-    
-    
-    
-    $("#btn").click(function() {
-        console.log("--files",$('#fileinput').prop('files')[0])
-      var data;
-      var formdata = new FormData();
-      formdata.append('file', $('#fileinput').prop('files')[0]);
-      $.ajax({
-        url: '/admin/upload',
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        dataType: "json",
-        mimeType: 'multipart/form-data',
-        data: formdata,
-        // beforeSend: function () {
-        //   $("#loader").show();
-        // },
-        success: function (data) {
-          if (data.status) {
-        console.log("--test",data)
 
-          }
-        }
-      })
-    })
-    // $(function () {
-    //   $("#departments").DataTable({
-    //     dom: 'Pfrtip',
-    //     language: {
-    //       searchPanes: {
-    //         emptyPanes: 'There are no panes to display. :/'
-    //       }
-    //     },
-    //     "responsive": true,
-    //     "lengthChange": false,
-    //     "autoWidth": false,
-    //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    //   }).buttons().container().appendTo('#departments_wrapper .col-md-6:eq(0)');
+                      ],
+                      success: function (done) {
+                        // console.log("--ab", done)
+                      }
+                    });
+                  });
+                  $("#btn").click(function () {
+                    console.log("--files", $('#fileinput').prop('files')[0])
+                    var data;
+                    var formdata = new FormData();
+                    formdata.append('file', $('#fileinput').prop('files')[0]);
+                    $.ajax({
+                      url: '/admin/upload',
+                      type: 'POST',
+                      processData: false,
+                      contentType: false,
+                      dataType: "json",
+                      mimeType: 'multipart/form-data',
+                      data: formdata,
+                      success: function (data) {
+                        if (data.status) {
+                          console.log("--test", data)
 
-    // });
-  </script>
+                        }
+                      }
+                    })
+                  })
+                </script>
 </body>
-
 </html>

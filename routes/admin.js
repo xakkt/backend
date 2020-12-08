@@ -139,14 +139,13 @@ router.get('/products',(req, res)=> {
 router.post('/product/create',isloggedin,productUpload.single('logo'),_global.permission('product_add'),productController.productsave)
 router.get('/product',isloggedin,_global.permission('product_view'),productController.productlisting)
 router.get('/product/delete/:id',isloggedin,_global.permission('product_delete'),productController.productdelete);
-router.get('/product/edit/:id',isloggedin,productController.productedit)
-router.post('/product/update/:id',isloggedin,productUpload.single('logo'), productController.productupdate)
+router.get('/product/edit/:id',isloggedin,_global.permission('product_edit'),productController.productedit)
+router.post('/product/update/:id',isloggedin,_global.permission('product_edit'),productUpload.single('logo'), productController.productupdate)
 router.get('/product/pricing/:productid',isloggedin,productController.addPrice);
 router.get('/product/create',isloggedin, productController.productCreate)
 router.post('/product_price/create',isloggedin, productController.priceSave)
 router.post('/product_price/remove',isloggedin, productController.remove)
 router.get('/product/list',isloggedin,_global.permission('product_view'),productController.product_listing)
-
 
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {
