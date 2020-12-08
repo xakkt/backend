@@ -6,20 +6,15 @@ const notification_options = {
 exports.firebase = async(req,res) =>{
     try{
     const  registrationToken = req.body.registrationToken
-    console.log("---logs0",registrationToken)
-    const message = req.body.message
+    // const message = req.body.message
     const options = {
         priority: 'high',
         timeToLive: 60 * 60 * 24, // 1 day
       };
-          const payload = {
-        'notification': {
-          'title': 'test',
-          'body': 'test',
-        }, 
-        // NOTE: The 'data' object is inside payload, not inside notification
-        'data': { 
-              'personSent': 'test' 
+      const payload = {
+        notification: {
+          title: 'Notification Title',
+          body: 'This is an example notification',
         }
       };
     admin.messaging().sendToDevice(registrationToken, payload,options)
