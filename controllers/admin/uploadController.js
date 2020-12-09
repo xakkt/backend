@@ -22,8 +22,6 @@ exports.upload = (req, res) => {
       });
       queue.on('job failed', (jobId, err) => {
         console.log('errrrrrr', err.message + 'iddd', jobId);
-        // queue.getJob(jobId).then((job) => console.log("---jobbb",job.data))
-        // console.log('errrrrrr',err.message + 'iddd',jobId);
       });
 
       queue.process(3, async (job) => {
