@@ -7,7 +7,6 @@ const Banner = require('../../models/banner')
 const Wishlist = require('../../models/wishlist')
 var waterfall = require('async-waterfall');
 
-
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const RegularPrice = require('../../models/product_regular_pricing');
@@ -321,11 +320,12 @@ exports.priceSave = async (req, res) => {
                 deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() },
 
             }
-            // console.log("--valueeeee",moment(req.body.stime[i]).startOf('day').toISOString())
             waterfall([
                 function (callback) {
-                    Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $lt: moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }, function (err, result) {
-                        //    console.log("--valuie",result)
+                    Banner.findOneAndUpdate(
+                        {$and: [ {_store:req.body.store[i]},{_deal: req.body.deal[i]},{ deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() }},{deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() }}  ]},
+                        { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
+                        function (err, result) {
                         callback(err, result);
                     })
                 },
@@ -409,7 +409,7 @@ exports.addPrice = async (req, res) => {
 }
 exports.product_listing = async (req, res) => {
     try {
-        console.log("--logs",req.query.search.value)
+        // console.log("--logs",req.query.search.value)
         var pagno = req.query.start / req.query.length + 1
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
