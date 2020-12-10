@@ -409,6 +409,7 @@ exports.addPrice = async (req, res) => {
 }
 exports.product_listing = async (req, res) => {
     try {
+        console.log("--logs",req.query.search.value)
         var pagno = req.query.start / req.query.length + 1
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
@@ -416,13 +417,20 @@ exports.product_listing = async (req, res) => {
         let product = await Product.find({
             $or: [
                 { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                { "name.english": { $regex: '.*' + searchString + '.*', $options: 'i' } }
+                { "name.english": { $regex:searchString, $options: 'i' } }
             ]
         })
             .skip((pagno - 1) * limit) //Notice here
             .limit(limit)
             .lean();
-        let total = await Product.find({ description: { $regex: '.*' + searchString + '.*', $options: 'i' } }).lean()
+        let total = await Product.find(
+            {
+                $or: [
+                    { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
+                    { "name.english": { $regex:searchString, $options: 'i' } }
+                ]
+            }
+            ).lean()
         // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
     } catch (err) {

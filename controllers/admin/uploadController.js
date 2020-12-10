@@ -16,14 +16,21 @@ exports.upload = (req, res) => {
     .then(async (jsonObj) => {
 
       const job = queue.createJob(jsonObj);
-      job.save();
+      job.retries(3).save();
       job.on('succeeded', (result) => {
         console.log(`Received result for job  ${result}`);
       });
       queue.on('job failed', (jobId, err) => {
         console.log('errrrrrr', err.message + 'iddd', jobId);
       });
-
+      job.on('failed', (err) => {
+        console.log(`Job ${job.id} failed with error ${err.message}`);
+      });
+      job.on('retrying', (err) => {
+        console.log(
+          `Job ${job.id} failed with error ${err.message} but is being retried!`
+        );
+      });
       queue.process(3, async (job) => {
         var declare = 'test'
         for (var i = 0; i < job.data.length; i++) {
@@ -43,11 +50,7 @@ exports.upload = (req, res) => {
             status: job.data[i].status,
             brand_id: job.data[i].brand
           }
-          let product = await Product.findOneAndUpdate({ sku: job.data[i].sku }, productinfo, { returnOriginal: false })
-          if (!product) {
-
-            await Product.create(productinfo)
-          }
+           await Product.findOneAndUpdate({ sku: job.data[i].sku }, productinfo,{upsert: true}).lean()
         }
         return declare
       });
