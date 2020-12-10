@@ -85,7 +85,7 @@
                     <input type="file" name="csv" id="fileinput" />
                     <input type="button" id="btn" value="Submit" />
                   </form>
-                  <button type="button" class="btn btn-danger check_delete">Delete</button>
+                  <button type="button" style="display:none"class="btn btn-danger check_delete">Delete</button>
                   <table id="products" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -167,7 +167,7 @@
                 <!-- Page specific script -->
                 <script>
                   var fruitsGranted = []
-                  $(".check_delete").hide();
+                  // $(".check_delete").hide();
                   function hideandshow(arr) {
                     (!arr.length) ? $(".check_delete").hide() : $(".check_delete").show();
                   }
