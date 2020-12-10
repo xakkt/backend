@@ -11,15 +11,13 @@ exports.wishlist = async (_store, product, price) => {
         wish_price: { $gte: price }
     }
     try {
-        var devices_token =[]
+        var devices_token = []
         let list = await Wishlist.find(filter).exec()
         list.map(async (item) => {
             let devices = await Device.find({ user_id: item._user }).exec()
-            devices.map((device) =>{
+            devices.map((device) => {
                 devices_token.push(device.device_token)
             })
-            console.log("---devices",devices_token)            
-            // const registrationToken = req.body.registrationToken
             const options = {
                 priority: 'high',
                 timeToLive: 60 * 60 * 24, // 1 day
@@ -40,8 +38,7 @@ exports.wishlist = async (_store, product, price) => {
             }
             admin.messaging().sendToDevice(devices_token, payload, options)
                 .then(response => {
-                    console.log("---respnsonessss",response)
-                    // return res.status(200).json({ message: "Notification sent successfully", data: response })
+                    console.log("---respnsonessss", response)
                 })
                 .catch(error => {
                     console.log(error);

@@ -141,9 +141,12 @@ exports.authenticate = async (req, res) => {
 			device_type: req.body.device_type,
 			device_token: req.body.device_token
 		}
-		let login = await Device.findOneAndUpdate({ user_id: userInfo._id, device_token: req.body.device_token }, { device_token: req.body.device_token, device_type: req.body.device_type }, { returnOriginal: false }).lean()
-		if (!login)
-			await Device.create(deviceinfo)
+		 Device.findOneAndUpdate({ user_id: userInfo._id, device_token: req.body.device_token }, { device_token: req.body.device_token, device_type: req.body.device_type },{upsert: true} ,function(err, result){
+		   if(err)
+		   {
+			   return res.status(400).json({message:err.message})
+		   }
+		 })
 		const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 		return res.json({ status: true, message: "user found!!!", data: { user: userInfo, token: token } });
 

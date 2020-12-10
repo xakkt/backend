@@ -178,7 +178,7 @@ exports.productlisting = async (req, res) => {
         // let price = await StoreProductPricing.find().exec()
         // let product = await Product.find().exec();
         // if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product/listing', { menu: "products", submenu: "list", product:'', price: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: '', price: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });
@@ -318,14 +318,14 @@ exports.priceSave = async (req, res) => {
             const banner = {
                 _deal: req.body.deal[i],
                 _store: req.body.store[i],
-                deal_end:{ $gte:  moment(req.body.stime[i]).startOf('day').toISOString()},
+                deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() },
 
             }
             // console.log("--valueeeee",moment(req.body.stime[i]).startOf('day').toISOString())
             waterfall([
                 function (callback) {
                     Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $lt: moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }, function (err, result) {
-                    //    console.log("--valuie",result)
+                        //    console.log("--valuie",result)
                         callback(err, result);
                     })
                 },
@@ -337,11 +337,11 @@ exports.priceSave = async (req, res) => {
                         })
                 },
                 function (result1, callback) {
-                   bannerinfo.image = 'no-image_1606218971.jpeg'
+                    bannerinfo.image = 'no-image_1606218971.jpeg'
                     if (result1)
                         callback(null, result1);
                     else {
-                         Banner.create(bannerinfo)
+                        Banner.create(bannerinfo)
                     }
                 }
             ], function (err, result) {
@@ -407,20 +407,35 @@ exports.addPrice = async (req, res) => {
         res.status(400).json({ data: err.message });
     }
 }
-exports.product_listing = async(req,res)=>{
-    try{
-        var pagno = req.query.start/req.query.length + 1
+exports.product_listing = async (req, res) => {
+    try {
+        var pagno = req.query.start / req.query.length + 1
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
-        let product = await Product.find()
-            .skip((pagno-1) * limit) //Notice here
+        let searchString = req.query.search.value || ''
+        let product = await Product.find({
+            $or: [
+                { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
+                { "name.english": { $regex: '.*' + searchString + '.*', $options: 'i' } }
+            ]
+        })
+            .skip((pagno - 1) * limit) //Notice here
             .limit(limit)
             .lean();
-       let total = await Product.find().lean()
+        let total = await Product.find({ description: { $regex: '.*' + searchString + '.*', $options: 'i' } }).lean()
         // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.json({ draw: page,recordsTotal:total.length,recordsFiltered:total.length,data: product })
-    }catch(err)
-    {
+        return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
+    } catch (err) {
         res.status(400).json({ data: err.message });
+    }
+}
+
+exports.product_delete =  async (req,res) =>{
+    try {
+        let remove = await Product.deleteMany({ _id: {$in :req.body.id} }).exec()
+        if (!remove) return res.json({ status: false })
+        return res.json({ status: true })
+    } catch (err) {
+        res.send(err)
     }
 }

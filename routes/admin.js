@@ -136,6 +136,7 @@ router.post('/store/update/:id', isloggedin,_global.permission('store_edit'),sto
 router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
 })
+router.post('/product/delete',isloggedin, productController.product_delete)
 router.post('/product/create',isloggedin,productUpload.single('logo'),_global.permission('product_add'),productController.productsave)
 router.get('/product',isloggedin,_global.permission('product_view'),productController.productlisting)
 router.get('/product/delete/:id',isloggedin,_global.permission('product_delete'),productController.productdelete);
@@ -145,6 +146,7 @@ router.get('/product/pricing/:productid',isloggedin,productController.addPrice);
 router.get('/product/create',isloggedin, productController.productCreate)
 router.post('/product_price/create',isloggedin, productController.priceSave)
 router.post('/product_price/remove',isloggedin, productController.remove)
+
 router.get('/product/list',isloggedin,_global.permission('product_view'),productController.product_listing)
 
 /*--------- Invoice ---------*/
