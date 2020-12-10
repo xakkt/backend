@@ -168,9 +168,8 @@
                 <script>
                   var fruitsGranted = []
                   $(".check_delete").hide();
-                  function hideandshow(arr)
-                  {
-                    (!arr.length)?  $(".check_delete").hide():$(".check_delete").show();
+                  function hideandshow(arr) {
+                    (!arr.length) ? $(".check_delete").hide() : $(".check_delete").show();
                   }
                   $(".check_delete").click(function () {
                     $.ajax({
@@ -184,7 +183,7 @@
                       console.log("--done", data)
                       if (data.status) {
                         for (i = 0; i < fruitsGranted.length; i++) {
-                          $('#'+fruitsGranted[i]).closest('tr').remove();
+                          $('#' + fruitsGranted[i]).closest('tr').remove();
                         }
                       }
                     });
@@ -197,12 +196,20 @@
                       flag = true
                     }
                     for (i = 0; i < allRows.length; i++) {
-                      //  console.log("llll", allRows[i].id)
-                      fruitsGranted.push(allRows[i].id);
-                      allRows[i].checked = flag
+
+                      if (flag) {
+                        fruitsGranted.push(allRows[i].id);
+                        allRows[i].checked = flag
+                      }
+                      else {
+                        allRows[i].checked = flag
+                        const index = fruitsGranted.indexOf(allRows[i].id);
+                        if (index > -1) {
+                          fruitsGranted.splice(index, 1);
+                        }
+                      }
                     }
                     hideandshow(fruitsGranted)
-                    // console.log("---log", fruitsGranted)
                   }
                   function myFunction(that) {
                     var $this = $(that);
