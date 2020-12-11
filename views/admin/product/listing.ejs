@@ -78,6 +78,7 @@
                       name="delete" />
                     <input type="hidden" value=<%= (await check ('product_edit',roleid)) ? roleid:"" %> id="edit"
                       name="edit" />
+                      <a href="/dummy.csv" download>Dummy link</a>
 
                     <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
                     <input type="hidden" value="<%=user%>" id="admin" name="admin" />
