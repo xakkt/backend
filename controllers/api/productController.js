@@ -60,16 +60,19 @@ exports.search = async (req, res) => {
 			match: { 
 				$or: [
 
-					{description: { $regex: '.*' + searchString + '.*', $options: 'i' }}, 
-					{"name.english": { $regex:searchString, $options: 'i' } }
+					{description: { $regex: '.*' + searchString   + '.*', $options: 'i' }}, 
+					{"name.english": { $regex:'.*' +searchString + '.*' , $options: 'i' } }
 			   ],
 			 },
 		}).skip((page - 1) * limit) //Notice here
             .limit(limit)
 			.lean();
+			if(!product) return res.json({message:"Data not found",data:[]})
 			console.log("--value",product)
 						await Promise.all(product.map(async (element) => {
 				var data = {}
+				if(element._product)
+				{
 				var productId = element._product._id.toString();
 				var productPrice = await _global.productprice(req.body._store, productId)
 	
@@ -79,10 +82,8 @@ exports.search = async (req, res) => {
 				data._product.regular_price =  productPrice.regular_price.toFixed(2)
 				delete data.regular_price 
 				search_product.push(data)
-	
+				}
 			}))	
-
-
 
         let total = await ProductRegularPricing.find({
             _store:req.body._store
@@ -92,11 +93,12 @@ exports.search = async (req, res) => {
 				$or: [
 
 					 {description: { $regex: '.*' + searchString + '.*', $options: 'i' }}, 
-					 {"name.english": { $regex:searchString, $options: 'i' } }
-				],
+					 {"name.english": { $regex:'.*' +searchString + '.*' , $options: 'i' } }
+					],
 			 },
 		})
-        return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: search_product })
+     const result = total.filter(word => word._product != null)
+ 		return res.json({ draw: page, recordsTotal: result.length, recordsFiltered: result.length, data: search_product })
 
 	} catch (err) {
 		console.log("--logs",err)
