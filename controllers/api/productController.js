@@ -48,6 +48,7 @@ exports.list = async (req, res) => {
 exports.search = async (req, res) => {
 
 	try {
+		var search_product = []
 		// var pagno = req.query.start / req.query.length + 1
         var page = req.body.page || 1; //for next page pass 1 here
         var limit = req.body.limit || 10;
@@ -58,23 +59,39 @@ exports.search = async (req, res) => {
 			path: '_product',
 			match: { 
 					description: { $regex: '.*' + searchString + '.*', $options: 'i' } ,
-					// { "name.english": { $regex:searchString, $options: 'i' } }
+					 "name.english": { $regex:searchString, $options: 'i' } 
 			 },
 		}).skip((page - 1) * limit) //Notice here
             .limit(limit)
-            .lean();
+			.lean();
+			await Promise.all(product.map(async (element) => {
+				var data = {}
+				var productId = element._product._id.toString();
+				var productPrice = await _global.productprice(req.body._store, productId)
+	
+				data = { ...element}
+				data._product.image = `${process.env.BASE_URL}/images/products/${element._product.image}`,
+				data._product.deal_price = productPrice.deal_price.toFixed(2),
+				data._product.regular_price =  productPrice.regular_price.toFixed(2)
+				delete data.regular_price 
+				search_product.push(data)
+	
+			}))	
+
+
+
         let total = await ProductRegularPricing.find({
             _store:req.body._store
         }).populate({
 			path: '_product',
 			match: { 
 				// $or: [
-					 description: { $regex: '.*' + searchString + '.*', $options: 'i' } 
-					// { "name.english": { $regex:searchString, $options: 'i' } }
+					 description: { $regex: '.*' + searchString + '.*', $options: 'i' }, 
+					 "name.english": { $regex:searchString, $options: 'i' } 
 				// ],
 			 },
 		})
-        return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
+        return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: search_product })
 
 	} catch (err) {
        return res.status(404).json({message:err.message})
