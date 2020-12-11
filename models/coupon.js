@@ -2,28 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const couponSchema = Schema({
-  code: {
+  coupon_code: {
     type: String,
     required: true,
   },
-  user_id: {
-      type: Schema.Types.ObjectId, ref: 'User'
-  },
-  description: {
+  apply: {
     type: String,
+    enum : ['fixed','percent'],
+    default: 'percent'
+  },
+  amount:{
+    type: Number,
     required: true
   },
-  disclaimer: {
+  _store:{
     type: String,
-    required: true
-  },
-  valid_from:{
-    type: Date,
-    required: true
-  },
-  valid_till:{
-    type: Date,
-    required: true
+    // required: true
   }
 }, {timestampst:true});
 

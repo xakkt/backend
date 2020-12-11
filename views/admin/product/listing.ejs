@@ -17,6 +17,19 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
+<style>
+
+#dummy {
+    /* text-align: left; */
+    position: absolute;
+    /* left: 50px; */
+    right: 100px;
+}
+#element.style {
+    position: absolute;
+    left: 20%;
+}
+</style>
 
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
@@ -78,15 +91,17 @@
                       name="delete" />
                     <input type="hidden" value=<%= (await check ('product_edit',roleid)) ? roleid:"" %> id="edit"
                       name="edit" />
-                      <a href="/dummy.csv" download>Dummy link</a>
+                      <a href="/dummy.csv" id="dummy" download>Dummy link</a>
 
                     <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
                     <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                     <%} %>
+                    <div id="files">
                     <input type="file" name="csv" id="fileinput" />
                     <input type="button" id="btn" value="Submit" />
+                    </div>
                   </form>
-                  <button type="button" style="display:none" class="btn btn-danger check_delete">Delete</button>
+                  <button type="button" style="display:none" class="btn btn-danger btn-sm check_delete">Delete</button>
                   <table id="products" class="table table-bordered table-striped">
                     <thead>
                       <tr>

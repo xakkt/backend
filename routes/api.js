@@ -134,6 +134,8 @@ router.get('/app/dashboard/:storeid', homeController.dashboard);
 // router.post('/product/create', verifyjwt.checkToken, productValidation, productController.create);
 router.get('/product/list/:storeid',productController.list);
 router.post('/product',productController.show);
+router.post('/product/search',productController.search);
+
 // router.delete('/product/:id/delete', verifyjwt.checkToken, productController.delete);
 // router.put('/product/:id/update',  verifyjwt.checkToken,productValidation, productController.update);
 
