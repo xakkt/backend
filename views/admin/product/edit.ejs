@@ -89,7 +89,7 @@
                       <select name="_category" class="form-control custom-select" id="_category">
                         <option value="">Choose one</option>
                         <% if(productCategories) productCategories.forEach(function(category){ %>
-                          <option <%=(product._category.equals(category._id))?'selected':''%> value="<%=category._id%>()"><%=category.name%></option>
+                          <option <%=(product._category.equals(category._id))?'selected':''%> value="<%=category._id%>"><%=category.name%></option>
                         <% }) %>
                       </select>
                     </div>
