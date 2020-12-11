@@ -170,6 +170,7 @@
                   var fruitsGranted = []
                   // $(".check_delete").hide();
                   function hideandshow(arr) {
+                    console.log("--hide",arr);
                     (!arr.length) ? $(".check_delete").hide() : $(".check_delete").show();
                   }
 
@@ -297,6 +298,7 @@
                         if (data.status) {
                           // list_products();
                           $('#products').DataTable().ajax.reload();
+                          fruitsGranted.splice(0, fruitsGranted.length)
                           // for (i = 0; i < fruitsGranted.length; i++) {
                           //   $('#' + fruitsGranted[i]).closest('tr').remove();
                           // }

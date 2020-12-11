@@ -34,6 +34,7 @@ exports.upload = (req, res) => {
       queue.process(3, async (job) => {
         var declare = 'test'
         for (var i = 0; i < job.data.length; i++) {
+          // console.log("--nameeee",job.data[i].name)
           const productinfo = {
             name: {
               english: job.data[i].name
