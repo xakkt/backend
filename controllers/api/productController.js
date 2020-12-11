@@ -58,13 +58,17 @@ exports.search = async (req, res) => {
         }).populate({
 			path: '_product',
 			match: { 
-					description: { $regex: '.*' + searchString + '.*', $options: 'i' } ,
-					 "name.english": { $regex:searchString, $options: 'i' } 
+				$or: [
+
+					{description: { $regex: '.*' + searchString + '.*', $options: 'i' }}, 
+					{"name.english": { $regex:searchString, $options: 'i' } }
+			   ],
 			 },
 		}).skip((page - 1) * limit) //Notice here
             .limit(limit)
 			.lean();
-			await Promise.all(product.map(async (element) => {
+			console.log("--value",product)
+						await Promise.all(product.map(async (element) => {
 				var data = {}
 				var productId = element._product._id.toString();
 				var productPrice = await _global.productprice(req.body._store, productId)
@@ -85,15 +89,17 @@ exports.search = async (req, res) => {
         }).populate({
 			path: '_product',
 			match: { 
-				// $or: [
-					 description: { $regex: '.*' + searchString + '.*', $options: 'i' }, 
-					 "name.english": { $regex:searchString, $options: 'i' } 
-				// ],
+				$or: [
+
+					 {description: { $regex: '.*' + searchString + '.*', $options: 'i' }}, 
+					 {"name.english": { $regex:searchString, $options: 'i' } }
+				],
 			 },
 		})
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: search_product })
 
 	} catch (err) {
+		console.log("--logs",err)
        return res.status(404).json({message:err.message})
 	}
 
