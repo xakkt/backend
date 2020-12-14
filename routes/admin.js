@@ -18,6 +18,7 @@ const unitController = require('../controllers/admin/unitController')
 const bannerController = require('../controllers/admin/bannerController.js')
 const compController = require('../controllers/admin/compController.js')
 const uploadController = require('../controllers/admin/uploadController.js')
+const coupanController = require('../controllers/admin/coupanController.js')
 
 
 // var auth = function(req, res, next) {
@@ -62,7 +63,7 @@ var storage =   multer.diskStorage({
   });
   var brandStorage =   multer.diskStorage({
     destination: function (req, file, callback) {
-      callback(null, './$/images/brands');
+      callback(null, './public/images/brands');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
       callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
@@ -257,4 +258,14 @@ router.get('/unit/delete/:id',isloggedin,unitController.delete)
 
 /******-------upload */
  router.post('/upload', csvUpload.single('file'),uploadController.upload)
+
+
+/********Coupon*********/
+router.get('/coupon/create',isloggedin,coupanController.create) 
+router.post('/coupon/save',isloggedin,coupanController.save) 
+router.get('/coupon/list',isloggedin,coupanController.listing) 
+router.get('/coupon/delete/:id',isloggedin,coupanController.delete) 
+router.get('/coupon/edit/:id',isloggedin,coupanController.edit) 
+router.post('/coupon/update/:id',isloggedin,coupanController.update) 
+
 module.exports = router;

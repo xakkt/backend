@@ -357,6 +357,7 @@
                 <p>Roles</p>
               </a>
             </li>
+            
             <!-- <li class="nav-item">
               <a href="pages/forms/advanced.html" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
@@ -375,6 +376,43 @@
           </ul> -->
         </li>
         <%}%>
+ <!----------------Coupan ----------------->
+ <% if(await admin("SYSTEM ADMININSTRATOR",user)) {%>
+  <li class="nav-item  <% if (menu === 'coupon') { %> menu-open <% } %>">
+   <a href="#" class="nav-link <% if (menu === 'coupon') { %> active <% } %>">
+     <i class="nav-icon fas fa-edit"></i>
+     <p>
+        Coupons
+       <i class="fas fa-angle-left right"></i>
+     </p>
+   </a>
+   <ul class="nav nav-treeview">
+     <li class="nav-item">
+       <a href="/admin/coupon/create" class="nav-link <% if (menu === 'coupon' && submenu === 'add' ) { %> active <% } %>">
+         <i class="far fa-circle nav-icon"></i>
+         <p>New Coupan</p>
+       </a>
+     </li>
+     <li class="nav-item">
+      <a href="/admin/coupon/list" class="nav-link <% if (menu === 'coupon' && submenu === 'list' ) { %> active <% } %>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Manage Coupans</p>
+      </a>
+    </li>
+   </ul>
+   <!-- <ul class="nav nav-treeview">
+     <li class="nav-item">
+       <a href="pages/tables/data.html" class="nav-link">
+         <i class="far fa-circle nav-icon"></i>
+         <p>DataTables</p>
+       </a>
+     </li>
+    
+   </ul> -->
+ </li>
+ <%}%>
+
+
         <!----- Payments ---->
         <li class="nav-item">
           <a href="#" class="nav-link">

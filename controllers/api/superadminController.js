@@ -8,6 +8,7 @@ exports.create = async (req, res) => {
     try {
 
         let role = await Roles.findOne({ name: req.body.role_name }).exec()
+        // console.log("---role",role)
         if (!role) return res.json({ message: "Role not found" })
         const superadmininfo = {
             first_name: 'Admin',
