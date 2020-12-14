@@ -13,33 +13,31 @@ exports.list = async (req, res) => {
     }
     try {
 
-        let cart = await Cart.find({ _store: req.body._store }).lean;
-        if (!cart) return res.json({ message: "Data not found", data: [] })
-        return res.json({ message:"Listing of coupouns", data: cart })
+        let coupon = await Coupon.find({ _store: req.body._store }).lean();
+        if (!coupon) return res.json({ message: "Data not found", data: [] })
+        return res.json({ messag: "Listing of coupons", data: coupon })
     } catch (err) {
         return res.status(400).json({ data: err.message });
     }
 }
 exports.applycoupon = async (req, res) => {
     try {
-        console.log("--logsss",req.body)
         let cart = await Cart.findOne({ _id: req.body._cart }).lean();
         let coupon = await Coupon.findOne({ coupon_code: req.body.coupan_name }).lean()
-        var price = 0 ;
-        console.log("--logsss",cart)
+        var price = 0;
         if (coupon.apply == 'percent') {
             price = eval(cart.cart[0].total_price - (cart.cart[0].total_price * coupon.amount) / 100)
         }
-        else if(coupon.apply == 'fixed'){
+        else if (coupon.apply == 'fixed') {
             price = cart.cart[0].total_price - coupon.amount
 
         }
-        delete(cart.cart[0].total_price)
+        delete (cart.cart[0].total_price)
         cart.cart[0].total_price = price
 
-        return res.json({ message:"Listing of coupouns", data: cart })
+        return res.json({ message: "Listing of coupouns", data: cart })
     } catch (err) {
-        console.log("--logs",err)
+        console.log("--logs", err)
         return res.status(400).json({ data: err.message });
     }
 }
