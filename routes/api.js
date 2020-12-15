@@ -19,6 +19,7 @@ const bannerController = require('../controllers/api/bannerController');
 const ratingController = require('../controllers/api/ratingController');
 const pushController = require('../controllers/api/pushController');
 const couponController = require('../controllers/api/couponController');
+const stripeController = require('../controllers/api/stripeController');
 
 
 
@@ -210,8 +211,8 @@ router.post("/push",pushController.firebase)
 
 router.post("/applycoupon",verifyjwt.checkToken,couponController.applycoupon)
 router.post("/coupon-list",verifyjwt.checkToken,couponController.list)
+router.post("/stripe",verifyjwt.checkToken,stripeController.stripe)
 
- 
 
 
 module.exports = router;

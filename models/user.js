@@ -12,6 +12,11 @@ const childSchema = new Schema({
   address: {
     type: String,
   },
+  address_type:{
+    type: String,
+    enum : ['Home','Office','Other'],
+        default: 'Home'
+  },
   pincode: {
     type: Number
   },
@@ -26,7 +31,19 @@ const childSchema = new Schema({
   },
   country: {
     type: String
-  }
+  },
+  location: {
+    type: {
+        type: String,
+        enum: ['Point'],
+        required: true
+    },
+    coordinates: {
+        type: [Number],
+        required: true
+    }
+},
+
 });
 
 const userSchema = Schema({

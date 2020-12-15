@@ -227,13 +227,16 @@ exports.address = async (req, res) => {
 
 	try {
 		var address_array = [];
+		console.log("--req",req.body)
 		address_array.push({
 			address: req.body.address,
 			city: req.body.city,
+			address_type:req.body.address_type,
 			country: req.body.country,
 			region: req.body.region,
 			pincode: req.body.pincode,
-			state: req.body.state
+			state: req.body.state,
+			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 		})
 
 		let user = await User.findOneAndUpdate({ _id: req.decoded.id }, { $push: { address: address_array } }, { returnOriginal: false }).exec()
@@ -248,7 +251,9 @@ exports.address = async (req, res) => {
 exports.addresslist = async (req, res) => {
 
 	try {
-		let user = await User.findOne({ _id: req.decoded.id }, 'address').select('-_id').lean()
+		let user = await User.findOne({ _id: req.decoded.id },"contact_no email first_name last_name address").select('-_id').lean()
+		// let user = await User.findOne({ _id: req.decoded.id }).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').lean()
+
 		if (!user) return res.json({ status: false, message: "Data not found" })
 		return res.json({ state: true, data: user })
 
