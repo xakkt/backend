@@ -32,6 +32,16 @@ const childSchema = new Schema({
   country: {
     type: String
   },
+  _timezone: {
+    type: Schema.Types.ObjectId,
+    ref:'Timezone',
+    validate: {
+            validator: function(v) {
+            return FKHelper(mongoose.model('Timezone'), v);
+         },
+        message: `Timezone doesn't exist`
+    }
+},
   location: {
     type: {
         type: String,

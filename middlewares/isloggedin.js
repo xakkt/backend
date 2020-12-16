@@ -4,7 +4,7 @@ const Permission = require('../models/permission');
 const { check } = require('../controllers/admin/userController');
 
 
-module.exports =  (req, res, next)=>{
+module.exports = async (req, res, next)=>{
     if (req.session.email) { 
         res.locals.user = req.session.userid
         res.locals.roleid = req.session.roleid

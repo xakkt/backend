@@ -87,9 +87,9 @@ exports.check = function (req, res) {
 
 exports.create = async (req, res) => {
     try {
-        // var timezone = await Timezone.find({}).lean();
+        var timezone = await Timezone.find({}).lean();
         var role = await Roles.find({}).lean()
-        res.render('admin/user/create', { menu: "users", submenu: "create", role: role })
+        res.render('admin/user/create', { menu: "users", submenu: "create",timezone:timezone, role: role })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });

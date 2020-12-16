@@ -20,28 +20,33 @@ exports.dashboard = async (req, res) => {
 	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 	// console.log("--date",date)
 	try {
+		var userid 
 		let token = req.headers['authorization'];
 		if (token) {
 			if (token.startsWith(process.env.JWT_SECRET)) {
 				token = token.slice(7, token.length);
 			}
 			await jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-				if (err) {
-					return res.json({
-						success: false,
-						message: 'Token is not valid'
-					});
-				}
+				// if (err) {
+				// 	return res.json({
+				// 		success: false,
+				// 		message: 'Token is not valid'
+				// 	});
+				// }
 				userid = decoded.id;
 			});
 		}
+		var cartProductList = []
+		var wishlistids = []
+		var shoppinglistProductIds  = []
 		let categories = await StoreProductPricing.find({ _store: req.params.storeid }).populate('_product', 'name sku  image').lean();
 		if (!categories.length) return res.json({ status: "false", message: "No data found", data: categories });
-
-		var cartProductList = await _global.cartProducts(userid, req.params.storeid);
-		var wishlistids = await _global.wishList(userid, req.params.storeid)
-		var shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
-
+		 if(userid)
+		 {
+		 cartProductList = await _global.cartProducts(userid, req.params.storeid);
+		 wishlistids = await _global.wishList(userid, req.params.storeid)
+		 shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
+		 }
 
 		await Promise.all(categories.map(async (element) => {
 			var data = {}

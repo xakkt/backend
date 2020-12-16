@@ -3,6 +3,7 @@ const Store = require('../../models/store');
 const Country = require('../../models/country')
 const Timezone = require('../../models/timezone')
 const { validationResult } = require('express-validator');
+var moment = require('moment-timezone');
 
 
 exports.list = async (req, res)=>{
@@ -33,8 +34,10 @@ exports.create = async(req, res) => {
 					var countries = await Country.find({}).lean();
 					var departments = await Department.find({}).lean();
 					var timezone = await Timezone.find({}).lean()
+					// var TimeZone = moment.tz.countries()
+					// var timeZones = moment.tz(moment.tz.names()).format();
+					// console.log("-los",TimeZone)
 					res.render('admin/store/create', { menu:"store", submenu:"create", departments:departments, countries: countries, timezone: timezone })
-			
 				}catch(err){
                     console.log(err)
 					res.status(400).json({data: err.message});
