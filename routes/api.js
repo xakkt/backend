@@ -207,7 +207,7 @@ router.post("/bannerproduct",bannerController.bannderproduct)
 router.post("/rating",verifyjwt.checkToken,ratingController.add)
 router.post("/push",pushController.firebase)
 
-router.post("/push",pushController.firebase)
+// router.post("/push",pushController.firebase)
 
 router.post("/applycoupon",verifyjwt.checkToken,couponController.applycoupon)
 router.post("/coupon-list",verifyjwt.checkToken,couponController.list)

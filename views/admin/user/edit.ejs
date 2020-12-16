@@ -136,6 +136,16 @@
                                
                                  </div>
                              </div>
+                             <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="tz">Timezone</label>
+                                 <select class="select2" data-placeholder="Select a Timezone" name="timezone" style="width: 100%;">
+                                   <% timezone.forEach(function(timezone){ %>
+                                    <option <%=(timezone == user._timezone)?'selected':'' %> value="<%=timezone%>"><%=timezone%></option>
+                                    <%})%>
+                                 </select>
+                               </div>
+                             </div>
                               <!-- /.col -->
                            </div>
                            <!-- /.row -->

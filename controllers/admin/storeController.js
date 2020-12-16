@@ -35,9 +35,8 @@ exports.create = async(req, res) => {
 					var departments = await Department.find({}).lean();
 					var timezone = await Timezone.find({}).lean()
 					// var TimeZone = moment.tz.countries()
-					// var timeZones = moment.tz(moment.tz.names()).format();
-					// console.log("-los",TimeZone)
-					res.render('admin/store/create', { menu:"store", submenu:"create", departments:departments, countries: countries, timezone: timezone })
+					var TimeZone = moment.tz.names();
+					res.render('admin/store/create', { menu:"store", submenu:"create", departments:departments, countries: countries, timezone: TimeZone })
 				}catch(err){
                     console.log(err)
 					res.status(400).json({data: err.message});
@@ -50,7 +49,8 @@ exports.editStore = async(req, res) => {
 			var countries = await Country.find({}).lean();
 			var departments = await Department.find({}).lean();
 			var timezone = await Timezone.find({}).lean()
-			res.render('admin/store/edit', { menu:"store", submenu:"", store:store, departments:departments, countries: countries, timezone: timezone })
+			var TimeZone = moment.tz.names();
+			res.render('admin/store/edit', { menu:"store", submenu:"", store:store, departments:departments, countries: countries, timezone: TimeZone })
 		}catch(err){
 
 		}

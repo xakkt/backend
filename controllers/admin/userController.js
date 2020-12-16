@@ -15,6 +15,7 @@ const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 //const transporter = require('../../config/transporter-mail');
+var moment = require('moment-timezone');
 
 
 class Mail {
@@ -78,8 +79,9 @@ exports.check = function (req, res) {
     exports.edit = async (req, res) => {
         try {
             var role = await Roles.find({}).lean()
+            var TimeZone = moment.tz.names();
             const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-            res.render('admin/user/edit', { menu: "users", submenu: "edit", status: "success", role: role, message: "", user: user });
+            res.render('admin/user/edit', { menu: "users", submenu: "edit", status: "success", role: role,timezone:TimeZone, message: "", user: user });
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }
@@ -87,9 +89,11 @@ exports.check = function (req, res) {
 
 exports.create = async (req, res) => {
     try {
-        var timezone = await Timezone.find({}).lean();
+        // var timezone = await Timezone.find({}).lean();
         var role = await Roles.find({}).lean()
-        res.render('admin/user/create', { menu: "users", submenu: "create",timezone:timezone, role: role })
+        var TimeZone = moment.tz.names();
+
+        res.render('admin/user/create', { menu: "users", submenu: "create",timezone:TimeZone, role: role })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });
@@ -114,7 +118,7 @@ exports.save = async (req, res) => {
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
             superbuckId: req.body.superbuckId,
-            timezone: req.body.timezone,
+            _timezone: req.body.timezone,
             profile_pic: req.file.path.replace(/public/g, ""),
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
@@ -135,6 +139,7 @@ exports.save = async (req, res) => {
 exports.update = async function (req, res) {
 
     try {
+        // console.log("--user",req.body)
         let userinfo = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
@@ -145,8 +150,9 @@ exports.update = async function (req, res) {
             _supervisor: req.session.userid,
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
+
             superbuckId: req.body.superbuckId,
-            timezone: req.body.timezone,
+            _timezone: req.body.timezone,
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
 

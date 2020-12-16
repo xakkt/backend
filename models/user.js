@@ -32,16 +32,17 @@ const childSchema = new Schema({
   country: {
     type: String
   },
-  _timezone: {
-    type: Schema.Types.ObjectId,
-    ref:'Timezone',
-    validate: {
-            validator: function(v) {
-            return FKHelper(mongoose.model('Timezone'), v);
-         },
-        message: `Timezone doesn't exist`
-    }
-},
+ 
+//   _timezone: {
+//     type: Schema.Types.ObjectId,
+//     ref:'Timezone',
+//     validate: {
+//             validator: function(v) {
+//             return FKHelper(mongoose.model('Timezone'), v);
+//          },
+//         message: `Timezone doesn't exist`
+//     }
+// },
   location: {
     type: {
         type: String,
@@ -102,17 +103,21 @@ const userSchema = Schema({
     required: true
   },
   address: [childSchema],
+  _timezone:{
+    require:true,
+    type:String
+},
 
-  _timezone: {
-    type: Schema.Types.ObjectId,
-    ref: 'Timezone',
-    validate: {
-      validator: function (v) {
-        return FKHelper(mongoose.model('Timezone'), v);
-      },
-      message: `Timezone doesn't exist`
-    }
-  },
+  // _timezone: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Timezone',
+  //   validate: {
+  //     validator: function (v) {
+  //       return FKHelper(mongoose.model('Timezone'), v);
+  //     },
+  //     message: `Timezone doesn't exist`
+  //   }
+  // },
   role_id: [
     {
       type: Schema.Types.ObjectId,

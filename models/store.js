@@ -28,16 +28,19 @@ const storeSchema = new Schema({
             message: `User doesn't exist`
         }
     },
-    _timezone: {
-        type: Schema.Types.ObjectId,
-        ref:'Timezone',
-        validate: {
-                validator: function(v) {
-                return FKHelper(mongoose.model('Timezone'), v);
-             },
-            message: `Timezone doesn't exist`
-        }
+    _timezone:{
+        type:String
     },
+    // _timezone: {
+    //     type: Schema.Types.ObjectId,
+    //     ref:'Timezone',
+    //     validate: {
+    //             validator: function(v) {
+    //             return FKHelper(mongoose.model('Timezone'), v);
+    //          },
+    //         message: `Timezone doesn't exist`
+    //     }
+    // },
     address: {
         type: String,
         required: true

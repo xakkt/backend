@@ -15,21 +15,18 @@ exports.login = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const userInfo = await User.findOne({ email: req.body.email }).populate('_timezone , abbr').exec()
+        const userInfo = await User.findOne({ email: req.body.email }).exec()
         if (!userInfo) { await req.flash('failure', "Email is not valid"); return res.redirect('/admin/login') };
         if (!bcrypt.compareSync(req.body.password, userInfo.password)) {
             await req.flash('failure', "Invalid password!!!");
             res.redirect('/admin/login');
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
-        // let utc = await Store.findOne({ _user: userInfo._id }).populate('_timezone', 'abbr').exec()
-      console.log("--value",userInfo)
-        // let time = await User.findOne({ email:req.session.email}).populate('_timezone , abbr').exec()
-        // var date = moment.tz.setDefault(time._timezone.abbr)
-     
+          console.log("--user",userInfo)
+        var date = moment.tz.setDefault(userInfo._timezone)
         // console.log("--utc", utc._timezone.abbr)
         // var date = moment.tz.setDefault(utc._timezone.abbr);
-        // req.session.date = date
+        req.session.date = date
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id

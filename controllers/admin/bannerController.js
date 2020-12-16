@@ -66,7 +66,7 @@ exports.list = async (req, res) => {
     try {
         var banner_image = []
         var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-        // console.log("--currentdate",date)
+        console.log("--currentdate",date)
         const banner = await Banner.find({ $and: [{ deal_start: { $lte: date } }, { deal_end: { $gte: date } }] }).populate('_store', 'name')
             .populate('_deal', 'name').lean()
         // banner.map((element) => {
