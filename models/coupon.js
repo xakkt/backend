@@ -15,6 +15,10 @@ const couponSchema = Schema({
     type: Number,
     required: true
   },
+  min_amount:{
+    type: Number,
+    required: true
+  },
   _store:{
     type: String,
     // required: true

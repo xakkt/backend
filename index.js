@@ -73,7 +73,9 @@ io.on('connection', function (socket) {
   });
 
 });
-
+ app.get('/',(req, res)=> {
+       return  res.render('frontend/index')
+  })
 
 
 app.use('/admin', adminRoute);

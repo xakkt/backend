@@ -84,7 +84,7 @@ exports.create = async (req, res) => {
 	}
 	User.create(userinfo, function (err, result) {
 		if (err) return res.status(400).json({ data: err.message });
-
+            
 		//mail.sendmail();
 		return res.json({ status: "success", message: "User Created.", data: result });
 
@@ -227,7 +227,7 @@ exports.address = async (req, res) => {
 
 	try {
 		var address_array = [];
-		console.log("--req",req.body)
+		// console.log("--req",req.body)
 		address_array.push({
 			address: req.body.address,
 			city: req.body.city,

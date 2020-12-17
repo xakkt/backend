@@ -104,7 +104,6 @@ const userSchema = Schema({
   },
   address: [childSchema],
   _timezone:{
-    require:true,
     type:String
 },
 
