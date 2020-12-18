@@ -29,6 +29,13 @@ var sess = {
 }*/
 
 app.use(session(sess))
+
+app.use(function(req, res, next) {
+  res.locals.user = 'xakkt';
+  next();
+});
+
+
 app.use(flash({ sessionKeyName: 'xakktFlashMessages' })); 
 const adminRoute = require('./routes/admin')
 const mobileApi = require('./routes/api')

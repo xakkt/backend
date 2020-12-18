@@ -132,6 +132,7 @@ exports.authenticate = async (req, res) => {
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
+		console.log("--login",req.body)
 		const userInfo = await User.findOne({ email: req.body.email }).exec();
 		if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
 
