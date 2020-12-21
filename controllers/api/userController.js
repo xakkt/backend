@@ -47,8 +47,8 @@ exports.check = function (req, res) {
 },
 
 	exports.list = function (req, res) {
-
-		let query = User.find({}, { password: false, updatedAt: false }).exec();
+		// let query = User.find({}, { password: false, updatedAt: false }).exec();
+		let query = User.find({}, ['first_name', 'last_name','email' ,'dob']).exec();
 		query.then(function (result) {
 			res.json({ status: "success", users: result });
 		}).catch(err => { console.log(err); res.status(400).json({ status: "false", data: err }) });
