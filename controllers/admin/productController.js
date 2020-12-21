@@ -155,15 +155,14 @@ exports.productsave = async (req, res) => {
             is_featured: req.body.is_featured,
             _unit: req.body.unit,
             price: req.body.price,
-            image: req.file.filename,
             status: req.body.status,
             brand_id: req.body.brand
 
         }
+        productinfo.image = (req.file.filename) ? req.file.filenam : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
         res.redirect("/admin/regularprice/create/" + product._id)
-
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/product')
@@ -323,11 +322,11 @@ exports.priceSave = async (req, res) => {
             waterfall([
                 function (callback) {
                     Banner.findOneAndUpdate(
-                        {$and: [ {_store:req.body.store[i]},{_deal: req.body.deal[i]},{ deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() }},{deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() }}  ]},
+                        { $and: [{ _store: req.body.store[i] }, { _deal: req.body.deal[i] }, { deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() } }, { deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }] },
                         { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
                         function (err, result) {
-                        callback(err, result);
-                    })
+                            callback(err, result);
+                        })
                 },
                 function (result, callback) {
                     if (result) callback(null, result);
@@ -417,7 +416,7 @@ exports.product_listing = async (req, res) => {
         let product = await Product.find({
             $or: [
                 { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                { "name.english": { $regex:searchString, $options: 'i' } }
+                { "name.english": { $regex: searchString, $options: 'i' } }
             ]
         })
             .skip((pagno - 1) * limit) //Notice here
@@ -427,10 +426,10 @@ exports.product_listing = async (req, res) => {
             {
                 $or: [
                     { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                    { "name.english": { $regex:searchString, $options: 'i' } }
+                    { "name.english": { $regex: searchString, $options: 'i' } }
                 ]
             }
-            ).lean()
+        ).lean()
         // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
     } catch (err) {
@@ -438,9 +437,9 @@ exports.product_listing = async (req, res) => {
     }
 }
 
-exports.product_delete =  async (req,res) =>{
+exports.product_delete = async (req, res) => {
     try {
-        let remove = await Product.deleteMany({ _id: {$in :req.body.id} }).exec()
+        let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
         if (!remove) return res.json({ status: false })
         return res.json({ status: true })
     } catch (err) {
