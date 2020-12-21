@@ -119,7 +119,7 @@ const orderValidation = [
 /*--- user ---*/
 router.post('/user/forgetpassword',userController.forgotPassword);
 router.post('/user/create',userValidation,userController.create);
-router.get('/user/list', userController.list);
+router.get('/user/list',verifyjwt.checkToken, userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
 router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
 router.post('/user/address', verifyjwt.checkToken,userController.address)
