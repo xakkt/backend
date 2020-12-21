@@ -159,7 +159,7 @@ exports.productsave = async (req, res) => {
             brand_id: req.body.brand
 
         }
-        productinfo.image = (req.file.filename) ? req.file.filenam : 'no-image_1606218971.jpeg';
+        productinfo.image = (req.file.filename) ? req.file.filename : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
         res.redirect("/admin/regularprice/create/" + product._id)
