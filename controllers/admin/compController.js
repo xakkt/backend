@@ -18,10 +18,13 @@ exports.save = async (req, res) => {
             email: req.body.email,
             description: req.body.description
         }
-        const company = await Company.create(compinfo).lean()
+        const company = await Company.create(compinfo)
         if (!company) return res.json({ status: false, message: "Data not saved" })
-        return res.json({ status: true, data: company })
+        req.flash('success', 'Company added successfully!');
+        res.redirect('/admin/company/list')
+        // return res.json({ status: true, data: company })
     } catch (err) {
+        console.log("errr",err)
         return res.status(404).json({ status: false, message: err })
 
     }

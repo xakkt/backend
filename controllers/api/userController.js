@@ -48,7 +48,7 @@ exports.check = function (req, res) {
 
 	exports.list = function (req, res) {
 		// let query = User.find({}, { password: false, updatedAt: false }).exec();
-		let query = User.find({}, ['first_name', 'last_name','email' ,'dob']).exec();
+		let query = User.find({}, ['first_name', 'last_name', 'email', 'dob']).exec();
 		query.then(function (result) {
 			res.json({ status: "success", users: result });
 		}).catch(err => { console.log(err); res.status(400).json({ status: "false", data: err }) });
@@ -84,7 +84,7 @@ exports.create = async (req, res) => {
 	}
 	User.create(userinfo, function (err, result) {
 		if (err) return res.status(400).json({ data: err.message });
-            
+
 		//mail.sendmail();
 		return res.json({ status: "success", message: "User Created.", data: result });
 
@@ -132,7 +132,7 @@ exports.authenticate = async (req, res) => {
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		console.log("--login",req.body)
+		console.log("--login", req.body)
 		const userInfo = await User.findOne({ email: req.body.email }).exec();
 		if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
 
@@ -142,12 +142,11 @@ exports.authenticate = async (req, res) => {
 			device_type: req.body.device_type,
 			device_token: req.body.device_token
 		}
-		 Device.findOneAndUpdate({ user_id: userInfo._id, device_token: req.body.device_token }, { device_token: req.body.device_token, device_type: req.body.device_type },{upsert: true} ,function(err, result){
-		   if(err)
-		   {
-			   return res.status(400).json({message:err.message})
-		   }
-		 })
+		Device.findOneAndUpdate({ user_id: userInfo._id, device_token: req.body.device_token }, { device_token: req.body.device_token, device_type: req.body.device_type }, { upsert: true }, function (err, result) {
+			if (err) {
+				return res.status(400).json({ message: err.message })
+			}
+		})
 		const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 		return res.json({ status: true, message: "user found!!!", data: { user: userInfo, token: token } });
 
@@ -228,11 +227,10 @@ exports.address = async (req, res) => {
 
 	try {
 		var address_array = [];
-		// console.log("--req",req.body)
 		address_array.push({
 			address: req.body.address,
 			city: req.body.city,
-			address_type:req.body.address_type,
+			address_type: req.body.address_type,
 			country: req.body.country,
 			region: req.body.region,
 			pincode: req.body.pincode,
@@ -252,7 +250,7 @@ exports.address = async (req, res) => {
 exports.addresslist = async (req, res) => {
 
 	try {
-		let user = await User.findOne({ _id: req.decoded.id },"contact_no email first_name last_name address").select('-_id').lean()
+		let user = await User.findOne({ _id: req.decoded.id }, "contact_no email first_name last_name address").select('-_id').lean()
 		// let user = await User.findOne({ _id: req.decoded.id }).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').lean()
 
 		if (!user) return res.json({ status: false, message: "Data not found" })
@@ -280,4 +278,52 @@ exports.deleteaddress = async (req, res) => {
 		return res.status(404).json({ message: err.message })
 
 	}
+}
+exports.updateaddress = async (req, res) => {
+	try {
+		// var address_array = [];
+		const address_value = {
+			address: req.body.address,
+			city: req.body.city,
+			address_type: req.body.address_type,
+			country: req.body.country,
+			region: req.body.region,
+			pincode: req.body.pincode,
+			state: req.body.state,
+			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
+		}
+		let user = await User.findOneAndUpdate({ 'address._id': req.params.id },
+			{
+				$set: {
+					"address.$.address": req.body.address,
+					"address.$.city": req.body.city,
+					"address.$.country": req.body.country,
+					"address.$.pincode": req.body.pincode,
+					"address.$.state": req.body.state,
+					"address.$.region": req.body.region,
+					"address.$.location":{coordinates:[req.body.long,req.body.lat]}
+				}
+			},
+			// { $push: { address: address_array } }, 
+			{ returnOriginal: false }).exec()
+		if (!user) return res.json({ status: true, message: "Data not found" })
+		return res.json({ status: true, data: user })
+
+	} catch (err) {
+		console.log("--log", err)
+		return res.status(404).json({ message: err.message })
+	}
+
+}
+exports.editaddress = async (req, res) => {
+	try {
+		let user = await User.findOne({ 'address._id': req.params.id }).exec()
+		if (!user) return res.json({ status: true, message: "Data not found" })
+		return res.json({ status: true, data: user })
+
+	} catch (err) {
+		console.log("--log", err)
+		return res.status(404).json({ message: err.message })
+	}
+
 }

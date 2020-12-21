@@ -127,11 +127,12 @@ router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
 router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
 router.get('/user/delete/:id', verifyjwt.checkToken,userController.deleteaddress);
+router.get('/user/edit/:id',verifyjwt.checkToken,userController.editaddress);
+router.post('/user/edit/:id',verifyjwt.checkToken,userController.updateaddress);
+
 
 /*--- home ---*/
 router.get('/app/dashboard/:storeid', homeController.dashboard);
-
-
 /*---- product ---*/
 // router.post('/product/create', verifyjwt.checkToken, productValidation, productController.create);
 router.get('/product/list/:storeid',productController.list);
