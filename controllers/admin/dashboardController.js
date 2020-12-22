@@ -15,8 +15,8 @@ exports.dashboard = async (req,res) =>{
 
 
         console.log("client IP is *********************" + ip);
-     let user =  await User.count().lean();
-    //  console.log("--logs",user)
+     let user =  await User.countDocuments().lean();
+     console.log("--logs",user)
    return res.render('admin/index',{ menu:"dashboard",data:user}) 
     }catch(err)
     {
