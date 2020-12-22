@@ -38,6 +38,7 @@ app.use(function(req, res, next) {
 
 app.use(flash({ sessionKeyName: 'xakktFlashMessages' })); 
 const adminRoute = require('./routes/admin')
+const frontendRoute = require('./routes/frontend')
 const mobileApi = require('./routes/api')
 app.use(bodyParser.urlencoded({ extended: true }))
 // connection to mongodb
@@ -92,6 +93,8 @@ app.get('/contact',(req, res)=> {
 
 
 app.use('/admin', adminRoute);
+app.use('/', frontendRoute);
+
 
 
 app.use('/api/v1', mobileApi);
