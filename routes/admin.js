@@ -19,6 +19,7 @@ const bannerController = require('../controllers/admin/bannerController.js')
 const compController = require('../controllers/admin/compController.js')
 const uploadController = require('../controllers/admin/uploadController.js')
 const coupanController = require('../controllers/admin/coupanController.js')
+const dashboardController = require('../controllers/admin/dashboardController.js')
 
 
 // var auth = function(req, res, next) {
@@ -102,9 +103,10 @@ const storeValidation = [
   verifyjwt.checkToken
 ]
 
-router.get('/',isloggedin,(req,res)=>{
-      res.render('admin/index',{ menu:"dashboard"}) 
-});
+router.get('/',isloggedin,dashboardController.dashboard)
+// (req,res)=>{
+//       res.render('admin/index',{ menu:"dashboard"}) 
+// });
 
 /*------------ User ---------*/
 router.get('/users',isloggedin,userController.list)
