@@ -273,5 +273,7 @@ router.post('/coupon/update/:id',isloggedin,coupanController.update)
 
 /*****Order ******/
 router.get('/order/list',isloggedin,orderController.listing) 
+router.get('/order/edit/:id',isloggedin,orderController.edit) 
+router.post('/order/update/:id',isloggedin,orderController.update) 
 
 module.exports = router;

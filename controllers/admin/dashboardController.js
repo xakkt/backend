@@ -23,7 +23,6 @@ exports.dashboard = async (req, res) => {
                 return true;
             }
         });
-        console.log("--logrs",order)
         return res.render('admin/index', { menu: "dashboard", data: user, deal: filtered.filter(item => item._id).length,order:(order.length)?order.length:0 })
     } catch (err) {
         console.log("--err", err)
