@@ -83,7 +83,7 @@ const OrderSchema = Schema({
   ]
     
   
-}, {timestampst:true});
+}, {timestamps:true});
 
 OrderSchema.plugin(uniqueValidator)
 module.exports = mongoose.model('orders', OrderSchema);

@@ -41,7 +41,7 @@ type: {
        type:Date,
        required:true
    }
-}, {timestampst:true});
+}, {timestamps:true});
 
 
 module.exports = mongoose.model('Banner', bannerSchema);

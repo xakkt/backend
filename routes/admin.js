@@ -20,6 +20,7 @@ const compController = require('../controllers/admin/compController.js')
 const uploadController = require('../controllers/admin/uploadController.js')
 const coupanController = require('../controllers/admin/coupanController.js')
 const dashboardController = require('../controllers/admin/dashboardController.js')
+const orderController = require('../controllers/admin/orderController.js')
 
 
 // var auth = function(req, res, next) {
@@ -269,5 +270,8 @@ router.get('/coupon/list',isloggedin,coupanController.listing)
 router.get('/coupon/delete/:id',isloggedin,coupanController.delete) 
 router.get('/coupon/edit/:id',isloggedin,coupanController.edit) 
 router.post('/coupon/update/:id',isloggedin,coupanController.update) 
+
+/*****Order ******/
+router.get('/order/list',isloggedin,orderController.listing) 
 
 module.exports = router;

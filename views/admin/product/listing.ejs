@@ -18,12 +18,27 @@
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <style>
+  .container-fluid1{
+    position:none;
+    padding:35px !important;
+  }
+
+  .file{
+  margin-right: 5px;
+
+  }
 
 #dummy {
-    /* text-align: left; */
+  padding: 1px 0px;
+  /* background-color:black; */
+    color:red;
     position: absolute;
-    /* left: 50px; */
+   text-align: center;
+   margin-top: 1px;
     right: 100px;
+}
+  #dummy:hover {
+  background-color: green !important;
 }
 #element.style {
     position: absolute;
@@ -85,21 +100,22 @@
                   <h3 class="card-title">All Products</h3>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body">
+                <div class="container-fluid1">
                   <form>
                     <input type="hidden" value=<%= (await check ('product_delete',roleid)) ? roleid:"" %> id="delete"
                       name="delete" />
                     <input type="hidden" value=<%= (await check ('product_edit',roleid)) ? roleid:"" %> id="edit"
                       name="edit" />
-                      <a href="/dummy.csv" id="dummy" download>Dummy link</a>
+                      <a href="/dummy.csv"  id="dummy" download>Dummy link</a>
 
                     <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
                     <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                     <%} %>
-                    <div id="files">
+                    <div class="file">
                     <input type="file" name="csv" id="fileinput" />
-                    <input type="button" id="btn" value="Submit" />
+                    <input type="button"   id="btn" value="Submit" />
                     </div>
+                  </div>
                   </form>
                   <button type="button" style="display:none" class="btn btn-danger btn-sm check_delete">Delete</button>
                   <table id="products" class="table table-bordered table-striped">

@@ -1,6 +1,7 @@
 const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 const ProductRegularPricing = require('../../models/product_regular_pricing')
+const StoreProductPricing = require('../../models/store_product_pricing')
 
 var moment = require('moment');
 const { validationResult } = require('express-validator');
@@ -12,7 +13,6 @@ exports.list = async (req, res) => {
 	try {
 
 		let stores = await StoreProductPricing.find({ '_store': req.params.storeid }).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean()
-		// let products = await Product.find().populate('_category','name logo').lean();
 		if (!stores.length) return res.json({ status: "false", message: "No data found", data: [] });
 		stores = stores.map(store => {
 			//product.image = `${process.env.BASE_URL}/images/products/${product.image}`;

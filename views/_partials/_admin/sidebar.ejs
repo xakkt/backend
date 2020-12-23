@@ -470,6 +470,27 @@
             </li>
           </ul>
         </li>
+
+        <% if(await admin("SYSTEM ADMININSTRATOR",user)) {%>
+          <li class="nav-item <% if (menu === 'orders') { %> menu-open <% } %>">
+             <a href="#" class="nav-link <% if (menu === 'orders') { %> active <% } %>">
+               <i class="nav-icon fas fa-box-open"></i>
+               <p>
+                 Order
+                 <i class="fas fa-angle-left right"></i>
+               </p>
+             </a>
+             <ul class="nav nav-treeview">
+               <li class="nav-item">
+                 <a href="/admin/orders/list" class="nav-link <% if (menu === 'orders' && submenu === 'list' ) { %> active <% } %>">
+                   <i class="far fa-circle nav-icon"></i>
+                   <p>Manage Orders</p>
+                 </a>
+               </li>
+              
+             </ul>
+           </li>
+           <%}%>
         <!--- Reports -->
         <!-- <li class="nav-header">REPORTS</li>
         <li class="nav-item">

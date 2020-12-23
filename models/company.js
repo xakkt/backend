@@ -39,7 +39,7 @@ const companySchema = Schema({
     },
 
   ],
-}, {timestampst:true});
+}, {timestamps:true});
 companySchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model('Company', companySchema);
