@@ -80,20 +80,18 @@
                               <table id="order" class="table table-bordered table-striped">
                                 <thead>
                                   <tr>
-                                    <th>createdAt</th>
-                                    <th>updatedAt</th>
-                                    <th>payment</th>
-                                    <th>Action</th>
+                                    <th>Order Placed</th>
+                                    <th>Order Update</th>
+                                    <th>Payment</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                                 <tfoot>
                                   <tr>
-                                    <th>createdAt</th>
-                                    <th>updatedAt</th>
-                                    <th>payment</th>
-                                    <th>Action</th>
+                                    <th>Order Placed</th>
+                                    <th>Order Update</th>
+                                    <th>Payment</th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -185,13 +183,10 @@
         type: 'get',
 
       }).done((data) => {
-        console.log("--done", data.data._id)
         if (data.status) {
           $('h4').text(data.data._user.first_name);
           $("select#status").val(data.data.shipping.tracking.status);
           $('form').attr('action', '/admin/order/update/'+data.data._id); //this fails silently
-
-          // $("#status selected").val(data.data.shipping.tracking.status);
         }
       });
     }
@@ -214,17 +209,6 @@
               var ab = row.shipping.tracking.status
               ab += `<a href="" data-toggle="modal" onclick="myfunction(this)" data-id="${row._id}" data-target="#myModal">
                             <i class="fa fa-plus"></i></a>`;
-              return ab
-            }
-          },
-          {
-            data: "ID",
-            render: function (data, type, row) {
-              var ab = `  <a href="/admin/coupon/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>`;
-              ab += '&nbsp'
-              ab += `<a href="/admin/coupon/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
               return ab
             }
           },
