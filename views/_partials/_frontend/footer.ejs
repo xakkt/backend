@@ -29,7 +29,8 @@
             sit voluptatem
             accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et
             quasi architecto
-            beatae vitae dicta sunt explicabo.</p>
+            beatae vitae dicta sunt explicabo.
+        </p>
         <!-- //footer first section -->
         <!-- footer second section -->
         <div class="w3l-grids-footer">
@@ -144,11 +145,14 @@
                     <h3>Get in Touch</h3>
                     <ul>
                         <li>
-                            <i class="fa fa-map-marker"></i> 123 Sebastian, USA.</li>
+                            <i class="fa fa-map-marker"></i> 123 Sebastian, USA.
+                        </li>
                         <li>
-                            <i class="fa fa-mobile"></i> 333 222 3333 </li>
+                            <i class="fa fa-mobile"></i> 333 222 3333
+                        </li>
                         <li>
-                            <i class="fa fa-phone"></i> +222 11 4444 </li>
+                            <i class="fa fa-phone"></i> +222 11 4444
+                        </li>
                         <li>
                             <i class="fa fa-envelope-o"></i>
                             <a href="mailto:example@mail.com"> mail@example.com</a>
@@ -368,83 +372,99 @@
         </p>
     </div>
 </div>
-<script>
-    window.onload = function (e) {
-        if (window.localStorage.getItem('token')) {
-            $(".sign").hide();
-            $(".logout").show();
-        }
-    };
-
-</script>
 <!-- //copyright -->
 <script>
-    function signin(e) {
-        e.preventDefault();
-        let user = {
-            email: $('#email').val(),
-            password: $('#password').val()
-        }
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type':
-                    'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(user)
-        }
-        let fetchRes = fetch("http://localhost:4800/api/v1/user/authenticate", options);
-        fetchRes.then(res =>
-            res.json()).then(resp => {
-                if (resp.status) {
-                    // $(".sign").hide();
-                    // // $(".sign").hide();
-
-
-                    // $(".logout").show();
-
-
-                    window.localStorage.setItem('token', resp.data.token);
-                    console.log("--localhs", window.localStorage.getItem('token'))
-                    if (window.localStorage.getItem('token')) {
-                        $(".sign").hide();
-                        // $(".sign").hide();
-                        $(".logout").show();
-                    }
-                }
-            })
-    }
     function signup(e) {
         e.preventDefault();
         let user = {
-            dob: $("#date").val(),
-            email: $("#email").val(),
+            dob: $("#dob").val(),
+            email: $("#emails").val(),
             password: $("#password").val(),
-            contact_no: $("#contact").val(),
+            contact: $("#contact").val(),
             last_name: $("#last_name").val(),
             first_name: $("#first_name").val(),
 
         }
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type':
-                    'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(user)
-        }
-        let fetchRes = fetch("http://localhost:4800/api/v1/user/create", options);
-        fetchRes.then(res =>
-            res.json()).then(resp => {
-                if (resp.status) {
-                    $(document).ready(function () {
-                        $('#myModal2').modal('hide');
-                        $('#myModal1').modal('show');
+        console.log("--user", user)
+        $.ajax({
+            url: "/create",
+            type: "post",
+            data: user,
+        }).done((data) => {
+            if (data.status) {
+                $('#myModal2').modal('hide');
+                $('#myModal1').modal('show');
+            }
+        });
 
-                    });
-                }
-            })
+
     }
+    // function signin(e) {
+    //     e.preventDefault();
+    //     let user = {
+    //         email: $('#email').val(),
+    //         password: $('#password').val()
+    //     }
+    //     let options = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type':
+    //                 'application/json;charset=utf-8'
+    //         },
+    //         body: JSON.stringify(user)
+    //     }
+    //     let fetchRes = fetch("http://localhost:4800/api/v1/user/authenticate", options);
+    //     fetchRes.then(res =>
+    //         res.json()).then(resp => {
+    //             if (resp.status) {
+    //                 // $(".sign").hide();
+    //                 // // $(".sign").hide();
+
+
+    //                 // $(".logout").show();
+
+
+    //                 window.localStorage.setItem('token', resp.data.token);
+    //                 console.log("--localhs", window.localStorage.getItem('token'))
+    //                 if (window.localStorage.getItem('token')) {
+    //                     $(".sign").hide();
+    //                     // $(".sign").hide();
+    //                     $(".logout").show();
+    //                 }
+    //             }
+    //         })
+    // }
+    // function signup(e) {
+    //     e.preventDefault();
+    //     let user = {
+    //         dob: $("#date").val(),
+    //         email: $("#email").val(),
+    //         password: $("#password").val(),
+    //         contact_no: $("#contact").val(),
+    //         last_name: $("#last_name").val(),
+    //         first_name: $("#first_name").val(),
+
+    //     }
+    //     let options = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type':
+    //                 'application/json;charset=utf-8'
+    //         },
+    //         body: JSON.stringify(user)
+    //     }
+    //     let fetchRes = fetch("http://localhost:4800/api/v1/user/create", options);
+    //     fetchRes.then(res =>
+    //         res.json()).then(resp => {
+    //             if (resp.status) {
+    //                 $(document).ready(function () {
+    //                     $('#myModal2').modal('hide');
+    //                     $('#myModal1').modal('show');
+
+    //                 });
+    //             }
+    //         })
+    // }
 
 </script>
 <!-- js-files -->

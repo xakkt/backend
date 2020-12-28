@@ -4,7 +4,6 @@ const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
 var isloggedin = require('../middlewares/isloggedin')
-
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
 const productController = require('../controllers/admin/productController')

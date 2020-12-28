@@ -81,15 +81,15 @@ io.on('connection', function (socket) {
   });
 
 });
- app.get('/',(req, res)=> {
-       return  res.render('frontend/index')
-  })
-  app.get('/about',(req, res)=> {
-    return  res.render('frontend/about')
-})
-app.get('/contact',(req, res)=> {
-  return  res.render('frontend/contact')
-})
+//  app.get('/',(req, res)=> {
+//        return  res.render('frontend/index')
+//   })
+//   app.get('/about',(req, res)=> {
+//     return  res.render('frontend/about')
+// })
+// app.get('/contact',(req, res)=> {
+//   return  res.render('frontend/contact')
+// })
 
 
 app.use('/admin', adminRoute);

@@ -19,18 +19,13 @@ exports.login = async (req, res) => {
         if (!userInfo) { await req.flash('failure', "Email is not valid"); return res.redirect('/admin/login') };
         if (!bcrypt.compareSync(req.body.password, userInfo.password)) {
             await req.flash('failure', "Invalid password!!!");
-            res.redirect('/admin/login');
+            res.redirect('/');
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
-        //   console.log("--user",userInfo)
-        var date = moment.tz.setDefault(userInfo._timezone)
-        // var date = moment.tz.setDefault(utc._timezone.abbr);
-        // req.session.date = date
-        // req.session.email = userInfo.email;
-        // req.session.userid = userInfo._id
-        // req.session.roleid = userInfo.role_id[0]._id
+        req.session.email = userInfo.email;
+        req.session.userid = userInfo._id
 
-        return res.redirect('/admin')
+        return res.redirect('/')
     } catch (err) {
         console.log("--err", err)
         await req.flash('failure', "Please enter valid email and password");
@@ -40,9 +35,18 @@ exports.login = async (req, res) => {
 }
 exports.create = async (req, res) => {
     try {
-        let role = await Role.find({}).lean()
-        // res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        res.render('admin/auth/login', { success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure'), role: role })
+        let userInfo = {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            password: req.body.password,
+            contact_no: req.body.contact,
+            dob: req.body.dob
+        }
+        let user = await User.create(userInfo)
+        if (user) return res.json({ status: true })
+        return res.json({ status: false })
+
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -55,7 +59,7 @@ exports.logout = async (req, res) => {
             } else {
                 req.session = null;
                 console.log("logout successful");
-                return res.redirect('/admin/login');
+                return res.redirect('/');
             }
         });
     }

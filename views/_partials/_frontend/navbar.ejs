@@ -30,6 +30,7 @@
                 <li>
                     <span class="fa fa-phone" aria-hidden="true"></span> 001 234 5678
                 </li>
+                <% if(!data) {%>
                 <li class="sign">
                     <a href="#" data-toggle="modal" data-target="#myModal1">
                         <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In </a>
@@ -38,10 +39,12 @@
                     <a href="#" data-toggle="modal" data-target="#myModal2">
                         <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up </a>
                 </li>
-                <li class="logout" style="display:none" >
-                    <a href="#">
+                <%} else {%>
+                <li class="logout">
+                    <a href="/logout">
                         <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Logout </a>
                 </li>
+                <%}%>
             </ul>
             <!-- //header lists -->
             <!-- search -->
@@ -470,7 +473,7 @@
                         <a href="#" data-toggle="modal" data-target="#myModal2">
                             Sign Up Now</a>
                     </p>
-                    <form onsubmit="return signin(event)" method="post">
+                    <form action="/login" method="post">
                         <div class="styled-input agile-styled-input-top">
                             <input type="email" placeholder="Enter Ur Name" name="email" id="email" required="">
                         </div>
@@ -525,7 +528,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="styled-input">
-                                    <input type="email" placeholder="E-mail" id="email" name="Email" required="">
+                                    <input type="email" placeholder="E-mail" id="emails" name="email" required="">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -538,7 +541,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="styled-input">
-                                    <input type="date" required="" id="date">
+                                    <input type="date" name="dob" id="dob" required=""/>
                                 </div>
                             </div>
                             <div class="col-sm-6">

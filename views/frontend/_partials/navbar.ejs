@@ -30,6 +30,7 @@
                 <li>
                     <span class="fa fa-phone" aria-hidden="true"></span> 001 234 5678
                 </li>
+                <% if(!data) {%>
                 <li>
                     <a href="#" data-toggle="modal" data-target="#myModal1">
                         <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In </a>
@@ -38,6 +39,12 @@
                     <a href="#" data-toggle="modal" data-target="#myModal2">
                         <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up </a>
                 </li>
+                <%} else {%>
+                    <li>
+                        <a href="#" data-toggle="modal">
+                            <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Logout </a>
+                    </li>
+                    <%}%>
             </ul>
             <!-- //header lists -->
             <!-- search -->
@@ -503,7 +510,7 @@
                     <p>
                         Come join the Grocery Shoppy! Let's set up your Account.
                     </p>
-                    <form method="post" onsubmit="return signup(event)">
+                    <form method="post" action="/create" onsubmit="return signup(event)">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="styled-input agile-styled-input-top">

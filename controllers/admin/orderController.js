@@ -9,15 +9,14 @@ exports.listing = async (req, res) => {
 
     try {
         if (req.query.length) {
-            console.log("--herer", req.query)
             var pagno = req.query.start / req.query.length + 1
             var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
             var limit = parseInt(req.query.length) || 5;
             let searchString = req.query.search.value || ''
-            let coupon = await Order.find({
+            let order = await Order.find({
 
                 // coupon_code: { $regex: '.*' + searchString + '.*', $options: 'i' }
-            })
+            }).populate('_store')
                 .skip((pagno - 1) * limit) //Notice here
                 .limit(limit)
                 .lean();
@@ -26,15 +25,13 @@ exports.listing = async (req, res) => {
                     // coupon_code: { $regex: '.*' + searchString + '.*', $options: 'i' }
                 }
             ).lean()
-            return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: coupon })
+            console.log("--order")
+            return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: order })
 
         }
         else {
             return res.render('admin/order/listing', { menu: "orders", submenu: "list", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         }
-        // let brand = await Brand.find().exec();
-        // if (!brand.length) return res.render('admin/brand/listing', { menu: "brands", submenu: "list", brand: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        // return res.render('admin/brand/listing', { menu: "brands", submenu: "list", brand: brand, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
 
     } catch (err) {
@@ -47,15 +44,18 @@ exports.edit = async (req, res) => {
     return res.json({ status: true, data: order })
 }
 exports.update = async (req, res) => {
-    var orderInfo = {
-        shipping: {
-            tracking: {
-                status: req.body.status
-            }
-        }
-    }
-    let order = await Order.findOneAndUpdate({ _id: req.params.id }, orderInfo).lean();
-    return res.redirect('/admin/order/list')
+    try{
+        console.log("--rowwww",req.params.id)
+    let order = await Order.findOneAndUpdate({ _id: req.params.id },
+       { $set:{
+           'shipping.tracking.status':req.body.status
+       }
+    }).lean();
+    return res.json({status:true})
+    }catch(err)
+    {
+        console.log('------',err)
 
+    }
 
 }
