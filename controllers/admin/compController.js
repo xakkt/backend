@@ -71,7 +71,7 @@ exports.update = async(req,res) =>{
             // email: req.body.email,
             description: req.body.description
         }
-        const company = await Company.findOneAndUpdate(req.params.id,compinfo,{returnOriginal: false}).lean()
+        const company = await Company.findOneAndUpdate({_id:req.params.id},compinfo,{returnOriginal: false}).lean()
         if(!company) return res.render('admin/company/listing',{menu:"company",submenu:"list" ,success: await req.consumeFlash('success'),data:"", failure: await req.consumeFlash('failure') })
          return  res.redirect('/admin/company/list')
 

@@ -285,6 +285,7 @@
     });*/
     $('input[type="checkbox"]').bootstrapSwitch();
     $('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function () {
+      $(this).attr("disabled", true);
       // console.log("--click")
       $(this).attr("disabled", true);
       $.ajax({
