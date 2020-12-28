@@ -7,6 +7,7 @@ var isloggedin = require('../middlewares/isloggedin')
 
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
+const StoreController = require('../controllers/frontend/storeController')
 
 
 
@@ -24,11 +25,13 @@ const path = require('path');
 
 /*-------- validation -------------*/
 
-router.get('/',IndexController.list)
+router.get('/product/:id',IndexController.list)
 router.post('/create',AuthController.create)
 router.post('/login',AuthController.login)
 router.get('/logout',AuthController.logout)
 
 /*------------ User ---------*/
+router.get('/',StoreController.list)
+
 
 module.exports = router;

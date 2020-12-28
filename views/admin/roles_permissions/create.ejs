@@ -285,6 +285,8 @@
     });*/
     $('input[type="checkbox"]').bootstrapSwitch();
     $('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function () {
+      // console.log("--click")
+      $(this).attr("disabled", true);
       $.ajax({
         url: '/admin/roles/update',
         type: 'POST',

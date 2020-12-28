@@ -154,9 +154,8 @@
   <!-- Page specific script -->
   <script>
     function myfunction(that) {
-      // console.log('-----==', $(that).attr('id'))
       var id = $(that).attr('id');
-      console.log('===>',id)
+      // console.log('===>',id)
       let data = {
         "status": $(that).val()
       }
@@ -181,7 +180,6 @@
     }
     return select.html()
   }
-    // $.fn.dataTable.moment('DD/MM/YY');
     $(document).ready(function () {
       $.fn.dataTable.moment('HH:mm DD/MM/YYYY');
 
@@ -206,7 +204,6 @@
             "data": "updatedAt",
             render: function (data,type,row) {
               var date = moment.tz.setDefault("Europe/Berlin");
-              console.log("--row",moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"))
               return (moment(data).isValid()) ? moment(data).format("YYYY-MM-DD  hh:mm:ss a ") : "-";
             }
 
@@ -214,7 +211,6 @@
           {
             data: "ID",
             render: function (data, type, row) {
-              // console.log("--logss",row._store._timezone)
               return  row._store._timezone
             }
 
