@@ -9,6 +9,9 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const childSchema = new Schema({
 
+  name:{
+   type:String
+  },
   address: {
     type: String,
   },
@@ -19,6 +22,12 @@ const childSchema = new Schema({
   },
   pincode: {
     type: Number
+  },
+  phoneno: {
+    type: Number
+  },
+  countrycode :{
+    type:String
   },
   city: {
     type: String
@@ -32,6 +41,7 @@ const childSchema = new Schema({
   country: {
     type: String
   },
+ 
  
 //   _timezone: {
 //     type: Schema.Types.ObjectId,

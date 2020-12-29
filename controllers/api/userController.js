@@ -233,10 +233,13 @@ exports.address = async (req, res) => {
 			address_type: req.body.address_type,
 			country: req.body.country,
 			region: req.body.region,
+			phoneno:req.body.phoneno,
+			countrycode:req.body.countrycode,
 			pincode: req.body.pincode,
 			state: req.body.state,
 			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 		})
+		console.log("0--00000",address_array)
 
 		let user = await User.findOneAndUpdate({ _id: req.decoded.id }, { $push: { address: address_array } }, { returnOriginal: false }).exec()
 		if (!user) return res.json({ status: true, message: "Data not found" })
@@ -282,22 +285,24 @@ exports.deleteaddress = async (req, res) => {
 exports.updateaddress = async (req, res) => {
 	try {
 		// var address_array = [];
-		const address_value = {
-			address: req.body.address,
-			city: req.body.city,
-			address_type: req.body.address_type,
-			country: req.body.country,
-			region: req.body.region,
-			pincode: req.body.pincode,
-			state: req.body.state,
-			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
-		}
+		// const address_value = {
+		// 	address: req.body.address,
+		// 	city: req.body.city,
+		// 	address_type: req.body.address_type,
+		// 	country: req.body.country,
+		// 	region: req.body.region,
+		// 	pincode: req.body.pincode,
+		// 	state: req.body.state,
+		// 	location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
+		// }
 		let user = await User.findOneAndUpdate({ 'address._id': req.params.id },
 			{
 				$set: {
 					"address.$.address": req.body.address,
 					"address.$.city": req.body.city,
+					"address.$.mobile":req.body.mobile,
 					"address.$.country": req.body.country,
+					"address.$.countrycode":req.body.countrycode,
 					"address.$.pincode": req.body.pincode,
 					"address.$.state": req.body.state,
 					"address.$.region": req.body.region,

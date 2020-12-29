@@ -292,19 +292,19 @@
                             render: function (data, type, row) {
                               if (admin || (del && edit)) {
                                 return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to Active this.')">
+                            onclick="return confirm('Are you sure you want to delete this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
                               } else if (del) {
                                 return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to Active this.')">
+                            onclick="return confirm('Are you sure you want to delete this.')">
                             <i class="far fa-trash-alt"></i></a>`
                               } else if (edit) {
                                 return `<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
                               }
                               return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to Active this.')">
+                            onclick="return confirm('Are you sure you want to delete this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
                             }

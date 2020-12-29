@@ -25,7 +25,7 @@ exports.listing = async (req, res) => {
                     // coupon_code: { $regex: '.*' + searchString + '.*', $options: 'i' }
                 }
             ).lean()
-            console.log("--order")
+            console.log("--order",order)
             return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: order })
 
         }

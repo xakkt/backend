@@ -53,108 +53,114 @@
     <!-- Navbar -->
     <%- await include('../../_partials/_admin/navbar.ejs'); %>
 
-    <!-- /.navbar -->
-    <!-- Main Sidebar Container -->
-    <%- await include('../../_partials/_admin/sidebar.ejs'); %>
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>New Role</h1>
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">New Role</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-        <!-- /.container-fluid -->
-      </section>
-      <div class="row">
-        <!-- Trigger the modal with a button -->
-        <div class="col-md-8"></div>
-        <div class="col-md-4" style="text-align:right">
-          <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#roleModal">Add
-            Role</a>
-
-          <!-- Modal -->
-
-          <!-- Trigger the modal with a button -->
-          <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal"
-            data-target="#permissionModal">Add
-            Permission</a>
-        </div>
-      </div>
-      <!-- Main content -->
-      <section class="content">
-        <div class="container">
-          <!-- SELECT2 EXAMPLE -->
-          <div class="card card-primary">
-
-            <div class="card-header">
-              <h3 class="card-title">Roles and Permissions</h3>
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
+      <!-- /.navbar -->
+      <!-- Main Sidebar Container -->
+      <%- await include('../../_partials/_admin/sidebar.ejs'); %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1>New Role</h1>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">New Role</li>
+                  </ol>
+                </div>
               </div>
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <br>
-              <div class="container">
-              <!-- <table style="width:100%"> -->
-                <table class="table table-condensed"  id="myTable">
-                <tr>
-                  <th style="width:100px"></th>
-                  <% if(roles) roles.forEach(function(role){ %>
-                  <th><%= role.name %></th>
-                  <%}) %>
-                </tr>
-                <% permissionType = "" %>
-                <% permission.forEach(function(permission){ %>
+            <!-- /.container-fluid -->
+          </section>
+          <div class="row">
+            <!-- Trigger the modal with a button -->
+            <div class="col-md-8"></div>
+            <div class="col-md-4" style="text-align:right">
+              <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#roleModal">Add
+                Role</a>
 
-                <% if(permissionType != permission.type){ %>
-                <% permissionType = permission.type %>
+              <!-- Modal -->
 
-                <tbody class="panel">
-                <!-- <tr class="parent"> -->
-                  <tr data-toggle="collapse" data-target="#<%= permission.type %>" data-parent="#myTable">
-                  <th colspan="<%=roles.length+1%>"><%=permission.type.toUpperCase()%></th>
-                </tr>
-                <% } %>
-                <tr id="<%=permission.type %>" class="collapse">
-                  <th class="hiddenRow" ><%= permission.description %></th>
-                  <% roles.forEach(function(role){  %>
-                  <td colspan="1" class="hiddenRow">
-                    <input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>" type="checkbox"
-                      <%=(role._permission.includes(permission._id))?'checked':''%>>
-                  </td>
-                  <%})%>
-                </tr>
-                <%}) %>
-              </tbody>
-              </table>
-              </div>
+              <!-- Trigger the modal with a button -->
+              <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="modal"
+                data-target="#permissionModal">Add
+                Permission</a>
             </div>
-            <!-- /.card -->
           </div>
-          <!-- /.container-fluid -->
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <%- await include('../../_partials/_admin/footer.ejs'); %>
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+          <!-- Main content -->
+          <section class="content">
+            <div class="container">
+              <!-- SELECT2 EXAMPLE -->
+              <div class="card card-primary">
+
+                <div class="card-header">
+                  <h3 class="card-title">Roles and Permissions</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <br>
+                  <div class="container">
+                    <!-- <table style="width:100%"> -->
+                    <table class="table table-condensed" id="myTable">
+                      <tr>
+                        <th style="width:100px"></th>
+                        <% if(roles) roles.forEach(function(role){ %>
+                          <th>
+                            <%= role.name %>
+                          </th>
+                          <%}) %>
+                      </tr>
+                      <% permissionType="" %>
+                        <% permission.forEach(function(permission){ %>
+
+                          <% if(permissionType !=permission.type){ %>
+                            <% permissionType=permission.type %>
+
+                              <tbody class="panel">
+                                <!-- <tr class="parent"> -->
+                                <tr data-toggle="collapse" data-target="#<%= permission.type %>" data-parent="#myTable">
+                                  <th colspan="<%=roles.length+1%>">
+                                    <%=permission.type.toUpperCase()%>
+                                  </th>
+                                </tr>
+                                <% } %>
+                                  <tr id="<%=permission.type %>" class="collapse">
+                                    <th class="hiddenRow">
+                                      <%= permission.description %>
+                                    </th>
+                                    <% roles.forEach(function(role){ %>
+                                      <td colspan="1" class="hiddenRow">
+                                        <input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>"
+                                          type="checkbox" <%=(role._permission.includes(permission._id))?'checked':''%>>
+                                      </td>
+                                      <%})%>
+                                  </tr>
+                                  <%}) %>
+                              </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.container-fluid -->
+          </section>
+          <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <%- await include('../../_partials/_admin/footer.ejs'); %>
+          <!-- Control Sidebar -->
+          <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+          </aside>
+          <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
   <!-- Pop for permission model -->
@@ -285,9 +291,12 @@
     });*/
     $('input[type="checkbox"]').bootstrapSwitch();
     $('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function () {
-      $(this).attr("disabled", true);
-      // console.log("--click")
-      $(this).attr("disabled", true);
+      // console.log("--this",$(this))
+      // console.log($(this).data("roleid") );
+      // $( this ).prop( "disabled", true );
+
+      // // console.log("--click")
+      // $(this).attr("disabled", true);
       $.ajax({
         url: '/admin/roles/update',
         type: 'POST',
