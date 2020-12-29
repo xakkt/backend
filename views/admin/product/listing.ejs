@@ -18,347 +18,387 @@
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <style>
-  .container-fluid1{
-    position:none;
-    padding:35px !important;
+  .container-fluid1 {
+    position: none;
+    padding: 35px !important;
   }
 
-  .file{
-  margin-right: 5px;
+  .file {
+    margin-right: 5px;
 
   }
 
-#dummy {
-  padding: 1px 0px;
-  /* background-color:black; */
-    color:red;
+  #dummy {
+    padding: 1px 0px;
+    /* background-color:black; */
+    color: red;
     position: absolute;
-   text-align: center;
-   margin-top: 1px;
+    text-align: center;
+    margin-top: 1px;
     right: 100px;
-}
+  }
+
   #dummy:hover {
-  background-color: green !important;
-}
-#element.style {
+    background-color: green !important;
+  }
+
+  #element.style {
     position: absolute;
     left: 20%;
-}
+  }
 </style>
 
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
     <%- await include('../../_partials/_admin/navbar.ejs'); %>
-    <!-- /.navbar -->
+      <!-- /.navbar -->
 
-    <!-- Main Sidebar Container -->
-    <%- await include('../../_partials/_admin/sidebar.ejs'); %>
+      <!-- Main Sidebar Container -->
+      <%- await include('../../_partials/_admin/sidebar.ejs'); %>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>Products</h1>
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Product</li>
-              </ol>
-            </div>
-          </div>
-        </div><!-- /.container-fluid -->
-      </section>
-      <!--- message section should be common for all-->
-
-      <% if(failure.length){ %>
-      <div class="alert alert-danger">
-        <strong><%= failure[0] %></strong>
-      </div>
-      <% } %>
-      <% if(success.length){ %>
-      <div class="alert alert-success">
-        <strong><%= success %></strong>
-      </div>
-      <% } %>
-
-      <!---- end of messages -->
-      <!-- Main content -->
-      <section class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">
-
-              <!-- /.card -->
-
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">All Products</h3>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1>Products</h1>
                 </div>
-                <!-- /.card-header -->
-                <div class="container-fluid1">
-                  <form>
-                    <input type="hidden" value=<%= (await check ('product_delete',roleid)) ? roleid:"" %> id="delete"
-                      name="delete" />
-                    <input type="hidden" value=<%= (await check ('product_edit',roleid)) ? roleid:"" %> id="edit"
-                      name="edit" />
-                      <a href="/dummy.csv"  id="dummy" download>Dummy link</a>
-
-                    <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
-                    <input type="hidden" value="<%=user%>" id="admin" name="admin" />
-                    <%} %>
-                    <div class="file">
-                    <input type="file" name="csv" id="fileinput" />
-                    <input type="button"   id="btn" value="Submit" />
-                    </div>
-                  </div>
-                  </form>
-                  <button type="button" style="display:none" class="btn btn-danger btn-sm check_delete">Delete</button>
-                  <table id="products" class="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        <th>Check All <input type="checkbox" class='checkall' id='checkall'
-                            onchange="checkUncheck(this)"></th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Promotion</th>
-                        <th>Price</th>
-                        <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
-                        <th>Action</th>
-                        <%}%>
-                      </tr>
-                    </thead>
-                    <tbody>
-                     
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                      <tr>
-                        <th>Check All <input type="checkbox" class='checkall' id='checkall' onchange="checkUncheck(this)"></th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Promotion</th>
-                        <th>Price</th>
-                        <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
-                        <th>Action</th>
-                        <%}%>
-                      </tr>
-                    </tfoot>
-                  </table>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Product</li>
+                  </ol>
                 </div>
-                <!-- /.card-body -->
               </div>
-              <!-- /.card -->
+            </div><!-- /.container-fluid -->
+          </section>
+          <!--- message section should be common for all-->
+
+          <% if(failure.length){ %>
+            <div class="alert alert-danger">
+              <strong>
+                <%= failure[0] %>
+              </strong>
             </div>
-            <!-- /.col -->
-          </div>
-          <!-- /.row -->
+            <% } %>
+              <% if(success.length){ %>
+                <div class="alert alert-success">
+                  <strong>
+                    <%= success %>
+                  </strong>
+                </div>
+                <% } %>
+
+                  <!---- end of messages -->
+                  <!-- Main content -->
+                  <section class="content">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-12">
+
+                          <!-- /.card -->
+
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">All Products</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="container-fluid1">
+                              <form>
+                                <input type="hidden" value=<%=(await check ('product_delete',roleid)) ? roleid:"" %>
+                                id="delete"
+                                name="delete" />
+                                <input type="hidden" value=<%=(await check ('product_edit',roleid)) ? roleid:"" %>
+                                id="edit"
+                                name="edit" />
+                                <a href="/dummy.csv" id="dummy" download>Dummy link</a>
+
+                                <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
+                                  <input type="hidden" value="<%=user%>" id="admin" name="admin" />
+                                  <%} %>
+                                    <div class="file">
+                                      <input type="file" name="csv" id="fileinput" />
+                                    </div>
+                            </div>
+                            </form>
+                            <button type="button" style="display:none"
+                              class="btn btn-danger btn-sm check_delete">Delete</button>
+                            <table id="products" class="table table-bordered table-striped">
+                              <thead>
+                                <tr>
+                                  <th>Check All <input type="checkbox" class='checkall' id='checkall'
+                                      onchange="checkUncheck(this)"></th>
+                                  <th>Name</th>
+                                  <th>Image</th>
+                                  <th>Description</th>
+                                  <th>Promotion</th>
+                                  <th>Price</th>
+                                  <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check
+                                    ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
+                                    <th>Action</th>
+                                    <%}%>
+                                </tr>
+                              </thead>
+                              <tbody>
+
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                <tr>
+                                  <th>Check All <input type="checkbox" class='checkall' id='checkall'
+                                      onchange="checkUncheck(this)"></th>
+                                  <th>Name</th>
+                                  <th>Image</th>
+                                  <th>Description</th>
+                                  <th>Promotion</th>
+                                  <th>Price</th>
+                                  <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check
+                                    ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
+                                    <th>Action</th>
+                                    <%}%>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
-      </section>
-      <!-- /.content -->
+        </section>
+        <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <%- await include('../../_partials/_admin/footer.ejs'); %>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
     </div>
-    <!-- /.content-wrapper -->
-    <%- await include('../../_partials/_admin/footer.ejs'); %>
+    <!-- ./wrapper -->
 
-                        <!-- Control Sidebar -->
-                        <aside class="control-sidebar control-sidebar-dark">
-                          <!-- Control sidebar content goes here -->
-                        </aside>
-                        <!-- /.control-sidebar -->
-                </div>
-                <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../../dist/js/demo.js"></script>
+    <!-- Page specific script -->
+    <script>
 
-                <!-- jQuery -->
-                <script src="../../plugins/jquery/jquery.min.js"></script>
-                <!-- Bootstrap 4 -->
-                <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                <!-- DataTables  & Plugins -->
-                <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-                <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-                <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-                <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-                <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-                <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-                <script src="../../plugins/jszip/jszip.min.js"></script>
-                <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-                <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-                <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-                <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-                <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-                <!-- AdminLTE App -->
-                <script src="../../dist/js/adminlte.min.js"></script>
-                <!-- AdminLTE for demo purposes -->
-                <script src="../../dist/js/demo.js"></script>
-                <!-- Page specific script -->
-                <script>
-                  var fruitsGranted = []
-                  // $(".check_delete").hide();
-                  function hideandshow(arr) {
-                    console.log("--hide",arr);
-                    (!arr.length) ? $(".check_delete").hide() : $(".check_delete").show();
-                  }
+      $('#fileinput').change(function () {
+        // $(this).val() will work here
+        var success = confirm('Are you sure to upload this file');
+          if(success)
+          {
+            upload()
+          }
+      })
+      var fruitsGranted = []
+      // $(".check_delete").hide();
+      function hideandshow(arr) {
+        console.log("--hide", arr);
+        (!arr.length) ? $(".check_delete").hide() : $(".check_delete").show();
+      }
+      function upload() {
+        var data;
+        var formdata = new FormData();
+        formdata.append('file', $('#fileinput').prop('files')[0]);
+        $.ajax({
+          url: '/admin/upload',
+          type: 'POST',
+          processData: false,
+          contentType: false,
+          dataType: "json",
+          mimeType: 'multipart/form-data',
+          data: formdata,
+          success: function (data) {
+            if (data.status) {
+              console.log("--test", data)
 
-                  function checkUncheck(that) {
-                    let allRows = document.getElementsByClassName('test')
-                    let data = $(".test").attr("id")
-                    let flag = false
-                    if (that.checked) {
-                      flag = true
-                    }
-                    for (i = 0; i < allRows.length; i++) {
+            }
+          }
+        })
 
-                      if (flag) {
-                        fruitsGranted.push(allRows[i].id);
-                        allRows[i].checked = flag
-                      }
-                      else {
-                        allRows[i].checked = flag
-                        const index = fruitsGranted.indexOf(allRows[i].id);
-                        if (index > -1) {
-                          fruitsGranted.splice(index, 1);
-                        }
-                      }
-                    }
-                    hideandshow(fruitsGranted)
-                  }
-                  function myFunction(that) {
-                    var $this = $(that);
+      }
+      function checkUncheck(that) {
+        let allRows = document.getElementsByClassName('test')
+        let data = $(".test").attr("id")
+        let flag = false
+        if (that.checked) {
+          flag = true
+        }
+        for (i = 0; i < allRows.length; i++) {
 
-                    if ($this.is(":checked")) {
-                      fruitsGranted.push($this.attr("id"));
-                    } else {
-                      const index = fruitsGranted.indexOf($this.attr("id"));
-                      if (index > -1) {
-                        fruitsGranted.splice(index, 1);
-                      }
-                    }
-                    hideandshow(fruitsGranted)
-                    // console.log("|------",fruitsGranted)
-                  }
+          if (flag) {
+            fruitsGranted.push(allRows[i].id);
+            allRows[i].checked = flag
+          }
+          else {
+            allRows[i].checked = flag
+            const index = fruitsGranted.indexOf(allRows[i].id);
+            if (index > -1) {
+              fruitsGranted.splice(index, 1);
+            }
+          }
+        }
+        hideandshow(fruitsGranted)
+      }
+      function myFunction(that) {
+        var $this = $(that);
 
-                  $(document).ready(function () {
-                    function list_products() {
-                      var admin = $('#admin').val();
-                      var del = $('#delete').val()
-                      var edit = $('#edit').val()
-                      $('#products').DataTable({
-                        "paging": true,
-                        "processing": true,
-                        "serverSide": true,
-                        "ordering": false,
-                        "ajax": {
-                          "url": "/admin/product/list",
-                          "type": "get",
-                        },
-                        "columns": [
-                          {
-                            "data": "ID",
-                            render: function (data, type, row) {
-                              return `<input type="Checkbox" id="${row._id}" onchange="myFunction(this)"
+        if ($this.is(":checked")) {
+          fruitsGranted.push($this.attr("id"));
+        } else {
+          const index = fruitsGranted.indexOf($this.attr("id"));
+          if (index > -1) {
+            fruitsGranted.splice(index, 1);
+          }
+        }
+        hideandshow(fruitsGranted)
+        // console.log("|------",fruitsGranted)
+      }
+
+      $(document).ready(function () {
+        function list_products() {
+          var admin = $('#admin').val();
+          var del = $('#delete').val()
+          var edit = $('#edit').val()
+          $('#products').DataTable({
+            "paging": true,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": {
+              "url": "/admin/product/list",
+              "type": "get",
+            },
+            "columns": [
+              {
+                "data": "ID",
+                render: function (data, type, row) {
+                  return `<input type="Checkbox" id="${row._id}" onchange="myFunction(this)"
                               class="test"/>`;
-                            }
-                          },
-                          { "data": "name.english" },
-                          {
-                            "data": "ID",
-                            render: function (data, type, row) {
-                              return `<img class="img-thumbnail" style="width: 6em;height: 4em"
+                }
+              },
+              { "data": "name.english" },
+              {
+                "data": "ID",
+                render: function (data, type, row) {
+                  return `<img class="img-thumbnail" style="width: 6em;height: 4em"
                             src="/images/products/${row.image}">`;
-                            }
-                          },
-                          { "data": "description" },
-                          {
-                            data: "ID",
-                            render: function (data, type, row) {
-                              return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
-                            }
-                          },
-                          {
-                            data: "ID",
-                            render: function (data, type, row) {
-                              return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
-                            }
-                          },
-                          {
-                            data: "ID",
-                            "visible": (admin || del || edit) ? true : false,
-                            render: function (data, type, row) {
-                              if (admin || (del && edit)) {
-                                return ` <a href="/admin/product/delete/${row._id}"
+                }
+              },
+              { "data": "description" },
+              {
+                data: "ID",
+                render: function (data, type, row) {
+                  return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                }
+              },
+              {
+                data: "ID",
+                render: function (data, type, row) {
+                  return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                }
+              },
+              {
+                data: "ID",
+                "visible": (admin || del || edit) ? true : false,
+                render: function (data, type, row) {
+                  if (admin || (del && edit)) {
+                    return ` <a href="/admin/product/delete/${row._id}"
                             onclick="return confirm('Are you sure you want to delete this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
-                              } else if (del) {
-                                return ` <a href="/admin/product/delete/${row._id}"
+                  } else if (del) {
+                    return ` <a href="/admin/product/delete/${row._id}"
                             onclick="return confirm('Are you sure you want to delete this.')">
                             <i class="far fa-trash-alt"></i></a>`
-                              } else if (edit) {
-                                return `<a
+                  } else if (edit) {
+                    return `<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
-                              }
-                              return ` <a href="/admin/product/delete/${row._id}"
+                  }
+                  return ` <a href="/admin/product/delete/${row._id}"
                             onclick="return confirm('Are you sure you want to delete this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
-                            }
-                          }
-                        ],
-                        success: function (done) {
-                          // console.log("--ab", done)
-                        }
-                      });
-                    }
-                    list_products();
-                    $(".check_delete").click(function () {
-                      $.ajax({
-                        url: '/admin/product/delete',
-                        type: 'POST',
-                        data: {
-                          id: fruitsGranted
-                        },
+                }
+              }
+            ],
+            success: function (done) {
+              // console.log("--ab", done)
+            }
+          });
+        }
+        list_products();
+        $(".check_delete").click(function () {
+          $.ajax({
+            url: '/admin/product/delete',
+            type: 'POST',
+            data: {
+              id: fruitsGranted
+            },
 
-                      }).done((data) => {
-                        console.log("--done", data)
-                        if (data.status) {
-                          // list_products();
-                          $('#products').DataTable().ajax.reload();
-                          fruitsGranted.splice(0, fruitsGranted.length)
-                          // for (i = 0; i < fruitsGranted.length; i++) {
-                          //   $('#' + fruitsGranted[i]).closest('tr').remove();
-                          // }
-                        }
-                      });
-                    });
-                  });
-                  $("#btn").click(function () {
-                    // console.log("--files", $('#fileinput').prop('files')[0])
-                    var data;
-                    var formdata = new FormData();
-                    formdata.append('file', $('#fileinput').prop('files')[0]);
-                    $.ajax({
-                      url: '/admin/upload',
-                      type: 'POST',
-                      processData: false,
-                      contentType: false,
-                      dataType: "json",
-                      mimeType: 'multipart/form-data',
-                      data: formdata,
-                      success: function (data) {
-                        if (data.status) {
-                          console.log("--test", data)
+          }).done((data) => {
+            console.log("--done", data)
+            if (data.status) {
+              // list_products();
+              $('#products').DataTable().ajax.reload();
+              fruitsGranted.splice(0, fruitsGranted.length)
+              // for (i = 0; i < fruitsGranted.length; i++) {
+              //   $('#' + fruitsGranted[i]).closest('tr').remove();
+              // }
+            }
+          });
+        });
+      });
+      // $("#btn").click(function () {
+      //   // console.log("--files", $('#fileinput').prop('files')[0])
+      //   var data;
+      //   var formdata = new FormData();
+      //   formdata.append('file', $('#fileinput').prop('files')[0]);
+      //   $.ajax({
+      //     url: '/admin/upload',
+      //     type: 'POST',
+      //     processData: false,
+      //     contentType: false,
+      //     dataType: "json",
+      //     mimeType: 'multipart/form-data',
+      //     data: formdata,
+      //     success: function (data) {
+      //       if (data.status) {
+      //         console.log("--test", data)
 
-                        }
-                      }
-                    })
-                  })
-                </script>
+      //       }
+      //     }
+      //   })
+      // })
+    </script>
 </body>
 
 </html>
