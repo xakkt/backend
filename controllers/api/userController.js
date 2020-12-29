@@ -230,6 +230,7 @@ exports.address = async (req, res) => {
 		address_array.push({
 			address: req.body.address,
 			city: req.body.city,
+			name:req.body.name,
 			address_type: req.body.address_type,
 			country: req.body.country,
 			region: req.body.region,
@@ -300,6 +301,7 @@ exports.updateaddress = async (req, res) => {
 				$set: {
 					"address.$.address": req.body.address,
 					"address.$.city": req.body.city,
+					"address.$.name":req.body.name,
 					"address.$.mobile":req.body.mobile,
 					"address.$.country": req.body.country,
 					"address.$.countrycode":req.body.countrycode,
