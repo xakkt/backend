@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
             res.redirect('/');
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
-        req.session.email = userInfo.email;
+        req.session.customer = userInfo.email;
         req.session.userid = userInfo._id
 
         return res.redirect('/')
@@ -48,10 +48,11 @@ exports.create = async (req, res) => {
         return res.json({ status: false })
 
     } catch (err) {
-        res.status(400).json({ status: "false", data: err });
+        res.status(400).json({ status: "false", err: err });
     }
 }
 exports.logout = async (req, res) => {
+    console.log("--sessionslogout",req.session)
     if (req.session) {
         req.session.destroy(function (err) {
             if (err) {

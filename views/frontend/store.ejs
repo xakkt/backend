@@ -110,7 +110,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="ads-grid">
 		<div class="container">
 			<!-- tittle heading -->
-			<h3 class="tittle-w3l">Our Top Products
+			<h3 class="tittle-w3l">Our Top Store
 				<span class="heading-style">
 					<i></i>
 					<i></i>
@@ -124,9 +124,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="agileinfo-ads-display col-md-9">
 				<div class="wrapper">
 					<!-- first section (nuts) -->
-					<div class="product-sec1">
+					<div class="product-sec1" style="margin-left: 250px;
+					margin-right: -115px;">
 						<h3 class="heading-tittle">Nuts</h3>
-						<% data.forEach(function (data) { %>
+						<% if(store) store.forEach(function (store) { %>
 						<div class="col-md-4 product-men">
 							<div class="men-pro-item simpleCart_shelfItem">
 								<div class="men-thumb-item">
@@ -140,13 +141,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								</div>
 								<div class="item-info-product ">
 									<h4>
-										<a href="/product/<%= data._id %>"><%= data.name %></a>
+										<a href="/product/<%= store._id %>"><%= store.name %></a>
 									</h4>
 									<div class="info-product-price">
 										<span class="item_price">$149.00</span>
 										<del>$280.00</del>
 									</div>
-									<div
+									<!-- <div
 										class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
 										<form action="#" method="post">
 											<fieldset>
@@ -162,7 +163,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 												<input type="submit" name="submit" value="Add to cart" class="button" />
 											</fieldset>
 										</form>
-									</div>
+									</div> -->
 
 								</div>
 							</div>

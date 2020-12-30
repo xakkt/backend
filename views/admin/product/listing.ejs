@@ -114,13 +114,15 @@
                                 <input type="hidden" value=<%=(await check ('product_edit',roleid)) ? roleid:"" %>
                                 id="edit"
                                 name="edit" />
-                                <a href="/dummy.csv" id="dummy" download>Dummy link</a>
+                                <a href="/dummy.csv" id="dummy" download>Dummy csv</a>
 
                                 <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
                                   <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                                   <%} %>
                                     <div class="file">
-                                      <input type="file" name="csv" id="fileinput" />
+                                      <label for='fileinput'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>
+                                      </label>
+                                      <input type="file"style="display:none" name="csv" id="fileinput" />
                                     </div>
                             </div>
                             </form>
