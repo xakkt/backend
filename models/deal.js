@@ -6,7 +6,7 @@ const dealSchema = Schema({
     type: String,
     required: true
   },
-  store_id:{
+  _store:{
       type: Schema.Types.ObjectId,
       ref:'Store'
   },

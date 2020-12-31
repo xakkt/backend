@@ -190,7 +190,11 @@ exports.updateStore = async function(req, res){
 
 exports.deleteStore = async(req,res)=>{
 	Store.deleteOne({ _id: req.params.id }, function (err) {
-		if (err) return res.status(400).json({data:err});
+		if (err) 
+		{
+			console.log("--data",err)
+			return res.status(400).json({data:err});
+	}
 		res.redirect('/admin/stores')
 		//  return res.json({status:true, message: "Store Deleted", data:[]});
 	  });

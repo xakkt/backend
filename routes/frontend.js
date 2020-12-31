@@ -26,6 +26,10 @@ const path = require('path');
 /*-------- validation -------------*/
 
 router.get('/product/:id',IndexController.list)
+router.post('/cookie',IndexController.cookie)
+router.get('/cookiees',IndexController.cookiees)
+
+
 router.post('/create',AuthController.create)
 router.post('/login',AuthController.login)
 router.get('/logout',AuthController.logout)

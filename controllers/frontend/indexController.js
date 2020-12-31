@@ -31,3 +31,23 @@ exports.list = async (req, res) => {
         console.log("--err", err)
     }
 }
+exports.cookie = (req,res) =>{
+    let arr =[];
+    arr.push(req.body)
+    let options = {
+        maxAge: 1000 * 60 * 15, // would expire after 15 minutes
+        httpOnly: true, // The cookie only accessible by the web server
+        // signed: true // Indicates if the cookie should be signed
+    }
+
+    // Set cookie
+    res.cookie('session_id', '12345',options) //
+    console.log("--done",req.cookies["session_id"])
+        return res.send('Cookie has been set');
+    }
+exports.cookiees = async (req,res) =>{
+    // var username = req.cookies['username'];
+    return res.json({cookie:req.signedCookies})
+    console.log('---varuser',req.cookies
+    )
+}

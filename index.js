@@ -15,6 +15,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
+var cookieParser = require('cookie-parser')
+
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
 //moment.tz.setDefault("America/New_York");
@@ -29,6 +31,7 @@ var sess = {
 }*/
 
 app.use(session(sess))
+app.use(cookieParser())
 
 app.use(function(req, res, next) {
   res.locals.user = 'xakkt';

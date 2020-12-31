@@ -2,34 +2,41 @@ const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
+const StoreProductPricing = require("./store_product_pricing");
+const ProductRegularPricing = require("./product_regular_pricing");
+const Order = require("./order");
+const Cart = require("./cart");
+const Banner = require("./banner");
 
 
-const storeSchema = new Schema({ 
-    name:{type: String, required: true},
-    _department:[ {
+
+
+const storeSchema = new Schema({
+    name: { type: String, required: true },
+    _department: [{
         type: Schema.Types.ObjectId,
-        ref:'Department',
-        required:true,
+        ref: 'Department',
+        required: true,
         validate: {
-                validator: function(v) {
+            validator: function (v) {
                 return FKHelper(mongoose.model('Department'), v);
-          },
-        message: `Department doesn't exist`
-      }
-    
+            },
+            message: `Department doesn't exist`
+        }
+
     }],
     _user: {
         type: Schema.Types.ObjectId,
-        ref:'User',
+        ref: 'User',
         validate: {
-                validator: function(v) {
+            validator: function (v) {
                 return FKHelper(mongoose.model('User'), v);
-             },
+            },
             message: `User doesn't exist`
         }
     },
-    _timezone:{
-        type:String
+    _timezone: {
+        type: String
     },
     // _timezone: {
     //     type: Schema.Types.ObjectId,
@@ -55,21 +62,21 @@ const storeSchema = new Schema({
     },
     _country: {
         type: Schema.Types.ObjectId,
-        ref:'Country',
+        ref: 'Country',
         validate: {
-                validator: function(v) {
+            validator: function (v) {
                 return FKHelper(mongoose.model('Country'), v);
-             },
+            },
             message: `Country doesn't exist`
         }
     },
     lastupdatedby: {
         type: Schema.Types.ObjectId,
-        ref:'User',
+        ref: 'User',
         validate: {
-                validator: function(v) {
+            validator: function (v) {
                 return FKHelper(mongoose.model('User'), v);
-             },
+            },
             message: `User doesn't exist`
         }
     },
@@ -93,24 +100,38 @@ const storeSchema = new Schema({
         required: true
     },
     time_schedule: {
-         Monday:{startTime:String,endTime:String},
-         Tuesday:{startTime:String,endTime:String},
-         Wednesday:{startTime:String,endTime:String},
-         Thursday:{startTime:String,endTime:String},
-         Friday:{startTime:String,endTime:String},
-         Saturday:{startTime:String,endTime:String},
-         Sunday:{startTime:String,endTime:String} 
+        Monday: { startTime: String, endTime: String },
+        Tuesday: { startTime: String, endTime: String },
+        Wednesday: { startTime: String, endTime: String },
+        Thursday: { startTime: String, endTime: String },
+        Friday: { startTime: String, endTime: String },
+        Saturday: { startTime: String, endTime: String },
+        Sunday: { startTime: String, endTime: String }
     },
-    holidays:[
+    holidays: [
         {
-            startDate:Date, 
-            endDate:Date,
-            message:String
+            startDate: Date,
+            endDate: Date,
+            message: String
         }
-       ]
- },{timestamps:true});
+    ]
+}, { timestamps: true });
 
- storeSchema.index({ location: "2dsphere" })
- storeSchema.plugin(uniqueValidator)
+storeSchema.pre("deleteOne", async function (next) {
+    console.log("---tisl", this.getQuery)
+    const _store = this.getQuery()["_id"];
+    await Promise.all(
+        StoreProductPricing.deleteMany({ _store: _store }).exec(),
+        ProductRegularPricing.deleteMany({ _store: _store }).exec(),
+        Order.deleteMany({ _store: _store }).exec(),
+        Cart.deleteMany({ _store: _store }).exec(),
+        Banner.deleteMany({ _store: _store }).exec()
+    )
+    next()
+});
+
+
+storeSchema.index({ location: "2dsphere" })
+storeSchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model('Store', storeSchema);
