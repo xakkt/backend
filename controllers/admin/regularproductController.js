@@ -1,5 +1,6 @@
 const RegularPrice = require('../../models/product_regular_pricing');
 const Store = require('../../models/store');
+const Deal = require('../../models/deal');
 
 exports.create = async (req, res) => {
     try {
@@ -54,7 +55,7 @@ exports.remove = async (req, res) => {
  */
 exports.get = async (req, res) => {
     try {
-
+        // var deal = await Deal.find({_store:req.body.storeid}).lean();
         var regularPrice = await RegularPrice.findOne({_product:req.body.productid,_store:req.body.storeid}).lean();
         if(!regularPrice)   return res.json({status:false,message:"Not found"})
       return res.json({status:true,message:regularPrice})

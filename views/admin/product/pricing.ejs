@@ -43,186 +43,207 @@
   <div class="wrapper">
     <!-- Navbar -->
     <%- await include('../../_partials/_admin/navbar.ejs'); %>
-    <!-- /.navbar -->
-    <!-- Main Sidebar Container -->
-    <%- await include('../../_partials/_admin/sidebar.ejs'); %>
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <% if(failure.length){ %>
-      <div class="alert alert-danger">
-        <strong><%= failure[0] %></strong>
-      </div>
-      <% } %>
-      <% if(success.length){ %>
-      <div class="alert alert-success">
-        <strong><%= success %></strong>
-      </div>
-      <% } %>
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>Product Price</h1>
+      <!-- /.navbar -->
+      <!-- Main Sidebar Container -->
+      <%- await include('../../_partials/_admin/sidebar.ejs'); %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <% if(failure.length){ %>
+            <div class="alert alert-danger">
+              <strong>
+                <%= failure[0] %>
+              </strong>
             </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Product Price</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-        <!-- /.container-fluid -->
-      </section>
-      <!-- Main content -->
-      <div class ="message" style="display:none;">
-        <span>For this deal type and store  type already selected Please select another date</span>
-      </div>
-      <section class="content">
-        <div class="container">
-          <!-- SELECT2 EXAMPLE -->
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">Product Price</h3>
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <form id="productForm" method="post" action="/admin/product_price/create">
-
-                <div class="row">
-                  <table id="gatePass" class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th>Store</th>
-                        <th>Regular Price</th>
-                        <th>Deal Type</th>
-                        <th>Deal %</th>
-                        <th>Deal Price</th>
-                        <th>From</th>
-                        <th>Till</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <input type="hidden" id="store" value="" name="no_of_stores" />
-                      <% if(price.length>0){  %>
-                      <% price.forEach(function(prices){ %>
-                        <div id="item_details" >
-                      <tr class="tr_clone" id="parent">
-                        <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select store-name" required
-                            onclick="changeLanguage(this)">
-                            <option value="">Select stores</option>
-                            <% if(stores) stores.forEach(function(store){ %>
-                            <option <%=(store._id.equals(prices._store))?'selected':''%> value="<%=store._id%>">
-                              <%=store.name%></option>
-                            <% }) %>
-                          </select>
-                        </td>
-                        <td style="width:10%"> <input type="text" class="form-control rgprice"
-                            value="<%= prices.regularprice %>" name="regular_price[]" class="form-control" readonly>
-                        </td>
-                        <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select deal-name" onchange="dealchange(this)" required>
-                            <option value="">Select Deal</option>
-                            <% if(deals) deals.forEach(function(deal){ %>
-                            <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="<%=deal._id%>">
-                              <%=deal.name%></option>
-                            <% }) %>
-                          </select>
-                        </td>
-                        <td style="width:10%">
-                          <input type="number" name="deal_value[]" value="<%= prices.deal_percentage %>"
-                            class="form-control deal" required>
-
-                        </td>
-                        <td style="width:10%"> <input type="number" name="deal_price[]" value="<%= prices.deal_price %>"
-                            class="form-control deal_price"> </td>
-
-                        <td> <input type="date" name="stime[]" onchange="handler(this)"
-                            value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
-                            class="form-control from-date" required> </td>
-                        <td> <input type="date" name="etime[]" class="form-control to-date"
-                            value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required> </td>
-                        <td>
-
-                          <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>" onclick="myFunction(this)"
-                            aria-hidden="true"></i>
-                        </td>
-                      </tr>
-                      </div>
-                      <%})%>
-                      <%} else {%>
-                        <div id="item_details" >
-                      <tr class="tr_clone" id="parent">
-                        <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select store-name" required
-                            onclick="changeLanguage(this)">
-                            <option value="">Select stores</option>
-                            <% if(stores) stores.forEach(function(store){ %>
-                            <option value="<%=store._id%>"><%=store.name%></option>
-                            <% }) %>
-                          </select>
-                        </td>
-                        <td style="width:10%"> <input type="text" name="regular_price[]" class="rgprice form-control"
-                            readonly required> </td>
-                        <td style="width:15%">
-                          <select name="deal[]" class="form-control custom-select deal-name" onclick="dealchange(this)" required>
-                            <option value="">Select Deal</option>
-                            <% if(deals) deals.forEach(function(deal){ %>
-                            <option value="<%=deal._id%>"><%=deal.name%></option>
-                            <% }) %>
-                          </select>
-                        </td>
-                        <td style="width:10%">
-                          <input type="number" name="deal_value[]" class="form-control deal" required>
-                        </td>
-                        <td style="width:20%"> <input type="number" name="deal_price[]" class="form-control deal_price">
-                        </td>
-
-                        <td> <input type="date" name="stime[]" class="form-control from-date" onchange="handler(this);" required> </td>
-                        <td> <input type="date" name="etime[]" class="form-control to-date" required> </td>
-                        <td>
-                          <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)" data-id=""
-                            aria-hidden="true"></i>
-
-                        </td>
-                      </tr>
-                      </div>
-                      <%}%>
-                    </tbody>
-                  </table>
+            <% } %>
+              <% if(success.length){ %>
+                <div class="alert alert-success">
+                  <strong>
+                    <%= success %>
+                  </strong>
                 </div>
-                <input type="hidden" id="productid" name="productid" value="<%= productid %>"></input>
-                      <!-- /.card-body -->
-                      <span class="input-group-btn">
-                      </span>
-                      <div class="card-footer">
-                        <input type="button" name="add" value="Add" id="tr_clone_add"
-                          class="btn btn-primary tr_clone_add">
-                        <button type="submit" value="submit" class="btn btn-primary submit">Submit</button>
+                <% } %>
+                  <!-- Content Header (Page header) -->
+                  <section class="content-header">
+                    <div class="container-fluid">
+                      <div class="row mb-2">
+                        <div class="col-sm-6">
+                          <h1>Product Price</h1>
+                        </div>
+                        <div class="col-sm-6">
+                          <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Product Price</li>
+                          </ol>
+                        </div>
                       </div>
-              </form>
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.container-fluid -->
-      </section>
-      <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <%- await include('../../_partials/_admin/footer.ejs'); %>
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+                    </div>
+                    <!-- /.container-fluid -->
+                  </section>
+                  <!-- Main content -->
+                  <div class="message" style="display:none;">
+                    <span>For this deal type and store type already selected Please select another date</span>
+                  </div>
+                  <section class="content">
+                    <div class="container">
+                      <!-- SELECT2 EXAMPLE -->
+                      <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">Product Price</h3>
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <form id="productForm" method="post" action="/admin/product_price/create">
+
+                            <div class="row">
+                              <table id="gatePass" class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th>Store</th>
+                                    <th>Regular Price</th>
+                                    <th>Deal Type</th>
+                                    <th>Deal %</th>
+                                    <th>Deal Price</th>
+                                    <th>From</th>
+                                    <th>Till</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <input type="hidden" id="store" value="" name="no_of_stores" />
+                                  <% if(price.length>0){ %>
+                                    <% price.forEach(function(prices){ %>
+                                      <div id="item_details">
+                                        <tr class="tr_clone" id="parent">
+                                          <td style="width:18%">
+                                            <select name="store[]" class="form-control custom-select store-name"
+                                              required onclick="changeLanguage(this)">
+                                              <option value="">Select stores</option>
+                                              <% if(stores) stores.forEach(function(store){ %>
+                                                <option <%=(store._id.equals(prices._store))?'selected':''%> value="
+                                                  <%=store._id%>">
+                                                    <%=store.name%>
+                                                </option>
+                                                <% }) %>
+                                            </select>
+                                          </td>
+                                          <td style="width:10%"> <input type="text" class="form-control rgprice"
+                                              value="<%= prices.regularprice %>" name="regular_price[]"
+                                              class="form-control" readonly>
+                                          </td>
+                                          <td style="width:15%">
+                                            <select name="deal[]" class="form-control custom-select deal-name"
+                                              onchange="dealchange(this)" required>
+                                              <option value="">Select Deal</option>
+                                              <% if(deals) deals.forEach(function(deal){ %>
+                                                <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="
+                                                  <%=deal._id%>">
+                                                    <%=deal.name%>
+                                                </option>
+                                                <% }) %>
+                                            </select>
+                                          </td>
+                                          <td style="width:10%">
+                                            <input type="number" name="deal_value[]"
+                                              value="<%= prices.deal_percentage %>" class="form-control deal" required>
+
+                                          </td>
+                                          <td style="width:10%"> <input type="number" name="deal_price[]"
+                                              value="<%= prices.deal_price %>" class="form-control deal_price"> </td>
+
+                                          <td> <input type="date" name="stime[]" onchange="handler(this)"
+                                              value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
+                                              class="form-control from-date" required> </td>
+                                          <td> <input type="date" name="etime[]" class="form-control to-date"
+                                              value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required>
+                                          </td>
+                                          <td>
+
+                                            <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>"
+                                              onclick="myFunction(this)" aria-hidden="true"></i>
+                                          </td>
+                                        </tr>
+                                      </div>
+                                      <%})%>
+                                        <%} else {%>
+                                          <div id="item_details">
+                                            <tr class="tr_clone" id="parent">
+                                              <td style="width:18%">
+                                                <select name="store[]" class="form-control custom-select store-name"
+                                                  required onclick="changeLanguage(this)">
+                                                  <option value="">Select stores</option>
+                                                  <% if(stores) stores.forEach(function(store){ %>
+                                                    <option value="<%=store._id%>">
+                                                      <%=store.name%>
+                                                    </option>
+                                                    <% }) %>
+                                                </select>
+                                              </td>
+                                              <td style="width:10%"> <input type="text" name="regular_price[]"
+                                                  class="rgprice form-control" readonly required> </td>
+                                              <td style="width:15%">
+                                                <select name="deal[]" id="deal"
+                                                  class="form-control custom-select deal-name"
+                                                  onclick="dealchange(this)" required>
+                                                  <option value="">Select Deal</option>
+                                                  <% if(deals) deals.forEach(function(deal){ %>
+                                                    <option value="<%=deal._id%>">
+                                                      <%=deal.name%>
+                                                    </option>
+                                                    <% }) %>
+                                                </select>
+                                              </td>
+                                              <td style="width:10%">
+                                                <input type="number" name="deal_value[]" class="form-control deal"
+                                                  required>
+                                              </td>
+                                              <td style="width:20%"> <input type="number" name="deal_price[]"
+                                                  class="form-control deal_price">
+                                              </td>
+
+                                              <td> <input type="date" name="stime[]" class="form-control from-date"
+                                                  onchange="handler(this);" required> </td>
+                                              <td> <input type="date" name="etime[]" class="form-control to-date"
+                                                  required> </td>
+                                              <td>
+                                                <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)"
+                                                  data-id="" aria-hidden="true"></i>
+
+                                              </td>
+                                            </tr>
+                                          </div>
+                                          <%}%>
+                                </tbody>
+                              </table>
+                            </div>
+                            <input type="hidden" id="productid" name="productid" value="<%= productid %>"></input>
+                            <!-- /.card-body -->
+                            <span class="input-group-btn">
+                            </span>
+                            <div class="card-footer">
+                              <input type="button" name="add" value="Add" id="tr_clone_add"
+                                class="btn btn-primary tr_clone_add">
+                              <button type="submit" value="submit" class="btn btn-primary submit">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+                      <!-- /.container-fluid -->
+                  </section>
+                  <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <%- await include('../../_partials/_admin/footer.ejs'); %>
+          <!-- Control Sidebar -->
+          <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+          </aside>
+          <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
 
@@ -288,7 +309,7 @@
       let that = e.target
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = 0, dealPercentage = that.value
-      dealPrice =  eval(regularPrice- (regularPrice * dealPercentage) / 100)
+      dealPrice = eval(regularPrice - (regularPrice * dealPercentage) / 100)
       that.parentElement.parentElement.getElementsByClassName("deal_price")[0].value = dealPrice
     });
     $(document).on("input", '.deal_price', function (e) {
@@ -314,6 +335,9 @@
 
       }).done((data) => {
 
+        // $.each(data.deal, function (data, value) {
+        //   $("#deal").append($("<option></option>").val(value._id).html(value.name));
+        // })
         if (data.status) {
           $(that).closest('.tr_clone').find('.rgprice').val(data.message.regular_price)
         }
@@ -330,9 +354,9 @@
 
       // var parentDiv = $(that).closest('tbody').closest('tr').attr('id');
       //   console.log('=>',parentDiv.attr('id'));
-        // if(parentDiv.attr('id') !== 'item_name') {
-        //   return  parentDiv.remove();
-        // }
+      // if(parentDiv.attr('id') !== 'item_name') {
+      //   return  parentDiv.remove();
+      // }
       if ($(that).data("id").trim() == "") {
         return $(that).closest('tr').remove()
       }
@@ -352,7 +376,7 @@
       let parentEle = that.parentElement.parentElement
       let store = parentEle.getElementsByClassName("store-name")[0].value
       let dealType = parentEle.getElementsByClassName("deal-name")[0].value
-      let from = moment(parentEle.getElementsByClassName("from-date")[0].value,"YYYY/MM/DD") 
+      let from = moment(parentEle.getElementsByClassName("from-date")[0].value, "YYYY/MM/DD")
       let to = moment(parentEle.getElementsByClassName("to-date")[0].value, "YYYY/MM/DD")
       let stores = document.getElementsByClassName("store-name")
       let dealTypes = document.getElementsByClassName("deal-name")
@@ -366,34 +390,32 @@
           // var compareDate = moment(, "YYYY/MM/DD");
           let startDate = moment(fromDates[i].value, "YYYY/MM/DD");
           let endDate = moment(toDates[i].value, "YYYY/MM/DD");
-          if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)){
+          if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)) {
             flag += 1
-          }else console.log('outside------')
+          } else console.log('outside------')
         } else console.log('outer outside')
       }
-      if(flag > 1){
+      if (flag > 1) {
         $('.message').show();
-        $('.submit').prop('disabled', true).css('background-color','red');
+        $('.submit').prop('disabled', true).css('background-color', 'red');
         parentEle.getElementsByClassName("deal-name")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("from-date")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("to-date")[0].style.border = '1px solid red'
         // parentEle.style.border = '1px solid red'
       }
-      else{
+      else {
         $('.submit').prop('disabled', false);
-        $('.submit').addClass('btn btn-primary ').css('background-color','')
+        $('.submit').addClass('btn btn-primary ').css('background-color', '')
 
       }
       console.log('flag===========', flag)
     }
-   function dealchange(that)
-   {
-    checkDuplicateEntry(that)
+    function dealchange(that) {
+      checkDuplicateEntry(that)
     }
-   function handler(that)
-   {
-    checkDuplicateEntry(that)
-   }
+    function handler(that) {
+      checkDuplicateEntry(that)
+    }
   </script>
 
 </body>

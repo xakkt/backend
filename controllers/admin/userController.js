@@ -81,7 +81,7 @@ exports.check = function (req, res) {
             var role = await Roles.find({}).lean()
             var TimeZone = moment.tz.names();
             const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-            res.render('admin/user/edit', { menu: "users", submenu: "edit", status: "success", role: role,timezone:TimeZone, message: "", user: user });
+           return  res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role,timezone:TimeZone, message: "", user: user });
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }

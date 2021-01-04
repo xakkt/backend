@@ -9,6 +9,9 @@ exports.list = async (req, res)=>{
 	  try{
 			let category = await ProductCategory.find().exec();
 			if(!category.length) return res.json({status: "false", message: "No data found", data: category});
+			category.map(element =>{
+				return element.logo =  `${process.env.BASE_URL}/images/products/${element.logo}`
+			})
 			return res.json({status: "success", message: "", data: category});
 			
 	   }catch(err){

@@ -100,7 +100,7 @@ exports.edit = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
         const productCategory = await ProductCategory.findById(req.params.id).exec();
-        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory" })
+        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory" ,submenu:"create"})
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -382,24 +382,29 @@ exports.priceSave = async (req, res) => {
 exports.addPrice = async (req, res) => {
     try {
         var prices = [];
+        var deal = [];
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();
         var regularPrice = await RegularPrice.find({}).lean()
 
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
-        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: '', price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
-        price.map((element) => {
-            var data = {}
-            regularPrice.forEach(regular => {
+      price.map((element) => {
+            var data = {};
+            var dealss = {}
+            regularPrice.map( regular => {
                 if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
+                    // dealss=  await Deals.find({_store:element._store}).exec();
                     data = { ...element, regularprice: regular.regular_price }
+
                 }
             })
             prices.push(data)
-
+          
         })
+    
         res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
         console.log("--err", err)
