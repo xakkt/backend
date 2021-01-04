@@ -13,8 +13,10 @@ module.exports = async (req, res, next)=>{
             if(!permission) return false
             return true
            }
+           
            res.locals.admin = async (value, id) => {
-               const role = await User.findOne({_id:id}).populate({
+            //    console.log('---idd',value)
+               const role = await User.findOne({_id:req.session.userid}).populate({
                    path: 'role_id', 
                    model: 'Role', 
                    match: {
