@@ -17,13 +17,24 @@ exports.dashboard = async (req, res) => {
         var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
         let user = await User.countDocuments().lean();
         let deal = await StoreProductPricing.find({ $and: [{ deal_start: { $lte: date } }, { deal_end: { $gte: date } }] }).lean();
-        var filtered = deal.filter(function (a) {
-            if (!this[a._deal]) {
-                this[a._deal] = true;
-                return true;
-            }
+    //    console.log('---deal',deal)
+        // var filtered = deal.filter(function (a) {
+        //     if (!this[a._deal]) {
+        //         this[a._deal] = true;
+        //         return true;
+        //     }
+        // });
+        var resArr = [];
+        deal.filter(function(item){
+          var i = resArr.findIndex(x => x._deal == item._deal);
+          if(i <= -1){
+            resArr.push(item);
+          }
+          return null;
         });
-        return res.render('admin/index', { menu: "dashboard", data: user, deal: filtered.filter(item => item._id).length,order:(order.length)?order.length:0 })
+
+        console.log("--filtere",resArr.length)
+        return res.render('admin/index', { menu: "dashboard", data: user, deal: resArr.length,order:order.length })
     } catch (err) {
         console.log("--err", err)
     }

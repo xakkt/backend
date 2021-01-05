@@ -124,8 +124,8 @@
                                               required onclick="changeLanguage(this)">
                                               <option value="">Select stores</option>
                                               <% if(stores) stores.forEach(function(store){ %>
-                                                <option <%=(store._id.equals(prices._store))?'selected':''%> value="
-                                                  <%=store._id%>">
+                                                <option <%=(store._id.equals(prices._store))?'selected':''%> 
+                                                  value="<%=store._id%>">
                                                     <%=store.name%>
                                                 </option>
                                                 <% }) %>
@@ -259,6 +259,10 @@
   <!-- AdminLTE for demo purposes -->
   <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
 
+  <!-- sweetAlert -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+
   <!-- jquery-validation -->
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/jquery.validate.min.js"></script>
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -335,9 +339,6 @@
 
       }).done((data) => {
 
-        // $.each(data.deal, function (data, value) {
-        //   $("#deal").append($("<option></option>").val(value._id).html(value.name));
-        // })
         if (data.status) {
           $(that).closest('.tr_clone').find('.rgprice').val(data.message.regular_price)
         }

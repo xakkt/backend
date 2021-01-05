@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
+ <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <style>
@@ -170,7 +172,7 @@
                         <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
                         <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td>
                         <td><a href="/admin/banner/delete/<%= data._id %>"
-                            onclick="return confirm('Are you sure you want to Active this.')">
+                            onclick="return confirmation(event)">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;</td>
                       </tr>
                       <% }) %>
@@ -234,7 +236,35 @@
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
+
+    <!-- sweetAlert -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
   <script>
+     function confirmation(ev) {
+        ev.preventDefault();
+        var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
+        console.log('/////',urlToRedirect); // verify if this is the right URL
+        swal({
+          title: "Are you sure?",
+          text: "But all data related to product also delete.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel please!",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        },
+          function (isConfirm) {
+            if (isConfirm) {
+              window.location.href = urlToRedirect;
+            } else {
+              swal("Cancelled", "Your file is safe :)", "error");
+            }
+          }
+        )
+
+      }
     function myFunction(that) {
       console.log(that.closest('td'));
       var data;

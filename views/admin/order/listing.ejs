@@ -165,7 +165,6 @@
         data: data,
       }).done((data) => {
         if (data.status) {
-          console.log("--logsss",data)
           sweetAlert("Good job!", "Status Updated", "success");
           // location.reload();
           $('#order').DataTable().ajax.reload();

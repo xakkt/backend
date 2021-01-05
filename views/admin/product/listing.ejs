@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
 </head>
 <style>
   .container-fluid1 {
@@ -120,9 +123,10 @@
                                   <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                                   <%} %>
                                     <div class="file">
-                                      <label for='fileinput'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>
+                                      <label for='fileinput'><i class="fa fa-upload" class="icon"
+                                          aria-hidden="true"></i>
                                       </label>
-                                      <input type="file"style="display:none" name="csv" id="fileinput" />
+                                      <input type="file" style="display:none" name="csv" id="fileinput" />
                                     </div>
                             </div>
                             </form>
@@ -209,21 +213,48 @@
     <script src="../../dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../dist/js/demo.js"></script>
+
+    <!-- sweetAlert -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
     <!-- Page specific script -->
     <script>
+      function confirmation(ev) {
+        ev.preventDefault();
+        var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
+        console.log('/////',urlToRedirect); // verify if this is the right URL
+        swal({
+          title: "Are you sure?",
+          text: "But all data related to product also delete.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel please!",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        },
+          function (isConfirm) {
+            if (isConfirm) {
+              window.location.href = urlToRedirect;
+            } else {
+              swal("Cancelled", "Your file is safe :)", "error");
+            }
+          }
+        )
+
+      }
 
       $('#fileinput').change(function () {
         // $(this).val() will work here
         var success = confirm('Are you sure to upload this file');
-          if(success)
-          {
-            upload()
-          }
+        if (success) {
+          upload()
+        }
       })
       var fruitsGranted = []
       // $(".check_delete").hide();
       function hideandshow(arr) {
-        console.log("--hide", arr);
         (!arr.length) ? $(".check_delete").hide() : $(".check_delete").show();
       }
       function upload() {
@@ -334,19 +365,19 @@
                 render: function (data, type, row) {
                   if (admin || (del && edit)) {
                     return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to delete this.')">
+                            onclick="return confirmation(event)">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
                   } else if (del) {
                     return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to delete this.')">
+                            onclick="return confirmation(event)">
                             <i class="far fa-trash-alt"></i></a>`
                   } else if (edit) {
                     return `<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
                   }
                   return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirm('Are you sure you want to delete this.')">
+                            onclick="return confirmation(event)">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
                             href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
                 }

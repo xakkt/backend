@@ -15,7 +15,6 @@ module.exports = async (req, res, next)=>{
            }
            
            res.locals.admin = async (value, id) => {
-            //    console.log('---idd',value)
                const role = await User.findOne({_id:req.session.userid}).populate({
                    path: 'role_id', 
                    model: 'Role', 

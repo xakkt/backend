@@ -118,7 +118,6 @@ const storeSchema = new Schema({
 }, { timestamps: true });
 
 storeSchema.pre("deleteOne", async function (next) {
-    console.log("---tisl", this.getQuery)
     const _store = this.getQuery()["_id"];
     await Promise.all(
         StoreProductPricing.deleteMany({ _store: _store }).exec(),

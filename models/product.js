@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 const FKHelper = require('../helper/foreign-key-constraint');
-
+const StoreProductPricing = require("./store_product_pricing");
+const ProductRegularPricing = require("./product_regular_pricing");
+const Order = require("./order");
+const Cart = require("./cart");
+const Banner = require("./banner");
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
@@ -114,7 +118,22 @@ const productSchema = new Schema({
   },
 }, {timestamps:true});
 
+productSchema.pre("deleteOne",  function (next) {
+  const _product = this.getQuery()["_id"];
+      StoreProductPricing.deleteMany({ _product: _product }).exec()
+      ProductRegularPricing.deleteMany({ _product: _product }).exec(),
+      Cart.deleteMany({ 'cart._product': _product }).exec(),
+ 
+  next()
+});
+
+
 productSchema.plugin(uniqueValidator)
+
+
+
+
+
 
 function dateToString(date){
   if(date) return new Date(date).toISOString();
