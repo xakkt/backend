@@ -8,6 +8,7 @@ var isloggedin = require('../middlewares/isloggedin')
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
 const StoreController = require('../controllers/frontend/storeController')
+const CartController = require('../controllers/frontend/cartController')
 
 
 
@@ -37,5 +38,6 @@ router.get('/logout',AuthController.logout)
 /*------------ User ---------*/
 router.get('/',StoreController.list)
 
+router.get('/cart',CartController.list)
 
 module.exports = router;

@@ -306,7 +306,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<div class="col-md-4 product-men">
 									<div class="men-pro-item simpleCart_shelfItem">
 										<div class="men-thumb-item">
-											<img   src="/images/products/<%= product._product.image %>" style="   padding: 50;
+											<img src="/images/products/<%= product._product.image %>" style="   padding: 50;
 											height: 100px;
 											width: 100px;
 										" />
@@ -337,23 +337,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 														</span>
 														<%}%>
 											</div>
-											<% console.log("---",product.effective_price) %>
-												<div
-											class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out"> 
-													<form action="/cookie"  onsubmit="return addtocart(event)" method="post">
-														 <input type="hidden" name="cmd" value="_cart" />
-															<input type="hidden" name="add" id="add"value="1" /> 
-															<input type="hidden" name="image" id="image" value="<%=product._product.image %>"/>
-															<input type="hidden" name="business" id="business" value=" " /> 
-															 <input type="hidden" name="item_name" id="item_name"
-																value="<%= product._product.name.english %>" />
-															<input type="hidden" name="amount" id="price" value="<%= product.effective_price %>" />
-															<input type="hidden" id="currency_code" name="currency_code" value="USD" /> 
-															<!-- <input type="hidden" name="return" value=" " /> -->
-															<!-- <input type="hidden" name="cancel_return" value=" " />   -->
-															<input type="submit"  value="Add to cart"  class="button"/>
-													</form>
-												</div>
+											<div
+												class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+												<form  class="addtocart" method="post">
+													<input type="hidden" name="cmd" value="_cart" />
+													<input type="hidden" name="add" class="add" value="1" />
+													<input type="hidden" name="image" class="image"
+														value="<%=product._product.image %>" />
+													<input type="hidden" name="business" class="business" value=" " />
+													<input type="hidden" name="item_name" class="item_name"
+														value="<%= product._product.name.english %>" />
+													<input type="hidden" name="amount" class="price"
+														value="<%= product.effective_price %>" />
+													<input type="hidden" class="currency_code" name="currency_code"
+														value="USD" />
+													<!-- <input type="hidden" name="return" value=" " /> -->
+													<!-- <input type="hidden" name="cancel_return" value=" " />   -->
+													<input type="button" value="Add to cart" class="button btn" />
+												</form>
+											</div>
 										</div>
 									</div>
 								</div>

@@ -13,11 +13,10 @@ exports.dashboard = async (req, res) => {
 
         // let ip = req.connection.remoteAddress;
         // console.log("client IP is *********************" + ip);
-        let order =  await Order.find({'shipping.tracking.status':"pending"}).lean()
+        let order = await Order.find({ 'shipping.tracking.status': "pending" }).lean()
         var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
         let user = await User.countDocuments().lean();
         let deal = await StoreProductPricing.find({ $and: [{ deal_start: { $lte: date } }, { deal_end: { $gte: date } }] }).lean();
-    //    console.log('---deal',deal)
         // var filtered = deal.filter(function (a) {
         //     if (!this[a._deal]) {
         //         this[a._deal] = true;
@@ -25,16 +24,16 @@ exports.dashboard = async (req, res) => {
         //     }
         // });
         var resArr = [];
-        deal.filter(function(item){
-          var i = resArr.findIndex(x => x._deal == item._deal);
-          if(i <= -1){
-            resArr.push(item);
-          }
-          return null;
+        deal.filter(function (item) {
+            var i = resArr.findIndex(x => x._deal == item._deal);
+            if (i <= -1) {
+                resArr.push(item);
+            }
+            return null;
         });
 
-        console.log("--filtere",resArr.length)
-        return res.render('admin/index', { menu: "dashboard", data: user, deal: resArr.length,order:order.length })
+        console.log("--filtere", resArr.length)
+        return res.render('admin/index', { menu: "dashboard", data: user, deal: resArr.length, order: order.length })
     } catch (err) {
         console.log("--err", err)
     }

@@ -11,19 +11,25 @@ const _global = require('../../helper/common')
 exports.list = async (req, res) => {
 
 	try {
-
+       var storess = []
 		let stores = await StoreProductPricing.find({ '_store': req.params.storeid }).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean()
 		if (!stores.length) return res.json({ status: "false", message: "No data found", data: [] });
-		stores = stores.map(store => {
+		await Promise.all(stores.map(async (store) => {
+			var data = {}
+		// stores = stores.map(store => {
 			//product.image = `${process.env.BASE_URL}/images/products/${product.image}`;
+			  let prices = await _global.productprice(req.params.storeid, store._product)
 			_product = store._product,
 				_deal = store._deal
 			delete store._product;
 			delete store._deal;
-			return { ...store, name: _product.name, image: `${process.env.BASE_URL}/images/products/${_product.image}`, sku: _product.sku, deal: _deal.name }
-		})
+			data =  { ...store, name: _product.name, regular_price:prices.regular_price, image: `${process.env.BASE_URL}/images/products/${_product.image}`, sku: _product.sku, deal: _deal.name }
+			storess.push(data)
 
-		return res.json({ status: "success", baseUrl: process.env.BASE_URL, message: "", data: stores });
+		})
+		)
+
+		return res.json({ status: "success", baseUrl: process.env.BASE_URL, message: "", data: storess });
 
 	} catch (err) {
 		console.log(err)

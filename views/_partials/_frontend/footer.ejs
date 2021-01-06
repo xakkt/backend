@@ -399,25 +399,42 @@
 
 
     }
-    function addtocart(e)
-    {
-        e.preventDefault();
-        console.log("--data",$('#amount').val())
+
+    $(document).ready(function () {
+        $(".btn").click(function () {
+            alert('Form is submitting....');
+            // Or Do Something...
+            return true;
+        });
+
+    })
+    // $(".addtocart").on("submit", function (event) {
+    //     event.preventDefault();
+    //     console.log($(this).serializeArray());
+    // });
+
+
+    function addtocart(that) {
+        console.log($(that).serializeArray());
+        // return false;
+        // e.preventDefault();
+        console.log("--data", $('input').attr('add')
+        )
         let cart = {
             name: $('#item_name').val(),
-            add:$('#add').val(),
-            amount:$('#price').val(),
-            currency_code:$('#currency_code').val(),
-            image:$('#image').val()
+            add: $('#add').val(),
+            amount: $('#price').val(),
+            currency_code: $('#currency_code').val(),
+            image: $('#image').val()
         }
         $.ajax({
-        url: '/cookie',
-        type: 'POST',
-        data: cart,
-      }).done((data) => {
-        // if (data.status) {
-        // }
-      });
+            url: '/cookie',
+            type: 'POST',
+            data: cart,
+        }).done((data) => {
+            // if (data.status) {
+            // }
+        });
 
     }
     // function signin(e) {
@@ -594,10 +611,8 @@
 <!-- //password-script -->
 
 <!-- smoothscroll -->
-<script src="/frontend/js/SmoothScroll.min.js"></script>
-<!-- //smoothscroll -->
+<!--script src="/frontend/js/SmoothScroll.min.js"></script>
 
-<!-- start-smooth-scrolling -->
 <script src="/frontend/js/move-top.js"></script>
 <script src="/frontend/js/easing.js"></script>
 <script>
@@ -611,17 +626,15 @@
         });
     });
 </script>
-<!-- //end-smooth-scrolling -->
 
-<!-- smooth-scrolling-of-move-up -->
 <script>
     $(document).ready(function () {
         $().UItoTop({
             easingType: 'easeOutQuart'
         });
     });
-</script>
-<!-- //smooth-scrolling-of-move-up -->
+</script-->
+
 
 <!-- for bootstrap working -->
 <script src="/frontend/js/bootstrap.js"></script>
