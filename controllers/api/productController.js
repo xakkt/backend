@@ -31,6 +31,7 @@ exports.list = async (req, res) => {
 
 		return res.json({ status: "success", baseUrl: process.env.BASE_URL, message: "", data: storess });
 
+		
 	} catch (err) {
 		console.log(err)
 		res.status(400).json({ status: "false", message: "", data: err });
