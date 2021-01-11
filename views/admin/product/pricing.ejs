@@ -32,6 +32,8 @@
   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/dist/css/adminlte.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
   <style>
     .tr_clone_remove {
       cursor: pointer;
@@ -124,7 +126,7 @@
                                               required onclick="changeLanguage(this)">
                                               <option value="">Select stores</option>
                                               <% if(stores) stores.forEach(function(store){ %>
-                                                <option <%=(store._id.equals(prices._store))?'selected':''%> 
+                                                <option <%=(store._id.equals(prices._store))?'selected':''%>
                                                   value="<%=store._id%>">
                                                     <%=store.name%>
                                                 </option>
@@ -170,52 +172,50 @@
                                       </div>
                                       <%})%>
                                         <%} else {%>
-                                          <div id="item_details">
-                                            <tr class="tr_clone" id="parent">
-                                              <td style="width:18%">
-                                                <select name="store[]" class="form-control custom-select store-name"
-                                                  required onclick="changeLanguage(this)">
-                                                  <option value="">Select stores</option>
-                                                  <% if(stores) stores.forEach(function(store){ %>
-                                                    <option value="<%=store._id%>">
-                                                      <%=store.name%>
-                                                    </option>
-                                                    <% }) %>
-                                                </select>
-                                              </td>
-                                              <td style="width:10%"> <input type="text" name="regular_price[]"
-                                                  class="rgprice form-control" readonly required> </td>
-                                              <td style="width:15%">
-                                                <select name="deal[]" id="deal"
-                                                  class="form-control custom-select deal-name"
-                                                  onclick="dealchange(this)" required>
-                                                  <option value="">Select Deal</option>
-                                                  <% if(deals) deals.forEach(function(deal){ %>
-                                                    <option value="<%=deal._id%>">
-                                                      <%=deal.name%>
-                                                    </option>
-                                                    <% }) %>
-                                                </select>
-                                              </td>
-                                              <td style="width:10%">
-                                                <input type="number" name="deal_value[]" class="form-control deal"
-                                                  required>
-                                              </td>
-                                              <td style="width:20%"> <input type="number" name="deal_price[]"
-                                                  class="form-control deal_price">
-                                              </td>
+                                          <tr class="tr_clone" id="parent">
+                                            <td style="width:18%">
+                                              <select name="store[]" class="form-control custom-select store-name"
+                                                required onclick="changeLanguage(this)">
+                                                <option value="">Select stores</option>
+                                                <% if(stores) stores.forEach(function(store){ %>
+                                                  <option value="<%=store._id%>">
+                                                    <%=store.name%>
+                                                  </option>
+                                                  <% }) %>
+                                              </select>
+                                            </td>
+                                            <td style="width:10%"> <input type="text" name="regular_price[]"
+                                                class="rgprice form-control" readonly required> </td>
+                                            <td style="width:15%">
+                                              <select name="deal[]" id="deal"
+                                                class="form-control custom-select deal-name" onclick="dealchange(this)"
+                                                required>
+                                                <option value="">Select Deal</option>
+                                                <% if(deals) deals.forEach(function(deal){ %>
+                                                  <option value="<%=deal._id%>">
+                                                    <%=deal.name%>
+                                                  </option>
+                                                  <% }) %>
+                                              </select>
+                                            </td>
+                                            <td style="width:10%">
+                                              <input type="number" name="deal_value[]" class="form-control deal"
+                                                required>
+                                            </td>
+                                            <td style="width:20%"> <input type="number" name="deal_price[]"
+                                                class="form-control deal_price">
+                                            </td>
 
-                                              <td> <input type="date" name="stime[]" class="form-control from-date"
-                                                  onchange="handler(this);" required> </td>
-                                              <td> <input type="date" name="etime[]" class="form-control to-date"
-                                                  required> </td>
-                                              <td>
-                                                <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)"
-                                                  data-id="" aria-hidden="true"></i>
-
-                                              </td>
-                                            </tr>
-                                          </div>
+                                            <td> <input type="date" name="stime[]" class="form-control from-date"
+                                                onclick="fromdatevalidation(this)" onchange="handler(this);" required>
+                                            </td>
+                                            <td> <input type="date" name="etime[]" class="form-control to-date"
+                                                onclick="enddatevalidation(this)" required> </td>
+                                            <td>
+                                              <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)"
+                                                data-id="" aria-hidden="true"></i>
+                                            </td>
+                                          </tr>
                                           <%}%>
                                 </tbody>
                               </table>
@@ -261,7 +261,7 @@
 
   <!-- sweetAlert -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-
+  <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
 
   <!-- jquery-validation -->
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -269,7 +269,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
     integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
     crossorigin="anonymous"></script>
+  <!-- sweetAlert -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
   <script>
+    function fromdatevalidation(that) {
+      var now = new Date();
+      var day = ("0" + now.getDate()).slice(-2);
+      var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+      var today = now.getFullYear() + "-" + (month) + "-" + (day);
+      $(that).attr('min', today);
+
+
+    }
+    function enddatevalidation(that) {
+      var now = $(that).closest('.tr_clone').find('.from-date').val();
+      if (!now) {
+        now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+        return $(that).attr('min', today);
+      }
+      $(that).attr('min', now);
+    }
     $(function () {
       bsCustomFileInput.init();
     });
@@ -351,27 +374,26 @@
     }
 
     function myFunction(that) {
-      // alert($(this).closest('tbody').closest('.table-bordered').attr('id'));
-
-      // var parentDiv = $(that).closest('tbody').closest('tr').attr('id');
-      //   console.log('=>',parentDiv.attr('id'));
-      // if(parentDiv.attr('id') !== 'item_name') {
-      //   return  parentDiv.remove();
-      // }
-      if ($(that).data("id").trim() == "") {
-        return $(that).closest('tr').remove()
-      }
-      $.ajax({
-        url: '/admin/product_price/remove',
-        type: 'POST',
-        data: {
-          _id: $(that).data("id"),
-        },
-      }).done((data) => {
-        if (data.status) {
-          $(that).closest('tr').remove();
+      if ($('#gatePass >tbody >tr ').length > 1) {
+        if ($(that).data("id").trim() == "") {
+          return $(that).closest('tr').remove()
         }
-      });
+        $.ajax({
+          url: '/admin/product_price/remove',
+          type: 'POST',
+          data: {
+            _id: $(that).data("id"),
+          },
+        }).done((data) => {
+          if (data.status) {
+            $(that).closest('tr').remove();
+          }
+        });
+      }
+      else {
+        sweetAlert("", "Cannot delete last value", "error");
+
+      }
     }
     function checkDuplicateEntry(that) {
       let parentEle = that.parentElement.parentElement
@@ -409,12 +431,12 @@
         $('.submit').addClass('btn btn-primary ').css('background-color', '')
 
       }
-      console.log('flag===========', flag)
     }
     function dealchange(that) {
       checkDuplicateEntry(that)
     }
     function handler(that) {
+
       checkDuplicateEntry(that)
     }
   </script>
