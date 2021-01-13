@@ -20,11 +20,10 @@ exports.list = async (req, res) => {
 			//product.image = `${process.env.BASE_URL}/images/products/${product.image}`;
 			  let prices = await _global.productprice(req.params.storeid, store._product)
 			_product = store._product,
-			 console.log("---logss",_product)
 				_deal = store._deal
 			delete store._product;
 			delete store._deal;
-			data =  { ...store,_product:_product.id, name: _product.name, regular_price:prices.regular_price, image: `${process.env.BASE_URL}/images/products/${_product.image}`, sku: _product.sku, deal: _deal.name }
+			data =  { ...store,_product:_product._id, name: _product.name, regular_price:prices.regular_price, image: `${process.env.BASE_URL}/images/products/${_product.image}`, sku: _product.sku, deal: _deal.name }
 			storess.push(data)
 
 		})
