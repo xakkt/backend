@@ -20,6 +20,7 @@ exports.list = async (req, res) => {
 			//product.image = `${process.env.BASE_URL}/images/products/${product.image}`;
 			  let prices = await _global.productprice(req.params.storeid, store._product)
 			_product = store._product,
+			 console.log("---logss",_product)
 				_deal = store._deal
 			delete store._product;
 			delete store._deal;
