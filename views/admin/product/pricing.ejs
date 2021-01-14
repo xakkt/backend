@@ -142,7 +142,7 @@
                                               onchange="dealchange(this)" required>
                                               <option value="">Select Deal</option>
                                               <% if(deals) deals.forEach(function(deal){ %>
-                                                <option <%=(deal._id.equals(prices._deal))?'selected':''%> 
+                                                <option <%=(deal._id.equals(prices._deal))?'selected':''%>
                                                   value="<%=deal._id%>">
                                                     <%=deal.name%>
                                                 </option>
@@ -157,10 +157,12 @@
                                           <td style="width:10%"> <input type="number" name="deal_price[]"
                                               value="<%= prices.deal_price %>" class="form-control deal_price"> </td>
 
-                                          <td> <input type="date" name="stime[]" onchange="handler(this)"
+                                          <td> <input type="date" name="stime[]" onclick="fromdatevalidation(this)"
+                                              onchange="handler(this)"
                                               value="<%= moment(prices.deal_start).format('YYYY-MM-DD');  %>"
                                               class="form-control from-date" required> </td>
-                                          <td> <input type="date" name="etime[]" class="form-control to-date"
+                                          <td> <input type="date" name="etime[]" onclick="enddatevalidation(this)"
+                                              class="form-control to-date"
                                               value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required>
                                           </td>
                                           <td>
