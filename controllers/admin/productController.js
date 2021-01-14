@@ -36,7 +36,6 @@ exports.productCreate = async (req, res) => {
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
         var unit = await Unit.find({}).lean();
-
         var productCategories = await ProductCategory.find({}).lean();
         return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, unit: unit, deals: deals, productCategories: productCategories })
     } catch (err) {
@@ -297,6 +296,7 @@ exports.priceSave = async (req, res) => {
         }
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
+            console.log("--product",req.body)
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];

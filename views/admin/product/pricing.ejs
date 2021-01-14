@@ -142,8 +142,8 @@
                                               onchange="dealchange(this)" required>
                                               <option value="">Select Deal</option>
                                               <% if(deals) deals.forEach(function(deal){ %>
-                                                <option <%=(deal._id.equals(prices._deal))?'selected':''%> value="
-                                                  <%=deal._id%>">
+                                                <option <%=(deal._id.equals(prices._deal))?'selected':''%> 
+                                                  value="<%=deal._id%>">
                                                     <%=deal.name%>
                                                 </option>
                                                 <% }) %>
