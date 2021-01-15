@@ -99,14 +99,14 @@ exports.updateProfile = async function (req, res) {
 			first_name: req.body.first_name,
 			last_name: req.body.last_name,
 			email: req.body.email,
-			password: req.body.password,
 			contact_no: req.body.contact_no,
-			status: req.body.status,
-			last_login: req.body.last_login,
-			ncrStatus: req.body.ncrStatus,
-			superbuckId: req.body.superbuckId,
-			timezone: req.body.timezone,
-			dob: moment(req.body.dob).format('YYYY-MM-DD')
+			// password: req.body.password
+			// status: req.body.status,
+			// last_login: req.body.last_login,
+			// ncrStatus: req.body.ncrStatus,
+			// superbuckId: req.body.superbuckId,
+			// timezone: req.body.timezone,
+			// dob: moment(req.body.dob).format('YYYY-MM-DD')
 		}
 
 		if (req.file) { userinfo.profile_pic = req.file.path.replace('public/', ''); }
@@ -230,17 +230,17 @@ exports.address = async (req, res) => {
 		address_array.push({
 			address: req.body.address,
 			city: req.body.city,
-			name:req.body.name,
+			name: req.body.name,
 			address_type: req.body.address_type,
 			country: req.body.country,
 			region: req.body.region,
-			phoneno:req.body.phoneno,
-			countrycode:req.body.countrycode,
+			phoneno: req.body.phoneno,
+			countrycode: req.body.countrycode,
 			pincode: req.body.pincode,
 			state: req.body.state,
 			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 		})
-		console.log("0--00000",address_array)
+		console.log("0--00000", address_array)
 
 		let user = await User.findOneAndUpdate({ _id: req.decoded.id }, { $push: { address: address_array } }, { returnOriginal: false }).exec()
 		if (!user) return res.json({ status: true, message: "Data not found" })
@@ -301,14 +301,14 @@ exports.updateaddress = async (req, res) => {
 				$set: {
 					"address.$.address": req.body.address,
 					"address.$.city": req.body.city,
-					"address.$.name":req.body.name,
-					"address.$.mobile":req.body.mobile,
+					"address.$.name": req.body.name,
+					"address.$.mobile": req.body.mobile,
 					"address.$.country": req.body.country,
-					"address.$.countrycode":req.body.countrycode,
+					"address.$.countrycode": req.body.countrycode,
 					"address.$.pincode": req.body.pincode,
 					"address.$.state": req.body.state,
 					"address.$.region": req.body.region,
-					"address.$.location":{coordinates:[req.body.long,req.body.lat]}
+					"address.$.location": { coordinates: [req.body.long, req.body.lat] }
 				}
 			},
 			// { $push: { address: address_array } }, 
