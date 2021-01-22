@@ -114,7 +114,7 @@ exports.updateProfile = async function (req, res) {
 
 		if (!user) return res.status(400).json({ status: false, message: "User not found" });
 
-		res.json({ status: true, message: "User updated", data: user });
+		res.json({ status: true, message: "User updated", data: {user:user} });
 
 
 

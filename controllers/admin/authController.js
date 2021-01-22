@@ -33,7 +33,6 @@ exports.login = async (req, res) => {
 
         return res.redirect('/admin')
     } catch (err) {
-        console.log("--err", err)
         await req.flash('failure', "Please enter valid email and password");
         res.redirect('/admin/login');
 

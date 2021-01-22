@@ -67,7 +67,6 @@ exports.check = function (req, res) {
             // (list)?cond={role_id:{$in: [null, [] ]}}:cond={user_id:req.session.userid}
 
             let users = await User.find({ role_id: { $in: [null, []] } }).lean();
-            // console.log("---user", users)
             if (!users) return res.render('admin/user/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
             return res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {
@@ -89,7 +88,6 @@ exports.check = function (req, res) {
 
 exports.create = async (req, res) => {
     try {
-        // var timezone = await Timezone.find({}).lean();
         var role = await Roles.find({}).lean()
         var TimeZone = moment.tz.names();
 
@@ -139,7 +137,6 @@ exports.save = async (req, res) => {
 exports.update = async function (req, res) {
 
     try {
-        // console.log("--user",req.body)
         let userinfo = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
@@ -225,7 +222,7 @@ exports.authenticate = async (req, res) => {
     }
 exports.adminlist = async (req, res) => {
     try {
-        let users = await User.find({ role_id: { $nin: [[], null] } }).lean();
+        let users = await User.find({ role_id: { $nin: [[], null] } }).populate('role_id').lean();
         if (!users) return res.render('admin/admin/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/admin/list', { menu: "users", submenu: "adminlist", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
