@@ -77,6 +77,7 @@ exports.list = async (req, res) => {
         // })
         
         if (!banner) return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        console.log("---banner",banner)
         return res.render('admin/banner/list', { menu: "banner", submenu: "list", data: banner, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {

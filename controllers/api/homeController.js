@@ -27,12 +27,6 @@ exports.dashboard = async (req, res) => {
 				token = token.slice(7, token.length);
 			}
 			await jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-				// if (err) {
-				// 	return res.json({
-				// 		success: false,
-				// 		message: 'Token is not valid'
-				// 	});
-				// }
 				userid = decoded.id;
 			});
 		}
