@@ -2,7 +2,6 @@ module.exports =
 {
     'model': 'Role',
     'documents': [
-  
                     {
                         "name" : "PRODUCT ADMINISTRATOR",
                         "description" : "PRODUCT ADMINISTRATOR"
@@ -27,9 +26,6 @@ module.exports =
                         "name" : "REPORTING ANALYST",
                         "description" : "REPORTING ANALYST"
                     },
-                   
-                   
-                    
                     
     ]
 }

@@ -116,6 +116,17 @@ const userSchema = Schema({
   _timezone:{
     type:String
 },
+_company: 
+  {
+    type: Schema.Types.ObjectId,
+    ref: 'Company',
+    validate: {
+      validator: function (v) {
+        return FKHelper(mongoose.model('Company'), v);
+      },
+      message: `Company doesn't exist`
+    }
+  },
 
   // _timezone: {
   //   type: Schema.Types.ObjectId,

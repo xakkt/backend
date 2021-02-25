@@ -1,6 +1,7 @@
 const User = require('../../models/user');
 const Roles = require('../../models/role')
 const Device = require('../../models/device')
+const Company = require('../../models/company')
 
 var randomstring = require("randomstring");
 const express = require('express');
@@ -80,7 +81,7 @@ exports.check = function (req, res) {
             var role = await Roles.find({}).lean()
             var TimeZone = moment.tz.names();
             const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-           return  res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role,timezone:TimeZone, message: "", user: user });
+            return res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role, timezone: TimeZone, message: "", user: user });
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }
@@ -90,8 +91,9 @@ exports.create = async (req, res) => {
     try {
         var role = await Roles.find({}).lean()
         var TimeZone = moment.tz.names();
+        var company = await Company.find({}).lean()
 
-        res.render('admin/user/create', { menu: "users", submenu: "create",timezone:TimeZone, role: role })
+        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: TimeZone,company:company, role: role })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });
@@ -114,6 +116,7 @@ exports.save = async (req, res) => {
             status: req.body.status,
             _supervisor: req.session.userid,
             last_login: req.body.last_login,
+            _company:req.body.company,
             ncrStatus: req.body.ncrStatus,
             superbuckId: req.body.superbuckId,
             _timezone: req.body.timezone,
@@ -181,13 +184,13 @@ exports.authenticate = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
         const userInfo = await User.findOne({ email: req.body.email }).exec();
-        console.log("--userinfo",userInfo)
+        console.log("--userinfo", userInfo)
         if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
 
         if (!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
-           let login =  await Device.findOne( {_user:userInfo._id}).exec()
-           if(login)console.log("--login",login)
-           else console.log("--notttt",not)
+        let login = await Device.findOne({ _user: userInfo._id }).exec()
+        if (login) console.log("--login", login)
+        else console.log("--notttt", not)
         const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
         return res.json({ status: true, message: "user found!!!", data: { user: userInfo, token: token } });
 

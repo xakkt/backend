@@ -92,7 +92,7 @@ exports.productprice = async (storeid,productid) =>{
     }
 }
 exports.permission =  (value) => {
-    return async(req,res,next) =>{
+    return async(req,res,next) => {
 
       const role =  await Roles.findOne({name:'SYSTEM ADMININSTRATOR',_id:req.session.roleid}).exec()
       if(role) return next()

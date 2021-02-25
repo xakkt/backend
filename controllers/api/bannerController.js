@@ -10,7 +10,6 @@ exports.bannderproduct = async (req, res) => {
         var storePrice = []
         await _time.store_time(req.body._store)
         var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-        // console.log("---value",date)
         let store = await StoreProductPricing.find({
             $and: [
                 { _store: req.body._store },

@@ -84,6 +84,17 @@ const storeSchema = new Schema({
         type: String,
         required: true
     },
+    _company:
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
+        validate: {
+            validator: function (v) {
+                return FKHelper(mongoose.model('Company'), v);
+            },
+            message: `Company doesn't exist`
+        }
+    },
     location: {
         type: {
             type: String,

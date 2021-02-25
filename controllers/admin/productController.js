@@ -99,7 +99,7 @@ exports.edit = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
         const productCategory = await ProductCategory.findById(req.params.id).exec();
-        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory" ,submenu:"create"})
+        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory", submenu: "create" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -150,6 +150,7 @@ exports.productsave = async (req, res) => {
             sku: req.body.sku,
             _category: req.body._category,
             weight: req.body.weight,
+            _company: req.session.company,
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             _unit: req.body.unit,
@@ -296,7 +297,7 @@ exports.priceSave = async (req, res) => {
         }
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
-            console.log("--product",req.body)
+            console.log("--product", req.body)
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
@@ -391,10 +392,10 @@ exports.addPrice = async (req, res) => {
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
         if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: '', price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
-      price.map((element) => {
+        price.map((element) => {
             var data = {};
             var dealss = {}
-            regularPrice.map( regular => {
+            regularPrice.map(regular => {
                 if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
                     // dealss=  await Deals.find({_store:element._store}).exec();
                     data = { ...element, regularprice: regular.regular_price }
@@ -402,9 +403,9 @@ exports.addPrice = async (req, res) => {
                 }
             })
             prices.push(data)
-          
+
         })
-    
+
         res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
         console.log("--err", err)
@@ -413,29 +414,26 @@ exports.addPrice = async (req, res) => {
 }
 exports.product_listing = async (req, res) => {
     try {
-        // console.log("--logs",req.query.search.value)
         var pagno = req.query.start / req.query.length + 1
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
-        let searchString = req.query.search.value || ''
-        let product = await Product.find({
+        let searchString = req.query.search.value || '';
+        var where = {
             $or: [
                 { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
                 { "name.english": { $regex: searchString, $options: 'i' } }
             ]
-        })
+        }
+        if (req.session.company) {
+            where._company = req.session.company
+        }
+        let product = await Product.find(where)
             .skip((pagno - 1) * limit) //Notice here
             .limit(limit)
             .lean();
         let total = await Product.find(
-            {
-                $or: [
-                    { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                    { "name.english": { $regex: searchString, $options: 'i' } }
-                ]
-            }
+            where
         ).lean()
-        // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
     } catch (err) {
         res.status(400).json({ data: err.message });

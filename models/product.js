@@ -105,6 +105,17 @@ const productSchema = new Schema({
     type: Number,
     //required: true
   },
+  _company:
+  {
+      type: Schema.Types.ObjectId,
+      ref: 'Company',
+      validate: {
+          validator: function (v) {
+              return FKHelper(mongoose.model('Company'), v);
+          },
+          message: `Company doesn't exist`
+      }
+  },
   crv: {
     type: String,
     default: null
