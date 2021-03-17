@@ -1,21 +1,19 @@
 const User = require('../../models/user');
 const Roles = require('../../models/role')
 const Timezone = require('../../models/timezone')
-
 var moment = require('moment');
 
 exports.create = async (req, res) => {
 
     try {
-
-        let role = await Roles.findOne({ name: req.body.role_name }).exec()
-        //  await Timezone.find
-        // console.log("---role",role)
+        let role = await Roles.findOne({ name: req.body.name }).exec()
+        // 
+        console.log("---role",role)
         if (!role) return res.json({ message: "Role not found" })
         const superadmininfo = {
             first_name: 'Admin',
             last_name: 'Admin',
-             _timezone: req.body.timezone,
+           //  _timezone: req.body.timezone,
             email: req.body.email,
             password: req.body.password,
             role_id: role._id,

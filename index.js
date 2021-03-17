@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
 const mongoose = require('./config/database')
 const path = require('path')
 var { flash } = require('express-flash-message');
@@ -15,7 +16,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
-var cookieParser = require('cookie-parser')
+
 
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
