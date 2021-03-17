@@ -5,6 +5,7 @@ const { check } = require('../controllers/admin/userController');
 
 
 module.exports = async (req, res, next)=>{
+    console.log(req.body)
     if (req.session.email) { 
         res.locals.user = req.session.userid
         res.locals.roleid = req.session.roleid

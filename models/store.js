@@ -12,11 +12,11 @@ const Banner = require("./banner");
 
 
 const storeSchema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: false },
     _department: [{
         type: Schema.Types.ObjectId,
         ref: 'Department',
-        required: true,
+        required: false,
         validate: {
             validator: function (v) {
                 return FKHelper(mongoose.model('Department'), v);
@@ -50,15 +50,15 @@ const storeSchema = new Schema({
     // },
     address: {
         type: String,
-        required: true
+        required: false
     },
     city: {
         type: String,
-        required: true
+        required: false
     },
     state: {
         type: String,
-        required: true
+        required: false
     },
     _country: {
         type: Schema.Types.ObjectId,
@@ -82,7 +82,7 @@ const storeSchema = new Schema({
     },
     zipcode: {
         type: String,
-        required: true
+        required: false
     },
     _company:
     {
@@ -99,16 +99,16 @@ const storeSchema = new Schema({
         type: {
             type: String,
             enum: ['Point'],
-            required: true
+            required: false
         },
         coordinates: {
             type: [Number],
-            required: true
+            required: false
         }
     },
     contact_no: {
         type: String,
-        required: true
+        required: false
     },
     time_schedule: {
         Monday: { startTime: String, endTime: String },

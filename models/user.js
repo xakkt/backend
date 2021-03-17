@@ -57,11 +57,11 @@ const childSchema = new Schema({
     type: {
         type: String,
         enum: ['Point'],
-        required: true
+        required: false
     },
     coordinates: {
         type: [Number],
-        required: true
+        required: false
     }
 },
 
@@ -74,7 +74,7 @@ const userSchema = Schema({
   },
   last_name: {
     type: String,
-    required: true
+    required: false
   },
   email: {
     type: String,
@@ -101,7 +101,7 @@ const userSchema = Schema({
     get: dateToString
   },
   ncrStatus: {
-    type: Boolean,
+    type: String,
     default: false
   },
   superbuckId: {
@@ -110,7 +110,7 @@ const userSchema = Schema({
   },
   dob: {
     type: Date,
-    required: true
+    required: false
   },
   address: [childSchema],
   _timezone:{

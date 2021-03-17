@@ -31,7 +31,7 @@ const bannerSchema = Schema({
 type: {
   type: String,
   enum: ['app', 'web'],
-  default : 'app'
+  default : 'app' 
   },
   deal_start:{
     type:Date,
