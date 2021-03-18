@@ -9,9 +9,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const childSchema = new Schema({
 
-  name:{
-   type:String
-  },
+ 
   address: {
     type: String,
   },
@@ -78,7 +76,7 @@ const userSchema = Schema({
   },
   email: {
     type: String,
-    unique: true,
+   // unique: true,
     required: true
   },
   profile_pic: {
@@ -90,7 +88,7 @@ const userSchema = Schema({
   },
   contact_no: {
     type: String,
-    required: true
+    required: false
   },
   status: {
     type: Boolean,
@@ -166,9 +164,9 @@ _company:
 
 userSchema.plugin(mongooseLeanGetters)
 userSchema.plugin(uniqueValidator)
-userSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(this.password, saltRounds);
-});
+// userSchema.pre('save', async function () {
+//   this.password = await bcrypt.hash(this.password, saltRounds);
+// });
 
 function dateToString(date) {
   if (date) return new Date(date).toISOString();

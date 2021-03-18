@@ -1,40 +1,37 @@
 const fs = require('fs')
 
 var newObj = []
-fs.readFile('./database_dump/malls.json', 'utf8',  function readFileCallback(err, data){
+fs.readFile('./database_dump/user6.json', 'utf8',  function readFileCallback(err, data){
     if (err){
         console.log(err);
     } else {
     obj = JSON.parse(data); 
     for(let i=0 ; i < obj.length; i++){
-    //     if(obj[i].first_name){
-    //  let userInfo =   {
-    //         "first_name":obj[i].first_name,"last_name":obj[i].last_name,"profile_pic" : 'abc.jpeg' , "status": obj[i].status,"last_login":null,"ncrStatus":obj[i].ncr_status,"superbuckId":obj[i].superbuckid,"dob":null,"address": [{ "name" : 'xyz' , "address" : "plot 2" , "address_type" :"Office" , "pincode" : "" , "phoneno": 4578475447 ,"countrycode" :obj[i].country_id , "city":" Meerut" ,"region" :"" , "state" : '' , "country" :"india" 
-    //         }] ,"password":"Root@123" ,"contact_no":4555544554, "email":obj[i].email
-    //     }
-    //     console.log('========================',userInfo)
+        if(obj[i].first_name){
+     let userInfo =   {
+            "first_name":obj[i].first_name,"last_name":obj[i].last_name,"profile_pic" : obj[i].photo , "status": obj[i].status,"ncrStatus":obj[i].ncr_status,"superbuckId":obj[i].superbuckid,"dob":'',"address": [{ "name" : obj[i].address , "address" : obj[i].address, "address_type":'Home' , "pincode" : 45754 , "phoneno": obj[i].mobile_no,"countrycode" :obj[i].country_id , "city":obj[i].city ,"region" :"" , "state" : obj[i].state  , "country" :''
+            }] ,"password":obj[i].password ,"contact_no":obj[i].mobile_no, "email":obj[i].email
+        }
+       console.log('========================',obj[i].address)
 
-    //     newObj.push(userInfo);
-    //    json = JSON.stringify(newObj); //convert it back to json
-    // //    fs.writeFileSync('./mongoCollection/user.json', json, 'utf8', function ( data){
-    // //     console.log(data)
-    // //        });
-    // } else if(obj[i].name){
-    //     let departmentInfo ={
-    //         "name" :obj[i].name, "description" :obj[i].description,
-    //         "logo":obj[i].logo
-    //     }
-    //     console.log('========================',departmentInfo)
-    //     newObj.push(departmentInfo);
-    //    json = JSON.stringify(newObj);
+        newObj.push(userInfo);
+       json = JSON.stringify(newObj); //convert it back to json
+       fs.writeFileSync('./mongoCollection/user6.json', json, 'utf8', function ( data){
+        console.log(data)
+           });
+    } else if(obj[i].description){
+        let departmentInfo ={
+            "name" :obj[i].name, "description" :obj[i].description,
+            "logo":obj[i].logo
+        }
+        console.log('========================',departmentInfo)
+        newObj.push(departmentInfo);
+       json = JSON.stringify(newObj);
 
-    // //    fs.writeFileSync('./mongoCollection/department.json', json, 'utf8', function ( data){
-    // //     console.log(data)
-    // //        });
-    // } else 
-    
-    
-    if(obj[i].sunday_end){
+       fs.writeFileSync('./mongoCollection/department.json', json, 'utf8', function ( data){
+        console.log(data)
+           });
+    } else if(obj[i].sunday_end){
         let storeInfo ={
             "name" :obj[i].name, "address" :obj[i].address, "city" : obj[i].city, "state" :obj[i].state,"zipcode"
 :obj[i].zip,"contact_no":4555544554, "time_schedule":{
@@ -50,12 +47,13 @@ fs.readFile('./database_dump/malls.json', 'utf8',  function readFileCallback(err
     
         newObj.push(storeInfo);
        json = JSON.stringify(newObj);
+       fs.writeFileSync('./mongoCollection/store.json', json, 'utf8', function ( data){
+        console.log(data)
+           });
       
     }
 
-    fs.writeFileSync('./mongoCollection/store.json', json, 'utf8', function ( data){
-        console.log(data)
-           });
+    
 
  // write it back 
         
