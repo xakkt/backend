@@ -68,7 +68,7 @@ const childSchema = new Schema({
 const userSchema = Schema({
   first_name: {
     type: String,
-    required: true,
+    required: false,
   },
   last_name: {
     type: String,
@@ -77,14 +77,14 @@ const userSchema = Schema({
   email: {
     type: String,
    // unique: true,
-    required: true
+    required: false
   },
   profile_pic: {
     type: String,
   },
   password: {
     type: String,
-    required: true
+    required: false
   },
   contact_no: {
     type: String,

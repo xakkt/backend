@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 let csvToJson = require('csvtojson');
 const Queues = require('bee-queue');
 const queue = new Queues('upload');
+
+
 exports.upload = (req, res) => {
   let filepath = req.file.path
   if (!filepath)
@@ -31,7 +33,7 @@ exports.upload = (req, res) => {
           `Job ${job.id} failed with error ${err.message} but is being retried!`
         );
       });
-      queue.process(3, async (job) => {
+      queue.process(3, async (job) =>   {
         var declare = 'test'
         for (var i = 0; i < job.data.length; i++) {
           // console.log("--nameeee",job.data[i].name)
