@@ -9,7 +9,7 @@ const bannerSchema = Schema({
   _store: {
     type: Schema.Types.ObjectId,
     ref:'Store',
-    required:true,
+    required:false,
     validate: {
             validator: function(v) {
             return FKHelper(mongoose.model('Store'), v);
@@ -20,7 +20,7 @@ const bannerSchema = Schema({
   _deal: {
     type: Schema.Types.ObjectId,
     ref:'Deal',
-    required:true,
+    required:false,
     validate: {
             validator: function(v) {
             return FKHelper(mongoose.model('Deal'), v);
@@ -33,14 +33,7 @@ type: {
   enum: ['app', 'web'],
   default : 'app' 
   },
-  deal_start:{
-    type:Date,
-    required:true
-   },
-   deal_end:{
-       type:Date,
-       required:true
-   }
+  
 }, {timestamps:true});
 
 
