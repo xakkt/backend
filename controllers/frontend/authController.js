@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
         }
         const userInfo = await User.findOne({ email: req.body.email }).exec()
         if (!userInfo) { await req.flash('failure', "Email is not valid"); return res.redirect('/admin/login') };
-        if (!bcrypt.compareSync(req.body.password, userInfo.password)) {
+        if (md5(req.body.password) !== userInfo.password) {
             await req.flash('failure', "Invalid password!!!");
             res.redirect('/');
         }

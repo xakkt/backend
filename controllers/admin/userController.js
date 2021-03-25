@@ -6,6 +6,7 @@ const Company = require('../../models/company')
 var randomstring = require("randomstring");
 const express = require('express');
 const bcrypt = require('bcrypt');
+const md5 = require("md5")
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 var moment = require('moment');
@@ -179,6 +180,7 @@ exports.update = async function (req, res) {
 exports.authenticate = async (req, res) => {
 
     try {
+      
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -186,8 +188,7 @@ exports.authenticate = async (req, res) => {
         const userInfo = await User.findOne({ email: req.body.email }).exec();
         console.log("--userinfo", userInfo)
         if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
-
-        if (!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
+        if (md5(req.body.password) !== userInfo.password) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
         let login = await Device.findOne({ _user: userInfo._id }).exec()
         if (login) console.log("--login", login)
         else console.log("--notttt", not)

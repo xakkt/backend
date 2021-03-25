@@ -10,11 +10,14 @@ seeder.connect('mongodb://localhost:27017/xakkt', function() {
       'models/permission',
       'models/user',
       'models/department',
-      'models/store'
+      'models/store',
+      'models/brand',
+      'models/product',
+
     ]);
 
   // Clear specified collections
-  seeder.clearModels(['Banner','Role', 'Permission','User', 'Store','Department'], function() {
+  seeder.clearModels(['Banner','Role', 'Permission','User', 'Store','Department', 'Brand'], function() {
     // Callback to populate DB once collections have been cleared
     setTimeout(function(){ seeder.populateModels(data, function() {
       seeder.disconnect();

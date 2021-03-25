@@ -1,7 +1,7 @@
 const Role = require('../../models/role');
 const User = require('../../models/user');
 const Store = require('../../models/store');
-
+const md5 = require("md5")
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken');
 // const moment = require('moment')
@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
         }
         const userInfo = await User.findOne({ email: req.body.email }).exec()
         if (!userInfo) { await req.flash('failure', "Email is not valid"); return res.redirect('/admin/login') };
-        if (!bcrypt.compareSync(req.body.password, userInfo.password)) {
+        if (md5(req.body.password) !== userInfo.password) {
             await req.flash('failure', "Invalid password!!!");
             res.redirect('/admin/login');
         }
@@ -30,6 +30,7 @@ exports.login = async (req, res) => {
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id
+        console.log('=======================>>>>>> req.session', req.session)
 
         return res.redirect('/admin')
     } catch (err) {

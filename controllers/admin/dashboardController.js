@@ -32,7 +32,7 @@ exports.dashboard = async (req, res) => {
             return null;
         });
 
-        console.log("--filtere", resArr.length)
+        console.log("--------------------------- filtere", resArr.length)
         return res.render('admin/index', { menu: "dashboard", data: user, deal: resArr.length, order: order.length })
     } catch (err) {
         console.log("--err", err)

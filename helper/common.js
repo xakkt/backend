@@ -11,6 +11,7 @@ const Permission = require('../models/permission')
  var moment = require('moment')
 var mongoose = require('mongoose');
 const { json } = require('body-parser')
+const Company = require('../models/company')
 
 exports.cartProducts = async (userid, storeid) => {
     cartProductList = [];
@@ -106,6 +107,27 @@ exports.role =  async (value) =>{
    let role =  await Roles.findOne({name:value}).select(" -description -createdAt -updatedAt -name -_permission -__v").exec()
    if(!role) return res.json({message:"Data not found",data:""})
    return res.json({data:role,message:"Data found"})
+    }catch(err)
+    {
+        return res.status(400).json({error:err.message})
+
+    }
+}
+
+exports.companyStore =  async (req) =>{
+    try{
+   let companyId = req.session.company
+   let stores = await Company.findOne({_id : companyId}).select("_store").exec()
+   const uniqueStrings = [];
+   stores._store.map((x) => {
+    uniqueStrings.push(x.toString())
+  });
+  let productIds = await ProductRegularPricing.find({_store:{ $in:uniqueStrings}}).select({"_product":1,"_id":0}).lean()
+  let productArr = []
+  productIds.map((item)=>{
+  productArr.push(item._product.toString())
+  })
+   return productArr
     }catch(err)
     {
         return res.status(400).json({error:err.message})

@@ -49,11 +49,11 @@ const productSchema = new Schema({
   sku:{
     type: String,
     required: true,
-    unique:true
+   // unique:true
   },
   description:{
       type: String,
-      required: true
+     // required: true
   },
   short_description:{
       type:String,
@@ -61,7 +61,7 @@ const productSchema = new Schema({
   },
   weight: {
     type: Number,
-    required: true
+    required: false
   },
   valid_from: {
     type: Date,

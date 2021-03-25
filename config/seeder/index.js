@@ -4,6 +4,8 @@ const permission = require('./permission')
 const user = require('./users')
 const department = require('./department')
 const store = require('./store')
+const brand = require('./brands')
+const product = require('./product')
 
 module.exports = [ 
     settingData,
@@ -11,5 +13,7 @@ module.exports = [
     permission,
     user,
     department,
-    store
+    store,
+    brand,
+    product
 ]

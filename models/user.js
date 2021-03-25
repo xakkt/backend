@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const mongooseLeanGetters = require('mongoose-lean-getters')
 var uniqueValidator = require('mongoose-unique-validator');
 const FKHelper = require('../helper/foreign-key-constraint');
+const md5 = require("md5")
 
 const Schema = mongoose.Schema;
 
@@ -76,7 +77,7 @@ const userSchema = Schema({
   },
   email: {
     type: String,
-   // unique: true,
+    unique: true,
     required: false
   },
   profile_pic: {
@@ -167,6 +168,10 @@ userSchema.plugin(uniqueValidator)
 // userSchema.pre('save', async function () {
 //   this.password = await bcrypt.hash(this.password, saltRounds);
 // });
+userSchema.pre('save', async function () {
+
+  this.password = await md5(this.password);
+});
 
 function dateToString(date) {
   if (date) return new Date(date).toISOString();

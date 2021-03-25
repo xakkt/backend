@@ -11,7 +11,9 @@ exports.list = async (req, res) => {
 
 	try {
 		var where = (req.session.company) ? { _company: req.session.company } : {};
+		
 		let stores = await Store.find(where).exec();
+		console.log('======================>stores',stores)
 		if (!stores.length) return res.render('admin/store/listing', { menu: "store", submenu: "list", stores: "" })
 		return res.render('admin/store/listing', { menu: "store", submenu: "list", stores: stores })
 

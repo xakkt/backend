@@ -10,7 +10,7 @@ var waterfall = require('async-waterfall');
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const RegularPrice = require('../../models/product_regular_pricing');
-
+const _globalCommon = require('../../helper/common')
 const { validationResult } = require('express-validator');
 var moment = require('moment')
 var waterfall = require('async-waterfall');
@@ -418,14 +418,19 @@ exports.product_listing = async (req, res) => {
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
         let searchString = req.query.search.value || '';
+      
+        let productForSpecificCompany
+        if (req.session.company) {
+            productForSpecificCompany = await _globalCommon.companyStore(req)
+            //where._company = req.session.company
+        }
+        console.log('=============>...>searchString',searchString)
         var where = {
             $or: [
                 { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                { "name.english": { $regex: searchString, $options: 'i' } }
+                { "name.english": { $regex: searchString, $options: 'i' } },
+                {_id : {$in : productForSpecificCompany}}
             ]
-        }
-        if (req.session.company) {
-            where._company = req.session.company
         }
         let product = await Product.find(where)
             .skip((pagno - 1) * limit) //Notice here

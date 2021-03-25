@@ -16,6 +16,7 @@ exports.upload = (req, res) => {
   csvToJson()
     .fromFile(authorFile)
     .then(async (jsonObj) => {
+      console.log('=================>>jsonObj',jsonObj[0])
 
       const job = queue.createJob(jsonObj);
       job.retries(3).save();

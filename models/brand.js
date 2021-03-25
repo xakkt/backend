@@ -6,13 +6,17 @@ const brandSchema = Schema({
     type: String,
     required: true
   },
+  brand_id: {
+    type: String,
+    required: false
+  },
   description: {
     type: String,
     default: null
   },
   logo: {
       type: String,
-      required: true
+      required: false
     },
   status: {
       type: Boolean,
