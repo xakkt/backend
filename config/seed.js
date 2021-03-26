@@ -1,4 +1,5 @@
 var seeder = require('mongoose-seed');
+const product = require('../models/product');
 
 // Connect to MongoDB via Mongoose
 seeder.connect('mongodb://localhost:27017/xakkt', function() {
@@ -17,7 +18,7 @@ seeder.connect('mongodb://localhost:27017/xakkt', function() {
     ]);
 
   // Clear specified collections
-  seeder.clearModels(['Banner','Role', 'Permission','User', 'Store','Department', 'Brand'], function() {
+  seeder.clearModels(['Banner','Role', 'Permission','User', 'Store','Department', 'Brand', 'Product'], function() {
     // Callback to populate DB once collections have been cleared
     setTimeout(function(){ seeder.populateModels(data, function() {
       seeder.disconnect();

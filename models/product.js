@@ -48,7 +48,7 @@ const productSchema = new Schema({
   },
   sku:{
     type: String,
-    required: true,
+    required: false,
    // unique:true
   },
   description:{
@@ -140,10 +140,6 @@ productSchema.pre("deleteOne",  function (next) {
 
 
 productSchema.plugin(uniqueValidator)
-
-
-
-
 
 
 function dateToString(date){

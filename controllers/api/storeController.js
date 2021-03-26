@@ -1,4 +1,5 @@
 const Store = require('../../models/store');
+const Message = require('../../models/message');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 
@@ -145,6 +146,49 @@ exports.getStoreByZipcode = async(req, res)=>{
 		return res.json({status:true, message: "", data:stores});
 	}catch(err){
 		res.status(400).json({data:err});
+	}
+}
+exports.userLocation = async (req, res) => {
+	try {
+		let cordinates = 	{
+	    username: "Skeletor",
+		text: "Hello World",
+		location: {
+		 type: "Point",
+		 coordinates: [28.984463, 77.706413]
+		}}
+	await Message.create(cordinates)
+		  
+		return res.json({status:true, message: "success", data:''});
+
+	} catch (err) {
+		res.status(400).json({ data: err });
+	}
+}
+
+
+exports.userNearbyStore = async (req, res) => {
+	try {
+		let latt = 28.984463
+		let long = 77.706413
+
+
+	let response = await Message.find({
+			location: {
+			 $near: {
+			  $maxDistance: 1000,
+			  $geometry: {
+			   type: "Point",
+			   coordinates: [req.body.lat,req.body.long]
+			  }
+			 }
+			}
+		   }).lean()
+		if(response) return res.json({status:true, message: "success", data:response});
+		return res.json({status:false, message: "failed", data:''});
+
+	} catch (err) {
+		res.status(400).json({ data: err });
 	}
 }
 

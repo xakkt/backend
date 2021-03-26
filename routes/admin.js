@@ -135,6 +135,7 @@ router.get('/store/delete/:id',isloggedin,_global.permission('store_delete'), st
 router.post('/store/update/:id', isloggedin,_global.permission('store_edit'),storeController.updateStore)
 
 
+
 /*------------ Products --------*/
 router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
@@ -274,5 +275,6 @@ router.post('/coupon/update/:id',isloggedin,coupanController.update)
 router.get('/order/list',isloggedin,orderController.listing) 
 router.get('/order/edit/:id',isloggedin,orderController.edit) 
 router.post('/order/update/:id',isloggedin,orderController.update) 
+
 
 module.exports = router;

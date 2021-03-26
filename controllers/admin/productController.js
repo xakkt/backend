@@ -424,7 +424,6 @@ exports.product_listing = async (req, res) => {
             productForSpecificCompany = await _globalCommon.companyStore(req)
             //where._company = req.session.company
         }
-        console.log('=============>...>searchString',searchString)
         var where = {
             $or: [
                 { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },

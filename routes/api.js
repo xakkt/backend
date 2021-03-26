@@ -189,7 +189,8 @@ router.get('/store/zipcode/:zipcode',storeController.getStoreByZipcode);
 router.post('/store/nearby/stores', storeNearByValidation,storeController.nearByStores);
 router.put('/store/:id/update', storeValidation, storeController.updateStore);
 router.get('/store/:id',storeController.show);
-
+router.post('/store/near-by-user', storeController.userNearbyStore)
+router.post('/store/save-user', storeController.userLocation)
 
 /*----wishlist ---*/
 router.post('/wishlist/add_product',  verifyjwt.checkToken,wishlistValidation, wishController.addPoductToWishlist);

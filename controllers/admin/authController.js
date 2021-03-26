@@ -30,7 +30,6 @@ exports.login = async (req, res) => {
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id
-        console.log('=======================>>>>>> req.session', req.session)
 
         return res.redirect('/admin')
     } catch (err) {

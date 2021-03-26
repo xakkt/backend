@@ -1,5 +1,6 @@
 const Product = require('../../models/product')
 const Queue = require('../../models/queue')
+const Brand = require('../../models/brand')
 
 var mongoose = require('mongoose');
 let csvToJson = require('csvtojson');
@@ -16,8 +17,6 @@ exports.upload = (req, res) => {
   csvToJson()
     .fromFile(authorFile)
     .then(async (jsonObj) => {
-      console.log('=================>>jsonObj',jsonObj[0])
-
       const job = queue.createJob(jsonObj);
       job.retries(3).save();
       job.on('succeeded', (result) => {
@@ -35,26 +34,15 @@ exports.upload = (req, res) => {
         );
       });
       queue.process(3, async (job) =>   {
-        var declare = 'test'
+        var declare = 'products'
         for (var i = 0; i < job.data.length; i++) {
-          // console.log("--nameeee",job.data[i].name)
-          const productinfo = {
-            name: {
-              english: job.data[i].name
-            },
-            description: job.data[i].description,
-            sku: job.data[i].sku,
-            _category: job.data[i]._category,
-            weight: job.data[i].weight,
-            short_description: job.data[i].short_description,
-            is_featured: job.data[i].is_featured,
-            _unit: job.data[i].unit,
-            price: job.data[i].price,
-            image: job.data[i].image,
-            status: job.data[i].status,
-            brand_id: job.data[i].brand
-          }
-           await Product.findOneAndUpdate({ sku: job.data[i].sku }, productinfo,{upsert: true}).lean()
+          let brandId = await Brand.findOne({brand_id : job.data[i].brand_id}).select('_id')
+     let products = {
+        "name":{"english":job.data[i].name},"sku":job.data[i].sku, "description": job.data[i].description, "short_description":job.data[i].short_description
+   , "brand_id": brandId._id ,"meta_description":job.data[i].meta_description,"meta_keywords":job.data[i].meta_keywords,
+"meta_title":job.data[i].meta_title,"crv":job.data[i].crv
+}
+           await Product.create(products)
         }
         return declare
       });
