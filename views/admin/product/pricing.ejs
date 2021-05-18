@@ -85,6 +85,9 @@
                   <div class="message" style="display:none;">
                     <span>For this deal type and store type already selected Please select another date</span>
                   </div>
+                  <div class="price-message" style="display:none;">
+                    <span>Deal price less than regular price</span>
+                  </div>
                   <section class="content">
                     <div class="container">
                       <!-- SELECT2 EXAMPLE -->
@@ -345,6 +348,21 @@
       let that = e.target
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = that.value, dealPercentage = 0
+      if ( parseFloat(dealPrice) > parseFloat(regularPrice)) {
+        
+        $('.price-message').show();
+
+       that.parentElement.parentElement.getElementsByClassName("deal_price")[0].style.border = '1px solid red'
+       $('.submit').prop('disabled', true).css('background-color', 'red');
+      }else
+      {
+        $('.price-message').hide();
+
+        $('.submit').prop('disabled', false);
+        that.parentElement.parentElement.getElementsByClassName("deal_price")[0].style.border = ''
+        $('.submit').addClass('btn btn-primary ').css('background-color', '')
+      }
+
       dealPercentage = eval(((regularPrice - dealPrice) / regularPrice) * 100)
       that.parentElement.parentElement.getElementsByClassName("deal")[0].value = dealPercentage
     });

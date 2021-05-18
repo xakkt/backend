@@ -86,7 +86,13 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="_category">Product Category</label>
-              
+                      <select name="_category" class="form-control custom-select" id="_category">
+                        <option value="">Choose one</option>
+                        <% if(productCategories) productCategories.forEach(function(category){ %>
+                          <option value="<%=category._id%>" <%=(category._id.toString().indexOf(product._id.toString()!=-1))?'selected':''%>><%=category.name%></option>
+                          <option ><%=category.name%></option>
+                        <% }) %>
+                      </select>
                     </div>
                   </div>
                   </div>
@@ -244,9 +250,9 @@
           en_name: {
             required: true
           },
-          description: {
-            required: true,
-          },
+          // description: {
+          //   required: true,
+          // },
           // logo: {
           //   required: true
           // },
@@ -261,9 +267,9 @@
           name: {
             required: "Please enter a department name"
           },
-          description: {
-            required: "Please enter the description",
-          },
+          // description: {
+          //   required: "Please enter the description",
+          // },
           // logo: {
           //   required: "Please select an image"
           // },
