@@ -13,7 +13,6 @@ exports.create = async (req, res) => {
         const superadmininfo = {
             first_name: 'Admin',
             last_name: 'Admin',
-           //  _timezone: req.body.timezone,
             email: req.body.email,
             password: req.body.password,
             role_id: role._id,

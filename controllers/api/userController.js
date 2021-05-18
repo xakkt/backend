@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 const Device = require('../../models/device')
+var md5 = require('md5');
 
 const app = express();
 var server = require('http').Server(app);
