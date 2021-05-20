@@ -106,7 +106,7 @@ exports.getStoreByZipcode = async(req, res)=>{
 	try{
 		let departments = await Department.find({zipcode:req.params.zipcode}).lean();
 		if(!departments.length) return res.json({message: "Not department found"});
-		return res.json({status:true, message: "", data:departments});
+		return res.json({status:1, message: "", data:departments});
 	}catch(err){
 		res.status(400).json({data:err});
 	}

@@ -20,6 +20,7 @@ const uploadController = require('../controllers/admin/uploadController.js')
 const coupanController = require('../controllers/admin/coupanController.js')
 const dashboardController = require('../controllers/admin/dashboardController.js')
 const orderController = require('../controllers/admin/orderController.js')
+const currencyController = require('../controllers/admin/currencyController.js')
 
 
 // var auth = function(req, res, next) {
@@ -275,6 +276,8 @@ router.post('/coupon/update/:id',isloggedin,coupanController.update)
 router.get('/order/list',isloggedin,orderController.listing) 
 router.get('/order/edit/:id',isloggedin,orderController.edit) 
 router.post('/order/update/:id',isloggedin,orderController.update) 
-
+/******Currecny******/
+router.post('/currency/add',isloggedin,currencyController.save) 
+router.get('/currency/create',isloggedin,currencyController.create) 
 
 module.exports = router;

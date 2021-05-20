@@ -6,6 +6,7 @@ const Unit = require('../../models/unit')
 const Banner = require('../../models/banner')
 const Wishlist = require('../../models/wishlist')
 var waterfall = require('async-waterfall');
+const Currency = require('../../models/currency');
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -384,6 +385,7 @@ exports.addPrice = async (req, res) => {
     try {
         var prices = [];
         var deal = [];
+        // var currency = await Currency.find({})
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
         var stores = await Stores.find({}).lean();

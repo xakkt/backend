@@ -5,13 +5,13 @@ const Country = require('../../models/country')
 const Timezone = require('../../models/timezone')
 const { validationResult } = require('express-validator');
 var moment = require('moment-timezone');
+const Currency = require('../../models/currency');
 
 
 exports.list = async (req, res) => {
 
 	try {
 		var where = (req.session.company) ? { _company: req.session.company } : {};
-		
 		let stores = await Store.find(where).exec();
 		console.log('======================>stores',stores)
 		if (!stores.length) return res.render('admin/store/listing', { menu: "store", submenu: "list", stores: "" })
@@ -35,12 +35,13 @@ exports.list = async (req, res) => {
 	exports.create = async (req, res) => {
 
 		try {
+			let currency  = await Currency.find({}).lean()
 			var countries = await Country.find({}).lean();
 			var departments = await Department.find({}).lean();
 			var timezone = await Timezone.find({}).lean()
 			// var TimeZone = moment.tz.countries()
 			var TimeZone = moment.tz.names();
-			res.render('admin/store/create', { menu: "store", submenu: "create", departments: departments, countries: countries, timezone: TimeZone })
+			res.render('admin/store/create', { menu: "store", submenu: "create", departments: departments, countries: countries, timezone: TimeZone,currency:currency })
 		} catch (err) {
 			console.log(err)
 			res.status(400).json({ data: err.message });
@@ -74,6 +75,7 @@ exports.editStore = async (req, res) => {
 				_company: req.session.company,
 				_country: req.body.country,
 				_timezone: req.body.timezone,
+				// _currency:req.body.currency,
 				zipcode: req.body.zipcode,
 				contact_no: req.body.contactno,
 				location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
