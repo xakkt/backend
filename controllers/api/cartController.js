@@ -67,8 +67,8 @@ exports.listCartProduct = async (req, res) => {
         try {
             var productInfo = await Product.findById(req.body._product);
             let productprice = await _global.productprice(req.body._store, req.body._product)
-            if (!productprice) return res.json({ status: false, message: "Product Price of this id not set yet" })
-            if (!productInfo) return res.json({ status: "false", message: "Product with this id not exists" })
+            if (!productprice) return res.json({ status: 0, message: "Product Price of this id not set yet" })
+            if (!productInfo) return res.json({ status: 0, message: "Product with this id not exists" })
             const cartInfo = {
                 _user: req.decoded.id,
                 _store: req.body._store,
@@ -82,7 +82,7 @@ exports.listCartProduct = async (req, res) => {
 
             var product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo.cart._product } } });
             if (product?.cart) {
-                return res.json({ status: "false", message: "Product is already in the cart" })
+                return res.json({ status: 0, message: "Product is already in the cart" })
             } else {
 
                 product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store });
@@ -101,7 +101,7 @@ exports.listCartProduct = async (req, res) => {
                 delete (data.quantity)
                 return data;
             })
-            return res.json({ status: "success", message: "Product added to cart successfully", data: product });
+            return res.json({ status: 1, message: "Product added to cart successfully", data: product });
         } catch (err) {
             console.log("--errr", err)
             return res.status(400).json({ data: err.message });
@@ -159,7 +159,7 @@ exports.removeProductFromCart = async (req, res) => {
             code: 'AZXPN102',
             discount: '20%'
         }
-        return res.json({ status: "success", message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+        return res.json({ status: 1, message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
     } catch (err) {
         return res.status(400).json({ data: err.message });
     }
@@ -222,9 +222,9 @@ exports.updateProductQuantity = async (req, res) => {
                 code: 'AZXPN102',
                 discount: '20%'
             }
-            return res.json({ status: "success", message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+            return res.json({ status: 1, message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
         }
-        return res.json({ status: "false", message: "No data found", data: {} });
+        return res.json({ status:0, message: "No data found", data: {} });
     } catch (err) {
         console.log("--err", err)
         return res.status(400).json({ data: err.message });

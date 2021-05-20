@@ -7,7 +7,8 @@ exports.create = async (req, res) => {
         var store = await Store.find({}).lean();
         var regularPrice = await RegularPrice.find({_product:req.params.productid}).lean();
         if(!regularPrice)   return res.render('admin/product/regular_price', { menu: "RegularPrice", regularPrice: "" ,store:store,productid:req.params.productid})
-      return res.render('admin/product/regular_price', { menu: "RegularPrice", regularPrice: regularPrice ,stores:store,productid:req.params.productid})
+        //   return  res.redirect('/admin/product/list')
+        return res.render('admin/product/regular_price', { menu: "RegularPrice", regularPrice: regularPrice ,stores:store,productid:req.params.productid})
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -32,7 +33,8 @@ exports.addprice = async (req, res) => {
         await req.flash('failure', "Regular price");
         res.redirect('/admin/product')
     }
-    res.redirect('/admin/product/pricing/'+req.body.productid)
+             res.redirect('/admin/product')
+    // res.redirect('/admin/product/pricing/'+req.body.productid)
 
 }catch(err){
 

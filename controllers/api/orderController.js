@@ -20,7 +20,7 @@ exports.listOrders = async (req, res) => {
        await _time.store_time(req.params.storeid)
         var order = await Order.find(orderInfo).lean();
         if (!order.length) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status: "success", message: "Order Listing", data:order});
+        return res.json({ status:1, message: "Order Listing", data:order});
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
@@ -38,7 +38,7 @@ exports.orderDetails = async (req, res) => {
         var order = await Order.findById(req.params.orderid).lean();
         console.log(order)
         if (!order) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status: "success", message: "", data:order});
+        return res.json({ status:1, message: "", data:order});
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
@@ -55,7 +55,7 @@ exports.rateOrder = async(req, res) => {
     try{
         var order = await Order.findByIdAndUpdate(req.params.orderid,{ $set :{ "feedback.rating":req.body.rating,"feedback.comment":req.body.comment} },{new:true}).lean();
         if (!order) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status: "success", message: "", data:order});
+        return res.json({ status: 1, message: "", data:order});
     }catch (err){
         return res.status(400).json({ data: err.message });
     }
@@ -72,7 +72,7 @@ exports.updateOrderStatus = async (req, res) => {
         var order = await Order.findByIdAndUpdate(req.params.orderid,{ $set :{ "shipping.tracking.status":req.body.status} },{new:true}).lean();
         console.log(order)
         if (!order) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status: "success", message: "", data:order});
+        return res.json({ status:1, message: "", data:order});
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
@@ -116,7 +116,7 @@ exports.creatOrder = async (req, res) => {
             }
             var order = await Order.create(orderInfo);
            
-           return res.json({ status: "success", message: "Order created", data: order });
+           return res.json({ status: 1, message: "Order created", data: order });
         } catch (err) {
             console.log("---value",err)
             return res.status(400).json({ data: err.message });
@@ -128,7 +128,7 @@ exports.myorder = async (req,res) =>{
         var order = await Order.find({_user: req.decoded.id}).lean();
         // console.log(order)
         if (!order.length) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status: "success", message: "", data:order});
+        return res.json({ status: 1, message: "", data:order});
 
     } catch (err) {
         return res.status(400).json({ data: err.message });

@@ -13,7 +13,7 @@ exports.list = async (req, res) => {
 	try {
        var storess = []
 		let stores = await StoreProductPricing.find({ '_store': req.params.storeid }).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean()
-		if (!stores.length) return res.json({ status: "false", message: "No data found", data: [] });
+		if (!stores.length) return res.json({ status:0, message: "No data found", data: [] });
 		await Promise.all(stores.map(async (store) => {
 			var data = {}
 		// stores = stores.map(store => {
@@ -29,12 +29,12 @@ exports.list = async (req, res) => {
 		})
 		)
 
-		return res.json({ status: "success", baseUrl: process.env.BASE_URL, message: "", data: storess });
+		return res.json({ status:1, baseUrl: process.env.BASE_URL, message: "", data: storess });
 
 		
 	} catch (err) {
 		console.log(err)
-		res.status(400).json({ status: "false", message: "", data: err });
+		res.status(400).json({ status:0, message: "", data: err });
 	}
 },
 
@@ -42,12 +42,12 @@ exports.list = async (req, res) => {
 		try {
 			var productPrice = await _global.productprice(req.body.storeid, req.body.productid)
 			const product = await Product.findById(req.body.productid).select("-meta_title -meta_keywords -meta_description -updatedAt -createdAt -__v").lean();
-			if (!product) return res.json({ status: "success", message: "Product not found", data: [] });
+			if (!product) return res.json({ status: 1, message: "Product not found", data: [] });
 			product.price = productPrice.regular_price
 			product.deal_price = productPrice.deal_price
-			return res.json({ status: "success", message: "", data: product });
+			return res.json({ status:1, message: "", data: product });
 		} catch (err) {
-			res.status(400).json({ status: "false", data: err });
+			res.status(400).json({ status:0, data: err });
 		}
 
 

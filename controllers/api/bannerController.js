@@ -31,11 +31,11 @@ exports.bannderproduct = async (req, res) => {
             delete (data.deal_price)
             storePrice.push(data)
         }))
-        if (!store.length) return res.json({ status: false, message: "Data not found" })
-        return res.json({ status: true, message: "Listing", data: storePrice })
+        if (!store.length) return res.json({ status: 0, message: "Data not found" })
+        return res.json({ status: 1, message: "Listing", data: storePrice })
 
     } catch (err) {
-        return res.status(404).json({ status: false, message: err })
+        return res.status(404).json({ status: 0, message: err })
 
     }
 }

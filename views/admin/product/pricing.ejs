@@ -109,12 +109,12 @@
                                 <thead>
                                   <tr>
                                     <th>Store</th>
-                                    <th>Reg </th>
+                                    <th>Reg Price</th>
                                     <th>Promo Type</th>
                                     <th>Promo %</th>
                                     <th>Promo Price</th>
-                                    <th>Begin date</th>
-                                    <th>End date</th>
+                                    <th>Begin Date</th>
+                                    <th>End Date</th>
                                     <th></th>
                                   </tr>
                                 </thead>
@@ -342,7 +342,7 @@
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = 0, dealPercentage = that.value
       dealPrice = eval(regularPrice - (regularPrice * dealPercentage) / 100)
-      that.parentElement.parentElement.getElementsByClassName("deal_price")[0].value = dealPrice
+      that.parentElement.parentElement.getElementsByClassName("deal_price")[0].value = dealPrice.toFixed(2)
     });
     $(document).on("input", '.deal_price', function (e) {
       let that = e.target
@@ -357,14 +357,13 @@
       }else
       {
         $('.price-message').hide();
-
         $('.submit').prop('disabled', false);
         that.parentElement.parentElement.getElementsByClassName("deal_price")[0].style.border = ''
         $('.submit').addClass('btn btn-primary ').css('background-color', '')
       }
 
       dealPercentage = eval(((regularPrice - dealPrice) / regularPrice) * 100)
-      that.parentElement.parentElement.getElementsByClassName("deal")[0].value = dealPercentage
+      that.parentElement.parentElement.getElementsByClassName("deal")[0].value = dealPercentage.toFixed(2)
     });
 
     $("form").submit(function (event) {

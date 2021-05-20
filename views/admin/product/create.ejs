@@ -138,33 +138,34 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="weight">Weight</label>
-                      <input type="text" name="weight" class="form-control" id="weight" placeholder="Weight">
+                      <label for="brands">Unit</label>
+                      <select name="unit" class="form-control custom-select" id="unit">
+                        <option value="">Choose one</option>
+                        <% if(unit) unit.forEach(function(unit){ %>
+                          <option value="<%=unit._id%>"><%=unit.name%></option>
+                        <% }) %>
+                      </select>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="status">Status</label>
-                      <select name="status" class="form-control custom-select" id="status">
-                        <option value="true">Active</option>
-                        <option value="false">Inactive</option>
-                      </select>
+                      <label for="weight">Weight</label>
+                      <input type="number" name="weight" class="form-control" id="weight" placeholder="Weight">
                     </div>
                   </div>
+                
                </div>
                <div class="row">
-                  <div class="col-md-6">
-
-                    <div class="form-group">
-                      <label for="mostsaved">Temporary1</label>
-                      <select id="mostsaved" class="form-control custom-select">
-                        <option selected="" disabled="">Select one</option>
-                        <option>No</option>
-                        <option>Yes</option>
-                      </select>
-                    </div>
-
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select name="status" class="form-control custom-select" id="status">
+                      <option value="true">Active</option>
+                      <option value="false">Inactive</option>
+                    </select>
                   </div>
+                </div>
+                 
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="featured">Temporary2</label>
@@ -202,12 +203,11 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="brands">Unit</label>
-                      <select name="unit" class="form-control custom-select" id="unit">
-                        <option value="">Choose one</option>
-                        <% if(unit) unit.forEach(function(unit){ %>
-                          <option value="<%=unit._id%>"><%=unit.name%></option>
-                        <% }) %>
+                      <label for="mostsaved">Temporary1</label>
+                      <select id="mostsaved" class="form-control custom-select">
+                        <option selected="" disabled="">Select one</option>
+                        <option>No</option>
+                        <option>Yes</option>
                       </select>
                     </div>
                   </div>

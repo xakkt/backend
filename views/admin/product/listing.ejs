@@ -30,6 +30,15 @@
     margin-right: 5px;
 
   }
+  #dummies{
+    padding: 1px 0px;
+    display: flex;
+    color: red;
+    position: absolute;
+    text-align: center;
+    margin-top: 1px;
+    right: 100px;
+  }
 
   #dummy {
     padding: 1px 0px;
@@ -117,14 +126,19 @@
                                 <input type="hidden" value=<%=(await check ('product_edit',roleid)) ? roleid:"" %>
                                 id="edit"
                                 name="edit" />
-                                <a href="/dummy.csv" id="dummy" download>Upload templates</a>
+                               <div id="dummies">
+                                <a href="/dummy.csv" id="dummy" download>
+                                  <i class="fa fa-file-excel" aria-hidden="true"></i>
+                                </a>
+                            <h6>Product File</h6>
+                              </div>
 
                                 <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
                                   <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                                   <%} %>
                                     <div class="file">
                                       <label for='fileinput'><i class="fa fa-upload" class="icon"
-                                          aria-hidden="true"></i>
+                                          aria-hidden="true"></i>Import Product
                                       </label>
                                       <input type="file" style="display:none" name="csv" id="fileinput" />
                                     </div>

@@ -21,10 +21,10 @@ exports.create = async (req, res) => {
         }
         const user = await User.create(superadmininfo)
         if (!user) return res.json({ message: "Data not inserted" })
-        return res.json({ status: "success", message: "User Created.", data: user });
+        return res.json({ status: 1, message: "User Created.", data: user });
 
     } catch (err) {
         console.log("----err", err)
-        return res.json({ status: false, error: err })
+        return res.json({ status: 0, error: err })
     }
 }

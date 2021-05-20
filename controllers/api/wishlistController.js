@@ -22,19 +22,19 @@ exports.addPoductToWishlist = async (req, res) => {
 		}
 		//get deal price
 		var productPrice = await _global.productprice(req.body._store, req.body._product)
-		if(!productPrice) return res.json({status:false,message:"_Store and _Product are invalid"})
+		if(!productPrice) return res.json({status:0,message:"_Store and _Product are invalid"})
 		if (productPrice.effective_price <= req.body.wish_price) {
-			return res.json({ status: false, message: "Wish price should be less than  product price" })
+			return res.json({ status: 0, message: "Wish price should be less than  product price" })
 		}
 		else if (productPrice.effective_price <= req.body.max_price) {
-			return res.json({ status: false, message: "Max price should be less than product price" })
+			return res.json({ status: 0, message: "Max price should be less than product price" })
 		}
 		else if (req.body.max_price <= req.body.wish_price) {
 			var price =  req.body.wish_price - req.body.max_price 
-			return res.json({ status: false, message: "Max price should be greather than Wish price "+ price.toFixed(2) + "" })
+			return res.json({ status: 0, message: "Max price should be greather than Wish price "+ price.toFixed(2) + "" })
 		}
 		const wishlist = await Wishlist.create(wishlistInfo);
-		return res.json({ status: "success", message: "Product added to wishlist successfully", data: wishlist });
+		return res.json({ status: 1, message: "Product added to wishlist successfully", data: wishlist });
 
 	} catch (err) {
 		console.log("--value",err)
@@ -52,7 +52,7 @@ exports.updateProductWishPrice = async (req, res) => {
 		valid_till = req.body.valid_till
 
 		const wishlistProduct = await Wishlist.updateOne({ _id: _wishlist }, { wish_price: wish_price, max_price, valid_till: valid_till });
-		return res.json({ status: "success", message: "Wishlist Product Updated", data: wishlistProduct })
+		return res.json({ status:1, message: "Wishlist Product Updated", data: wishlistProduct })
 	} catch (err) {
 		return res.status(400).json({ data: err.message });
 	}
@@ -67,12 +67,12 @@ exports.updateProductWishPrice = async (req, res) => {
 			}
 			Wishlist.deleteOne(queryInfo, function (err, data) {
 				if (err) return res.json({ err: err });
-				if (!data.deletedCount) { return res.json({ status: true, message: "No product found", data: "" }); }
-				return res.json({ status: true, message: "Product Removed from Wishlist", data: data });
+				if (!data.deletedCount) { return res.json({ status: 1, message: "No product found", data: "" }); }
+				return res.json({ status: 1, message: "Product Removed from Wishlist", data: data });
 			});
 		} catch (err) {
 			console.log(err)
-			return res.status(400).json({ status: false, message: "", data: err });
+			return res.status(400).json({ status: 0, message: "", data: err });
 		}
 
 	}
@@ -85,7 +85,7 @@ exports.allWishlistProducts = async (req, res) => {
 		}
 
 		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate('_product', 'name image price').lean();
-		if (!wishlist.length) return res.json({ status: "success", message: "no data found", data: [] })
+		if (!wishlist.length) return res.json({ status:1, message: "no data found", data: [] })
 		wishlist = await Promise.all(wishlist.map(async (list) => {
 			if (!list._product) return
 			var productId = list._product._id.toString();
@@ -107,9 +107,9 @@ exports.allWishlistProducts = async (req, res) => {
 			delete (list.updatedAt)
 			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, wish_price: wish_price, max_price: max_price } };
 		}).filter(Boolean));
-		return res.json({ status: "success", message: "", data: wishlist })
+		return res.json({ status: 1, message: "", data: wishlist })
 	} catch (err) {
 		console.log(err)
-		return res.status(400).json({ status: false, message: "", data: err });
+		return res.status(400).json({ status: 0, message: "", data: err });
 	}
 }

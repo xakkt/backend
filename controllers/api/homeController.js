@@ -96,10 +96,10 @@ exports.dashboard = async (req, res) => {
 				product: []
 			}
 		];
-		return res.json({ status: "true", data: pdata })
+		return res.json({ status:1, data: pdata })
 	} catch (err) {
 		console.log(err)
-		res.status(400).json({ status: "false", message: "", data: err });
+		res.status(400).json({ status:0, message: "", data: err });
 	}
 }
 
