@@ -3,7 +3,9 @@ const Currency = require('../../models/currency');
 exports.save = async (req, res) => {
     try {
         let store = await Currency.create(req.body);
-        res.render('admin/currency/list', { menu: "currency", submenu: "list", store: store })
+        req.flash('success', 'Currency added successfully!');
+		res.redirect('/admin/currency/list')
+        // res.render('admin/currency/list', { menu: "currency", submenu: "list", store: store })
     } catch (err) {
         console.log("----err",err)
         res.status(400).json({ status: "false", data: err });
