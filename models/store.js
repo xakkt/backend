@@ -25,18 +25,17 @@ const storeSchema = new Schema({
         }
 
     }],
-    // _currency: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Department',
-    //     required: false,
-    //     validate: {
-    //         validator: function (v) {
-    //             return FKHelper(mongoose.model('Currency'), v);
-    //         },
-    //         message: `Currency doesn't exist`
-    //     }
-
-    // }],
+    _currency: {
+        type: Schema.Types.ObjectId,
+        ref: 'Currency',
+        required: false,
+        validate: {
+            validator: function (v) {
+                return FKHelper(mongoose.model('Currency'), v);
+            },
+            message: `Currency doesn't exist`
+        }
+    },
     _user: {
         type: Schema.Types.ObjectId,
         ref: 'User',

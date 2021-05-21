@@ -45,7 +45,6 @@ exports.edit = async (req, res) => {
 }
 exports.update = async (req, res) => {
     try{
-        console.log("--rowwww",req.params.id)
     let order = await Order.findOneAndUpdate({ _id: req.params.id },
        { $set:{
            'shipping.tracking.status':req.body.status

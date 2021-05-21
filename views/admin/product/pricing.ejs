@@ -116,7 +116,7 @@
                                     <th>Promo Price</th>
                                     <th>Begin Date</th>
                                     <th>End Date</th>
-                                    <th></th>
+                                    <th>Action</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -141,17 +141,8 @@
                                               value="<%= prices.regularprice %>" name="regular_price[]"
                                               class="form-control" readonly>
                                           </td>
-                                          <td style="width:15%">
-                                            <select name="currency[]" class="form-control custom-select currency"
-                                             required>
-                                              <option value="">Select Currency</option>
-                                                <option value="USD">USD</option>
-                                                <option value="NZD">NZD</option>
-                                                <option value="CHF">CHF</option>
-                                                <option value="EUR">EUR</option>
-                                                </option>
-                                            </select>
-                                          </td>
+                                          <td style="width:10%"> <input type="text" name="currency[]"
+                                            class="currency form-control" readonly required> </td>
                                           <td style="width:15%">
                                             <select name="deal[]" class="form-control custom-select deal-name"
                                               onchange="dealchange(this)" required>
@@ -203,6 +194,8 @@
                                             </td>
                                             <td style="width:10%"> <input type="text" name="regular_price[]"
                                                 class="rgprice form-control" readonly required> </td>
+                                                <td style="width:10%"> <input type="text" name="currency[]"
+                                                  class="currency form-control" readonly required> </td>
                                             <td style="width:15%">
                                               <select name="deal[]" id="deal"
                                                 class="form-control custom-select deal-name" onclick="dealchange(this)"
@@ -395,6 +388,8 @@
 
         if (data.status) {
           $(that).closest('.tr_clone').find('.rgprice').val(data.message.regular_price)
+          $(that).closest('.tr_clone').find('.currency').val(data.currency._currency.name)
+
         }
         else {
           $(that).closest('.tr_clone').find('.rgprice').val('')

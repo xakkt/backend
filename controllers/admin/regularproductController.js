@@ -57,9 +57,11 @@ exports.remove = async (req, res) => {
  */
 exports.get = async (req, res) => {
     try {
+        console.log("0---im here",req.body) 
+           let currency = await Store.findOne({_id:req.body.storeid}).populate({path: '_currency'}).exec()
         var regularPrice = await RegularPrice.findOne({_product:req.body.productid,_store:req.body.storeid}).lean();
         if(!regularPrice)   return res.json({status:false,message:"Not found"})
-      return res.json({status:true,message:regularPrice})
+      return res.json({status:true,message:regularPrice,currency:currency})
     } catch (err) {
         res.status(400).json({ data: err.message });
     }

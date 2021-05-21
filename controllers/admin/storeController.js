@@ -54,8 +54,9 @@ exports.editStore = async (req, res) => {
 		var countries = await Country.find({}).lean();
 		var departments = await Department.find({}).lean();
 		var timezone = await Timezone.find({}).lean()
+		 var currency = await Currency.find({}).lean()
 		var TimeZone = moment.tz.names();
-		res.render('admin/store/edit', { menu: "store", submenu: "", store: store, departments: departments, countries: countries, timezone: TimeZone })
+		res.render('admin/store/edit', { menu: "store", submenu: "", store: store, departments: departments, countries: countries, timezone: TimeZone ,currency:currency})
 	} catch (err) {
 
 	}
@@ -75,7 +76,7 @@ exports.editStore = async (req, res) => {
 				_company: req.session.company,
 				_country: req.body.country,
 				_timezone: req.body.timezone,
-				// _currency:req.body.currency,
+				_currency:req.body.currency,
 				zipcode: req.body.zipcode,
 				contact_no: req.body.contactno,
 				location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
@@ -166,6 +167,7 @@ exports.updateStore = async function (req, res) {
 			city: req.body.city,
 			state: req.body.state,
 			_country: req.body.country,
+			_currency:req.body.currency,
 			_timezone: req.body.timezone,
 			zipcode: req.body.zipcode,
 			contact_no: req.body.contactno,

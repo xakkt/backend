@@ -279,5 +279,9 @@ router.post('/order/update/:id',isloggedin,orderController.update)
 /******Currecny******/
 router.post('/currency/add',isloggedin,currencyController.save) 
 router.get('/currency/create',isloggedin,currencyController.create) 
+router.get('/currency/list',isloggedin,currencyController.list) 
+router.get('/currency/delete/:id',isloggedin,currencyController.delete) 
+router.get('/currency/edit/:id',isloggedin,currencyController.edit) 
+router.post('/currency/update/:id',isloggedin,currencyController.update) 
 
 module.exports = router;
