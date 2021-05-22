@@ -141,8 +141,14 @@
                                               value="<%= prices.regularprice %>" name="regular_price[]"
                                               class="form-control" readonly>
                                           </td>
-                                          <td style="width:10%"> <input type="text" name="currency[]"
-                                            class="currency form-control" readonly required> </td>
+                                          <% if(stores) stores.forEach(function(store){ %>
+                                            <% if (store._id.equals(prices._store)) {%>
+                                              <% var currency = (store._currency)?store._currency.name: '' %>
+                                              <td style="width:10%"> <input type="text" name="currency[]"
+                                                value="<%= currency  %>"  class="currency form-control" readonly required > </td>
+                                               <%}%>
+                                            <% }) %>
+                                          
                                           <td style="width:15%">
                                             <select name="deal[]" class="form-control custom-select deal-name"
                                               onchange="dealchange(this)" required>
@@ -158,7 +164,6 @@
                                           <td style="width:10%">
                                             <input type="number" name="deal_value[]"
                                               value="<%= prices.deal_percentage %>" class="form-control deal" required>
-
                                           </td>
                                           <td style="width:10%"> <input type="number" name="deal_price[]"
                                               value="<%= prices.deal_price %>" class="form-control deal_price"> </td>
@@ -172,7 +177,6 @@
                                               value="<%= moment(prices.deal_end).format('YYYY-MM-DD') %>" required>
                                           </td>
                                           <td>
-
                                             <i class="fa fa-trash tr_clone_remove" data-id="<%= prices._id %>"
                                               onclick="myFunction(this)" aria-hidden="true"></i>
                                           </td>
@@ -195,7 +199,7 @@
                                             <td style="width:10%"> <input type="text" name="regular_price[]"
                                                 class="rgprice form-control" readonly required> </td>
                                                 <td style="width:10%"> <input type="text" name="currency[]"
-                                                  class="currency form-control" readonly required> </td>
+                                                  class="currency form-control" readonly > </td>
                                             <td style="width:15%">
                                               <select name="deal[]" id="deal"
                                                 class="form-control custom-select deal-name" onclick="dealchange(this)"

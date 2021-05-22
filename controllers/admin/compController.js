@@ -37,7 +37,6 @@ exports.save = async (req, res) => {
 exports.list = async (req, res) => {
     try {
         const company = await Company.find().lean()
-        console.log('==================>.company',company)
         if (!company) return res.render('admin/company/listing', { menu: "company", submenu: "list", data: "",success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
         return res.render('admin/company/listing', { menu: "company", submenu: "list",data: company,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure')  })
     } catch (err) {
