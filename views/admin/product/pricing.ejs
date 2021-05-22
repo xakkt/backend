@@ -116,7 +116,7 @@
                                     <th>Promo Price</th>
                                     <th>Begin Date</th>
                                     <th>End Date</th>
-                                    <th>Action</th>
+                                    <th></th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -355,6 +355,8 @@
     });
     $(document).on("input", '.deal_price', function (e) {
       let that = e.target
+      let values = that.value
+      that.value = (values.indexOf(".") >= 0) ? (values.substr(0, values.indexOf(".")) + values.substr(values.indexOf("."), 3)) : values;
       let regularPrice = that.parentElement.parentElement.getElementsByClassName("rgprice")[0].value
       let dealPrice = that.value, dealPercentage = 0
       if ( parseFloat(dealPrice) > parseFloat(regularPrice)) {
