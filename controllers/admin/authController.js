@@ -22,6 +22,7 @@ exports.login = async (req, res) => {
             res.redirect('/admin/login');
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
+        console.log("--userrr",userInfo._timezone)
         var date = moment.tz.setDefault(userInfo._timezone)
         // console.log("--utc", utc._timezone.abbr)
         // var date = moment.tz.setDefault(utc._timezone.abbr);
