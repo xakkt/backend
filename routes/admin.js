@@ -239,7 +239,7 @@ router.post('/unit/edit/:id',isloggedin,unitController.update)
 router.get('/unit/delete/:id',isloggedin,unitController.delete)
 
  /*----------Banner -------*/
- router.get('/banner',isloggedin,bannerController.create)
+ router.get('/banner/create',isloggedin,bannerController.create)
  router.post('/banner/deal',isloggedin,bannerController.deals)
  router.post('/banner/save',isloggedin,bannerUpload.single('logo'),bannerController.save)
  router.get('/banner/list',isloggedin,bannerController.list)

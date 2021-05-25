@@ -11,8 +11,9 @@ const product_category = require('../../models/product_category');
 exports.create = async (req, res) => {
     try {
         const store = await Store.find({}).lean()
+        const deal =  await Deal.find({}).lean()
         const store_product_pricing = await Store_product_pricing.find({}).lean()
-        res.render('admin/banner/create', { menu: "banner", submenu: "create", store: store, store_product_pricing: store_product_pricing })
+        res.render('admin/banner/create', { menu: "banner", submenu: "create", store: store, store_product_pricing: store_product_pricing ,deal:deal})
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }

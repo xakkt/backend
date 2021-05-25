@@ -12,7 +12,7 @@ exports.save = async (req, res) => {
 }
 exports.create = async (req, res) => {
     try {
-        res.render('admin/currency/create', { menu: "currency", submenu: "create", currency: '' })
+       return res.render('admin/currency/create', { menu: "currency", submenu: "create", currency: '' })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }

@@ -94,7 +94,7 @@
                                     <!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="departmentLogo">File input</label>
+                                            <label for="departmentLogo">Banner Image</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="logo" class="custom-file-input"
@@ -115,10 +115,13 @@
                                             <label for="brands">Deal</label>
                                             <select name="deal" class="form-control custom-select" id="deal">
                                                 <option value="">Choose one</option>
+                                                <% if(deal) deal.forEach(function(deals){ %>
+                                                    <option value="<%=deals._id%>"><%=deals.name%></option>
+                                                    <% }) %>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="brands">Device</label>
                                             <select name="device" class="form-control custom-select" id="device">
@@ -128,7 +131,7 @@
 
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">

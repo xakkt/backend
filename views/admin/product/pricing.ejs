@@ -93,7 +93,7 @@
                       <!-- SELECT2 EXAMPLE -->
                       <div class="card card-primary">
                         <div class="card-header">
-                          <h3 class="card-title">Promotions</h3>
+                          <h3 class="card-title"><%= productName.name.english %></h3>
                           <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                               <i class="fas fa-minus"></i>
@@ -141,14 +141,17 @@
                                               value="<%= prices.regularprice %>" name="regular_price[]"
                                               class="form-control" readonly>
                                           </td>
-                                          <% if(stores) stores.forEach(function(store){ %>
+                                          <% if(stores) {stores.forEach(function(store){ %>
                                             <% if (store._id.equals(prices._store)) {%>
                                               <% var currency = (store._currency)?store._currency.name: '' %>
                                               <td style="width:10%"> <input type="text" name="currency[]"
                                                 value="<%= currency  %>"  class="currency form-control" readonly required > </td>
                                                <%}%>
-                                            <% }) %>
-                                          
+                                            <% })} else {%>
+                                              <% console.log("--- elseeeeeee") %>
+                                              <td style="width:10%"> <input type="text" name="currency[]"
+                                                value=""  class="currency form-control" readonly required > </td>
+                                              <%}%>
                                           <td style="width:15%">
                                             <select name="deal[]" class="form-control custom-select deal-name"
                                               onchange="dealchange(this)" required>
@@ -184,6 +187,7 @@
                                       </div>
                                       <%})%>
                                         <%} else {%>
+                                          <% console.log("-- elseeeeeeeim heeeee") %>
                                           <tr class="tr_clone" id="parent">
                                             <td style="width:18%">
                                               <select name="store[]" class="form-control custom-select store-name"
