@@ -33,26 +33,25 @@ exports.addprice = async (req, res) => {
     try {
         const arr = [];
         for (i = 0; i < req.body.no_of_stores; i++) {
-
+            // await RegularPrice.findOne({_store:req.body.store[i],_product:req.body.prod});
             data = {};
             data.regular_price = req.body.regular_price[i];
             data._store = req.body.store[i]
             data._product = req.body.productid
             data._user = req.session.userid
-            arr.push(data)
+            await RegularPrice.findOneAndUpdate({_store:req.body.store[i],_product:req.body.productid}, data, {
+                new: true,
+                upsert: true // Make this update into an upsert
+              })
+            // arr.push(data)
         }
-
-        var regularPrice = await RegularPrice.insertMany(arr);
-        if (!regularPrice) {
-            await req.flash('failure', "Regular price");
             res.redirect('/admin/product')
-        }
-        res.redirect('/admin/product')
-        // res.redirect('/admin/product/pricing/'+req.body.productid)
+       
+     
 
     } catch (err) {
-
         console.log('===validation', err)
+     await req.flash('failure', "Regular price");
         res.send(err)
     }
 }

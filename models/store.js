@@ -141,13 +141,14 @@ const storeSchema = new Schema({
 
 storeSchema.pre("deleteOne", async function (next) {
     const _store = this.getQuery()["_id"];
-    await Promise.all(
-        StoreProductPricing.deleteMany({ _store: _store }).exec(),
-        ProductRegularPricing.deleteMany({ _store: _store }).exec(),
-        Order.deleteMany({ _store: _store }).exec(),
-        Cart.deleteMany({ _store: _store }).exec(),
-        Banner.deleteMany({ _store: _store }).exec()
-    )
+    await Promise.all([
+       await StoreProductPricing.deleteMany({ _store: _store}).exec(),
+       await Banner.deleteMany({ _store: _store }).exec(),
+      await  StoreProductPricing.deleteMany({ _store: _store }).exec(),
+      await  ProductRegularPricing.deleteMany({ _store: _store }).exec(),
+      await Order.deleteMany({ _store: _store }).exec(),
+      await  Cart.deleteMany({ _store: _store }).exec()
+    ])
     next()
 });
 
