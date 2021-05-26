@@ -321,34 +321,34 @@ exports.priceSave = async (req, res) => {
                 deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() },
 
             }
-            waterfall([
-                function (callback) {
-                    Banner.findOneAndUpdate(
-                        { $and: [{ _store: req.body.store[i] }, { _deal: req.body.deal[i] }, { deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() } }, { deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }] },
-                        { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
-                        function (err, result) {
-                            callback(err, result);
-                        })
-                },
-                function (result, callback) {
-                    if (result) callback(null, result);
-                    else
-                        Banner.findOne(banner, function (err, result1) {
-                            callback(err, result1);
-                        })
-                },
-                function (result1, callback) {
-                    bannerinfo.image = 'no-image_1606218971.jpeg'
-                    if (result1)
-                        callback(null, result1);
-                    else {
-                        Banner.create(bannerinfo)
-                    }
-                }
-            ], function (err, result) {
-                // result now equals 'done'
-                console.log("--errr", result)
-            });
+            // waterfall([
+            //     function (callback) {
+            //         Banner.findOneAndUpdate(
+            //             { $and: [{ _store: req.body.store[i] }, { _deal: req.body.deal[i] }, { deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() } }, { deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }] },
+            //             { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
+            //             function (err, result) {
+            //                 callback(err, result);
+            //             })
+            //     },
+            //     function (result, callback) {
+            //         if (result) callback(null, result);
+            //         else
+            //             Banner.findOne(banner, function (err, result1) {
+            //                 callback(err, result1);
+            //             })
+            //     },
+            //     function (result1, callback) {
+            //         bannerinfo.image = 'no-image_1606218971.jpeg'
+            //         if (result1)
+            //             callback(null, result1);
+            //         else {
+            //             Banner.create(bannerinfo)
+            //         }
+            //     }
+            // ], function (err, result) {
+            //     // result now equals 'done'
+            //     console.log("--errr", result)
+            // });
 
             // const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte:moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end:moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }).exec()
             // if (!banner) {

@@ -177,24 +177,24 @@
 
         $(function () {
 
-            $('#store').click(function () {
-                $.ajax({
-                    url: '/admin/banner/deal',
-                    type: 'POST',
-                    data: {
-                        storeid: $(this).val(),
-                    },
+            // $('#store').click(function () {
+            //     $.ajax({
+            //         url: '/admin/banner/deal',
+            //         type: 'POST',
+            //         data: {
+            //             storeid: $(this).val(),
+            //         },
                     
-                }).done((data) => {
-                    var option = ``;
-                    $('#deal option:gt(0)').remove();
-                    console.log("---data",data.value[0])
-                    for (var i=0;i<data.value.length;i++){
-                    option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
-                    }
-                    $('#deal').append(option);
-                });
-            });
+            //     }).done((data) => {
+            //         var option = ``;
+            //         $('#deal option:gt(0)').remove();
+            //         console.log("---data",data.value[0])
+            //         for (var i=0;i<data.value.length;i++){
+            //         option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
+            //         }
+            //         $('#deal').append(option);
+            //     });
+            // });
 
 
 

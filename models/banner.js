@@ -32,15 +32,15 @@ type: {
   type: String,
   enum: ['app', 'web'],
   default : 'app' 
-  },
-  deal_start:{
-    type:Date,
-    required:true
-   },
-   deal_end:{
-       type:Date,
-       required:true
-   }
+  }
+  // deal_start:{
+  //   type:Date,
+  //   required:true
+  //  },
+  //  deal_end:{
+  //      type:Date,
+  //      required:true
+  //  }
   
 }, {timestamps:true});
 
