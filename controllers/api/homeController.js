@@ -18,7 +18,6 @@ exports.dashboard = async (req, res) => {
 	var product = [];
 	await _time.store_time(req.params.storeid)
 	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-	// console.log("--date",date)
 	try {
 		var userid
 		let token = req.headers['authorization'];
@@ -85,10 +84,9 @@ exports.dashboard = async (req, res) => {
 
 		}))
 		product = getUniqueListBy(product, '_id')
-
-		let banners = await Banner.find({
-			$and: [{
-					type: "app"
+		let banners =  await StoreProductPricing.find({
+			  	$and: [{
+					_store:req.params.storeid
 				},
 				{
 					deal_start: {
@@ -101,7 +99,18 @@ exports.dashboard = async (req, res) => {
 				}
 			],
 		}).lean();
-		if (!banners) return res.json({
+		let data = []
+		 banners.filter(item => {
+			data.push(JSON.stringify(item._deal))
+		})
+			let bannerss = await Banner.find({
+			_store:req.params.storeid,
+			 _deal:{
+				 $in :JSON.parse(data)
+				}
+			 }
+		).lean()
+		if (!bannerss) return res.json({
 			status: "false",
 			message: "No setting found",
 			data: []
@@ -110,7 +119,7 @@ exports.dashboard = async (req, res) => {
 		pdata = [{
 				path: `${process.env.BASE_URL}/images/banners/`,
 				type: "banner",
-				banner: banners
+				banner: bannerss
 			},
 			{
 				path: `${process.env.BASE_URL}/images/products/`,

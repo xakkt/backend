@@ -83,7 +83,7 @@
                   </section>
                   <!-- Main content -->
                   <div class="message" style="display:none;">
-                    <span>For this deal type and store type already selected Please select another date</span>
+                    <span>Deal Type and Store already selected</span>
                   </div>
                   <div class="price-message" style="display:none;">
                     <span>Deal price less than regular price</span>
@@ -187,7 +187,6 @@
                                       </div>
                                       <%})%>
                                         <%} else {%>
-                                          <% console.log("-- elseeeeeeeim heeeee") %>
                                           <tr class="tr_clone" id="parent">
                                             <td style="width:18%">
                                               <select name="store[]" class="form-control custom-select store-name"
@@ -244,7 +243,7 @@
                             </span>
                             <div class="card-footer">
                               <input type="button" name="add" value="Add" id="tr_clone_add"
-                                class="btn btn-primary tr_clone_add">
+                                class="btn btn-primary tr_clone_add add">
                               <button type="submit" value="submit" class="btn btn-primary submit">Submit</button>
                             </div>
                           </form>
@@ -386,6 +385,7 @@
       $('#store').val(rowCount);
     });
     function changeLanguage(that) {
+      dealchange(that)
       $.ajax({
         url: '/admin/regularprice/get',
         type: 'POST',
@@ -446,25 +446,35 @@
 
       for (var i = 0; i < totalRows; i++) {
         if (stores[i].value == store && dealTypes[i].value == dealType) {
-          // var compareDate = moment(, "YYYY/MM/DD");
+          flag += 1
           let startDate = moment(fromDates[i].value, "YYYY/MM/DD");
           let endDate = moment(toDates[i].value, "YYYY/MM/DD");
-          if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)) {
-            flag += 1
-          } else console.log('outside------')
+          // if (from.isBetween(startDate, endDate) || from.isSame(startDate) || from.isSame(endDate)) {
+          //   flag += 1
+          // } else console.log('outside------')
         } else console.log('outer outside')
       }
       if (flag > 1) {
         $('.message').show();
         $('.submit').prop('disabled', true).css('background-color', 'red');
+        $('.add').prop('disabled', true).css('background-color', 'red');
         parentEle.getElementsByClassName("deal-name")[0].style.border = '1px solid red'
+        parentEle.getElementsByClassName("store-name")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("from-date")[0].style.border = '1px solid red'
         parentEle.getElementsByClassName("to-date")[0].style.border = '1px solid red'
         // parentEle.style.border = '1px solid red'
       }
       else {
+        $('.message').hide();
+
+        $('.add').prop('disabled', false);
         $('.submit').prop('disabled', false);
         $('.submit').addClass('btn btn-primary ').css('background-color', '')
+        $('.add').addClass('btn btn-primary ').css('background-color', '')
+        parentEle.getElementsByClassName("deal-name")[0].style.border = ''
+        parentEle.getElementsByClassName("store-name")[0].style.border = ''
+        parentEle.getElementsByClassName("from-date")[0].style.border = ''
+        parentEle.getElementsByClassName("to-date")[0].style.border = ''
 
       }
     }

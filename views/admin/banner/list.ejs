@@ -119,6 +119,16 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+          <% if(failure.length){ %> 
+            <div class="alert alert-danger">
+                <strong><%= failure[0] %></strong>
+              </div>
+              <% } %>
+            <% if(success.length){ %>   
+            <div class="alert alert-success">
+                <strong><%= success %></strong> 
+            </div>
+            <% } %>
 
           <!--- message section should be common for all-->
           <div id="successMessage" style="display:none;"> Image updated successfully</div>

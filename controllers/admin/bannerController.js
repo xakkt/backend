@@ -15,7 +15,9 @@ exports.create = async (req, res) => {
             const store = await Store.find({}).lean()
             const deal = await Deal.find({}).lean()
             const store_product_pricing = await Store_product_pricing.find({}).lean()
+
             res.render('admin/banner/create', {
+                success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure'),
                 menu: "banner",
                 submenu: "create",
                 store: store,
@@ -71,27 +73,34 @@ exports.create = async (req, res) => {
     }
 exports.save = async (req, res) => {
     try {
-        console.log("--- im herrrr")
         const brandinfo = {
             _deal: req.body.deal,
             image: req.file.filename,
             _store: req.body.store,
         }
-        console.log("---brand",brandinfo)
+        console.log("---brand", brandinfo)
+        let BannerDup = await Banner.findOne({
+            _store: req.body.store,
+            _deal: req.body.deal
+        }).lean()
+        if (BannerDup) {
+            await req.flash('failure', "Banner already exist's for this store and deal");
+           return res.redirect('/admin/banner/create')
+        }
         const banner = await Banner.create(brandinfo);
-        if (!banner){ 
+        if (!banner) {
             await req.flash('failure', "Banner not added");
             return res.json({
-            status: false,
-            message: "Data not saved"
-        })
-    }
+                status: false,
+                message: "Data not saved"
+            })
+        }
         await req.flash('success', 'Banner added successfully!');
         res.redirect('/admin/banner/list')
 
 
     } catch (err) {
-        console.log("--err",err)
+        console.log("--err", err)
         await req.flash('failure', err.message);
         res.redirect('/admin/banner/list')
 
@@ -118,13 +127,13 @@ exports.list = async (req, res) => {
         //         }]
         //     }).populate('_store', 'name')
         //     .populate('_deal', 'name').lean()
-            const banner = await Banner.find({}).populate('_store', 'name').populate('_deal', 'name').lean()
-            // banner.map((element) => {
-            //     var data = {}
-            //     data = { ...element }
-            //     if (!element.image) data.image = 'no-image_1606218971.jpeg'
-            //     banner_image.push(data)
-            // })
+        const banner = await Banner.find({}).populate('_store', 'name').populate('_deal', 'name').lean()
+        // banner.map((element) => {
+        //     var data = {}
+        //     data = { ...element }
+        //     if (!element.image) data.image = 'no-image_1606218971.jpeg'
+        //     banner_image.push(data)
+        // })
 
         if (!banner) return res.render('admin/banner/list', {
             menu: "banner",
@@ -165,13 +174,13 @@ exports.delete = async (req, res) => {
 exports.edit = async (req, res) => {
     try {
         const store = await Store.find({}).lean()
-          const deal = await Deal.find({}).lean()
+        const deal = await Deal.find({}).lean()
         const banner = await Banner.findById(req.params.id).exec();
         res.render('admin/banner/edit', {
             status: "success",
             data: banner,
-            store:store,
-            deal:deal,
+            store: store,
+            deal: deal,
             menu: "banner",
             submenu: "edit"
         })

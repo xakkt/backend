@@ -274,28 +274,28 @@ exports.remove = async (req, res) => {
 exports.priceSave = async (req, res) => {
     try {
         const arr = [];
-        for (i = 0; i < req.body.no_of_stores; i++) {
-            for (k = i + 1; k < req.body.no_of_stores; k++) {
-                if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
-                    if (req.body.etime[i] >= req.body.stime[k]) {
-                        await req.flash('failure', "Cannot select two  same dates for same deals");
-                        return res.redirect('/admin/product/pricing/' + req.body.productid)
-                    }
-                }
-                else if (req.body.store[i]) {
-                    if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
-                        await req.flash('failure', "Cannot select two  same dates for same deals");
-                        return res.redirect('/admin/product/pricing/' + req.body.productid)
-                    }
+        // for (i = 0; i < req.body.no_of_stores; i++) {
+        //     for (k = i + 1; k < req.body.no_of_stores; k++) {
+        //         if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
+        //             if (req.body.etime[i] >= req.body.stime[k]) {
+        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
+        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
+        //             }
+        //         }
+        //         else if (req.body.store[i]) {
+        //             if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
+        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
+        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
+        //             }
 
-                }
-            }
-            // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
-            // {
-            //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
-            //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
-            // }
-        }
+        //         }
+        //     }
+        //     // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
+        //     // {
+        //     //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
+        //     //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
+        //     // }
+        // }
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
             console.log("--product", req.body)
