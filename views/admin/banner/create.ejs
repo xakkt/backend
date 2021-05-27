@@ -46,6 +46,16 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
+            <% if(failure.length){ %> 
+                <div class="alert alert-danger">
+                    <strong><%= failure[0] %></strong>
+                  </div>
+                  <% } %>
+                <% if(success.length){ %>   
+                <div class="alert alert-success">
+                    <strong><%= success %></strong> 
+                </div>
+                <% } %>
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -94,7 +104,7 @@
                                     <!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="departmentLogo">File input</label>
+                                            <label for="departmentLogo">Banner Image</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="logo" class="custom-file-input"
@@ -115,10 +125,13 @@
                                             <label for="brands">Deal</label>
                                             <select name="deal" class="form-control custom-select" id="deal">
                                                 <option value="">Choose one</option>
+                                                <% if(deal) deal.forEach(function(deals){ %>
+                                                    <option value="<%=deals._id%>"><%=deals.name%></option>
+                                                    <% }) %>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="brands">Device</label>
                                             <select name="device" class="form-control custom-select" id="device">
@@ -128,7 +141,7 @@
 
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -174,24 +187,24 @@
 
         $(function () {
 
-            $('#store').click(function () {
-                $.ajax({
-                    url: '/admin/banner/deal',
-                    type: 'POST',
-                    data: {
-                        storeid: $(this).val(),
-                    },
+            // $('#store').click(function () {
+            //     $.ajax({
+            //         url: '/admin/banner/deal',
+            //         type: 'POST',
+            //         data: {
+            //             storeid: $(this).val(),
+            //         },
                     
-                }).done((data) => {
-                    var option = ``;
-                    $('#deal option:gt(0)').remove();
-                    console.log("---data",data.value[0])
-                    for (var i=0;i<data.value.length;i++){
-                    option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
-                    }
-                    $('#deal').append(option);
-                });
-            });
+            //     }).done((data) => {
+            //         var option = ``;
+            //         $('#deal option:gt(0)').remove();
+            //         console.log("---data",data.value[0])
+            //         for (var i=0;i<data.value.length;i++){
+            //         option += `<option value=${data.value[i]._deal._id}>${data.value[i]._deal.name}</option>`;
+            //         }
+            //         $('#deal').append(option);
+            //     });
+            // });
 
 
 

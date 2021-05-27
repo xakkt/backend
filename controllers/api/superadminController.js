@@ -1,14 +1,14 @@
 const User = require('../../models/user');
 const Roles = require('../../models/role')
-
+const Timezone = require('../../models/timezone')
 var moment = require('moment');
 
 exports.create = async (req, res) => {
 
     try {
-
-        let role = await Roles.findOne({ name: req.body.role_name }).exec()
-        // console.log("---role",role)
+        let role = await Roles.findOne({ name: req.body.name }).exec()
+        // 
+        console.log("---role",role)
         if (!role) return res.json({ message: "Role not found" })
         const superadmininfo = {
             first_name: 'Admin',
@@ -21,10 +21,10 @@ exports.create = async (req, res) => {
         }
         const user = await User.create(superadmininfo)
         if (!user) return res.json({ message: "Data not inserted" })
-        return res.json({ status: "success", message: "User Created.", data: user });
+        return res.json({ status: 1, message: "User Created.", data: user });
 
     } catch (err) {
         console.log("----err", err)
-        return res.json({ status: false, error: err })
+        return res.json({ status: 0, error: err })
     }
 }

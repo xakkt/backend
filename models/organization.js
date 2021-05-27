@@ -14,6 +14,6 @@ const OrganizationSchema = Schema({
     type: String,
     required: true
   }
-}, {timestampst:true});
+}, {timestamps:true});
 
 module.exports = mongoose.model('organizations', OrganizationSchema);

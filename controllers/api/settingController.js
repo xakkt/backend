@@ -20,7 +20,7 @@ exports.add = async(req, res) => {
 				console.log(req.body.images)			
 			
 				let setting = await Setting.create(settingInfo);
-				res.json({status: "success", message: "Value added successfully", data: setting});
+				res.json({status:1, message: "Value added successfully", data: setting});
 			
 				}catch(err){
 					res.status(400).json({data: err.message});

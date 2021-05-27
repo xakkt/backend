@@ -6,7 +6,7 @@ const dealSchema = Schema({
     type: String,
     required: true
   },
-  store_id:{
+  _store:{
       type: Schema.Types.ObjectId,
       ref:'Store'
   },
@@ -15,6 +15,6 @@ const dealSchema = Schema({
     default: null
   },
   
-}, {timestampst:true});
+}, {timestamps:true});
 
 module.exports = mongoose.model('Deal', dealSchema);

@@ -6,11 +6,12 @@ const Unit = require('../../models/unit')
 const Banner = require('../../models/banner')
 const Wishlist = require('../../models/wishlist')
 var waterfall = require('async-waterfall');
+const Currency = require('../../models/currency');
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const RegularPrice = require('../../models/product_regular_pricing');
-
+const _globalCommon = require('../../helper/common')
 const { validationResult } = require('express-validator');
 var moment = require('moment')
 var waterfall = require('async-waterfall');
@@ -36,7 +37,6 @@ exports.productCreate = async (req, res) => {
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
         var unit = await Unit.find({}).lean();
-
         var productCategories = await ProductCategory.find({}).lean();
         return res.render('admin/product/create', { menu: "products", submenu: "create", brands: brands, unit: unit, deals: deals, productCategories: productCategories })
     } catch (err) {
@@ -100,7 +100,7 @@ exports.edit = async (req, res) => {
     try {
         var product = await ProductCategory.find({}).lean();
         const productCategory = await ProductCategory.findById(req.params.id).exec();
-        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory" })
+        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory", submenu: "create" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -151,19 +151,19 @@ exports.productsave = async (req, res) => {
             sku: req.body.sku,
             _category: req.body._category,
             weight: req.body.weight,
+            _company: req.session.company,
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             _unit: req.body.unit,
             price: req.body.price,
-            image: req.file.filename,
             status: req.body.status,
             brand_id: req.body.brand
 
         }
+        productinfo.image = (req.file.filename) ? req.file.filename : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
         res.redirect("/admin/regularprice/create/" + product._id)
-
     } catch (err) {
         await req.flash('failure', err.message);
         res.redirect('/admin/product')
@@ -274,30 +274,31 @@ exports.remove = async (req, res) => {
 exports.priceSave = async (req, res) => {
     try {
         const arr = [];
-        for (i = 0; i < req.body.no_of_stores; i++) {
-            for (k = i + 1; k < req.body.no_of_stores; k++) {
-                if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
-                    if (req.body.etime[i] >= req.body.stime[k]) {
-                        await req.flash('failure', "Cannot select two  same dates for same deals");
-                        return res.redirect('/admin/product/pricing/' + req.body.productid)
-                    }
-                }
-                else if (req.body.store[i]) {
-                    if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
-                        await req.flash('failure', "Cannot select two  same dates for same deals");
-                        return res.redirect('/admin/product/pricing/' + req.body.productid)
-                    }
+        // for (i = 0; i < req.body.no_of_stores; i++) {
+        //     for (k = i + 1; k < req.body.no_of_stores; k++) {
+        //         if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
+        //             if (req.body.etime[i] >= req.body.stime[k]) {
+        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
+        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
+        //             }
+        //         }
+        //         else if (req.body.store[i]) {
+        //             if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
+        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
+        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
+        //             }
 
-                }
-            }
-            // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
-            // {
-            //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
-            //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
-            // }
-        }
+        //         }
+        //     }
+        //     // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
+        //     // {
+        //     //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
+        //     //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
+        //     // }
+        // }
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
+            console.log("--product", req.body)
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
@@ -320,34 +321,34 @@ exports.priceSave = async (req, res) => {
                 deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() },
 
             }
-            waterfall([
-                function (callback) {
-                    Banner.findOneAndUpdate(
-                        {$and: [ {_store:req.body.store[i]},{_deal: req.body.deal[i]},{ deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() }},{deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() }}  ]},
-                        { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
-                        function (err, result) {
-                        callback(err, result);
-                    })
-                },
-                function (result, callback) {
-                    if (result) callback(null, result);
-                    else
-                        Banner.findOne(banner, function (err, result1) {
-                            callback(err, result1);
-                        })
-                },
-                function (result1, callback) {
-                    bannerinfo.image = 'no-image_1606218971.jpeg'
-                    if (result1)
-                        callback(null, result1);
-                    else {
-                        Banner.create(bannerinfo)
-                    }
-                }
-            ], function (err, result) {
-                // result now equals 'done'
-                console.log("--errr", result)
-            });
+            // waterfall([
+            //     function (callback) {
+            //         Banner.findOneAndUpdate(
+            //             { $and: [{ _store: req.body.store[i] }, { _deal: req.body.deal[i] }, { deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() } }, { deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }] },
+            //             { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
+            //             function (err, result) {
+            //                 callback(err, result);
+            //             })
+            //     },
+            //     function (result, callback) {
+            //         if (result) callback(null, result);
+            //         else
+            //             Banner.findOne(banner, function (err, result1) {
+            //                 callback(err, result1);
+            //             })
+            //     },
+            //     function (result1, callback) {
+            //         bannerinfo.image = 'no-image_1606218971.jpeg'
+            //         if (result1)
+            //             callback(null, result1);
+            //         else {
+            //             Banner.create(bannerinfo)
+            //         }
+            //     }
+            // ], function (err, result) {
+            //     // result now equals 'done'
+            //     console.log("--errr", result)
+            // });
 
             // const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte:moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end:moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }).exec()
             // if (!banner) {
@@ -383,25 +384,30 @@ exports.priceSave = async (req, res) => {
 exports.addPrice = async (req, res) => {
     try {
         var prices = [];
+        var deal = [];
+         var product =  await Product.findOne({_id:req.params.productid}).lean()
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).lean();
-        var stores = await Stores.find({}).lean();
+        var stores = await Stores.find({}).populate('_currency').lean();
         var regularPrice = await RegularPrice.find({}).lean()
-
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
-        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, productName:product, brands: brands, deals: '', price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
         price.map((element) => {
-            var data = {}
-            regularPrice.forEach(regular => {
+            var data = {};
+            var dealss = {}
+            regularPrice.map(regular => {
                 if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
                     data = { ...element, regularprice: regular.regular_price }
+
                 }
             })
+
             prices.push(data)
 
         })
-        res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+  console.log("---product",product)
+        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
         console.log("--err", err)
         res.status(400).json({ data: err.message });
@@ -409,38 +415,39 @@ exports.addPrice = async (req, res) => {
 }
 exports.product_listing = async (req, res) => {
     try {
-        // console.log("--logs",req.query.search.value)
         var pagno = req.query.start / req.query.length + 1
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
-        let searchString = req.query.search.value || ''
-        let product = await Product.find({
+        let searchString = req.query.search.value || '';
+      
+        let productForSpecificCompany
+        if (req.session.company) {
+            productForSpecificCompany = await _globalCommon.companyStore(req)
+            //where._company = req.session.company
+        }
+        var where = {
             $or: [
                 { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                { "name.english": { $regex:searchString, $options: 'i' } }
+                { "name.english": { $regex: searchString, $options: 'i' } },
+                {_id : {$in : productForSpecificCompany}}
             ]
-        })
+        }
+        let product = await Product.find(where)
             .skip((pagno - 1) * limit) //Notice here
             .limit(limit)
             .lean();
         let total = await Product.find(
-            {
-                $or: [
-                    { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
-                    { "name.english": { $regex:searchString, $options: 'i' } }
-                ]
-            }
-            ).lean()
-        // if (!deal.length) return res.render('admin/deals/listing', { menu: "deal", submenu: "list", deal: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+            where
+        ).lean()
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
 }
 
-exports.product_delete =  async (req,res) =>{
+exports.product_delete = async (req, res) => {
     try {
-        let remove = await Product.deleteMany({ _id: {$in :req.body.id} }).exec()
+        let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
         if (!remove) return res.json({ status: false })
         return res.json({ status: true })
     } catch (err) {

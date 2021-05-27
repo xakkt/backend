@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const mongooseLeanGetters = require('mongoose-lean-getters')
 var uniqueValidator = require('mongoose-unique-validator');
 const FKHelper = require('../helper/foreign-key-constraint');
+const md5 = require("md5")
 
 const Schema = mongoose.Schema;
 
@@ -9,6 +10,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const childSchema = new Schema({
 
+ 
   address: {
     type: String,
   },
@@ -19,6 +21,12 @@ const childSchema = new Schema({
   },
   pincode: {
     type: Number
+  },
+  phoneno: {
+    type: Number
+  },
+  countrycode :{
+    type:String
   },
   city: {
     type: String
@@ -32,15 +40,27 @@ const childSchema = new Schema({
   country: {
     type: String
   },
+ 
+ 
+//   _timezone: {
+//     type: Schema.Types.ObjectId,
+//     ref:'Timezone',
+//     validate: {
+//             validator: function(v) {
+//             return FKHelper(mongoose.model('Timezone'), v);
+//          },
+//         message: `Timezone doesn't exist`
+//     }
+// },
   location: {
     type: {
         type: String,
         enum: ['Point'],
-        required: true
+        required: false
     },
     coordinates: {
         type: [Number],
-        required: true
+        required: false
     }
 },
 
@@ -49,27 +69,27 @@ const childSchema = new Schema({
 const userSchema = Schema({
   first_name: {
     type: String,
-    required: true,
+    required: false,
   },
   last_name: {
     type: String,
-    required: true
+    required: false
   },
   email: {
     type: String,
     unique: true,
-    required: true
+    required: false
   },
   profile_pic: {
     type: String,
   },
   password: {
     type: String,
-    required: true
+    required: false
   },
   contact_no: {
     type: String,
-    required: true
+    required: false
   },
   status: {
     type: Boolean,
@@ -80,7 +100,7 @@ const userSchema = Schema({
     get: dateToString
   },
   ncrStatus: {
-    type: Boolean,
+    type: String,
     default: false
   },
   superbuckId: {
@@ -89,20 +109,34 @@ const userSchema = Schema({
   },
   dob: {
     type: Date,
-    required: true
+    required: false
   },
   address: [childSchema],
-
-  _timezone: {
+  _timezone:{
+    type:String
+},
+_company: 
+  {
     type: Schema.Types.ObjectId,
-    ref: 'Timezone',
+    ref: 'Company',
     validate: {
       validator: function (v) {
-        return FKHelper(mongoose.model('Timezone'), v);
+        return FKHelper(mongoose.model('Company'), v);
       },
-      message: `Timezone doesn't exist`
+      message: `Company doesn't exist`
     }
   },
+
+  // _timezone: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Timezone',
+  //   validate: {
+  //     validator: function (v) {
+  //       return FKHelper(mongoose.model('Timezone'), v);
+  //     },
+  //     message: `Timezone doesn't exist`
+  //   }
+  // },
   role_id: [
     {
       type: Schema.Types.ObjectId,
@@ -131,8 +165,12 @@ const userSchema = Schema({
 
 userSchema.plugin(mongooseLeanGetters)
 userSchema.plugin(uniqueValidator)
+// userSchema.pre('save', async function () {
+//   this.password = await bcrypt.hash(this.password, saltRounds);
+// });
 userSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(this.password, saltRounds);
+
+  this.password = await md5(this.password);
 });
 
 function dateToString(date) {

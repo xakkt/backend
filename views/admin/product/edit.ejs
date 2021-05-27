@@ -75,12 +75,14 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <form id="productForm" method="post" action="/admin/product/update/<%= product._id %>" enctype="multipart/form-data">
+              <form id="productForm" method="post" action="/admin/product/update/<%= product._id %>"
+                enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="departmentname">Name</label>
-                      <input type="text" name="en_name" value = "<%= product.name.get('english') %>"class="form-control" id="departmentname" placeholder="Enter name">
+                      <input type="text" name="en_name" value="<%= product.name.get('english') %>" class="form-control"
+                        id="departmentname" placeholder="Enter name">
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -89,55 +91,63 @@
                       <select name="_category" class="form-control custom-select" id="_category">
                         <option value="">Choose one</option>
                         <% if(productCategories) productCategories.forEach(function(category){ %>
-                          <option <%=(product._category.equals(category._id))?'selected':''%> value="<%=category._id%>"><%=category.name%></option>
+                        <option value="<%=category._id%>"
+                          <%=(category._id.toString().indexOf(product._id.toString()!=-1))?'selected':''%>>
+                          <%=category.name%></option>
+                        <option><%=category.name%></option>
                         <% }) %>
                       </select>
                     </div>
                   </div>
-                  </div>
-                  <div class="row">
+                </div>
+                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Description</label>
-                      <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."><%= product.description %></textarea>
+                      <textarea name="description" class="form-control" rows="3"
+                        placeholder="Enter ..."><%= product.description %></textarea>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Short Description</label>
-                      <textarea name="short_description" class="form-control" rows="3" placeholder="Enter ..."><%= product.short_description %></textarea>
+                      <textarea name="short_description" class="form-control" rows="3"
+                        placeholder="Enter ..."><%= product.short_description %></textarea>
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentLogo">Product image</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg" id="departmentLogo">
-                        <label class="custom-file-label" for="departmentLogo">Choose file</label>
+                  <div class="col-md-6">
+                    <img id="blah" src="/images/products/<%=product.image%>" style="height:100px; widht:10px" alt="your image" />
+                    <div class="form-group">
+                      <label for="departmentLogo">Product image</label>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg"
+                            id="imgInp">
+                          <label class="custom-file-label" for="departmentLogo">Choose file</label>
+                        </div>
                       </div>
-                      
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="departmentname">SKU</label>
+                      <input type="text" name="sku" value="<%= product.sku %>" class="form-control" id="departmentname"
+                        placeholder="Enter name">
                     </div>
                   </div>
-                   <!-- /.col -->
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">SKU</label>
-                    <input type="text" name="sku" value = "<%= product.sku %>"class="form-control" id="departmentname" placeholder="Enter name">
-                  </div>
-                </div>
                 </div>
                 <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="departmentname">Weight</label>
-                    <input type="text" name="weight" value = "<%= product.weight %>" class="form-control" id="departmentname" placeholder="Enter name">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="departmentname">Weight</label>
+                      <input type="text" name="weight" value="<%= product.weight %>" class="form-control"
+                        id="departmentname" placeholder="Enter name">
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="status">Status</label>
                       <select name="status" class="form-control custom-select" id="status">
@@ -146,15 +156,15 @@
                         <option value="false">Inactive</option>
 
                         <% } else { %>
-                        <option value="false"selected>Inactive</option>
+                        <option value="false" selected>Inactive</option>
                         <option value="true">Active</option>
                         <% } %>
                       </select>
                     </div>
                   </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
 
                     <div class="form-group">
                       <label for="mostsaved">Temporary1</label>
@@ -175,31 +185,31 @@
                       </select>
                     </div>
                   </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="brands">Brand</label>
-                  <select name="brand" class="form-control custom-select" id="brand">
-                    <option value="">Choose one</option>
-                    <% if(brands) brands.forEach(function(brand){ %>
-                      <option value="<%=brand._id%>"><%=brand.name%></option>
-                    <% }) %>
-                  </select>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="deals">Temporary3</label>
-                  <select name="deal" class="form-control custom-select" id="deals">
-                    <option value="">Select one</option>
-                    <% if(deals) deals.forEach(function(deal){ %>
-                      <option value="<%=deal._id%>"><%=deal.name%></option>
-                    <% }) %>
-                  </select>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="brands">Brand</label>
+                      <select name="brand" class="form-control custom-select" id="brand">
+                        <option value="">Choose one</option>
+                        <% if(brands) brands.forEach(function(brand){ %>
+                        <option value="<%=brand._id%>"><%=brand.name%></option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="deals">Temporary3</label>
+                      <select name="deal" class="form-control custom-select" id="deals">
+                        <option value="">Select one</option>
+                        <% if(deals) deals.forEach(function(deal){ %>
+                        <option value="<%=deal._id%>"><%=deal.name%></option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
@@ -243,26 +253,50 @@
     });
 
     $(function () {
+      imgInp.onchange = evt => {
+        const [file] = imgInp.files
+        // console.log("<%= process.env.BASE_URL %>",file)
+        if (file) {
+          blah.src = URL.createObjectURL(file)
+        }
+      }
 
       $('#productForm').validate({
         rules: {
-          name: {
+          en_name: {
             required: true
           },
-          description: {
-            required: true,
+          // description: {
+          //   required: true,
+          // },
+          // logo: {
+          //   required: true
+          // },
+          sku: {
+            required: true
           },
-          
+          weight: {
+            required: true
+          }
         },
         messages: {
           name: {
             required: "Please enter a department name"
           },
-          description: {
-            required: "Please enter the description",
+          // description: {
+          //   required: "Please enter the description",
+          // },
+          // logo: {
+          //   required: "Please select an image"
+          // },
+          sku: {
+            required: "Please enter unique sku code"
           },
-         
+          weight: {
+            required: "Please enter weight value"
+          }
         },
+
         errorElement: 'span',
         errorPlacement: function (error, element) {
           error.addClass('invalid-feedback');

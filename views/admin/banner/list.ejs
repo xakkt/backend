@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
+ <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <style>
@@ -117,6 +119,16 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
+          <% if(failure.length){ %> 
+            <div class="alert alert-danger">
+                <strong><%= failure[0] %></strong>
+              </div>
+              <% } %>
+            <% if(success.length){ %>   
+            <div class="alert alert-success">
+                <strong><%= success %></strong> 
+            </div>
+            <% } %>
 
           <!--- message section should be common for all-->
           <div id="successMessage" style="display:none;"> Image updated successfully</div>
@@ -141,8 +153,8 @@
                         <th>Store Name</th>
                         <th>Deal</th>
                         <th>Image</th>
-                        <th>From</th>
-                        <th>Till</th>
+                        <!-- <th>From</th>
+                        <th>Till</th> -->
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -150,7 +162,6 @@
 
                       <% if(data) data.forEach(function(data){ %>
                       <tr>
-                        <% console.log("====--",data.image) %>
                         <td><%= data._store.name %></td>
                         <td><%= data._deal.name %></td>
                         <td>
@@ -168,11 +179,15 @@
                           <input type="file" style="display:none;" class="uploads" name="uploads" id='<%= data._id %>'
                             onchange="myFunction(this)" data-id="<%= data._id %>" /></div>
                         </td>
-                        <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
-                        <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td>
+                        <!-- <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
+                        <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td> -->
                         <td><a href="/admin/banner/delete/<%= data._id %>"
-                            onclick="return confirm('Are you sure you want to Active this.')">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;</td>
+                            onclick="return confirmation(event)">
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;
+                            <a
+                            href="/admin/banner/edit/<%= data._id%>"><i class="fas fa-pencil-alt"></i></a>
+                          </td>
+                            
                       </tr>
                       <% }) %>
 
@@ -183,8 +198,8 @@
                         <th>Store Name</th>
                         <th>Deal</th>
                         <th>Image</th>
-                        <th>From</th>
-                        <th>Till</th>
+                        <!-- <th>From</th>
+                        <th>Till</th> -->
                         <th>Action</th>
                       </tr>
                     </tfoot>
@@ -235,7 +250,35 @@
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
   <!-- Page specific script -->
+
+    <!-- sweetAlert -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
   <script>
+     function confirmation(ev) {
+        ev.preventDefault();
+        var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
+        console.log('/////',urlToRedirect); // verify if this is the right URL
+        swal({
+          title: "Are you sure?",
+          text: "But all data related to product also delete.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel please!",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        },
+          function (isConfirm) {
+            if (isConfirm) {
+              window.location.href = urlToRedirect;
+            } else {
+              swal("Cancelled", "Your file is safe :)", "error");
+            }
+          }
+        )
+
+      }
     function myFunction(that) {
       console.log(that.closest('td'));
       var data;

@@ -9,7 +9,7 @@ exports.add = async(req, res) => {
 						}
                 let rating = await Rating.create(ratingInfo);
                 if(!rating) return res.json({message:"Something went wrong"})
-			   return	res.json({status: "success", message: "Value added successfully", data: rating});
+			   return	res.json({status:1, message: "Value added successfully", data: rating});
 				}catch(err){
                     console.log("--logs",err)
 					res.status(400).json({data: err.message});

@@ -119,7 +119,7 @@ const orderValidation = [
 /*--- user ---*/
 router.post('/user/forgetpassword',userController.forgotPassword);
 router.post('/user/create',userValidation,userController.create);
-router.get('/user/list', userController.list);
+router.get('/user/list',verifyjwt.checkToken, userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
 router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
 router.post('/user/address', verifyjwt.checkToken,userController.address)
@@ -127,11 +127,12 @@ router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
 router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
 router.get('/user/delete/:id', verifyjwt.checkToken,userController.deleteaddress);
+router.get('/user/edit/:id',verifyjwt.checkToken,userController.editaddress);
+router.post('/user/edit/:id',verifyjwt.checkToken,userController.updateaddress);
+
 
 /*--- home ---*/
 router.get('/app/dashboard/:storeid', homeController.dashboard);
-
-
 /*---- product ---*/
 // router.post('/product/create', verifyjwt.checkToken, productValidation, productController.create);
 router.get('/product/list/:storeid',productController.list);
@@ -188,7 +189,8 @@ router.get('/store/zipcode/:zipcode',storeController.getStoreByZipcode);
 router.post('/store/nearby/stores', storeNearByValidation,storeController.nearByStores);
 router.put('/store/:id/update', storeValidation, storeController.updateStore);
 router.get('/store/:id',storeController.show);
-
+router.post('/store/near-by-user', storeController.userNearbyStore)
+router.post('/store/save-user', storeController.userLocation)
 
 /*----wishlist ---*/
 router.post('/wishlist/add_product',  verifyjwt.checkToken,wishlistValidation, wishController.addPoductToWishlist);
@@ -207,7 +209,7 @@ router.post("/bannerproduct",bannerController.bannderproduct)
 router.post("/rating",verifyjwt.checkToken,ratingController.add)
 router.post("/push",pushController.firebase)
 
-router.post("/push",pushController.firebase)
+// router.post("/push",pushController.firebase)
 
 router.post("/applycoupon",verifyjwt.checkToken,couponController.applycoupon)
 router.post("/coupon-list",verifyjwt.checkToken,couponController.list)

@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 const FKHelper = require('../helper/foreign-key-constraint');
-
+const StoreProductPricing = require("./store_product_pricing");
+const ProductRegularPricing = require("./product_regular_pricing");
+const Order = require("./order");
+const Cart = require("./cart");
+const Banner = require("./banner");
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
@@ -44,12 +48,12 @@ const productSchema = new Schema({
   },
   sku:{
     type: String,
-    required: true,
-    unique:true
+    required: false,
+   // unique:true
   },
   description:{
       type: String,
-      required: true
+     // required: true
   },
   short_description:{
       type:String,
@@ -57,7 +61,7 @@ const productSchema = new Schema({
   },
   weight: {
     type: Number,
-    required: true
+    required: false
   },
   valid_from: {
     type: Date,
@@ -101,6 +105,17 @@ const productSchema = new Schema({
     type: Number,
     //required: true
   },
+  _company:
+  {
+      type: Schema.Types.ObjectId,
+      ref: 'Company',
+      validate: {
+          validator: function (v) {
+              return FKHelper(mongoose.model('Company'), v);
+          },
+          message: `Company doesn't exist`
+      }
+  },
   crv: {
     type: String,
     default: null
@@ -114,7 +129,18 @@ const productSchema = new Schema({
   },
 }, {timestamps:true});
 
+productSchema.pre("deleteOne",  function (next) {
+  const _product = this.getQuery()["_id"];
+      StoreProductPricing.deleteMany({ _product: _product }).exec()
+      ProductRegularPricing.deleteMany({ _product: _product }).exec(),
+      Cart.deleteMany({ 'cart._product': _product }).exec(),
+ 
+  next()
+});
+
+
 productSchema.plugin(uniqueValidator)
+
 
 function dateToString(date){
   if(date) return new Date(date).toISOString();

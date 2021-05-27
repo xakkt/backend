@@ -25,12 +25,14 @@ exports.applycoupon = async (req, res) => {
         let cart = await Cart.findOne({ _id: req.body._cart }).lean();
         let coupon = await Coupon.findOne({ coupon_code: req.body.coupan_name }).lean()
         var price = 0;
-        if (coupon.apply == 'percent') {
-            price = eval(cart.cart[0].total_price - (cart.cart[0].total_price * coupon.amount) / 100)
+        if (coupon.min_amount > cart.cart[0].total_price) {
+            return res.json({ message: "Cannot apply this coupon min amount should be" + coupon.min_amount })
         }
-        else if (coupon.apply == 'fixed') {
-            price = cart.cart[0].total_price - coupon.amount
 
+        if (coupon.apply == 'percent') {
+            price = eval(cart.cart[0].total_price - (cart.cart[0].total_price * coupon.amount) / 100);
+        } else if (coupon.apply == 'fixed') {
+            price = cart.cart[0].total_price - coupon.amount;
         }
         delete (cart.cart[0].total_price)
         cart.cart[0].total_price = price

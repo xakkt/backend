@@ -1,7 +1,7 @@
 const Role = require('../../models/role');
 const User = require('../../models/user');
 const Store = require('../../models/store');
-
+const md5 = require("md5")
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken');
 // const moment = require('moment')
@@ -17,22 +17,23 @@ exports.login = async (req, res) => {
         }
         const userInfo = await User.findOne({ email: req.body.email }).exec()
         if (!userInfo) { await req.flash('failure', "Email is not valid"); return res.redirect('/admin/login') };
-        if (!bcrypt.compareSync(req.body.password, userInfo.password)) {
+        if (md5(req.body.password) !== userInfo.password) {
             await req.flash('failure', "Invalid password!!!");
             res.redirect('/admin/login');
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
-        let utc = await Store.findOne({ _user: userInfo._id }).populate('_timezone', 'abbr').exec()
+        console.log("--userrr",userInfo._timezone)
+        var date = moment.tz.setDefault(userInfo._timezone)
         // console.log("--utc", utc._timezone.abbr)
         // var date = moment.tz.setDefault(utc._timezone.abbr);
-        // req.session.date = date
+        req.session.date = date,
+        req.session.company = userInfo._company;
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id
         req.session.roleid = userInfo.role_id[0]._id
 
         return res.redirect('/admin')
     } catch (err) {
-        console.log("--err", err)
         await req.flash('failure', "Please enter valid email and password");
         res.redirect('/admin/login');
 

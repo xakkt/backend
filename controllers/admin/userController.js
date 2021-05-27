@@ -1,10 +1,12 @@
 const User = require('../../models/user');
 const Roles = require('../../models/role')
 const Device = require('../../models/device')
+const Company = require('../../models/company')
 
 var randomstring = require("randomstring");
 const express = require('express');
 const bcrypt = require('bcrypt');
+const md5 = require("md5")
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 var moment = require('moment');
@@ -15,6 +17,7 @@ const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 //const transporter = require('../../config/transporter-mail');
+var moment = require('moment-timezone');
 
 
 class Mail {
@@ -66,7 +69,6 @@ exports.check = function (req, res) {
             // (list)?cond={role_id:{$in: [null, [] ]}}:cond={user_id:req.session.userid}
 
             let users = await User.find({ role_id: { $in: [null, []] } }).lean();
-            // console.log("---user", users)
             if (!users) return res.render('admin/user/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
             return res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {
@@ -78,8 +80,9 @@ exports.check = function (req, res) {
     exports.edit = async (req, res) => {
         try {
             var role = await Roles.find({}).lean()
+            var TimeZone = moment.tz.names();
             const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-            res.render('admin/user/edit', { menu: "users", submenu: "edit", status: "success", role: role, message: "", user: user });
+            return res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role, timezone: TimeZone, message: "", user: user });
         } catch (err) {
             res.status(400).json({ status: "false", data: err });
         }
@@ -87,9 +90,11 @@ exports.check = function (req, res) {
 
 exports.create = async (req, res) => {
     try {
-        // var timezone = await Timezone.find({}).lean();
         var role = await Roles.find({}).lean()
-        res.render('admin/user/create', { menu: "users", submenu: "create", role: role })
+        var TimeZone = moment.tz.names();
+        var company = await Company.find({}).lean()
+
+        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: TimeZone,company:company, role: role })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });
@@ -112,9 +117,10 @@ exports.save = async (req, res) => {
             status: req.body.status,
             _supervisor: req.session.userid,
             last_login: req.body.last_login,
+            _company:req.body.company,
             ncrStatus: req.body.ncrStatus,
             superbuckId: req.body.superbuckId,
-            timezone: req.body.timezone,
+            _timezone: req.body.timezone,
             profile_pic: req.file.path.replace(/public/g, ""),
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
@@ -145,8 +151,9 @@ exports.update = async function (req, res) {
             _supervisor: req.session.userid,
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
+
             superbuckId: req.body.superbuckId,
-            timezone: req.body.timezone,
+            _timezone: req.body.timezone,
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
 
@@ -173,18 +180,18 @@ exports.update = async function (req, res) {
 exports.authenticate = async (req, res) => {
 
     try {
+      
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         const userInfo = await User.findOne({ email: req.body.email }).exec();
-        console.log("--userinfo",userInfo)
+        console.log("--userinfo", userInfo)
         if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
-
-        if (!bcrypt.compareSync(req.body.password, userInfo.password)) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
-           let login =  await Device.findOne( {_user:userInfo._id}).exec()
-           if(login)console.log("--login",login)
-           else console.log("--notttt",not)
+        if (md5(req.body.password) !== userInfo.password) return res.status(400).json({ status: false, message: "Invalid password!!!", data: null });
+        let login = await Device.findOne({ _user: userInfo._id }).exec()
+        if (login) console.log("--login", login)
+        else console.log("--notttt", not)
         const token = await jwt.sign({ id: userInfo._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
         return res.json({ status: true, message: "user found!!!", data: { user: userInfo, token: token } });
 
@@ -219,7 +226,7 @@ exports.authenticate = async (req, res) => {
     }
 exports.adminlist = async (req, res) => {
     try {
-        let users = await User.find({ role_id: { $nin: [[], null] } }).lean();
+        let users = await User.find({ role_id: { $nin: [[], null] } }).populate('role_id').lean();
         if (!users) return res.render('admin/admin/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/admin/list', { menu: "users", submenu: "adminlist", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {

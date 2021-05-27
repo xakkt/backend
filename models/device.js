@@ -21,6 +21,6 @@ const deviceSchema = Schema({
   //   type: String,
   //   required: true
   // }
-}, {timestampst:true});
+}, {timestamps:true});
 
 module.exports = mongoose.model('Device', deviceSchema);

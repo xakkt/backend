@@ -78,6 +78,9 @@
                 </button>
               </div>
             </div>
+            <div class="msg" style="display:none;">
+              Duplicate store selected
+            </div>
             <!-- /.card-header -->
             <div class="card-body">
               <form id="productForm" method="post" action="/admin/regularprice/update">
@@ -95,12 +98,11 @@
                     <tbody>
 
                       <input type="hidden" id="store" value="" name="no_of_stores" />
-                      <% console.log("-regulsr",regularPrice) %>
                       <% if(regularPrice.length){  %>
                       <% regularPrice.forEach(function(regularPrice){ %>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select" required>
+                          <select name="store[]" onchange="checkDuplicateEntry(this)" class="form-control custom-select store-name" required>
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
                             <option <%=(store._id.equals(regularPrice._store))?'selected':''%> value="<%=store._id%>"><%=store.name%></option>
@@ -122,7 +124,7 @@
                       <%} else {%>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]" class="form-control custom-select" required>
+                          <select name="store[]"  onchange="checkDuplicateEntry(this)" class="form-control custom-select store-name" required>
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
                             <option value="<%=store._id%>"><%=store.name%></option>
@@ -150,8 +152,8 @@
                       <span class="input-group-btn">
                       </span>
                       <div class="card-footer">
-                        <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add">
-                        <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                        <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add add">
+                        <button type="submit" value="submit" class="btn btn-primary submit">Submit</button>
                       </div>
               </form>
             </div>
@@ -187,6 +189,35 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
+      function checkDuplicateEntry(that) {
+      let parentEle = that.parentElement.parentElement
+      let store = parentEle.getElementsByClassName("store-name")[0].value
+      let stores = document.getElementsByClassName("store-name")
+      let flag = 0
+      let totalRows = stores.length
+      for (var i = 0; i < totalRows; i++) {
+        if (stores[i].value == store) {
+          flag += 1
+        } 
+      }
+      if (flag > 1) {
+        $('.msg').show()
+        $('.add').prop('disabled', true).css('background-color', 'red')
+        $('.submit').prop('disabled', true).css('background-color', 'red');
+        parentEle.getElementsByClassName("store-name")[0].style.border = '1px solid red'
+      }
+      else {
+        $('.add').prop('disabled', false).css('background-color', '')
+        parentEle.getElementsByClassName("store-name")[0].style.border = '#fff'
+        $('.msg').hide()
+        $('.submit').prop('disabled', false);
+        $('.submit').addClass('btn btn-primary ').css('background-color', '')
+
+      }
+    }
+
+
+
     $(function () {
       bsCustomFileInput.init();
     });

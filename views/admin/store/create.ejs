@@ -98,7 +98,14 @@
                       <label for="">Address</label>
                       <input type="text" class="form-control" id="address" name="address" placeholder="Address">
                     </div>
-
+                    <div class="form-group">
+                      <label>Currency</label>
+                      <select class="select2" data-placeholder="Select a currency" name="currency" style="width: 100%;">
+                        <% currency.forEach(function(currency){ %>
+                        <option value="<%=currency._id%>"><%=currency.name%></option>
+                        <%})%>
+                      </select>
+                    </div>
                     <div class="form-group">
                       <label>Country</label>
                       <select class="select2" data-placeholder="Select a State" name="country" style="width: 100%;">
@@ -143,7 +150,7 @@
                       <label for="tz">Timezone</label>
                       <select class="select2" data-placeholder="Select a Timezone" name="timezone" style="width: 100%;">
                         <% timezone.forEach(function(timezone){ %>
-                        <option value="<%=timezone._id%>"><%=timezone.value%></option>
+                        <option value="<%=timezone%>"><%=timezone%></option>
                         <%})%>
                       </select>
                     </div>

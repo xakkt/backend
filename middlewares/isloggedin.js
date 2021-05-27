@@ -4,7 +4,8 @@ const Permission = require('../models/permission');
 const { check } = require('../controllers/admin/userController');
 
 
-module.exports =  (req, res, next)=>{
+module.exports = async (req, res, next)=>{
+    console.log(req.body)
     if (req.session.email) { 
         res.locals.user = req.session.userid
         res.locals.roleid = req.session.roleid
@@ -13,8 +14,9 @@ module.exports =  (req, res, next)=>{
             if(!permission) return false
             return true
            }
+           
            res.locals.admin = async (value, id) => {
-               const role = await User.findOne({_id:id}).populate({
+               const role = await User.findOne({_id:req.session.userid}).populate({
                    path: 'role_id', 
                    model: 'Role', 
                    match: {

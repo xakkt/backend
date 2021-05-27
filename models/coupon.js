@@ -15,10 +15,14 @@ const couponSchema = Schema({
     type: Number,
     required: true
   },
+  min_amount:{
+    type: Number,
+    required: true
+  },
   _store:{
     type: String,
     // required: true
   }
-}, {timestampst:true});
+}, {timestamps:true});
 
 module.exports = mongoose.model('Coupon', couponSchema);

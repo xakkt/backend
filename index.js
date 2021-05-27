@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
 const mongoose = require('./config/database')
 const path = require('path')
 var { flash } = require('express-flash-message');
@@ -15,6 +16,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
+
+
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
 //moment.tz.setDefault("America/New_York");
@@ -29,8 +32,17 @@ var sess = {
 }*/
 
 app.use(session(sess))
+app.use(cookieParser())
+
+app.use(function(req, res, next) {
+  res.locals.user = 'xakkt';
+  next();
+});
+
+
 app.use(flash({ sessionKeyName: 'xakktFlashMessages' })); 
 const adminRoute = require('./routes/admin')
+const frontendRoute = require('./routes/frontend')
 const mobileApi = require('./routes/api')
 app.use(bodyParser.urlencoded({ extended: true }))
 // connection to mongodb
@@ -73,10 +85,20 @@ io.on('connection', function (socket) {
   });
 
 });
-
+//  app.get('/',(req, res)=> {
+//        return  res.render('frontend/index')
+//   })
+//   app.get('/about',(req, res)=> {
+//     return  res.render('frontend/about')
+// })
+// app.get('/contact',(req, res)=> {
+//   return  res.render('frontend/contact')
+// })
 
 
 app.use('/admin', adminRoute);
+app.use('/', frontendRoute);
+
 
 
 app.use('/api/v1', mobileApi);

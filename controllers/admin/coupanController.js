@@ -19,7 +19,8 @@ exports.create = async (req, res) => {
                 coupon_code: req.body.coupanname,
                 _store: req.body.store,
                 apply: req.body.coupan_applied,
-                amount: req.body.amount
+                amount: req.body.amount,
+                min_amount:req.body.min_amount
             }
             // categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
             const coupon = await Coupon.create(couponinfo);
@@ -104,7 +105,9 @@ exports.update = async function (req, res) {
             coupon_code: req.body.coupanname,
             _store: req.body.store,
             apply: req.body.coupan_applied,
-            amount: req.body.amount
+            amount: req.body.amount,
+            min_amount:req.body.min_amount
+
         }
 
         const coupon = await Coupon.findByIdAndUpdate({ _id: req.params.id }, couponinfo, { new: true, upsert: true });

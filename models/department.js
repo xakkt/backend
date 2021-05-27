@@ -7,7 +7,7 @@ const departmentSchema = Schema({
     name: {
         type: String,
         required: true,
-        unique: true
+        unique: false
     },
     no_of_stores: {
         type: Number,
@@ -15,7 +15,7 @@ const departmentSchema = Schema({
     },
    description: {
         type: String,
-        required: true
+        required: false
     },
     logo: {
         type: String,

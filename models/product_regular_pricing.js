@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
-
 const productRegularPricingSchema = new Schema({ 
      _product: {
         type: Schema.Types.ObjectId,

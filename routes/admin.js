@@ -4,7 +4,6 @@ const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
 var isloggedin = require('../middlewares/isloggedin')
-
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
 const productController = require('../controllers/admin/productController')
@@ -19,6 +18,9 @@ const bannerController = require('../controllers/admin/bannerController.js')
 const compController = require('../controllers/admin/compController.js')
 const uploadController = require('../controllers/admin/uploadController.js')
 const coupanController = require('../controllers/admin/coupanController.js')
+const dashboardController = require('../controllers/admin/dashboardController.js')
+const orderController = require('../controllers/admin/orderController.js')
+const currencyController = require('../controllers/admin/currencyController.js')
 
 
 // var auth = function(req, res, next) {
@@ -102,9 +104,10 @@ const storeValidation = [
   verifyjwt.checkToken
 ]
 
-router.get('/',isloggedin,(req,res)=>{
-      res.render('admin/index',{ menu:"dashboard"}) 
-});
+router.get('/',isloggedin,dashboardController.dashboard)
+// (req,res)=>{
+//       res.render('admin/index',{ menu:"dashboard"}) 
+// });
 
 /*------------ User ---------*/
 router.get('/users',isloggedin,userController.list)
@@ -131,6 +134,7 @@ router.post('/store/save',isloggedin,_global.permission('store_add'),storeContro
 router.get('/store/edit/:storeid',isloggedin,_global.permission('store_edit'),storeController.editStore)
 router.get('/store/delete/:id',isloggedin,_global.permission('store_delete'), storeController.deleteStore);
 router.post('/store/update/:id', isloggedin,_global.permission('store_edit'),storeController.updateStore)
+
 
 
 /*------------ Products --------*/
@@ -235,7 +239,7 @@ router.post('/unit/edit/:id',isloggedin,unitController.update)
 router.get('/unit/delete/:id',isloggedin,unitController.delete)
 
  /*----------Banner -------*/
- router.get('/banner',isloggedin,bannerController.create)
+ router.get('/banner/create',isloggedin,bannerController.create)
  router.post('/banner/deal',isloggedin,bannerController.deals)
  router.post('/banner/save',isloggedin,bannerUpload.single('logo'),bannerController.save)
  router.get('/banner/list',isloggedin,bannerController.list)
@@ -267,5 +271,17 @@ router.get('/coupon/list',isloggedin,coupanController.listing)
 router.get('/coupon/delete/:id',isloggedin,coupanController.delete) 
 router.get('/coupon/edit/:id',isloggedin,coupanController.edit) 
 router.post('/coupon/update/:id',isloggedin,coupanController.update) 
+
+/*****Order ******/
+router.get('/order/list',isloggedin,orderController.listing) 
+router.get('/order/edit/:id',isloggedin,orderController.edit) 
+router.post('/order/update/:id',isloggedin,orderController.update) 
+/******Currecny******/
+router.post('/currency/add',isloggedin,currencyController.save) 
+router.get('/currency/create',isloggedin,currencyController.create) 
+router.get('/currency/list',isloggedin,currencyController.list) 
+router.get('/currency/delete/:id',isloggedin,currencyController.delete) 
+router.get('/currency/edit/:id',isloggedin,currencyController.edit) 
+router.post('/currency/update/:id',isloggedin,currencyController.update) 
 
 module.exports = router;

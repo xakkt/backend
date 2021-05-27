@@ -12,7 +12,6 @@ exports.create = async (req, res) => {
     }
 }
 exports.save = async (req, res) => {
-    console.log(req.body)
     try {
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
@@ -22,7 +21,7 @@ exports.save = async (req, res) => {
         const dealinfo = {
             name: req.body.name,
             description: req.body.description,
-            store_id: req.body.store
+            _store: req.body.store
         }
 
         // categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
@@ -79,7 +78,7 @@ exports.update = async function (req, res) {
         const dealinfo = {
             name: req.body.name,
             description: req.body.description,
-            store_id: req.body.store
+            _store: req.body.store
         }
         const deal = await Deal.findByIdAndUpdate({ _id: req.params.id }, dealinfo, { new: true, upsert: true });
         if (deal) {

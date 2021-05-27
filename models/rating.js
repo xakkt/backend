@@ -32,7 +32,7 @@ const RateSchema = Schema({
   },
 
 
-}, { timestampst: true });
+}, { timestamps: true });
 
 RateSchema.plugin(uniqueValidator)
 module.exports = mongoose.model('Rating', RateSchema);
