@@ -206,8 +206,8 @@ exports.agreement = async (req, res) => {
 exports.update = async (req, res) => {
     try {
 
-        console.log("req.pra", req.params.id)
-        const baanerinfo = {}
+        const baanerinfo = {
+        }
         if (req.file) {
             baanerinfo.image = req.file.filename
         }
@@ -220,10 +220,9 @@ exports.update = async (req, res) => {
             status: false,
             message: "Data not saved"
         })
-        return res.json({
-            status: true,
-            message: "Data Updated"
-        })
+        await req.flash('success', 'Banner updated successfully!');
+      return  res.redirect('/admin/banner/list')
+      
 
     } catch (err) {
         console.log("--err", err)

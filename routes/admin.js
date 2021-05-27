@@ -245,7 +245,7 @@ router.get('/unit/delete/:id',isloggedin,unitController.delete)
  router.get('/banner/list',isloggedin,bannerController.list)
  router.get('/banner/delete/:id',isloggedin,bannerController.delete)
  router.get('/banner/edit/:id',isloggedin,bannerController.edit)
- router.post('/banner/update/:id',isloggedin,bannerUpload.single('banner_image'),bannerController.update)
+ router.post('/banner/update/:id',isloggedin,bannerUpload.single('logo'),bannerController.update)
  router.get('/banner/agreement',isloggedin,bannerController.agreement)
 
 
