@@ -108,7 +108,7 @@
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="logo" class="custom-file-input"
-                                                        accept="image/png,image/jpeg" id="departmentLogo">
+                                                        accept="image/png,image/jpeg" id="departmentLogo" class="departmentLogo">
                                                     <label class="custom-file-label" for="departmentLogo">Choose
                                                         file</label>
                                                 </div>
@@ -210,15 +210,28 @@
 
             $('#bannerForm').validate({
                 rules: {
-                    name: {
+                    logo: {
                         required: true
                     },
+                    store:{
+                        required:true
+                    },
+                    deal:{
+                        required:true
+
+                    }
 
                 },
                 messages: {
-                    name: {
-                        required: "Please enter a department name"
+                    logo: {
+                        required: "Please upload banner"
                     },
+                    store:{
+                        required:"Please select store"
+                    },
+                    deal:{
+                        required:"Please select deal"
+                    }
 
 
                 },
