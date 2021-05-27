@@ -101,15 +101,19 @@ exports.dashboard = async (req, res) => {
 		}).lean();
 		let data = []
 		 banners.filter(item => {
-			data.push(JSON.stringify(item._deal))
+			data.push(item._deal)
 		})
-			let bannerss = await Banner.find({
+		console.log("==dataa",typeof(data[0]))
+		// if(data.length > 0)
+		// {
+			 var	bannerss = await Banner.find({
 			_store:req.params.storeid,
-			 _deal:{
-				 $in :JSON.parse(data)
+			 _deal: {
+				 $in :data
 				}
 			 }
 		).lean()
+			console.log("------,",bannerss)
 		if (!bannerss) return res.json({
 			status: "false",
 			message: "No setting found",
