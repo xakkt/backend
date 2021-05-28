@@ -1,13 +1,17 @@
 const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
+const Store = require('../../models/store');
+
 let jwt = require('jsonwebtoken');
 const Setting = require('../../models/setting')
 const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
+
 const _time = require('../../helper/storetimezone')
 
 const StoreProductPricing = require('../../models/store_product_pricing')
 var moment = require('moment');
+const store = require('../../models/store');
 
 function getUniqueListBy(product, key) {
 	return [...new Map(product.map(item => [item[key], item])).values()]
@@ -33,6 +37,15 @@ exports.dashboard = async (req, res) => {
 			});
 
 		}
+	let storedata =  await Store.findOne({_id:req.params.storeid}).lean()
+	let latlong =	await Store.find({ location :  { $near :	{ $geometry :  
+			{ type : "Point", coordinates :storedata.location.coordinates }, $maxDistance:50000	}  } 
+	} )
+	var storeId =[]
+	  latlong.filter((item) =>{
+		  storeId.push(item._id)
+	  })
+	  console.log("--data",storeId)
 		var cartProductList = []
 		var wishlistids = []
 		var shoppinglistProductIds = []
@@ -86,7 +99,9 @@ exports.dashboard = async (req, res) => {
 		product = getUniqueListBy(product, '_id')
 		let banners =  await StoreProductPricing.find({
 			  	$and: [{
-					_store:req.params.storeid
+					_store:{
+						$in:storeId
+					}
 				},
 				{
 					deal_start: {
@@ -103,17 +118,17 @@ exports.dashboard = async (req, res) => {
 		 banners.filter(item => {
 			data.push(item._deal)
 		})
-		console.log("==dataa",typeof(data[0]))
-		// if(data.length > 0)
-		// {
-			 var	bannerss = await Banner.find({
-			_store:req.params.storeid,
+			 var bannerss = await Banner.find({
+			_store:{
+				$in:storeId
+			},
 			 _deal: {
 				 $in :data
 				}
 			 }
 		).lean()
-			console.log("------,",bannerss)
+		console.log("--banner",bannerss)
+
 		if (!bannerss) return res.json({
 			status: "false",
 			message: "No setting found",

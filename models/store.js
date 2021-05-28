@@ -116,6 +116,7 @@ const storeSchema = new Schema({
             type: [Number],
             required: false
         }
+
     },
     contact_no: {
         type: String,
