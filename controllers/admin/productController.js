@@ -389,8 +389,8 @@ exports.addPrice = async (req, res) => {
         var deal = [];
          var product =  await Product.findOne({_id:req.params.productid}).lean()
         var brands = await Brand.find({}).lean()
-        var deals = await Deals.find({}).lean();
-        var stores = await Stores.find({}).populate('_currency').lean();
+        var deals = await Deals.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
+        var stores = await Stores.find({}).populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
         var regularPrice = await RegularPrice.find({}).lean()
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
         if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, productName:product, brands: brands, deals: '', price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
