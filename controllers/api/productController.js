@@ -32,7 +32,7 @@ exports.list = async (req, res) => {
 					$nin: productId
 				}
 			}).populate('_product')
-			if (stores.length) {
+			if (stores.length >0) {
 				// return res.json({
 				// 	status: 0,
 				// 	message: "No data found",

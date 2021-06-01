@@ -197,6 +197,41 @@
       let values = that.value
       that.value = (values.indexOf(".") >= 0) ? (values.substr(0, values.indexOf(".")) + values.substr(values.indexOf("."), 3)) : values;
   })
+  $(function () {
+      $('#productForm').validate({
+        rules: {
+          store:{
+            required:true
+          },
+          regular_price:{
+            required:true
+          }
+        
+        },
+        messages: {
+          store: {
+            required: "Please select a store"
+          },
+          regular_price:{
+            required: "Please entery a price"
+          }
+        },
+        // errorElement: 'span',
+        submitHandler: function(form) {
+         form.submit();
+        }
+        // errorPlacement: function (error, element) {
+        //   error.addClass('invalid-feedback');
+        //   element.closest('.form-group').append(error);
+        // },
+        // highlight: function (element, errorClass, validClass) {
+        //   $(element).addClass('is-invalid');
+        // },
+        // unhighlight: function (element, errorClass, validClass) {
+        //   $(element).removeClass('is-invalid');
+        // }
+      });
+    });
     function checkDuplicateEntry(that) {
       let parentEle = that.parentElement.parentElement
       let store = parentEle.getElementsByClassName("store-name")[0].value
@@ -229,29 +264,6 @@
       bsCustomFileInput.init();
     });
 
-    $(function () {
-
-
-      $('#productForm').validate({
-        rules: {
-
-        },
-        messages: {
-
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
-        }
-      });
-    });
     $(function () {
 
       $(".tr_clone_add").click(function (e) {

@@ -223,6 +223,7 @@ exports.productupdate = async function (req, res) {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        console.log("--req",req.body)
         const productinfo = {
             name: {
                 english: req.body.en_name
@@ -235,9 +236,9 @@ exports.productupdate = async function (req, res) {
             is_featured: req.body.is_featured,
             price: req.body.price,
             _unit: req.body.unit,
-
+            cuisine:req.body.cuisine,
             status: req.body.status,
-
+            brand_id:req.body.brand
         }
         if (req.file) { productinfo.image = req.file.filename }
         const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: true, upsert: true });

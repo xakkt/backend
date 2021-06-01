@@ -195,7 +195,8 @@
                       <select name="brand" class="form-control custom-select" id="brand">
                         <option value="">Choose one</option>
                         <% if(brands) brands.forEach(function(brand){ %>
-                        <option value="<%=brand._id%>"><%=brand.name%></option>
+                        <option value="<%=brand._id%>" <%=(brand._id.toString().indexOf(product.brand_id.toString()!=-1))?'selected':''%>
+                          ><%=brand.name%></option>
                         <% }) %>
                       </select>
                     </div>
