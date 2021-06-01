@@ -5,7 +5,7 @@ const StoreProductPricing = require('../../models/store_product_pricing');
 
 exports.create = async (req, res) => {
     try {
-        var store = await Store.find({}).lean();
+        var store = await Store.find({}).sort({'name': 1}).lean();
         var regularPrice = await RegularPrice.aggregate([
             {$lookup: {from: "stores", localField: "_store", foreignField: "_id", as: "store"}},
             {$sort: {"store.name": 1}},
@@ -32,7 +32,6 @@ exports.create = async (req, res) => {
 
 exports.addprice = async (req, res) => {
     try {
-        console.log("---eim here",req.body)
         const arr = [];
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
@@ -41,7 +40,6 @@ exports.addprice = async (req, res) => {
             data._product = req.body.productid
             data._user = req.session.userid
             await RegularPrice.findOneAndUpdate({_store:req.body.store[i],_product:req.body.productid}, data, {
-                // new: true,
                 upsert: true // Make this update into an upsert
               })
             // arr.push(data)
