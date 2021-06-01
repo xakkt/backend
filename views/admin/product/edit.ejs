@@ -136,6 +136,9 @@
                       <label for="sku">SKU</label>
                       <input type="text" name="sku" value="<%= product.sku %>" class="form-control" id="sku"
                         placeholder="Enter SKU">
+                        <div class="message" style="display:none;">
+                          <span style="color:red">Duplicate sku number</span>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -181,7 +184,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="featured">Temporary2</label>
-                      <select name="Featured" id="status" class="form-control custom-select">
+                      <select name="Featured" id="" class="form-control custom-select">
                         <option value="true">No</option>
                         <option value="false">Yes</option>
                       </select>
