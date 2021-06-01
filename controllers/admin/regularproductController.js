@@ -5,7 +5,7 @@ const StoreProductPricing = require('../../models/store_product_pricing');
 
 exports.create = async (req, res) => {
     try {
-        var store = await Store.find({}).sort({'name': 1}).lean();
+        var store = await Store.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
         var regularPrice = await RegularPrice.aggregate([
             {$lookup: {from: "stores", localField: "_store", foreignField: "_id", as: "store"}},
             {$sort: {"store.name": 1}},
