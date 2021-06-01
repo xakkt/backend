@@ -63,6 +63,10 @@ const productSchema = new Schema({
     type: Number,
     required: false
   },
+  cuisine:{
+  type:String,
+  required:true
+  },
   valid_from: {
     type: Date,
     //required: true,

@@ -156,6 +156,7 @@ exports.productsave = async (req, res) => {
             is_featured: req.body.is_featured,
             _unit: req.body.unit,
             price: req.body.price,
+            cuisine:req.body.cuisine,
             status: req.body.status,
             brand_id: req.body.brand
 
@@ -447,6 +448,23 @@ exports.product_listing = async (req, res) => {
 
 exports.product_delete = async (req, res) => {
     try {
+        let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
+        if (!remove) return res.json({ status: false })
+        return res.json({ status: true })
+    } catch (err) {
+        res.send(err)
+    }
+}
+exports.unique_sku = async (req, res) => {
+    try {
+        console.log("--req",req.body)
+
+       let sku =  await Product.findOne({sku:req.body.sku}).lean()
+       if(sku)
+       {
+        return res.send({ status: false })
+       }
+       return res.send({status:true})
         let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
         if (!remove) return res.json({ status: false })
         return res.json({ status: true })

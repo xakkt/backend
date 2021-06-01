@@ -164,18 +164,20 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
-
-                    <div class="form-group">
-                      <label for="mostsaved">Temporary1</label>
-                      <select id="mostsaved" class="form-control custom-select">
-                        <option selected="" disabled="">Select one</option>
-                        <option>No</option>
-                        <option>Yes</option>
-                      </select>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="mostsaved">Cuisine</label>
+                        <select name="cuisine" id="mostsaved" class="form-control custom-select">
+                          <option selected="" disabled="">Select one</option>
+                          <option value="India"  <%= (product.cuisine == 'India')? 'selected':'' %>>India</option>
+                          <option <%= (product.cuisine == 'American')? 'selected':'' %> value="American">American</option>
+                          <option  value="MiddleEastern"<%= (product.cuisine == 'MiddleEastern')? 'selected':'' %> >Middle Eastern</option>
+                          <option  value="Hispanic" <%= (product.cuisine == 'Hispanic')?'selected':'' %>>Hispanic</option>
+                          <option  value="Japanese" <%= (product.cuisine == 'Japanese')? 'selected':'' %>>Japanese</option>
+                          <option  value="Chinese"<%= (product.cuisine == 'Chinese')? 'selected':'' %> >Chinese</option>
+                        </select>
+                      </div>
                     </div>
-
-                  </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="featured">Temporary2</label>

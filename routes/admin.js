@@ -151,8 +151,8 @@ router.get('/product/pricing/:productid',isloggedin,productController.addPrice);
 router.get('/product/create',isloggedin, productController.productCreate)
 router.post('/product_price/create',isloggedin, productController.priceSave)
 router.post('/product_price/remove',isloggedin, productController.remove)
-
 router.get('/product/list',isloggedin,_global.permission('product_view'),productController.product_listing)
+router.post('/product/sku',isloggedin,_global.permission('product_view'),productController.unique_sku)
 
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {

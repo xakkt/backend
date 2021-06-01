@@ -45,7 +45,6 @@ exports.dashboard = async (req, res) => {
 	  latlong.filter((item) =>{
 		  storeId.push(item._id)
 	  })
-	  console.log("--data",storeId)
 		var cartProductList = []
 		var wishlistids = []
 		var shoppinglistProductIds = []

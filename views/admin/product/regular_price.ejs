@@ -102,21 +102,22 @@
                       <% regularPrice.forEach(function(regularPrice){ %>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]" onchange="checkDuplicateEntry(this)" class="form-control custom-select store-name" required>
+                          <select name="store[]" onchange="checkDuplicateEntry(this)"
+                            class="form-control custom-select store-name" required>
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
-                            <option <%=(store._id.equals(regularPrice._store))?'selected':''%> value="<%=store._id%>"><%=store.name%></option>
+                            <option <%=(store._id.equals(regularPrice._store))?'selected':''%> value="<%=store._id%>">
+                              <%=store.name%></option>
                             <% }) %>
                           </select>
                         </td>
-                    
-                        <td style="width:10%"> <input type="number" name="regular_price[]" value="<%= regularPrice.regular_price %>"
-                            class="form-control" required> </td>
-                       
+
+                        <td style="width:10%"> <input type="number" name="regular_price[]"
+                            value="<%= regularPrice.regular_price %>"  onchange="regularPrice(this)" class="form-control regular_price" required> </td>
                         <td>
 
-                          <i class="fa fa-trash tr_clone_remove" data-id="<%= regularPrice._id %>" onclick="myFunction(this)"
-                            aria-hidden="true"></i>
+                          <i class="fa fa-trash tr_clone_remove" data-id="<%= regularPrice._id %>"
+                            onclick="myFunction(this)" aria-hidden="true"></i>
 
                         </td>
                       </tr>
@@ -124,7 +125,8 @@
                       <%} else {%>
                       <tr class="tr_clone">
                         <td style="width:18%">
-                          <select name="store[]"  onchange="checkDuplicateEntry(this)" class="form-control custom-select store-name" required>
+                          <select name="store[]" onchange="checkDuplicateEntry(this)"
+                            class="form-control custom-select store-name" required>
                             <option value="">Select stores</option>
                             <% if(stores) stores.forEach(function(store){ %>
                             <option value="<%=store._id%>"><%=store.name%></option>
@@ -132,8 +134,8 @@
                           </select>
                         </td>
 
-                       
-                        <td style="width:10%"> <input type="number" name="regular_price[]" class="form-control"
+
+                        <td style="width:10%"> <input type="number" name="regular_price[]"  onchange="regularPrice(this)" class="form-control regular_price"
                             required> </td>
                         <td>
                           <i class="fa fa-trash tr_clone_remove" onclick="myFunction(this)" data-id=""
@@ -152,7 +154,8 @@
                       <span class="input-group-btn">
                       </span>
                       <div class="card-footer">
-                        <input type="button" name="add" value="Add" id="tr_clone_add" class="btn btn-primary tr_clone_add add">
+                        <input type="button" name="add" value="Add" id="tr_clone_add"
+                          class="btn btn-primary tr_clone_add add">
                         <button type="submit" value="submit" class="btn btn-primary submit">Submit</button>
                       </div>
               </form>
@@ -189,7 +192,12 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
-      function checkDuplicateEntry(that) {
+  $(document).on("input", '.regular_price', function (e) {
+    let that = e.target
+      let values = that.value
+      that.value = (values.indexOf(".") >= 0) ? (values.substr(0, values.indexOf(".")) + values.substr(values.indexOf("."), 3)) : values;
+  })
+    function checkDuplicateEntry(that) {
       let parentEle = that.parentElement.parentElement
       let store = parentEle.getElementsByClassName("store-name")[0].value
       let stores = document.getElementsByClassName("store-name")
@@ -198,15 +206,14 @@
       for (var i = 0; i < totalRows; i++) {
         if (stores[i].value == store) {
           flag += 1
-        } 
+        }
       }
       if (flag > 1) {
         $('.msg').show()
         $('.add').prop('disabled', true).css('background-color', 'red')
         $('.submit').prop('disabled', true).css('background-color', 'red');
         parentEle.getElementsByClassName("store-name")[0].style.border = '1px solid red'
-      }
-      else {
+      } else {
         $('.add').prop('disabled', false).css('background-color', '')
         parentEle.getElementsByClassName("store-name")[0].style.border = '#fff'
         $('.msg').hide()
@@ -248,10 +255,10 @@
     $(function () {
 
       $(".tr_clone_add").click(function (e) {
-
         var $tr = $('.tr_clone').first();
         var $clone = $tr.clone();
-        $clone.find(':text').val('');
+        $clone.find('input').val('');
+        $clone.find('select').val('')
         $(".tr_clone:last").after($clone)
       });
     })
@@ -261,6 +268,7 @@
       $('#store').val(rowCount);
 
     });
+
     function myFunction(that) {
 
       if ($(that).data("id").trim() == "") {

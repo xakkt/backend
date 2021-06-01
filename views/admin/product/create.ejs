@@ -90,7 +90,7 @@
                       <select name="_category" class="form-control custom-select" id="_category">
                         <option value="">Choose one</option>
                         <% if(productCategories) productCategories.forEach(function(category){ %>
-                          <option value="<%=category._id%>"><%=category.name%></option>
+                        <option value="<%=category._id%>"><%=category.name%></option>
                         <% }) %>
                       </select>
                     </div>
@@ -103,7 +103,7 @@
                       <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
                     </div>
                   </div>
-                
+
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Short Description</label>
@@ -112,7 +112,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
@@ -131,9 +131,13 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="sku">SKU</label>
-                      <input type="text" name="sku" class="form-control" id="sku" placeholder="SKU code">
+                      <input type="text" name="sku" class="form-control skuId" id="sku" placeholder="SKU code">
+                      <div class="message" style="display:none;">
+                        <span style="color:red">Duplicate sku number</span>
+                      </div>
                     </div>
                   </div>
+                
                 </div>
                 <div class="row">
                   <div class="col-md-6">
@@ -142,7 +146,7 @@
                       <select name="unit" class="form-control custom-select" id="unit">
                         <option value="">Choose one</option>
                         <% if(unit) unit.forEach(function(unit){ %>
-                          <option value="<%=unit._id%>"><%=unit.name%></option>
+                        <option value="<%=unit._id%>"><%=unit.name%></option>
                         <% }) %>
                       </select>
                     </div>
@@ -153,19 +157,19 @@
                       <input type="number" name="weight" class="form-control" id="weight" placeholder="Weight">
                     </div>
                   </div>
-                
-               </div>
-               <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="status">Status</label>
-                    <select name="status" class="form-control custom-select" id="status">
-                      <option value="true">Active</option>
-                      <option value="false">Inactive</option>
-                    </select>
-                  </div>
+
                 </div>
-                 
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="status">Status</label>
+                      <select name="status" class="form-control custom-select" id="status">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="featured">Temporary2</label>
@@ -177,44 +181,49 @@
                   </div>
                 </div>
                 <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="brands">Brand</label>
-                    <select name="brand" class="form-control custom-select" id="brand">
-                      <option value="">Choose one</option>
-                      <% if(brands) brands.forEach(function(brand){ %>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="brands">Brand</label>
+                      <select name="brand" class="form-control custom-select" id="brand">
+                        <option value="">Choose one</option>
+                        <% if(brands) brands.forEach(function(brand){ %>
                         <option value="<%=brand._id%>"><%=brand.name%></option>
-                      <% }) %>
-                    </select>
+                        <% }) %>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="deals">Temporary3</label>
-                    <select name="deal" class="form-control custom-select" id="deals">
-                      <option value="">Select one</option>
-                      <% if(deals) deals.forEach(function(deal){ %>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="deals">Temporary3</label>
+                      <select name="deal" class="form-control custom-select" id="deals">
+                        <option value="">Select one</option>
+                        <% if(deals) deals.forEach(function(deal){ %>
                         <option value="<%=deal._id%>"><%=deal.name%></option>
-                      <% }) %>
-                    </select>
+                        <% }) %>
+                      </select>
+                    </div>
                   </div>
-                </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="mostsaved">Temporary1</label>
-                      <select id="mostsaved" class="form-control custom-select">
+                      <label for="mostsaved">Cuisine</label>
+                      <select name="cuisine" id="mostsaved" class="form-control custom-select">
                         <option selected="" disabled="">Select one</option>
-                        <option>No</option>
-                        <option>Yes</option>
+                        <option value="India">India</option>
+                        <option value="American">American</option>
+                        <option value="Middle Eastern">Middle Eastern</option>
+                        <option value="Hispanic">Hispanic</option>
+                        <option value="Hispanic">Hispanic</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Chinese">Chinese</option>
                       </select>
                     </div>
                   </div>
-                  </div>
+                </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" name ="submit" class="btn btn-primary submit">Submit</button>
                 </div>
               </form>
             </div>
@@ -252,6 +261,39 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
+    $(".skuId").change(function () {
+      let formdata = {
+        "sku": $(this).val()
+      }
+      $.ajax({
+        url: '/admin/product/sku',
+        type: 'POST',
+        data: formdata
+      }).done((data) => {
+        if (!data.status) {
+          $('.message').show();
+          $('.submit').prop('disabled', true).css('background-color', 'red');
+        }else{
+        $('.message').hide();
+        $('.submit').prop('disabled', false);
+        $('.submit').addClass('btn btn-primary ').css('background-color', '')
+        }
+      })
+    })
+
+    $(function () {
+      $.ajax({
+        url: '/admin/product/delete',
+        type: 'POST',
+        data: {
+          id: fruitsGranted
+        },
+
+      }).done((data) => {
+
+      })
+    })
+
     $(function () {
       bsCustomFileInput.init();
     });
@@ -269,11 +311,11 @@
           logo: {
             required: true
           },
-          sku:{
-            required:true
+          sku: {
+            required: true
           },
-          weight:{
-            required:true
+          weight: {
+            required: true
           }
         },
         messages: {
@@ -286,11 +328,11 @@
           logo: {
             required: "Please select an image"
           },
-          sku:{
-            required:"Please enter unique sku code"
+          sku: {
+            required: "Please enter unique sku code"
           },
-          weight:{
-            required:"Please enter weight value"
+          weight: {
+            required: "Please enter weight value"
           }
         },
         errorElement: 'span',
