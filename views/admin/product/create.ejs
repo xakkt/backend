@@ -79,8 +79,8 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="departmentname">Name</label>
-                      <input type="text" name="en_name" class="form-control" id="departmentname"
+                      <label for="productname">Name</label>
+                      <input type="text" name="en_name" class="form-control" id="productname"
                         placeholder="Enter name">
                     </div>
                   </div>
@@ -131,7 +131,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="sku">SKU</label>
-                      <input type="text" name="sku" class="form-control skuId" id="sku" placeholder="SKU code">
+                      <input type="text" name="sku" class="form-control" id="sku" placeholder="SKU code">
                       <div class="message" style="display:none;">
                         <span style="color:red">Duplicate sku number</span>
                       </div>
@@ -173,7 +173,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="featured">Temporary2</label>
-                      <select name="featured" id="status" class="form-control custom-select">
+                      <select name="featured" id="" class="form-control custom-select">
                         <option value="true">No</option>
                         <option value="false">Yes</option>
                       </select>
@@ -260,7 +260,7 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
-    $(".skuId").change(function () {
+    $("#sku").keyup(function () {
       let formdata = {
         "sku": $(this).val()
       }
