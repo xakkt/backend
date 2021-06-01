@@ -6,9 +6,10 @@ const StoreProductPricing = require('../../models/store_product_pricing');
 exports.create = async (req, res) => {
     try {
         var store = await Store.find({}).lean();
-        var regularPrice = await RegularPrice.find({
-            _product: req.params.productid
-        }).lean();
+        var regularPrice = await RegularPrice.aggregate([
+            {$lookup: {from: "stores", localField: "_store", foreignField: "_id", as: "store"}},
+            {$sort: {"store.name": 1}},
+         ])
         if (!regularPrice) return res.render('admin/product/regular_price', {
             menu: "RegularPrice",
             regularPrice: "",
@@ -31,23 +32,21 @@ exports.create = async (req, res) => {
 
 exports.addprice = async (req, res) => {
     try {
+        console.log("---eim here",req.body)
         const arr = [];
         for (i = 0; i < req.body.no_of_stores; i++) {
-            // await RegularPrice.findOne({_store:req.body.store[i],_product:req.body.prod});
             data = {};
             data.regular_price = req.body.regular_price[i];
             data._store = req.body.store[i]
             data._product = req.body.productid
             data._user = req.session.userid
             await RegularPrice.findOneAndUpdate({_store:req.body.store[i],_product:req.body.productid}, data, {
-                new: true,
+                // new: true,
                 upsert: true // Make this update into an upsert
               })
             // arr.push(data)
         }
             res.redirect('/admin/product')
-       
-     
 
     } catch (err) {
         console.log('===validation', err)
