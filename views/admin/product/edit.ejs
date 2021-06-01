@@ -251,6 +251,27 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
+
+$("#sku").keyup(function () {
+      let formdata = {
+        "sku": $(this).val()
+      }
+      $.ajax({
+        url: '/admin/product/sku',
+        type: 'POST',
+        data: formdata
+      }).done((data) => {
+        if (!data.status) {
+          $('.message').show();
+          $('.submit').prop('disabled', true).css('background-color', 'red');
+        }else{
+        $('.message').hide();
+        $('.submit').prop('disabled', false);
+        $('.submit').addClass('btn btn-primary ').css('background-color', '')
+        }
+      })
+    })
+    
     $(function () {
       bsCustomFileInput.init();
     });
