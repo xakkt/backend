@@ -35,9 +35,8 @@
     padding: 1px 0px;
     display: flex;
     color: red;
-    position: absolute;
     text-align: center;
-    margin-top: 1px;
+    margin-right: 37px;
     right: 100px;
   }
 
@@ -58,6 +57,12 @@
   #element.style {
     position: absolute;
     left: 20%;
+  }
+  .upload-icons{
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    margin-top: 9px;
   }
 </style>
 
@@ -119,13 +124,13 @@
                   <h3 class="card-title">All Products</h3>
                 </div>
                 <!-- /.card-header -->
-                <div class="container-fluid1">
+                <div class="container-fluid">
                   <form>
                     <input type="hidden" value=<%=(await check ('product_delete',roleid)) ? roleid:"" %> id="delete"
                       name="delete" />
                     <input type="hidden" value=<%=(await check ('product_edit',roleid)) ? roleid:"" %> id="edit"
                       name="edit" />
-                    <ul>
+                    <ul class="upload-icons">
                     <li id="dummies">
                       <a href="/dummy.csv" id="dummy" download>
                         <i class="fa fa-file-excel" aria-hidden="true"></i>
