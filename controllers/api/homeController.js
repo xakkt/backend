@@ -20,7 +20,7 @@ function getUniqueListBy(product, key) {
 exports.dashboard = async (req, res) => {
 	var userid;
 	var product = [];
-	await _time.store_time(req.params.storeid)
+	//await _time.store_time(req.params.storeid)
 	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 	try {
 		var userid
@@ -38,6 +38,12 @@ exports.dashboard = async (req, res) => {
 
 		}
 	let storedata =  await Store.findOne({_id:req.params.storeid}).lean()
+	if(!storedata){   
+		return res.json({
+			status: 0,
+			data: 'Store does not exists'
+		})
+	 }
 	let latlong =	await Store.find({ location :  { $near :	{ $geometry :  
 			{ type : "Point", coordinates :storedata.location.coordinates }, $maxDistance:50000	}  } 
 	} )

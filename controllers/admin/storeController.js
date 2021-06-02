@@ -242,7 +242,7 @@ exports.updateStore = async function (req, res) {
 				errors: errors.array()
 			});
 		}
-		var holiday_date = req.body.holiday.split('-').map((item) => item.trim())
+		//var holiday_date = req.body.holiday.split('-').map((item) => item.trim())
 		const storeinfo = {
 			name: req.body.name,
 			_department: req.body.department,
@@ -291,11 +291,11 @@ exports.updateStore = async function (req, res) {
 				},
 
 			},
-			holidays: {
+			/*holidays: {
 				startDate: holiday_date[0],
 				endDate: holiday_date[1],
 				message: req.body.holiday_message
-			}
+			}*/
 
 		}
 		const store = await Store.findByIdAndUpdate({
