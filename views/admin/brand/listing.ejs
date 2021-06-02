@@ -90,10 +90,15 @@
                       <% if(brand) brand.forEach(function(brand){ %>
                       <tr>
                         <td><%= brand.name %></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em"
-                            src="/images/brands/<%= brand.logo %>" /></td>
+                        <td>
+                          <% if(brand.logo) { %>
+                              <img class="img-thumbnail" style="width: 6em;height: 4em" src="/images/brands/<%= brand.logo %>" />
+                           <% }else{ %>
+                                N/A
+                            <% } %>
+                        </td>
                         <td><%= brand.description %></td>
-                        <td><%= brand.status %> </td>
+                        <td><% if(brand.status){ %> Active <% }else{ %> Inactive <% } %></td>
                         <td><a href="/admin/brand/delete/<%= brand._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/brand/edit/<%= brand._id %>""><i

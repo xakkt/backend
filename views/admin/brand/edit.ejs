@@ -90,7 +90,7 @@
                                     <!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="departmentLogo">File input</label>
+                                            <label for="departmentLogo">Brand Image</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="logo" class="custom-file-input"
@@ -106,27 +106,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="departmentname">Status</label>
-                                            <select name="status" id="status">
-                                                <% if(brand.status == true) { %>
-                                                <option value="true" selected>active</option>
-                                                <option value="false">inactive</option>
-                                                <% } else { %>
-                                                <option value="true" selected>active</option>
-                                                <option value="false">inactive</option>
-                                                <%}%>
-                      </select>
-                    </div>
-                  </div>
-                  <!-- /.row -->
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Description</label>
-                      <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."><%= brand.description %></textarea>
+                                            <select name="status" class="form-control custom-select" id="status">
+                                                <option value="true" <%if(brand.status)%> selected >Active</option>
+                                                <option value="false" <%if(!brand.status)%></option>Inactive</option>
+                                            </select>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Description</label>
+                                          <textarea name="description" class="form-control" rows="1" placeholder="Enter ..."><%= brand.description %></textarea>
+                                        </div>
+                                    </div>
+                                    <!-- /.row -->
                                 </div>
+
                                 <!-- /.card-body -->
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -146,6 +140,7 @@
             <!-- Control sidebar content goes here -->
         </aside>
         <!-- /.control-sidebar -->
+    </div>
     </div>
     <!-- ./wrapper -->
 
@@ -176,9 +171,7 @@
                     name: {
                         required: true
                     },
-                    description: {
-                        required: true,
-                    },
+                    
                 },
                 messages: {
                     name: {

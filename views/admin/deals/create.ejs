@@ -56,7 +56,7 @@
          </section>
          <!-- Main content -->
          <section class="content">
-            <div class="container">
+            <div class="container" style="width:80%" >
                <!-- SELECT2 EXAMPLE -->
                <div class="card card-primary">
                   <div class="card-header">
@@ -71,7 +71,7 @@
                   <div class="card-body">
                     <form id="dealForm" method="post" action="/admin/deal/save">
                      <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                            <div class="form-group">
                               <label for="dealname">Name</label>
                               <input type="text" name="name" class="form-control" id="dealname" placeholder="Enter name">
@@ -80,23 +80,13 @@
                         <!-- /.col -->
                         <!-- /.row -->
                   
-                     <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="brands">Store</label>
-                          <select name="store" class="form-control custom-select" id="store">
-                            <option value="">Choose one</option>
-                            <% if(stores) stores.forEach(function(stores){ %>
-                              <option value="<%=stores._id%>"><%=stores.name%></option>
-                            <% }) %>
-                          </select>
-                        </div>
-                      </div>
+                     
                      </div>
                      <div class="row">
                         <div class="col-md-12">
                            <div class="form-group">
                               <label>Description</label>
-                              <textarea name="description" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                              <textarea name="description" class="form-control" rows="3" placeholder="Enter Description"></textarea>
                            </div>
                         </div>
                      </div>

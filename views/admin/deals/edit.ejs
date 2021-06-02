@@ -57,7 +57,7 @@
          </section>
          <!-- Main content -->
          <section class="content">
-            <div class="container">
+            <div class="container" style="width:80%">
                <!-- SELECT2 EXAMPLE -->
                <div class="card card-primary">
                   <div class="card-header">
@@ -72,7 +72,7 @@
                   <div class="card-body">
                     <form id="dealForm" method="post" action="/admin/deal/update/<%= deal._id %>">
                      <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                            <div class="form-group">
                               <label for="dealname">Name</label>
                               <input type="text" name="name" value="<%= deal.name %>" class="form-control" id="dealname" placeholder="Enter name">
@@ -80,23 +80,6 @@
                         </div>
                         <!-- /.col -->
                         <!-- /.row -->
-                     <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="brands">Store</label>
-                          <select name="store" class="form-control custom-select" id="store">
-                            <option value="">Choose one</option>
-                            <% if(stores) stores.forEach(function(stores){ %>
-                              <% if(JSON.stringify(deal.store_id) == JSON.stringify(stores._id)) {%>
-                              <option value="<%=stores._id%>" selected><%=stores.name%></option>
-                              <% } else{ %>
-                              <option value="<%=stores._id%>"><%=stores.name%></option>
-                              <%}%>
-                            <% }) %>
-                          </select>
-                        </div>
-                      </div>
-                     </div>
-                     <div class="row">
                         <div class="col-md-12">
                            <div class="form-group">
                               <label>Description</label>
@@ -104,6 +87,7 @@
                            </div>
                         </div>
                      </div>
+                     
                      <!-- /.card-body -->
                      <div class="card-footer">
                       <button type="submit" class="btn btn-primary">Submit</button>

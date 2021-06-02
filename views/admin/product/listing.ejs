@@ -41,11 +41,8 @@
   }
 
   #dummy {
-    /* padding: 1px 0px; */
-    /* background-color: black; */
-    
-    /* position: absolute; */
-    /* text-align: center; */
+    color:black;
+    font-weight: 900;
     margin-top: -2px;
     margin-right: 10px;
     /* right: 100px; */
@@ -139,13 +136,13 @@ i#dummies h6 {
                     <ul class="upload-icons">
                     <li id="dummies">
                       <a href="/dummy.csv" id="dummy" download>
-                        <i class="fa fa-file-excel" aria-hidden="true"></i>
+                        <i class="fa fa-file-excel" style="color:red" aria-hidden="true"></i>
+                        Product File
                       </a>
-                      <h6>Product File</h6>
                     </li>
 
                     <li class="file">
-                      <label for='fileinput'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>Import Product
+                      <label for='fileinput'><i class="fa fa-upload" style="color:red" class="icon" aria-hidden="true"></i>Import Product
                       </label>
                       <input type="file" style="display:none" name="csv" id="fileinput" />
                     </li>
@@ -436,27 +433,7 @@ i#dummies h6 {
                     });
                   });
                 });
-      // $("#btn").click(function () {
-      //   // console.log("--files", $('#fileinput').prop('files')[0])
-      //   var data;
-      //   var formdata = new FormData();
-      //   formdata.append('file', $('#fileinput').prop('files')[0]);
-      //   $.ajax({
-      //     url: '/admin/upload',
-      //     type: 'POST',
-      //     processData: false,
-      //     contentType: false,
-      //     dataType: "json",
-      //     mimeType: 'multipart/form-data',
-      //     data: formdata,
-      //     success: function (data) {
-      //       if (data.status) {
-      //         console.log("--test", data)
-
-      //       }
-      //     }
-      //   })
-      // })
+      
               </script>
 </body>
 
