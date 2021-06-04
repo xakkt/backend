@@ -157,6 +157,7 @@ exports.productsave = async (req, res) => {
             _unit: req.body.unit,
             price: req.body.price,
             cuisine:req.body.cuisine,
+            trending:req.body.trending,
             status: req.body.status,
             brand_id: req.body.brand
 
@@ -237,6 +238,7 @@ exports.productupdate = async function (req, res) {
             price: req.body.price,
             _unit: req.body.unit,
             cuisine:req.body.cuisine,
+            trending:req.body.trending,
             status: req.body.status,
             brand_id:req.body.brand
         }

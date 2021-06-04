@@ -12,7 +12,7 @@ exports.list = async (req, res)=>{
 			return res.json({status:1, message: "", data: department});
 			
 	   }catch(err){
-		   console.log(err)
+		    console.log(err)
 			res.status(400).json({status:1, message: "", data: err});
 	   }
 },
@@ -23,7 +23,7 @@ exports.show =  async (req, res)=> {
 		res.json({status:1, message: "", data: departments});
 	 }catch(err){
 		res.status(400).json({status:0, data: err});
-   }
+    }
 	
 	
 },

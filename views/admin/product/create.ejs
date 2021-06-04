@@ -172,10 +172,10 @@
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="featured">Temporary2</label>
-                      <select name="featured" id="" class="form-control custom-select">
-                        <option value="true">No</option>
-                        <option value="false">Yes</option>
+                      <label for="trending"> Trending </label>
+                      <select name="trending" id="trending" class="form-control custom-select">
+                        <option value="false" selected>No</option>
+                        <option value="true">Yes</option>
                       </select>
                     </div>
                   </div>
@@ -194,19 +194,6 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="deals">Temporary3</label>
-                      <select name="deal" class="form-control custom-select" id="deals">
-                        <option value="">Select one</option>
-                        <% if(deals) deals.forEach(function(deal){ %>
-                        <option value="<%=deal._id%>"><%=deal.name%></option>
-                        <% }) %>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
                       <label for="mostsaved">Cuisine</label>
                       <select name="cuisine" id="mostsaved" class="form-control custom-select">
                         <option selected="" disabled="">Select one</option>
@@ -220,6 +207,7 @@
                     </div>
                   </div>
                 </div>
+                
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" name ="submit" class="btn btn-primary submit">Submit</button>

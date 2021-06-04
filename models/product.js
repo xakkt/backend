@@ -64,9 +64,13 @@ const productSchema = new Schema({
     required: false
   },
   cuisine:{
-  type:String,
-  required:true
+    type:String,
+    required:true
   },
+  trending:{
+    type:Boolean,
+    required:true
+    },
   valid_from: {
     type: Date,
     //required: true,

@@ -118,14 +118,14 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <img id="blah" src="/images/products/<%=product.image%>" style="height:100px; width:10px" alt="your image" />
+                    
                     <div class="form-group">
-                      <label for="departmentLogo">Product image</label>
-                      <div class="input-group">
+                      <label for="imgInp"><img id="blah" src="/images/products/<%=product.image%>" style="height:100px; cursor:pointer;" alt="your image" /></label>
+                      <div class="input-group" style="display:none;">
                         <div class="custom-file">
                           <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg"
                             id="imgInp">
-                          <label class="custom-file-label" for="departmentLogo">Choose file</label>
+                          <label class="custom-file-label" for="">Choose file</label>
                         </div>
                       </div>
                     </div>
@@ -152,17 +152,11 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="status">Status</label>
-                      <select name="status" class="form-control custom-select" id="status">
-                        <% if(product.status == true) {%>
-                        <option value="true" selected>Active</option>
-                        <option value="false">Inactive</option>
-
-                        <% } else { %>
-                        <option value="false" selected>Inactive</option>
-                        <option value="true">Active</option>
-                        <% } %>
-                      </select>
+                        <label for="status">Status</label>
+                        <select name="status" class="form-control custom-select" id="status">
+                          <option value="true" <%= (product.status)?'selected':'' %> >Active</option>
+                          <option value="false" <%= (!product.status)?'selected':'' %> >Inactive</option>
+                        </select>
                     </div>
                   </div>
                 </div>
@@ -181,15 +175,15 @@
                         </select>
                       </div>
                     </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="featured">Temporary2</label>
-                      <select name="Featured" id="" class="form-control custom-select">
-                        <option value="true">No</option>
-                        <option value="false">Yes</option>
-                      </select>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="trending"> Trending </label>
+                        <select name="trending" id="trending" class="form-control custom-select">
+                          <option value="false" <%= (product.trending)?'selected':'' %>>No</option>
+                          <option value="true" <%= (product.trending)?'selected':'' %>>Yes</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
@@ -204,17 +198,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="deals">Temporary3</label>
-                      <select name="deal" class="form-control custom-select" id="deals">
-                        <option value="">Select one</option>
-                        <% if(deals) deals.forEach(function(deal){ %>
-                        <option value="<%=deal._id%>"><%=deal.name%></option>
-                        <% }) %>
-                      </select>
-                    </div>
-                  </div>
+                  
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

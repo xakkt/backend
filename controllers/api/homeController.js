@@ -124,51 +124,57 @@ exports.dashboard = async (req, res) => {
 				message: 'No Product on this store available',
 				product: []
 			}
+		}else{
+
+			await Promise.all(categories.map(async (element) => {
+			
+				var data = {}
+				var productId = element._product._id.toString();
+				var productPrice = await _global.productprice(req.params.storeid, productId)
+	
+				data = {
+					...data,
+					type: "product",
+					_id: element._product._id,
+					name: element._product.name,
+					is_favourite: 0,
+					in_shoppinglist: 0,
+					in_cart: 0,
+					image: `${process.env.BASE_URL}/images/products/${element._product.image}`,
+					deal_price: productPrice.deal_price.toFixed(2),
+					regular_price: productPrice.regular_price.toFixed(2)
+				}
+	
+				if (productId in cartProductList) {
+					data.in_cart = cartProductList[productId]
+				}
+	
+				if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
+					data.is_favourite = 1,
+					data.in_shoppinglist = 1
+				} else if (shoppinglistProductIds.includes(productId)) {
+					data.in_shoppinglist = 1
+				} else if (wishlistids.includes(productId)) {
+					data.is_favourite = 1
+				}
+				product.push(data)
+	
+			}))
+			product = getUniqueListBy(product, '_id')
+			pdata[1] = {
+							path: `${process.env.BASE_URL}/images/products/`,
+							type: "product",
+							sub_type: "Deals",
+							product: product
+						};
+
 		}
 		
-	await Promise.all(categories.map(async (element) => {
-			
-			var data = {}
-			var productId = element._product._id.toString();
-			var productPrice = await _global.productprice(req.params.storeid, productId)
-
-			data = {
-				...data,
-				type: "product",
-				_id: element._product._id,
-				name: element._product.name,
-				is_favourite: 0,
-				in_shoppinglist: 0,
-				in_cart: 0,
-				image: `${process.env.BASE_URL}/images/products/${element._product.image}`,
-				deal_price: productPrice.deal_price.toFixed(2),
-				regular_price: productPrice.regular_price.toFixed(2)
-			}
-
-			if (productId in cartProductList) {
-				data.in_cart = cartProductList[productId]
-			}
-
-			if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
-				data.is_favourite = 1,
-					data.in_shoppinglist = 1
-			} else if (shoppinglistProductIds.includes(productId)) {
-				data.in_shoppinglist = 1
-			} else if (wishlistids.includes(productId)) {
-				data.is_favourite = 1
-			}
-			product.push(data)
-
-		}))
-		product = getUniqueListBy(product, '_id')
-		pdata[1] = {
-						path: `${process.env.BASE_URL}/images/products/`,
-						type: "product",
-						sub_type: "Deals",
-						product: product
-					};
+	
 		
 
+	
+		/*--------- order again --------*/			
 		let orderAgain = []			
 		pdata[2] = 	{
 						path: `${process.env.BASE_URL}/images/products/`,
@@ -177,6 +183,44 @@ exports.dashboard = async (req, res) => {
 						message: "You have not placed any orders in the last 90 days",
 						product: orderAgain
 					}			
+		/*--------- order again --------*/
+
+
+		/*--------- trending products --------*/
+		
+		var trendingProducts = []			
+		let trendings = await Product.find({
+			trending:true
+		}).select('name sku  image').lean();
+
+       /*if(!trendings.length){
+			pdata[3] = 	{
+				path: `${process.env.BASE_URL}/images/products/`,
+				type: "product",
+				sub_type: "trending",
+				message: "No trending product available",
+				product: []
+			}	
+	   }else{
+			await Promise.all(trendings.map(async (element) => { 
+				var productId = element._id.toString();
+				var productData = await _global.productprice(req.params.storeid, productId)
+				console.log("======>>>>>>",element)
+				trendingProducts.push(productData)
+			}))
+
+			pdata[3] = 	{
+				path: `${process.env.BASE_URL}/images/products/`,
+				type: "product",
+				sub_type: "trending",
+				product: trendingProducts
+			}	
+
+	   }*/
+		
+		
+		/*-------- trending products ------*/		
+
 		return res.json({
 			status: 1,
 			data: pdata

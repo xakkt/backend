@@ -92,32 +92,31 @@ exports.list = async (req, res) => {
 			});
 		}
 	},
-
-	exports.show = async (req, res) => {
-		try {
-			var productPrice = await _global.productprice(req.body.storeid, req.body.productid)
-			const product = await Product.findById(req.body.productid).select("-meta_title -meta_keywords -meta_description -updatedAt -createdAt -__v").lean();
-			if (!product) return res.json({
-				status: 1,
-				message: "Product not found",
-				data: []
-			});
-			product.price = productPrice.regular_price
-			product.deal_price = productPrice.deal_price
-			return res.json({
-				status: 1,
-				message: "",
-				data: product
-			});
-		} catch (err) {
-			res.status(400).json({
-				status: 0,
-				data: err
-			});
-		}
-
-
+exports.show = async (req, res) => {
+	try {
+		var productPrice = await _global.productprice(req.body.storeid, req.body.productid)
+		const product = await Product.findById(req.body.productid).select("-meta_title -meta_keywords -meta_description -updatedAt -createdAt -__v").lean();
+		if (!product) return res.json({
+			status: 1,
+			message: "Product not found",
+			data: []
+		});
+		product.price = productPrice.regular_price
+		product.deal_price = productPrice.deal_price
+		return res.json({
+			status: 1,
+			message: "",
+			data: product
+		});
+	} catch (err) {
+		res.status(400).json({
+			status: 0,
+			data: err
+		});
 	}
+
+
+}
 exports.search = async (req, res) => {
 
 	try {
