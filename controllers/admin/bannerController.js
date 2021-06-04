@@ -12,7 +12,7 @@ const product_category = require('../../models/product_category');
 
 exports.create = async (req, res) => {
         try {
-            const store = await Store.find({}).lean()
+            const store = await Store.find({}).sort('name').lean()
             const deal = await Deal.find({}).lean()
             const store_product_pricing = await Store_product_pricing.find({}).lean()
 

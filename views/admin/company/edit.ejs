@@ -120,17 +120,17 @@
                                     placeholder="Enter ..."><%= data.description %></textarea>
                               </div>
                            </div>
+                           
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label>Select Store</label>
                                  <select class="select2" name="store[]" multiple style="width: 100%;"
                                     placeholder="Select Department">
                                     <% store.forEach((store)=>{ %>
-                                    <option
-                                       <%=(data._store.toString().indexOf(store._id.toString()!=-1))?'selected':''%>
+                                      <% const stringsIdsArray = data._store.map(x => x.toString()); %>
+                                      <% const uniqueStrings = [...new Set(stringsIdsArray)]; %>
+                                    <option <%= (uniqueStrings.indexOf(store._id.toString())!=-1)?'selected':'' %>
                                        value="<%=store._id%>"><%=store.name%></option>
-
-                                    <option value="<%=store._id%>"><%=store.name%></option>
                                     <%})%>
                                  </select>
                               </div>

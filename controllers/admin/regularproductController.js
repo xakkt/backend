@@ -2,11 +2,13 @@ const RegularPrice = require('../../models/product_regular_pricing');
 const Store = require('../../models/store');
 const Deal = require('../../models/deal');
 const StoreProductPricing = require('../../models/store_product_pricing');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.create = async (req, res) => {
     try {
         var store = await Store.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
         var regularPrice = await RegularPrice.aggregate([
+            {$match: {_product:ObjectId(req.params.productid), _user:ObjectId(req.session.userid)}},
             {$lookup: {from: "stores", localField: "_store", foreignField: "_id", as: "store"}},
             {$sort: {"store.name": 1}},
          ])
@@ -16,7 +18,7 @@ exports.create = async (req, res) => {
             store: store,
             productid: req.params.productid
         })
-        //   return  res.redirect('/admin/product/list')
+        
         return res.render('admin/product/regular_price', {
             menu: "RegularPrice",
             regularPrice: regularPrice,
@@ -31,19 +33,25 @@ exports.create = async (req, res) => {
 }
 
 exports.addprice = async (req, res) => {
-    try {
+    try { 
+        if(req.body.store.length != req.body.regular_price.length){
+            return res.json({status:false, message:"Something went wrong"})
+        }
         const arr = [];
-        for (i = 0; i < req.body.no_of_stores; i++) {
+        for (i = 0; i < req.body.store.length; i++) {
             data = {};
             data.regular_price = req.body.regular_price[i];
             data._store = req.body.store[i]
             data._product = req.body.productid
             data._user = req.session.userid
-            await RegularPrice.findOneAndUpdate({_store:req.body.store[i],_product:req.body.productid}, data, {
-                upsert: true // Make this update into an upsert
-              })
-            // arr.push(data)
+            arr.push(data)
         }
+      
+        var remove_price = await RegularPrice.deleteMany({_user:data._user, _product:data._product}).exec();
+        if (!remove_price) return res.json({ status: false })
+
+        var prices = await RegularPrice.insertMany(arr).then()
+        if(!prices){ return res.json({ message:"Something went wrong", status: false })  }
             res.redirect('/admin/product')
 
     } catch (err) {

@@ -1,6 +1,7 @@
 const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 const Store = require('../../models/store');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 let jwt = require('jsonwebtoken');
 const Setting = require('../../models/setting')
@@ -9,7 +10,8 @@ const _global = require('../../helper/common')
 
 const _time = require('../../helper/storetimezone')
 
-const StoreProductPricing = require('../../models/store_product_pricing')
+//const StoreProductPricing = require('../../models/store_product_pricing')
+const ProductRegularPricing = require('../../models/product_regular_pricing')
 var moment = require('moment');
 const store = require('../../models/store');
 
@@ -19,6 +21,7 @@ function getUniqueListBy(product, key) {
 
 exports.dashboard = async (req, res) => {
 	var userid;
+	var pdata = [];
 	var product = [];
 	//await _time.store_time(req.params.storeid)
 	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
@@ -28,7 +31,6 @@ exports.dashboard = async (req, res) => {
 		if (token) {
 			if (token.startsWith(process.env.JWT_SECRET)) {
 				token = token.slice(7, token.length);
-
 			}
 			await jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
 				if (decoded) {
@@ -37,38 +39,95 @@ exports.dashboard = async (req, res) => {
 			});
 
 		}
-	let storedata =  await Store.findOne({_id:req.params.storeid}).lean()
-	if(!storedata){   
-		return res.json({
-			status: 0,
-			data: 'Store does not exists'
+		let storedata = await Store.findOne({ _id: req.params.storeid }).lean()
+		if (!storedata) {
+			return res.json({
+				status: 0,
+				data: 'Store does not exists'
+			})
+		}
+		let nearbystores = await Store.find({
+			location: {
+				$near: {
+					$geometry:
+						{ type: "Point", coordinates: storedata.location.coordinates }, $maxDistance: 50000
+				}
+			}
+		}).select('name address city state contact_no')
+
+		var storeId = []
+		nearbystores.filter((item) => {
+			storeId.push(item._id)
 		})
-	 }
-	let latlong =	await Store.find({ location :  { $near :	{ $geometry :  
-			{ type : "Point", coordinates :storedata.location.coordinates }, $maxDistance:50000	}  } 
-	} )
-	var storeId =[]
-	  latlong.filter((item) =>{
-		  storeId.push(item._id)
-	  })
 		var cartProductList = []
 		var wishlistids = []
 		var shoppinglistProductIds = []
-		let categories = await StoreProductPricing.find({
-			_store: req.params.storeid
-		}).populate('_product', 'name sku  image').lean();
-		if (!categories.length) return res.json({
-			status: "false",
-			message: "No data found",
-			data: categories
-		});
-		if (userid) {
-			cartProductList = await _global.cartProducts(userid, req.params.storeid);
-			wishlistids = await _global.wishList(userid, req.params.storeid)
-			shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
+
+		
+
+		let banners = await Banner.find({_store: {
+			$in: storeId
+		}}).lean();
+
+		_banners = [ {
+						"_id": "60b942742527aa36d0ba23",
+						"type": "default",
+						"_deal": "60b72629b707492d27c576ba",
+						"image": "badshah_chana_masala_100gm._1622753908.jpg",
+					},
+					{
+						"_id": "60b942742527aa36d0ba23",
+						"type": "default",
+						"_deal": "60b72629b707492d27c576ba",
+						"image": "badshah_chana_masala_100gm._1622753908.jpg",
+					}]
+
+/* ------------- code for banners ---------*/
+
+		if(!banners.length){
+			//banners.concat(_banners)
+     		pdata[0] = {
+				path: `${process.env.BASE_URL}/images/banners/`,
+				type: "banner",
+				message: "No banner found",
+				banner: []
+			}
+
+		}else{
+			pdata[0] = {
+				path: `${process.env.BASE_URL}/images/banners/`,
+				type: "banner",
+				banner: banners
+			}
 		}
 
-		await Promise.all(categories.map(async (element) => {
+		//	const mergedArray = [...banners, ..._banners];
+/* ----------------- end of code for banners ----------*/
+
+	
+	let categories = await ProductRegularPricing.find({
+		_store: req.params.storeid
+	}).populate('_product', 'name sku  image').lean();
+
+
+	if (userid) {
+		cartProductList = await _global.cartProducts(userid, req.params.storeid);
+		wishlistids = await _global.wishList(userid, req.params.storeid)
+		shoppinglistProductIds = await _global.shoppingList(userid, req.params.storeid)
+	}
+
+	if (!categories.length){
+			pdata[1] = {
+				path: `${process.env.BASE_URL}/images/products/`,
+				type: "product",
+				sub_type: "Deals",
+				message: 'No Product on this store available',
+				product: []
+			}
+		}
+		
+	await Promise.all(categories.map(async (element) => {
+			
 			var data = {}
 			var productId = element._product._id.toString();
 			var productPrice = await _global.productprice(req.params.storeid, productId)
@@ -102,72 +161,32 @@ exports.dashboard = async (req, res) => {
 
 		}))
 		product = getUniqueListBy(product, '_id')
-		let banners =  await StoreProductPricing.find({
-			  	$and: [{
-					_store:{
-						$in:storeId
-					}
-				},
-				{
-					deal_start: {
-						$lte: date
-					}
-				}, {
-					deal_end: {
-						$gte: date
-					}
-				}
-			],
-		}).lean();
-		let data = []
-		 banners.filter(item => {
-			data.push(item._deal)
-		})
-			 var bannerss = await Banner.find({
-			_store:{
-				$in:storeId
-			},
-			 _deal: {
-				 $in :data
-				}
-			 }
-		).lean()
-		console.log("--banner",bannerss)
+		pdata[1] = {
+						path: `${process.env.BASE_URL}/images/products/`,
+						type: "product",
+						sub_type: "Deals",
+						product: product
+					};
+		
 
-		if (!bannerss) return res.json({
-			status: "false",
-			message: "No setting found",
-			data: []
-		})
-
-		pdata = [{
-				path: `${process.env.BASE_URL}/images/banners/`,
-				type: "banner",
-				banner: bannerss
-			},
-			{
-				path: `${process.env.BASE_URL}/images/products/`,
-				type: "product",
-				sub_type: "Deals",
-				product: product
-
-			},
-			{
-				path: `${process.env.BASE_URL}/images/products/`,
-				type: "product",
-				sub_type: "order_again",
-				product: []
-			}
-		];
+		let orderAgain = []			
+		pdata[2] = 	{
+						path: `${process.env.BASE_URL}/images/products/`,
+						type: "product",
+						sub_type: "order_again",
+						message: "No product available for now",
+						product: orderAgain
+					}			
 		return res.json({
 			status: 1,
 			data: pdata
 		})
+		
 	} catch (err) {
 		console.log(err)
 		res.status(400).json({
 			status: 0,
-			message: "",
+			message: "SOMETHING_WENT_WRONG",
 			data: err
 		});
 	}
