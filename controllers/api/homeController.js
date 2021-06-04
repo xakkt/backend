@@ -174,7 +174,7 @@ exports.dashboard = async (req, res) => {
 						path: `${process.env.BASE_URL}/images/products/`,
 						type: "product",
 						sub_type: "order_again",
-						message: "No product available for now",
+						message: "You have not placed any orders in the last 90 days",
 						product: orderAgain
 					}			
 		return res.json({
