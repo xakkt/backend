@@ -18,7 +18,7 @@ exports.bannderproduct = async (req, res) => {
             ],
         }).populate('_product','name sku description').lean()
 
-        
+        console.log("=========>>",store)
         await Promise.all(store.map(async (element) => {
             var data = {}
             var _store = element._store
