@@ -149,7 +149,7 @@
                       <select name="unit" class="form-control custom-select" id="unit">
                         <option value="">Choose one</option>
                         <% if(unit) unit.forEach(function(unit){ %>
-                        <option value="<%=unit._id%>"  <%=(unit._id.toString() == product._unit.toString())?'selected':''%> ><%=unit.name%></option>
+                        <option value="<%=unit._id%>"  <%=((product._unit) && unit._id.toString() == product._unit.toString())?'selected':''%> ><%=unit.name%></option>
                         <% }) %>
                       </select>
                     </div>
