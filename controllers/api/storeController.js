@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let store = await Store.find().populate('_department','name description no_of_stores').exec();
+			let store = await Store.find().select('-time_schedule').populate('_department','name description no_of_stores').exec();
 			if(!store.length) return res.json({status:0, message: "No data found", data: store});
 			return res.json({status:1, message: "", data: store});
 			

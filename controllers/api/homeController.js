@@ -137,6 +137,8 @@ exports.dashboard = async (req, res) => {
 					type: "product",
 					_id: element._product._id,
 					name: element._product.name,
+					unit: element._product._unit,
+					weight: element._product.weight,
 					is_favourite: 0,
 					in_shoppinglist: 0,
 					in_cart: 0,

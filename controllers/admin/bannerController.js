@@ -1,6 +1,7 @@
 const Banner = require('../../models/banner');
 const Store = require('../../models/store');
 const Deal = require('../../models/deal');
+const product_regular_pricing = require('../../models/product_regular_pricing');
 var moment = require('moment')
 
 const Store_product_pricing = require('../../models/store_product_pricing');
@@ -15,6 +16,7 @@ exports.create = async (req, res) => {
             const store = await Store.find({}).sort('name').lean()
             const deal = await Deal.find({}).lean()
             const store_product_pricing = await Store_product_pricing.find({}).lean()
+        //    const checkProduct = await 
 
             res.render('admin/banner/create', {
                 success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure'),
@@ -72,12 +74,15 @@ exports.create = async (req, res) => {
         }
     }
 exports.save = async (req, res) => {
+    console.log("=====here now")
     try {
         const brandinfo = {
             _deal: req.body.deal,
             image: req.file.filename,
             _store: req.body.store,
         }
+        const checkProduct = await product_regular_pricing.find({_store:brandinfo._store})
+        console.log("======here",checkProduct)
         console.log("---brand", brandinfo)
         let BannerDup = await Banner.findOne({
             _store: req.body.store,
