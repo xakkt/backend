@@ -69,6 +69,15 @@ exports.dashboard = async (req, res) => {
 		let banners = await Banner.find({_store: {
 			$in: storeId
 		}}).lean();
+		bannerArr = [];
+		await Promise.all(banners.map( async function(banner){
+			let dealProducts =  await StoreProductPricing.findOne({$and: [ {_store:banner._store, _deal:banner._deal}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).lean()
+		
+			if(dealProducts){
+					bannerArr.push(banner)
+				}
+		})
+		)
 
 		_banners = [ {
 						"_id": "60b942742527aa36d0ba23",
@@ -98,7 +107,7 @@ exports.dashboard = async (req, res) => {
 			pdata[0] = {
 				path: `${process.env.BASE_URL}/images/banners/`,
 				type: "banner",
-				banner: banners
+				banner: bannerArr
 			}
 		}
 
@@ -135,7 +144,6 @@ exports.dashboard = async (req, res) => {
 		}else{
 
 			await Promise.all(categories.map(async (element) => {
-			
 				var data = {}
 				var productId = element._product._id.toString();
 				var productPrice = await _global.productprice(req.params.storeid, productId)
@@ -145,7 +153,7 @@ exports.dashboard = async (req, res) => {
 					type: "product",
 					_id: element._product._id,
 					name: element._product.name,
-					unit: element._product._unit.name,
+					unit: element._product._unit?.name??'n/a',
 					weight: element._product.weight,
 					is_favourite: 0,
 					in_shoppinglist: 0,
@@ -181,10 +189,6 @@ exports.dashboard = async (req, res) => {
 
 		}
 		
-	
-		
-
-	
 		/*--------- order again --------*/			
 		let orderAgain = []			
 		pdata[2] = 	{

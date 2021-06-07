@@ -1,7 +1,7 @@
 const Banner = require('../../models/banner');
 const Store = require('../../models/store');
 const Deal = require('../../models/deal');
-const product_regular_pricing = require('../../models/product_regular_pricing');
+const StoreProductPricing = require('../../models/store_product_pricing');
 var moment = require('moment')
 
 const Store_product_pricing = require('../../models/store_product_pricing');
@@ -35,64 +35,67 @@ exports.create = async (req, res) => {
     },
 
 
-    exports.deals = async (req, res) => {
-        try {
-            var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-            const store = await Store_product_pricing.find({
-                $and: [{
-                    _store: req.body.storeid
-                }, {
-                    deal_start: {
-                        $lte: date
-                    }
-                }, {
-                    deal_end: {
-                        $gte: date
-                    }
-                }]
-            }).populate('_deal', 'name').select('-deal_percentage -deal_price -deal_start -percentag_discount_price -deal_end -product -createdAt -updatedAt -_product -_store').lean()
-            // const store =   Store_product_pricing.aggregate([
-            //     {
-            //         $match:{
-            //             _store:req.body.storeid
-            //         },
-            //     },
-            //     {$group : {_deal}},
-            // ]).exec()
-            // console.log("--logss",store)
-
-            return res.json({
-                status: true,
-                value: store
-            })
-        } catch (err) {
-            res.status(400).json({
-                status: "false",
-                data: err
-            });
-
-        }
-    }
-exports.save = async (req, res) => {
-    console.log("=====here now")
+exports.deals = async (req, res) => {
     try {
-        const brandinfo = {
-            _deal: req.body.deal,
-            image: req.file.filename,
-            _store: req.body.store,
+        var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        const store = await Store_product_pricing.find({
+            $and: [{
+                _store: req.body.storeid
+            }, {
+                deal_start: {
+                    $lte: date
+                }
+            }, {
+                deal_end: {
+                    $gte: date
+                }
+            }]
+        }).populate('_deal', 'name').select('-deal_percentage -deal_price -deal_start -percentag_discount_price -deal_end -product -createdAt -updatedAt -_product -_store').lean()
+        // const store =   Store_product_pricing.aggregate([
+        //     {
+        //         $match:{
+        //             _store:req.body.storeid
+        //         },
+        //     },
+        //     {$group : {_deal}},
+        // ]).exec()
+        // console.log("--logss",store)
+
+        return res.json({
+            status: true,
+            value: store
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "false",
+            data: err
+        });
+
+    }
+}
+exports.save = async (req, res) => {
+    
+    try {
+        var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        const [_deal, image, _store ] = [
+             req.body.deal,
+             req.file.filename,
+             req.body.store,
+        ]
+       
+        let noOfProducts =  await StoreProductPricing.findOne({$and: [ {_store, _deal}, { deal_start:{$lte:date} }  ]}).count();
+       
+        if(!noOfProducts){
+            await req.flash('failure', "You don't have any product for this deal in current or in future");
+            return res.redirect('/admin/banner/create')
         }
-        const checkProduct = await product_regular_pricing.find({_store:brandinfo._store})
-        console.log("======here",checkProduct)
-        console.log("---brand", brandinfo)
-        let BannerDup = await Banner.findOne({
-            _store: req.body.store,
-            _deal: req.body.deal
-        }).lean()
+  ;
+        let BannerDup = await Banner.findOne({ _store, _deal}).lean()
         if (BannerDup) {
             await req.flash('failure', "Banner already exist's for this store and deal");
            return res.redirect('/admin/banner/create')
         }
-        const banner = await Banner.create(brandinfo);
+        const banner = await Banner.create({_deal, image, _store});
         if (!banner) {
             await req.flash('failure', "Banner not added");
             return res.json({
