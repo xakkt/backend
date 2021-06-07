@@ -1,6 +1,7 @@
 const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 const Store = require('../../models/store');
+
 var ObjectId = require('mongoose').Types.ObjectId;
 
 let jwt = require('jsonwebtoken');
@@ -10,7 +11,7 @@ const _global = require('../../helper/common')
 
 const _time = require('../../helper/storetimezone')
 
-//const StoreProductPricing = require('../../models/store_product_pricing')
+const StoreProductPricing = require('../../models/store_product_pricing')
 const ProductRegularPricing = require('../../models/product_regular_pricing')
 var moment = require('moment');
 const store = require('../../models/store');
@@ -105,10 +106,9 @@ exports.dashboard = async (req, res) => {
 /* ----------------- end of code for banners ----------*/
 
 	
-	let categories = await ProductRegularPricing.find({
+	let categories = await StoreProductPricing.find({
 		_store: req.params.storeid
-	}).populate('_product', 'name sku  image').lean();
-
+	}).populate('_product','name sku image _unit weight').lean();
 
 	if (userid) {
 		cartProductList = await _global.cartProducts(userid, req.params.storeid);
@@ -163,6 +163,7 @@ exports.dashboard = async (req, res) => {
 	
 			}))
 			product = getUniqueListBy(product, '_id')
+			
 			pdata[1] = {
 							path: `${process.env.BASE_URL}/images/products/`,
 							type: "product",
