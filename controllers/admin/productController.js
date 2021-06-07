@@ -205,8 +205,9 @@ exports.productedit = async (req, res) => {
         const product = await Product.findById(req.params.id).exec();
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
+        var unit = await Unit.find({}).lean();
         var productCategories = await ProductCategory.find({}).lean();
-        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals: deals, product: product, productCategories: productCategories, menu: "Product" })
+        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals: deals, unit:unit, product: product, productCategories: productCategories, menu: "Product" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
