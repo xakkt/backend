@@ -108,7 +108,15 @@ exports.dashboard = async (req, res) => {
 	
 	let categories = await StoreProductPricing.find({
 		_store: req.params.storeid
-	}).populate('_product','name sku image _unit weight').lean();
+	}).populate({
+		path: '_product',
+		select: 'name sku image weight',
+		populate: {
+		  path: '_unit',
+		  select: 'name'
+	    }
+	  }).lean();
+
 
 	if (userid) {
 		cartProductList = await _global.cartProducts(userid, req.params.storeid);
@@ -137,7 +145,7 @@ exports.dashboard = async (req, res) => {
 					type: "product",
 					_id: element._product._id,
 					name: element._product.name,
-					unit: element._product._unit,
+					unit: element._product._unit.name,
 					weight: element._product.weight,
 					is_favourite: 0,
 					in_shoppinglist: 0,
