@@ -134,7 +134,7 @@ exports.dashboard = async (req, res) => {
 	}
 
 	if (!categories.length){
-			pdata[1] = {
+			pdata[2] = {
 				path: `${process.env.BASE_URL}/images/products/`,
 				type: "product",
 				sub_type: "Deals",
@@ -180,7 +180,7 @@ exports.dashboard = async (req, res) => {
 			}))
 			product = getUniqueListBy(product, '_id')
 			
-			pdata[1] = {
+			pdata[2] = {
 							path: `${process.env.BASE_URL}/images/products/`,
 							type: "product",
 							sub_type: "Deals",
@@ -191,7 +191,7 @@ exports.dashboard = async (req, res) => {
 		
 		/*--------- order again --------*/			
 		let orderAgain = []			
-		pdata[2] = 	{
+		pdata[3] = 	{
 						path: `${process.env.BASE_URL}/images/products/`,
 						type: "product",
 						sub_type: "order_again",
@@ -225,7 +225,7 @@ exports.dashboard = async (req, res) => {
 		
 
        if(!storeTrending.length){
-			pdata[3] = 	{
+			pdata[1] = 	{
 				path: `${process.env.BASE_URL}/images/products/`,
 				type: "product",
 				sub_type: "trending",
@@ -270,7 +270,7 @@ exports.dashboard = async (req, res) => {
 
 		}))
 
-			pdata[3] = 	{
+			pdata[1] = 	{
 				path: `${process.env.BASE_URL}/images/products/`,
 				type: "product",
 				sub_type: "trending",
