@@ -40,7 +40,11 @@ exports.dashboard = async (req, res) => {
 			});
 
 		}
-		let storedata = await Store.findOne({ _id: req.params.storeid }).lean()
+		let storedata = await Store.findOne({ _id: req.params.storeid }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
+			path: '_currency',
+			select: 'name',
+			
+		  }).lean()
 		if (!storedata) {
 			return res.json({
 				status: 0,
@@ -280,7 +284,8 @@ exports.dashboard = async (req, res) => {
 
 		return res.json({
 			status: 1,
-			data: pdata
+			data: pdata,
+			store:storedata
 		})
 		
 	} catch (err) {
