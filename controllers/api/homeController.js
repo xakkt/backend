@@ -110,7 +110,7 @@ exports.dashboard = async (req, res) => {
 			pdata[0] = {
 				path: `${process.env.BASE_URL}/images/banners/`,
 				type: "banner",
-				banner: bannerArr
+				banner: bannerArr.reverse()
 			}
 		}
 
