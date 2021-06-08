@@ -86,7 +86,7 @@ exports.save = async (req, res) => {
         let noOfProducts =  await StoreProductPricing.findOne({$and: [ {_store, _deal}, { deal_start:{$lte:date} }  ]}).count();
        
         if(!noOfProducts){
-            await req.flash('failure', "You don't have any product for this deal in current or in future");
+            await req.flash('failure', "Currently there are no products with an active deal, please add or update the product deal dates prior to uploading the banner for this deal type.");
             return res.redirect('/admin/banner/create')
         }
   ;
