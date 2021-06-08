@@ -43,7 +43,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/departments');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
 
@@ -52,7 +52,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/users');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var productStorage =   multer.diskStorage({
@@ -60,7 +60,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/products');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var brandStorage =   multer.diskStorage({
@@ -68,7 +68,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/brands');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var bannerStorage =   multer.diskStorage({
@@ -76,7 +76,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/banners');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var csvStorage =   multer.diskStorage({

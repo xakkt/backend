@@ -64,11 +64,10 @@ exports.dashboard = async (req, res) => {
 		var wishlistids = []
 		var shoppinglistProductIds = []
 
-		
-
 		let banners = await Banner.find({_store: {
 			$in: storeId
 		}}).lean();
+	
 		bannerArr = [];
 		await Promise.all(banners.map( async function(banner){
 			let dealProducts =  await StoreProductPricing.findOne({$and: [ {_store:banner._store, _deal:banner._deal}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).lean()
@@ -221,10 +220,7 @@ exports.dashboard = async (req, res) => {
 				
 				})	
 		
-		console.log('store === trending====', storeTrending);
-		
-
-       if(!storeTrending.length){
+	      if(!storeTrending.length){
 			pdata[1] = 	{
 				path: `${process.env.BASE_URL}/images/products/`,
 				type: "product",
