@@ -16,9 +16,9 @@ exports.bannderproduct = async (req, res) => {
                 { _deal: req.body._deal },
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
-        }).populate('_product','name sku image unit weight description').populate('_deal','name city state _currency').lean()
+        }).populate('_product','name sku image unit weight description').populate('_store','name city state unit weight description').populate('_deal','name city state _currency').lean()
 
-        console.log("=========>>",store)
+  
         await Promise.all(store.map(async (element) => {
             console.log("=====",element)
             var data = {}
@@ -31,7 +31,9 @@ exports.bannderproduct = async (req, res) => {
                 data._product.regular_price = productPrice.regular_price
                 data._product.deal_price = productPrice.deal_price
             }
+            data.dealType = element._deal.name
             delete (data.deal_price)
+            delete (data._deal)
             storePrice.push(data)
         }))
         if (!store.length) return res.json({ status: 0, message: "Data not found" })
