@@ -36,6 +36,7 @@ exports.bannderproduct = async (req, res) => {
             
             delete (data.deal_price)
             delete (data._deal)
+            delete (data._store)
             storePrice.push(data)
         }))
         if (!store.length) return res.json({ status: 0, message: "Data not found" })
