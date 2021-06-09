@@ -26,12 +26,14 @@ exports.bannderproduct = async (req, res) => {
             var _product = element._product._id
             let productPrice = await _global.productprice(_store, _product)
             data = { ...element }
+            data.dealType = element._deal.name
+            data.storeName = element._store.name
             if (productPrice) {
                 data._product.image = `${process.env.BASE_URL}/images/products/${element._product.image}`,
                 data._product.regular_price = productPrice.regular_price
                 data._product.deal_price = productPrice.deal_price
             }
-            data.dealType = element._deal.name
+            
             delete (data.deal_price)
             delete (data._deal)
             storePrice.push(data)
