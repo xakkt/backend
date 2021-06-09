@@ -16,7 +16,7 @@ exports.bannderproduct = async (req, res) => {
                 { _deal: req.body._deal },
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
-        }).populate('_product','name sku image description').lean()
+        }).populate('_product','name sku image unit weight description').populate('_deal','name city state _currency').lean()
 
         console.log("=========>>",store)
         await Promise.all(store.map(async (element) => {
