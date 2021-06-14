@@ -127,6 +127,9 @@ exports.dashboard = async (req, res) => {
 		  path: '_unit',
 		  select: 'name'
 	    }
+	  }).populate({
+		path:'_deal',
+		select:'name'
 	  }).lean();
 
 
@@ -145,12 +148,13 @@ exports.dashboard = async (req, res) => {
 				product: []
 			}
 		}else{
-
+			var deal_name = '';
 			await Promise.all(categories.map(async (element) => {
+				
 				var data = {}
 				var productId = element._product._id.toString();
 				var productPrice = await _global.productprice(req.params.storeid, productId)
-	
+				deal_name = element._deal.name;
 				data = {
 					...data,
 					type: "product",
@@ -186,6 +190,7 @@ exports.dashboard = async (req, res) => {
 			pdata[2] = {
 							path: `${process.env.BASE_URL}/images/products/`,
 							type: "product",
+							dealName: deal_name,
 							sub_type: "Deals",
 							product: product
 						};

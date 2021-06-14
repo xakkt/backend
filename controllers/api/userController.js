@@ -81,14 +81,13 @@ exports.create = async (req, res) => {
 		ncrStatus: req.body.ncrStatus,
 		superbuckId: req.body.superbuckId,
 		timezone: req.body.timezone,
-		dob: moment(req.body.dob).format('YYYY-MM-DD')
+		dob: moment(req.body.dob,'DD-MM-YYYY').format('YYYY-MM-DD')
 	}
+	
 	User.create(userinfo, function (err, result) {
 		if (err) return res.status(400).json({ data: err.message });
-
-		//mail.sendmail();
-		return res.json({ status: 1, message: "User Created.", data: result });
-
+			//mail.sendmail();
+			return res.json({ status: 1, message: "User Created.", data: result });
 	});
 
 };
@@ -101,13 +100,13 @@ exports.updateProfile = async function (req, res) {
 			last_name: req.body.last_name,
 			email: req.body.email,
 			contact_no: req.body.contact_no,
-			// password: req.body.password
-			// status: req.body.status,
-			// last_login: req.body.last_login,
-			// ncrStatus: req.body.ncrStatus,
-			// superbuckId: req.body.superbuckId,
-			// timezone: req.body.timezone,
-			// dob: moment(req.body.dob).format('YYYY-MM-DD')
+		    password:  await md5(req.body.password),
+		    status: req.body.status,
+		    last_login: req.body.last_login,
+		    ncrStatus: req.body.ncrStatus,
+		    superbuckId: req.body.superbuckId,
+		    timezone: req.body.timezone,
+		    dob: moment(req.body.dob,'DD-MM-YYYY').format('YYYY-MM-DD')
 		}
 
 		if (req.file) { userinfo.profile_pic = req.file.path.replace('public/', ''); }

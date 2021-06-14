@@ -94,7 +94,8 @@ const userValidation = [
     body('first_name').not().isEmpty().trim().escape().withMessage('first_name should not be empty'),
     body('last_name').not().isEmpty().trim().escape().withMessage('last_name should not be empty'),
     body('contact_no').not().isEmpty().trim().escape().withMessage('contact_no should not be empty'),
-    
+    body('password').not().isEmpty().trim().escape().withMessage('Password should not be empty'),
+    body('dob').not().isEmpty().trim().escape().withMessage('Date of birth should not be empty'),
 ]
 
 const authValidation = [
@@ -124,7 +125,7 @@ router.post('/user/authenticate', authValidation, userController.authenticate);
 router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
 router.post('/user/address', verifyjwt.checkToken,userController.address)
 router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
-router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
+router.put('/user/update/:id',verifyjwt.checkToken,userValidation,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
 router.get('/user/delete/:id', verifyjwt.checkToken,userController.deleteaddress);
 router.get('/user/edit/:id',verifyjwt.checkToken,userController.editaddress);

@@ -169,7 +169,6 @@ userSchema.plugin(uniqueValidator)
 //   this.password = await bcrypt.hash(this.password, saltRounds);
 // });
 userSchema.pre('save', async function () {
-
   this.password = await md5(this.password);
 });
 

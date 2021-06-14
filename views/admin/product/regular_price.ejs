@@ -64,10 +64,14 @@
             <!-- /.container-fluid -->
          </section>
          <!-- Main content -->
+        
          <section class="content">
             <div class="container">
                <!-- SELECT2 EXAMPLE -->
                <div class="card card-primary">
+                  <div class="err content" style="display:none;">
+                     <span>Store already selected</span>
+                   </div>
                   <div class="card-header">
                      <h3 class="card-title">Product Price</h3>
                      <div class="card-tools">
@@ -82,7 +86,7 @@
                   <!-- /.card-header -->
                   <div class="card-body">
                      <form id="productForm" method="post" action="/admin/regularprice/update">
-                       <span class="err">You have duplicate row/s.</span>
+                        
                         <div class="row">
                            <table id="gatePass" class="table table-striped">
                               <thead>
