@@ -28,7 +28,7 @@
     "express-validator": "^6.6.1",
     "fast-csv": "^4.3.6",
     "fcm-node": "^1.6.1",
-    "firebase-admin": "^9.9.0",
+    "firebase-admin": "^9.4.1",
     "flash": "^1.1.0",
     "fs": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
