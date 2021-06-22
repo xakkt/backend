@@ -163,7 +163,7 @@
                       <% if(data) data.forEach(function(data){ %>
                       <tr>
                         <td><%= data._store.name %></td>
-                        <td><%= data._deal.name %></td>
+                        <td><%= data?._deal?.name %></td>
                         <td>
                           <div id='loader' style='display: none;'>
                             <i class="fa fa-spinner fa-spin" style="font-size:48px;color:red"></i>
