@@ -180,18 +180,6 @@
       "icon": "bulk-deli-cheese.jpg"
     },
     {
-      "id": "16",
-      "name": "Restaurants",
-      "store_no": "7",
-      "description": "",
-      "logo": null,
-      "phone_no": null,
-      "isdeleted": "Y",
-      "isblocked": "N",
-      "user_id": null,
-      "icon": null
-    },
-    {
       "id": "17",
       "name": "El Super Bucks",
       "store_no": "17",
