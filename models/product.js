@@ -69,7 +69,7 @@ const productSchema = new Schema({
   },
   trending:{
     type:Boolean,
-    required:true
+    default:false
     },
   valid_from: {
     type: Date,

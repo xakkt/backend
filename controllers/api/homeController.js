@@ -283,8 +283,7 @@ exports.dashboard = async (req, res) => {
 			}	
 			
 	   }
-		
-		
+	
 		/*-------- trending products ------*/		
 
 		return res.json({

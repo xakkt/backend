@@ -6,7 +6,7 @@ var moment = require('moment');
 exports.create = async (req, res) => {
 
     try {
-        let role = await Roles.findOne({ name: req.body.name }).exec()
+        let role = await Roles.findOne({ key: req.body.key }).exec()
         // 
         console.log("---role",role)
         if (!role) return res.json({ message: "Role not found" })

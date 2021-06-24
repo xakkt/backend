@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 let rolesSchema = Schema({
     name    : { type: String, required: true, unique:true },
     description : { type: String, defualt: null},
+    key : { type: String, defualt: null},
     _permission : [
         {
             type: Schema.Types.ObjectId, 

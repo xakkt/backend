@@ -93,13 +93,12 @@ exports.productprice = async (storeid,productid) =>{
     }
 }
 exports.permission =  (value) => {
-    return async(req,res,next) => {
-
-      const role =  await Roles.findOne({name:'SYSTEM ADMININSTRATOR',_id:req.session.roleid}).exec()
-      if(role) return next()
-      const permission =await Permission.findOne({name:value, _roles: { $in: req.session.roleid }},{}).exec()
-       if(!permission)return res.json({status:false,message:"You are not allowed for this route"})
-      next()
+    return async(req,res,next) => { 
+      if(req.session.roles.includes('system_admin')) return next()
+     
+      const permission =await Permission.findOne({name:value, _roles: { $in: req.session.rolesId }},{}).exec()
+      if(!permission) return res.render('admin/forbidden/forbidden')
+      return next()
     }
 }
 exports.role =  async (value) =>{

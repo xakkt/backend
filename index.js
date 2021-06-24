@@ -16,6 +16,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
+var isloggedin = require('./middlewares/isloggedin')
 
 
 //var moment = require('moment-timezone');
@@ -96,11 +97,8 @@ io.on('connection', function (socket) {
 // })
 
 
-app.use('/admin', adminRoute);
+app.use('/admin',isloggedin,adminRoute);
 app.use('/', frontendRoute);
-
-
-
 app.use('/api/v1', mobileApi);
 
 

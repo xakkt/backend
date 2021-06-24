@@ -38,14 +38,14 @@ class Mail {
 
 }
 
-exports.check = function (req, res) {
+/*exports.check = function (req, res) {
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(422).json({ errors: errors.array() });
 	}
 	res.json(req.body.email);
-},
+},*/
 
 	exports.list = function (req, res) {
 		// let query = User.find({}, { password: false, updatedAt: false }).exec();

@@ -117,24 +117,44 @@
                                 </div>
                               </div>
                             </div>
+
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="">Company</label>
+                                 <select class="select2" name="company" style="width: 100%;">
+                                    <% company.forEach((company)=>{ %>
+                                       <option value="<%=company._id%>">
+                                          <%=company.name%>
+                                       </option>
+                                       <%})%>
+                                 </select>
+                              </div>
+                          </div>
                             
                               <div class="col-md-6">
                                  <div class="form-group">
                                     <label for="">Store</label>
-                                    <input type="text" class="form-control" id="store" name="store" placeholder="Store">
+                                      <select class="select2" name="store" multiple="multiple" style="width: 100%;" placeholder="Select Store" required>
+                                     <% stores.forEach((store)=>{ %>
+                                     <option value="<%=store._id%>"  <%=(user?._store?.includes(store._id))?'selected':''%> ><%=store.name%></option>
+                                     <%})%>
+                                   </select>
                                  </div>
                               </div>
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                   <label for="">Role</label>
-                                   <!-- <input type="text" class="form-control" id="role" name="role" placeholder="Role"> -->
-                                   <select class="select2" name="role" multiple="multiple" style="width: 100%;" placeholder="Select Role">
-                                    <% role.forEach((role)=>{ %>
-                                    <option value="<%=role._id%>"<%=(user.role_id.includes(role._id))?'selected':''%>><%=role.name%></option>
-                                    <%})%>
-                                  </select>
-                               
-                                 </div>
+                              
+                              
+
+                             <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="">Role</label>
+                                 <!-- <input type="text" class="form-control" id="role" name="role" placeholder="Role"> -->
+                                 <select class="select2" name="role" multiple="multiple" style="width: 100%;" placeholder="Select Role" required>
+                                  <% role.forEach((role)=>{ %>
+                                  <option value="<%=role._id%>"<%=(user?.role_id?.includes(role._id))?'selected':''%>><%=role.name%></option>
+                                  <%})%>
+                                </select>
+                             
+                               </div>                             
                              </div>
                              <div class="col-md-6">
                               <div class="form-group">
@@ -195,7 +215,7 @@
 <script>
   $(function () {
    $('.select2').select2({
-        placeholder: "Select Roles"
+        
       })
     bsCustomFileInput.init();
   });

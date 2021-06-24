@@ -132,15 +132,8 @@
 
                                  <div class="col-md-6">
                                     <div class="form-group">
-                                       <label for="">Store</label>
-                                       <input type="text" class="form-control" id="store" name="store"
-                                          placeholder="Store">
-                                    </div>
-                                 </div>
-                                 <div class="col-md-6">
-                                    <div class="form-group">
                                        <label for="">Company</label>
-                                       <select class="select2" name="company" multiple="multiple" style="width: 100%;"
+                                       <select class="select2" name="company" style="width: 100%;"
                                           placeholder="Select">
                                           <% company.forEach((company)=>{ %>
                                              <option value="<%=company._id%>">
@@ -149,6 +142,18 @@
                                              <%})%>
                                        </select>
                                     </div>
+                                   
+                                 </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                       <label for="">Store</label>
+                                         <select class="select2" name="store" multiple="multiple" style="width: 100%;" placeholder="Select Store">
+                                        <% stores.forEach((store)=>{ %>
+                                        <option value="<%=store._id%>"><%=store.name%></option>
+                                        <%})%>
+                                      </select>
+                                   
+                                     </div>
                                  </div>
                                  <div class="col-md-6">
                                     <div class="form-group">
@@ -224,11 +229,7 @@
 
    <script>
       $(function () {
-         $('.select2').select2({
-            placeholder: "Choose "
-         })
-
-
+         $('.select2').select2({})
          bsCustomFileInput.init();
       });
 
@@ -254,7 +255,16 @@
                profile_pic: {
                   required: true
                },
+               store:{
+                  required:true
+               },
                timezone: {
+                  required: true
+               },
+               company: {
+                  required: true
+               },
+               role:{
                   required: true
                }
             },
