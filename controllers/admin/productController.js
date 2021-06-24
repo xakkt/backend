@@ -283,28 +283,7 @@ exports.remove = async (req, res) => {
 exports.priceSave = async (req, res) => {
     try {
         const arr = [];
-        // for (i = 0; i < req.body.no_of_stores; i++) {
-        //     for (k = i + 1; k < req.body.no_of_stores; k++) {
-        //         if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
-        //             if (req.body.etime[i] >= req.body.stime[k]) {
-        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
-        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
-        //             }
-        //         }
-        //         else if (req.body.store[i]) {
-        //             if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
-        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
-        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
-        //             }
-
-        //         }
-        //     }
-        //     // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
-        //     // {
-        //     //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
-        //     //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
-        //     // }
-        // }
+        
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
             console.log("--product", req.body)
@@ -330,45 +309,7 @@ exports.priceSave = async (req, res) => {
                 deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() },
 
             }
-            // waterfall([
-            //     function (callback) {
-            //         Banner.findOneAndUpdate(
-            //             { $and: [{ _store: req.body.store[i] }, { _deal: req.body.deal[i] }, { deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() } }, { deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }] },
-            //             { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
-            //             function (err, result) {
-            //                 callback(err, result);
-            //             })
-            //     },
-            //     function (result, callback) {
-            //         if (result) callback(null, result);
-            //         else
-            //             Banner.findOne(banner, function (err, result1) {
-            //                 callback(err, result1);
-            //             })
-            //     },
-            //     function (result1, callback) {
-            //         bannerinfo.image = 'no-image_1606218971.jpeg'
-            //         if (result1)
-            //             callback(null, result1);
-            //         else {
-            //             Banner.create(bannerinfo)
-            //         }
-            //     }
-            // ], function (err, result) {
-            //     // result now equals 'done'
-            //     console.log("--errr", result)
-            // });
-
-            // const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte:moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end:moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }).exec()
-            // if (!banner) {
-            //     const bannerinfo = {
-            //         _deal: req.body.deal[i],
-            //         _store: req.body.store[i],
-            //         deal_start:moment(req.body.stime[i]).startOf('day').toISOString(),
-            //         deal_end:moment(req.body.etime[i]).endOf('day').toISOString()
-            //     }
-            //     await Banner.create(bannerinfo);
-            // }
+            
             await StoreProductPricing.deleteOne({ _store: req.body.store[i], _product: req.body.productid }).exec()
         }
 

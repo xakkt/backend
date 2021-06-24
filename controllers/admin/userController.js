@@ -2,6 +2,7 @@ const User = require('../../models/user');
 const Roles = require('../../models/role')
 const Device = require('../../models/device')
 const Company = require('../../models/company')
+const Stores = require('../../models/store')
 
 var randomstring = require("randomstring");
 const express = require('express');
@@ -42,7 +43,6 @@ class Mail {
 
 }
 
-
 exports.check = function (req, res) {
 
     const errors = validationResult(req);
@@ -52,19 +52,19 @@ exports.check = function (req, res) {
     res.json(req.body.email);
 },
 
-    exports.list = async (req, res) => {
-        let filter = {
-            limit: 10,
-            skip: 10,
-            search: '',
-            sort: 'ASC',
-            sort: {
-                name: 'asc'
-            }
+exports.list = async (req, res) => {
+    let filter = {
+        limit: 10,
+        skip: 10,
+        search: '',
+        sort: 'ASC',
+        sort: {
+            name: 'asc'
         }
+    }
 
         try {
-            // let list =  await Roles.find({_id:req.session.roleid,name:'SYSTEM ADMININSTRATOR'}).lean()
+            // let list =  await Roles.find({_id:req.session.rolesId,name:'SYSTEM ADMININSTRATOR'}).lean()
             // var cond ;
             // (list)?cond={role_id:{$in: [null, [] ]}}:cond={user_id:req.session.userid}
 
@@ -80,10 +80,13 @@ exports.check = function (req, res) {
     exports.edit = async (req, res) => {
         try {
             var role = await Roles.find({}).lean()
+            var stores = await Stores.find({}).lean()
+            var company = await Company.find({}).lean()
             var TimeZone = moment.tz.names();
             const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-            return res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role, timezone: TimeZone, message: "", user: user });
+            return res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role, timezone:TimeZone,message: "",user:user,stores:stores,company:company });
         } catch (err) {
+            console.log(err)
             res.status(400).json({ status: "false", data: err });
         }
     }
@@ -93,8 +96,9 @@ exports.create = async (req, res) => {
         var role = await Roles.find({}).lean()
         var TimeZone = moment.tz.names();
         var company = await Company.find({}).lean()
+        var stores = await Stores.find({}).lean()
 
-        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: TimeZone,company:company, role: role })
+        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: TimeZone,company:company,role:role,stores:stores })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });
@@ -113,6 +117,7 @@ exports.save = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             role_id: req.body.role,
+            _store:req.body.store,
             contact_no: req.body.contact_no,
             status: req.body.status,
             _supervisor: req.session.userid,

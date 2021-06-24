@@ -41,18 +41,21 @@
   }
 
   #dummy {
-    color:black;
+    color: black;
     font-weight: 900;
     margin-top: -2px;
     margin-right: 10px;
     /* right: 100px; */
-}
-i#dummies h6 {
+  }
+
+  i#dummies h6 {
     margin: 0;
-}
-.file i {
+  }
+
+  .file i {
     margin-right: 10px;
-}
+  }
+
   #dummy:hover {
     background-color: green !important;
   }
@@ -61,7 +64,8 @@ i#dummies h6 {
     position: absolute;
     left: 20%;
   }
-  .upload-icons{
+
+  .upload-icons {
     justify-content: flex-end;
     display: flex;
     align-items: center;
@@ -129,29 +133,25 @@ i#dummies h6 {
                 <!-- /.card-header -->
                 <div class="container-fluid">
                   <form>
-                    <input type="hidden" value=<%=(await check ('product_delete',roleid)) ? roleid:"" %> id="delete"
-                      name="delete" />
-                    <input type="hidden" value=<%=(await check ('product_edit',roleid)) ? roleid:"" %> id="edit"
-                      name="edit" />
-                    <ul class="upload-icons">
-                    <li id="dummies">
-                      <a href="/dummy.csv" id="dummy" download>
-                        <i class="fa fa-file-excel" style="color:red" aria-hidden="true"></i>
-                        Product File
-                      </a>
-                    </li>
 
-                    <li class="file">
-                      <label for='fileinput'><i class="fa fa-upload" style="color:red" class="icon" aria-hidden="true"></i>Import Product
-                      </label>
-                      <input type="file" style="display:none" name="csv" id="fileinput" />
-                    </li>
+                    <ul class="upload-icons">
+                      <li id="dummies">
+                        <a href="/dummy.csv" id="dummy" download>
+                          <i class="fa fa-file-excel" style="color:red" aria-hidden="true"></i>
+                          Product File
+                        </a>
+                      </li>
+
+                      <li class="file">
+                        <label for='fileinput'><i class="fa fa-upload" style="color:red" class="icon"
+                            aria-hidden="true"></i>Import Product
+                        </label>
+                        <input type="file" style="display:none" name="csv" id="fileinput" />
+                      </li>
                     </ul>
-                    <% if(await admin("SYSTEM ADMININSTRATOR",user)){ %>
+                    <% if(await check("system_admin")){ %>
                     <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                     <%} %>
-                    
-                    
 
                 </div>
                 </form>
@@ -164,15 +164,16 @@ i#dummies h6 {
                       <th>Name</th>
                       <th>Image</th>
                       <th>Description</th>
+                      <% if(await check("add_product_pricing")) { %>
                       <th>Promotion</th>
                       <th>Price</th>
-                      <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check
-                                    ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
+                      <% } %>
+                      <% if(await check("product_edit","product_delete")) { %>
                       <th>Action</th>
                       <%}%>
-                                </tr>
-                              </thead>
-                              <tbody>
+                    </tr>
+                  </thead>
+                <tbody>
 
                               </tbody>
                               <tfoot>
@@ -183,12 +184,13 @@ i#dummies h6 {
                                   <th>Name</th>
                                   <th>Image</th>
                                   <th>Description</th>
+                                  <% if(await check("add_product_pricing")) { %>
                                   <th>Promotion</th>
                                   <th>Price</th>
-                                  <% if(await admin("SYSTEM ADMININSTRATOR",user) || await check
-                                    ("product_delete",roleid) || await check ("product_edit",roleid)) { %>
-                      <th>Action</th>
-                      <%}%>
+                                  <% } %>
+                                  <% if(await check("product_edit","product_delete")) { %>
+                                  <th>Action</th>
+                                  <%}%>
                                 </tr>
                               </tfoot>
                             </table>
@@ -371,7 +373,7 @@ i#dummies h6 {
                           }
                         },
                         { "data": "description" },
-                        {
+                        <% if(await check("add_product_pricing")) { %> {
                           data: "ID",
                           render: function (data, type, row) {
                             return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
@@ -383,6 +385,7 @@ i#dummies h6 {
                             return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
                           }
                         },
+                        <% } %>
                         {
                           data: "ID",
                           "visible": (admin || del || edit) ? true : false,
@@ -433,7 +436,7 @@ i#dummies h6 {
                     });
                   });
                 });
-      
+
               </script>
 </body>
 

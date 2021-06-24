@@ -41,18 +41,7 @@ const childSchema = new Schema({
     type: String
   },
  
- 
-//   _timezone: {
-//     type: Schema.Types.ObjectId,
-//     ref:'Timezone',
-//     validate: {
-//             validator: function(v) {
-//             return FKHelper(mongoose.model('Timezone'), v);
-//          },
-//         message: `Timezone doesn't exist`
-//     }
-// },
-  location: {
+ location: {
     type: {
         type: String,
         enum: ['Point'],
@@ -127,17 +116,7 @@ _company:
     }
   },
 
-  // _timezone: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Timezone',
-  //   validate: {
-  //     validator: function (v) {
-  //       return FKHelper(mongoose.model('Timezone'), v);
-  //     },
-  //     message: `Timezone doesn't exist`
-  //   }
-  // },
-  role_id: [
+ role_id: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Role',
@@ -146,6 +125,19 @@ _company:
           return FKHelper(mongoose.model('Role'), v);
         },
         message: `Role doesn't exist`
+      }
+    },
+
+  ],
+  _store: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Store',
+      validate: {
+        validator: function (v) {
+          return FKHelper(mongoose.model('Store'), v);
+        },
+        message: `Store doesn't exist`
       }
     },
 
@@ -165,9 +157,7 @@ _company:
 
 userSchema.plugin(mongooseLeanGetters)
 userSchema.plugin(uniqueValidator)
-// userSchema.pre('save', async function () {
-//   this.password = await bcrypt.hash(this.password, saltRounds);
-// });
+
 userSchema.pre('save', async function () {
   this.password = await md5(this.password);
 });

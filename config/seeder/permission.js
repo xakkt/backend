@@ -162,6 +162,27 @@ module.exports =
             "name": "category_add",
             "description": "Add",
         },
+        {
+            "type": "product_pricing",
+            "name": "view_product_pricing",
+            "description": "View",
+        },
+        {
+            "type": "product_pricing",
+            "name": "add_product_pricing",
+            "description": "Add",
+        },
+        {
+            "type": "product_pricing",
+            "name": "edit_product_pricing",
+            "description": "Edit",
+        },
+        {
+            "type": "product_pricing",
+            "name": "delete_product_pricing",
+            "description": "Delete",
+        },
 
     ]
 }
+

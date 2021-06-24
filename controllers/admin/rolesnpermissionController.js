@@ -27,21 +27,27 @@ exports.createRole = async (req, res) => {
 exports.update = async function (req, res) {
 
     try {
-        console.log("--checked",req.body.checked)
-        const $cond = parseInt(req.body.checked) ? { $push: { "_permission": req.body.permissionid } } : { $pull: { "_permission": req.body.permissionid } };
-        const $cond1 = parseInt(req.body.checked) ? { $push: { "_roles": req.body.roleid} } : { $pull: { "_roles": req.body.roleid} };
+        
+        const $permission = parseInt(req.body.checked) ? { $push: { "_permission": req.body.permissionid } } : { $pull: { "_permission": req.body.permissionid } };
+        const $roll = parseInt(req.body.checked) ? { $push: { "_roles": req.body.roleid} } : { $pull: { "_roles": req.body.roleid} };
 
-        await Roles.findOneAndUpdate(
+      let role =  Roles.findOneAndUpdate(
             {_id:req.body.roleid},
-            $cond,
+            $permission,
             { safe: true, new: true },
         )
-      let permission =  await Permission.findOneAndUpdate(
+      let permission =  Permission.findOneAndUpdate(
             {_id:req.body.permissionid},
-            $cond1,
+            $roll,
             { safe: true, new: true },
         )
-        console.log("--permission",permission)
+
+      
+    let finalResult =await role + await permission;
+
+     if(finalResult)
+        return res.json({status:true,data:'permission given'})
+        
     } catch (err) {
         console.log(err)
         await req.flash('failure', err.message);
@@ -53,9 +59,11 @@ exports.update = async function (req, res) {
 exports.createPermission = async (req, res) => {
     try {
         const permissioninfo = {
-            name: req.body.permission_name,
-            description: req.body.permission_description
+            name: req.body.permission_name.toLowerCase()+'_'+req.body.type,
+            type: req.body.type,
+            description: req.body.permission_name
         }
+        
         let permissions = await Permission.create(permissioninfo)
         if (permissions) return  res.redirect('/admin/roles')
 

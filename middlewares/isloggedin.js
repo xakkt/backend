@@ -5,27 +5,29 @@ const { check } = require('../controllers/admin/userController');
 
 
 module.exports = async (req, res, next)=>{
-    console.log(req.body)
+    
+    if (req.url == '/login') return next();
     if (req.session.email) { 
+        
         res.locals.user = req.session.userid
-        res.locals.roleid = req.session.roleid
-        res.locals.check = async (value, id) => {
-            const permission = await Permission.findOne({ name: value,_roles:{$in:id}}).exec()
+        res.locals.rolesId = req.session.rolesId
+
+        res.locals.check = async (...value) => {
+               const role = await User.findOne({_id:req.session.userid}).populate({
+                path: 'role_id', 
+                model: 'Role', 
+                match: {
+                  key:{$eq:'system_admin'}
+                }
+            }).exec()
+            if(role.role_id.length) return true
+
+            const permission = await Permission.findOne({ name: value,_roles:{$in:req.session.rolesId}}).exec()
             if(!permission) return false
             return true
            }
-           
-           res.locals.admin = async (value, id) => {
-               const role = await User.findOne({_id:req.session.userid}).populate({
-                   path: 'role_id', 
-                   model: 'Role', 
-                   match: {
-                     name:{$eq:'SYSTEM ADMININSTRATOR'}
-                   }
-               }).exec()
-              if(!role.role_id.length) return false
-               return true
-              }
+       
+
         next()
     }
     else {

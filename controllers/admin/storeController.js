@@ -8,28 +8,25 @@ const {
 } = require('express-validator');
 var moment = require('moment-timezone');
 const Currency = require('../../models/currency');
+const { ['log']: c } = console;
 
 
 exports.list = async (req, res) => {
 
 		try {
-			var where = (req.session.company) ? {
-				_company: req.session.company
-			} : {};
-			let stores = await Store.find(where).exec();
-			console.log('======================>stores', stores)
-			if (!stores.length) return res.render('admin/store/listing', {
-				menu: "store",
-				submenu: "list",
-				stores: ""
-			})
-			return res.render('admin/store/listing', {
-				menu: "store",
-				submenu: "list",
-				stores: stores
-			})
+			c("session =====>>>",req.session)
 
-		} catch (err) {
+			var cond = (req.session.roles.includes('system_admin'))?{}:{ _id :{ $in: req.session.stores } }
+			let stores = await Store.find(cond).exec();
+
+			return res.render('admin/store/listing', 
+				{
+					menu: "store",
+					submenu: "list",
+					stores: stores
+				})
+			 
+		 } catch (err) {
 			res.status(400).json({
 				status: "success",
 				data: err
@@ -37,23 +34,24 @@ exports.list = async (req, res) => {
 		}
 	},
 
-	exports.show = async (req, res) => {
-			try {
-				const stores = await Store.findById(req.params.id).exec();
-				res.json({
-					status: "success",
-					message: "",
-					data: stores
-				});
-			} catch (err) {
-				res.status(400).json({
-					status: "false",
-					data: err
-				});
-			}
+exports.show = async (req, res) => {
+		try {
+			const stores = await Store.findById(req.params.id).exec();
+			res.json({
+				status: "success",
+				message: "",
+				data: stores
+			});
+		} catch (err) {
+			res.status(400).json({
+				status: "false",
+				data: err
+			});
+		}
 
 
-		},
+	},
+
 		exports.create = async (req, res) => {
 
 			try {
