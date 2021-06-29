@@ -55,9 +55,9 @@ exports.delete =  (req,res) =>{
 }
 exports.edit = async (req,res) =>{
     try {
-        const store =  await Store.find().lean()
-        const company = await Company.findById(req.params.id).exec();
-        res.render('admin/company/edit', { status:true, store:store,data:company, menu: "company", submenu: "create" })
+        const stores =  await Store.find().lean()
+        const company = await Company.findById(req.params.id).sort({'name': 1}).exec();
+        res.render('admin/company/edit', { status:true, stores:stores,data:company, menu: "company", submenu: "create" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }

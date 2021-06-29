@@ -17,6 +17,11 @@
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <style>
+    .custom-control-label{
+      cursor:pointer;
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -51,20 +56,20 @@
       <section class="content">
         <div class="container-fluid">
 
-<!--- message section should be common for all-->
+          <!--- message section should be common for all-->
 
-            <% if(failure.length){ %> 
-            <div class="alert alert-danger">
-                <strong><%= failure[0] %></strong>
-              </div>
-              <% } %>
-            <% if(success.length){ %>   
-            <div class="alert alert-success">
-                <strong><%= success %></strong> 
-            </div>
-            <% } %>
+          <% if(failure.length){ %>
+          <div class="alert alert-danger">
+            <strong><%= failure[0] %></strong>
+          </div>
+          <% } %>
+          <% if(success.length){ %>
+          <div class="alert alert-success">
+            <strong><%= success %></strong>
+          </div>
+          <% } %>
 
-<!---- end of messages -->              
+          <!---- end of messages -->
           <div class="row">
             <div class="col-12">
 
@@ -74,7 +79,7 @@
                 <div class="card-header">
                   <h3 class="card-title">All Users</h3>
                 </div>
-                
+
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table id="users" class="table table-bordered table-striped">
@@ -83,32 +88,42 @@
                         <th>Name</th>
                         <th>Profile Pic</th>
                         <th>Email</th>
-                         <th>Contact No</th>
-                        <th>DoB</th>
-                        <th>Last login</th>
+                        <th>Contact No</th>
+                        <!--th>DoB</th-->
+                        <th>Roles</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                     
 
-                      <% if(users) users.forEach(function(user){ %>
+
+                      <% if(users) users.forEach(function(user, userIndex){ %>
                       <tr>
                         <td><%= user.first_name%> <%=user.last_name%></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="<%= user.profile_pic %>" /></td>
+                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="<%= user.profile_pic %>" />
+                        </td>
                         <td><%= user.email %></td>
                         <td><%= user.contact_no %> </td>
-                        <td><%= moment(user.dob).format('MMMM Do YYYY'); %></td>
-                        <td><%= moment(user.createdAt).format('MMMM Do YYYY'); %></td>
-                        <td><%= user.status %></td>
+                        <!--td><%= moment(user.dob).format('MMMM Do YYYY'); %></td-->
+                        <td>
+                          <% if(user) user.role_id.forEach(function(data, index, arr) { %>
+                          <%= data.name %> <% if(index!=arr.length-1){ %> | <%}%> 
+                            <% })%>
+                        </td>
+                        <td>
+                          <div class="custom-control custom-switch">
+                            <input type="checkbox" <%=(user.status)?'checked':''%> data-userid="<%=user._id%>" class="custom-control-input user-status" id="customSwitch_<%=userIndex%>">
+                            <label class="custom-control-label" for="customSwitch_<%=userIndex%>"></label>
+                          </div>
+                        </td>
                         <td><a href="/admin/user/delete/<%= user._id %>"
                             onclick="return confirm('Are you sure you want to Active this.')">
                             <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a href="/admin/user/edit/<%= user._id %>""><i
-                              class="fas fa-pencil-alt"></i></a></td>
+                              class=" fas fa-pencil-alt"></i></a></td>
                       </tr>
                       <% }) %>
-                      
+
 
                     </tbody>
                     <tfoot>
@@ -174,19 +189,28 @@
   <script>
     $(function () {
       $("#users").DataTable({
-        dom:'Pfrtip',
+        dom: 'Pfrtip',
         language: {
-            searchPanes: {
-                emptyPanes: 'There are no panes to display. :/'
-            }
+          searchPanes: {
+            emptyPanes: 'There are no panes to display. :/'
+          }
         },
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#users_wrapper .col-md-6:eq(0)');
-      
+
     });
+
+
+
+    $(document).on('change','.user-status',function(){ 
+         $.get( "/admin/user/update/status",{status:$(this).is(':checked'),userid:$(this).data('userid')},function( data ) {
+             if(!data.status){ alert('Something went wrong') }
+        });
+     })
+
   </script>
 </body>
 

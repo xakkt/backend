@@ -67,17 +67,7 @@
                  </a>
               </li>
            </ul>
-           <% if(await check("system_admin")) {%>
-           <ul class="nav nav-treeview">
-              <li class="nav-item">
-                 <a href="/admin/managers" class="nav-link <% if (menu === 'users' && submenu === 'adminlist' ) { %> active <% } %>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Admin Users</p>
-                 </a>
-              </li>
-           </ul>
-           <% } %>
-
+           
         </li>
         <%}%>
         <!--- Departments ---->

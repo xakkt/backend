@@ -3,10 +3,21 @@ const Store = require('../../models/store');
 const Deal = require('../../models/deal');
 const StoreProductPricing = require('../../models/store_product_pricing');
 var ObjectId = require('mongoose').Types.ObjectId;
+const User = require('../../models/user')
 
 exports.create = async (req, res) => {
     try {
-        var store = await Store.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
+       
+        if(req.session.roles.includes('system_admin')){
+            var stores = await Store.find({}).populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+            store = stores
+        }else{
+           
+            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
+            store = stores._store
+        }
+
+        
         var regularPrice = await RegularPrice.aggregate([
             {$match: {_product:ObjectId(req.params.productid), _user:ObjectId(req.session.userid)}},
             {$lookup: {from: "stores", localField: "_store", foreignField: "_id", as: "store"}},

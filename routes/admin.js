@@ -111,12 +111,12 @@ router.get('/',dashboardController.dashboard)
 
 /*------------ User ---------*/
 router.get('/users',userController.list)
-router.get('/managers',userController.adminlist)
 router.get('/user/create',userController.create);
 router.post('/user/save',userUpload.single('profile_pic'),userController.save)
 router.get('/user/delete/:userid', userController.delete);
 router.get('/user/edit/:id', userController.edit);
 router.post('/user/update/:id',userUpload.single('profile_pic'),userController.update)
+router.get('/user/update/status',userController.updateStatus);
 
 /*------------- Department -------*/
 router.get('/departments',departmentController.list)
@@ -255,7 +255,9 @@ router.get('/unit/delete/:id',unitController.delete)
  router.get('/company/create',compController.create)
  router.post('/company/save',compController.save)
  router.get('/company/list',compController.list)
- router.get('/company/delete/:id',compController.delete)
+ 
+ /*---- need to discuss ----*/
+ /*router.get('/company/delete/:id',compController.delete)*/
  router.get('/company/edit/:id',compController.edit)
  router.post('/company/update/:id',compController.update)
 

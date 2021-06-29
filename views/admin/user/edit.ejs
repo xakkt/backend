@@ -123,7 +123,7 @@
                                  <label for="">Company</label>
                                  <select class="select2" name="company" style="width: 100%;">
                                     <% company.forEach((company)=>{ %>
-                                       <option value="<%=company._id%>">
+                                       <option value="<%=company._id%>" <%=(company._id.equals(user._company))?'selected':'' %>>
                                           <%=company.name%>
                                        </option>
                                        <%})%>
@@ -136,14 +136,12 @@
                                     <label for="">Store</label>
                                       <select class="select2" name="store" multiple="multiple" style="width: 100%;" placeholder="Select Store" required>
                                      <% stores.forEach((store)=>{ %>
-                                     <option value="<%=store._id%>"  <%=(user?._store?.includes(store._id))?'selected':''%> ><%=store.name%></option>
+                                          <option value="<%=store._id%>"  <%=(user?._store?.includes(store._id))?'selected':''%> ><%=store.name%></option>
                                      <%})%>
                                    </select>
                                  </div>
                               </div>
-                              
-                              
-
+      
                              <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Role</label>

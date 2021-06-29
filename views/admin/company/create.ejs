@@ -179,13 +179,22 @@
 
       $(function () {
 
-         $('#departmentForm').validate({
+         $('#companyForm').validate({
             rules: {
                name: {
                   required: true
                },
                description: {
                   required: true,
+               },
+               email: {
+                  required: true,
+               },
+               contact: {
+                  required: true,
+               },
+               address: {
+                  required: true
                },
                logo: {
                   required: true

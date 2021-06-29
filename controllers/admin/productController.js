@@ -1,5 +1,6 @@
 const ProductCategory = require('../../models/product_category');
 const Product = require('../../models/product');
+const User = require('../../models/user')
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
@@ -335,13 +336,30 @@ exports.addPrice = async (req, res) => {
     try {
         var prices = [];
         var deal = [];
-         var product =  await Product.findOne({_id:req.params.productid}).lean()
+        var product =  await Product.findOne({_id:req.params.productid}).lean()
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
-        var stores = await Stores.find({}).populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+
+        const role = await User.findOne({_id:req.session.userid}).populate({
+            path: 'role_id', 
+            model: 'Role', 
+            match: {
+              key:{$eq:'system_admin'}
+            }
+        }).exec()
+
+        if(req.session.roles.includes('system_admin')){
+            var stores = await Stores.find({}).populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+            data = stores
+        }else{
+           
+            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
+            data = stores._store
+        }
+        
         var regularPrice = await RegularPrice.find({}).lean()
         let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
-        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, productName:product, brands: brands, deals: '', price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        
 
         price.map((element) => {
             var data = {};
@@ -356,8 +374,8 @@ exports.addPrice = async (req, res) => {
             prices.push(data)
 
         })
-  console.log("---product",product)
-        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+  
+        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: data, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
         console.log("--err", err)
         res.status(400).json({ data: err.message });
