@@ -162,7 +162,7 @@
 
                       <% if(data) data.forEach(function(data){ %>
                       <tr>
-                        <td><%= data._store.name %></td>
+                        <td><%= data?._store?.name %></td>
                         <td><%= data?._deal?.name %></td>
                         <td>
                           <div id='loader' style='display: none;'>

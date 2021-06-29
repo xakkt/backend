@@ -116,17 +116,17 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label>Description</label>
-                                 <textarea name="description" class="form-control" rows="3"
+                                 <textarea name="description" class="form-control" rows="2"
                                     placeholder="Enter ..."><%= data.description %></textarea>
                               </div>
                            </div>
                            
-                           <div class="col-md-6">
+                           <!--div class="col-md-6">
                               <div class="form-group">
                                  <label>Select Store</label>
                                  <select class="select2" name="store[]" multiple style="width: 100%;"
                                     placeholder="Select Department">
-                                    <% store.forEach((store)=>{ %>
+                                    <% stores.forEach((store)=>{ %>
                                       <% const stringsIdsArray = data._store.map(x => x.toString()); %>
                                       <% const uniqueStrings = [...new Set(stringsIdsArray)]; %>
                                     <option <%= (uniqueStrings.indexOf(store._id.toString())!=-1)?'selected':'' %>
@@ -135,7 +135,21 @@
                                  </select>
                               </div>
                            </div>
+                        </div-->
+
+
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <label for="">Store</label>
+                                <select class="select2" name="store" multiple="multiple" style="width: 100%;" placeholder="Select Store" required>
+                                <% stores.forEach((store)=>{ %>
+                                  <option value="<%=store._id%>"  <%=(data?._store?.includes(store._id))?'selected':''%> ><%=store.name%></option>
+                                <%})%>
+                             </select>
+                           </div>
                         </div>
+
+                        
                         <!-- /.card-body -->
                         <div class="card-footer">
                            <button type="submit" class="btn btn-primary">Submit</button>
