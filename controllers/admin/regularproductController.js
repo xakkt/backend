@@ -9,31 +9,20 @@ exports.create = async (req, res) => {
     try {
        
         if(req.session.roles.includes('system_admin')){
-            var stores = await Store.find({}).populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
-            store = stores
+            var stores = await Store.find({}).select('name _currency').populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+            userStores = stores
         }else{
-           
-            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
-            store = stores._store
+            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
+            userStores = stores._store
         }
 
-        
-        var regularPrice = await RegularPrice.aggregate([
-            {$match: {_product:ObjectId(req.params.productid), _user:ObjectId(req.session.userid)}},
-            {$lookup: {from: "stores", localField: "_store", foreignField: "_id", as: "store"}},
-            {$sort: {"store.name": 1}},
-         ])
-        if (!regularPrice) return res.render('admin/product/regular_price', {
-            menu: "RegularPrice",
-            regularPrice: "",
-            store: store,
-            productid: req.params.productid
-        })
-        
+        var storesIds = userStores.map(store => store._id)
+        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean()
+   
         return res.render('admin/product/regular_price', {
             menu: "RegularPrice",
             regularPrice: regularPrice,
-            stores: store,
+            stores: userStores,
             productid: req.params.productid
         })
     } catch (err) {
@@ -110,7 +99,7 @@ exports.remove = async (req, res) => {
  */
 exports.get = async (req, res) => {
     try {
-        console.log("0---im here", req.body)
+        
         let currency = await Store.findOne({
             _id: req.body.storeid
         }).populate({

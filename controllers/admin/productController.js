@@ -340,44 +340,39 @@ exports.addPrice = async (req, res) => {
         var brands = await Brand.find({}).lean()
         var deals = await Deals.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
 
-        const role = await User.findOne({_id:req.session.userid}).populate({
-            path: 'role_id', 
-            model: 'Role', 
-            match: {
-              key:{$eq:'system_admin'}
-            }
-        }).exec()
-
         if(req.session.roles.includes('system_admin')){
-            var stores = await Stores.find({}).populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
-            data = stores
+            var stores = await Stores.find({}).select('name _currency').populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+            userStores = stores
         }else{
-           
-            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
-            data = stores._store
+            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
+            userStores = stores._store
         }
         
-        var regularPrice = await RegularPrice.find({}).lean()
-        let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
+        var storesIds = userStores.map(store => store._id)
         
+        let productPrice = await StoreProductPricing.find({ _store:{$in : storesIds},_product:req.params.productid}).populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency', select:'name'}}).lean()
+        console.log("============>>>",productPrice)
+        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean()
+        console.log("============>>>",productPrice)
+        let storeData = [];
+        productPrice.map((price)=>{
+                pricingData = {}
+                regularPrice.map((regPrice)=>{
+                        if(regPrice._store.equals(price._store._id)){
+                            pricingData = { ...price, regularprice: regPrice.regular_price, storeId:price._store._id, storeName:price._store.name, _currency:price._store._currency.name }
+                            delete(pricingData._store)
+                            delete(pricingData.createdAt)
+                            delete(pricingData.updatedAt)
+                            delete(pricingData.__v)
+                        }
+                })
+                storeData.push(pricingData)
+                //console.log(price._store._id,"==========",regularPricee)
+        }) 
 
-        price.map((element) => {
-            var data = {};
-            var dealss = {}
-            regularPrice.map(regular => {
-                if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
-                    data = { ...element, regularprice: regular.regular_price }
+        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid:req.params.productid, brands:brands, deals:deals, storeData:storeData, stores:userStores, moment:moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
-                }
-            })
-
-            prices.push(data)
-
-        })
-  
-        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: data, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
-        console.log("--err", err)
         res.status(400).json({ data: err.message });
     }
 }

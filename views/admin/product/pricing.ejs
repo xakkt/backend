@@ -118,8 +118,8 @@
                               </thead>
                               <tbody>
                                  <input type="hidden" id="store" value="" name="no_of_stores" />
-                                 <% if(price.length>0){ %>
-                                 <% price.forEach(function(prices){ %>
+                                 <% if(storeData.length>0){ %>
+                                 <% storeData.forEach(function(prices){ %>
                                  <div id="item_details">
                                     <tr class="tr_clone" id="parent">
                                        <td style="width:18%">
@@ -127,7 +127,7 @@
                                              onclick="changeLanguage(this)">
                                              <option value="">Select stores</option>
                                              <% if(stores) stores.forEach(function(store){ %>
-                                             <option <%=(store._id.equals(prices._store))?'selected':''%> value="<%=store._id%>">
+                                             <option <%=(store._id.equals(prices.storeId))?'selected':''%> value="<%=store._id%>">
                                                 <%=store.name%>
                                              </option>
                                              <% }) %>
