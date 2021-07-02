@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
         }
 
         var storesIds = userStores.map(store => store._id)
-        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds}}).lean()
+        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean()
    
         return res.render('admin/product/regular_price', {
             menu: "RegularPrice",
