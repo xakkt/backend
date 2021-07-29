@@ -16,9 +16,6 @@ exports.list = async (req, res) => {
 		try {
 			var storess = []
 			var productId = []
-
-
-			let currency = await Store.findById(req.params.storeid).select('_currency').populate('_currency','name').lean()
 			
 			let stores = await StoreProductPricing.find({
 				'_store': req.params.storeid
@@ -54,7 +51,6 @@ exports.list = async (req, res) => {
 						...store,
 						_product: _product._id,
 						name: _product.name,
-						currency:currency._currency.name,
 						regular_price: prices.regular_price,
 						image: `${process.env.BASE_URL}/images/products/${_product.image}`,
 						sku: _product.sku,
