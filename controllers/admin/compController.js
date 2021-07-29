@@ -80,3 +80,14 @@ exports.update = async(req,res) =>{
         res.status(400).json({ status: "false", data: err });
     }
 }
+exports.checkEmail = async(req,res) =>{
+    try {
+        console.log("--req",req.body)
+        let email =  await Company.findOne({email:req.body.email}).lean()
+        if(email)return res.send({ status: false })
+        return res.send({status:true})
+        
+    } catch (err) {
+        res.send(err)
+    }
+}

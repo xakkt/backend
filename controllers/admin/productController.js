@@ -4,10 +4,6 @@ const User = require('../../models/user')
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
-const Banner = require('../../models/banner')
-const Wishlist = require('../../models/wishlist')
-var waterfall = require('async-waterfall');
-const Currency = require('../../models/currency');
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -15,7 +11,6 @@ const RegularPrice = require('../../models/product_regular_pricing');
 const _globalCommon = require('../../helper/common')
 const { validationResult } = require('express-validator');
 var moment = require('moment')
-var waterfall = require('async-waterfall');
 const _global = require('../../helper/notification');
 
 /*
@@ -48,7 +43,7 @@ exports.productCreate = async (req, res) => {
     * Add new Product Category
     *params[name,filename]
     */
-    exports.save = async (req, res) => {
+exports.save = async (req, res) => {
 
         try {
             const categoryInfo = {
@@ -67,7 +62,7 @@ exports.productCreate = async (req, res) => {
         }
 
 
-    }
+}
 /*
 *Listing of Product Category
 */
@@ -161,8 +156,8 @@ exports.productsave = async (req, res) => {
             trending:req.body.trending,
             status: req.body.status,
             brand_id: req.body.brand
-
         }
+
         productinfo.image = (req.file.filename) ? req.file.filename : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
@@ -177,10 +172,10 @@ exports.productsave = async (req, res) => {
 */
 exports.productlisting = async (req, res) => {
     try {
-        // let price = await StoreProductPricing.find().exec()
-        // let product = await Product.find().exec();
-        // if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: '', price: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+       
+        var cond = (req.session.roles.includes('system_admin'))?{}:{ _id :{ $in: req.session.stores } }
+		let stores = await Stores.find(cond).exec();
+        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: '', price: '', store:stores,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });
@@ -273,7 +268,7 @@ exports.remove = async (req, res) => {
         let remove = await StoreProductPricing.deleteOne({ _id: req.body._id }).exec()
         if (!remove) return res.json({ status: false })
         return res.json({ status: true })
-    } catch (err) {
+    }catch (err) {
         res.send(err)
     }
 }
@@ -382,11 +377,31 @@ exports.product_listing = async (req, res) => {
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
         let searchString = req.query.search.value || '';
-      
+        if(req.query._store) {
+         let productId = await RegularPrice.find({_store:req.query._store},['_product'])
+         let _product = []
+          productId.map((item)=>{
+            _product.push(item._product)
+           })
+           var where = {
+            _id : {$in : _product},
+            $or: [
+                { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
+                { "name.english": { $regex: searchString, $options: 'i' } },
+            ]
+        }
+           let product = await Product.find(where)
+           .skip((pagno - 1) * limit) //Notice here
+           .limit(limit)
+           .lean();
+       let total = await Product.find(
+           where
+       ).lean()
+       return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
+        }else{
         let productForSpecificCompany
         if (req.session.company) {
             productForSpecificCompany = await _globalCommon.companyStore(req)
-            //where._company = req.session.company
         }
         var where = {
             $or: [
@@ -403,11 +418,11 @@ exports.product_listing = async (req, res) => {
             where
         ).lean()
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
+        }
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
 }
-
 exports.product_delete = async (req, res) => {
     try {
         let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
@@ -419,17 +434,11 @@ exports.product_delete = async (req, res) => {
 }
 exports.unique_sku = async (req, res) => {
     try {
-        console.log("--req",req.body)
-
        let sku =  await Product.findOne({sku:req.body.sku}).lean()
-       if(sku)
-       {
-        return res.send({ status: false })
-       }
+       if(sku)return res.send({ status: false })
+       
        return res.send({status:true})
-        let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
-        if (!remove) return res.json({ status: false })
-        return res.json({ status: true })
+      
     } catch (err) {
         res.send(err)
     }

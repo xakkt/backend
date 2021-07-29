@@ -2,6 +2,7 @@ const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 const ProductRegularPricing = require('../../models/product_regular_pricing')
 const StoreProductPricing = require('../../models/store_product_pricing')
+const Store = require('../../models/store')
 
 var moment = require('moment');
 const {
@@ -15,12 +16,14 @@ exports.list = async (req, res) => {
 		try {
 			var storess = []
 			var productId = []
+
+
+			let currency = await Store.findById(req.params.storeid).select('_currency').populate('_currency','name').lean()
+			
 			let stores = await StoreProductPricing.find({
 				'_store': req.params.storeid
 			}).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean()
-			let regularprice = await ProductRegularPricing.find({
-				_store: req.params.storeid
-			})
+			
 			if (stores.length) {
 				stores.map((item) => {
 					productId.push(item._product._id)
@@ -51,6 +54,7 @@ exports.list = async (req, res) => {
 						...store,
 						_product: _product._id,
 						name: _product.name,
+						currency:currency._currency.name,
 						regular_price: prices.regular_price,
 						image: `${process.env.BASE_URL}/images/products/${_product.image}`,
 						sku: _product.sku,
