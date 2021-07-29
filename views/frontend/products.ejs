@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   <script src="https://use.fontawesome.com/73e16e51a8.js"></script>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/owl.theme.default.min.css">
+   <script src="<%= process.env.BASE_URL %>/frontend/js/owl.carousel.min.js"></script>
+   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
+   
+</head>
+<body>
+   <!-- Navbar -->
+   <%- await include('../_partials/_frontend/navbar.ejs'); %>
+   <!-- /.navbar -->
+   <div class="main-body">
+      <div class="jumbotron jumbotron-fluid x-jumbo" style="background: url('<%= process.env.BASE_URL %>/frontend/images/grocery.jpg') center center / cover no-repeat">
+         <div class="container topbanner">
+            <h1 class="display-4">X-Grocery</h1>
+            <p class="lead">Coming Soon.</p>
+         </div>
+         <div class="container-list">
+            <ul class="list-inline">
+                <% for (const [i,brand] of brands.entries()) { %>
+                    <%if(i==20){%>
+                        <li class="list-inline-item"><a href="">Check More</a></li>
+                        
+                    <% break; }%>    
+                        <li class="list-inline-item"><a href=""><%=brand.name%></a></li>
+                    
+                <% }%>    
+            </ul>
+         </div>
+      </div>
+      <div class="container-fluid">
+         <h4>Trending Nearby</h4>
+         <div class="owl-carousel owl-theme">
+            <% for (const [i,product] of products.entries()) { %> 
+                <div class="item">
+                <img src="<%=product.image%>"/>
+                <span class="img-text" style="text-align:center;font-size:16px"><%=product.name.english%></span>
+                <span class="img-text" style="text-align:center;font-size:16px"><strike><%=product.currency%></product.currency><%=product.regular_price%></strike> <%=product.currency%><%=product.deal_price%></span>
+                <span class="img-text add-to-cart">Add to cart</span>
+                </div>
+            <% }%>     
+         </div>
+         <!---owl-carousel-->
+      </div> <!--container-fluid-->
+
+        <div class="container-fluid">
+         <h4>Deals @ Palm HyperMarket</h4>
+         <div class="owl-carousel owl-theme">
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906042350054_002_.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8908003115948_002__1.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906005670045.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/3/1/3141120000062.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/8/9/8906032010838.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+            <div class="item">
+               <img src="https://cdn.adilstore.com/catalog/product/cache/137c8af4d23c8c65467939b2b91b6f17/b/i/bikaji-rasgulla.jpg"/>
+               <span class="img-text" style="text-align:center;font-size:16px">Product title</span>
+               <span class="img-text" style="text-align:center;font-size:16px">price</span>
+            </div>
+         </div>
+         <!---owl-carousel-->
+      </div>
+
+   </div>
+
+   <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+
+  
+</body>
+</html>
