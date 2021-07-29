@@ -12,13 +12,6 @@ const CartController = require('../controllers/frontend/cartController')
 
 
 
-// var auth = function(req, res, next) {
-//   if (req.session.email)
-//       return next();
-//   else
-//       return res.redirect('/admin/login')
-// };
-
 const verifyjwt = require('../middlewares/tokenVerification');
 var moment = require('moment');
 const path = require('path');
@@ -30,13 +23,13 @@ router.get('/product/:id',IndexController.list)
 router.post('/cookie',IndexController.cookie)
 router.get('/cookiees',IndexController.cookiees)
 
-
 router.post('/create',AuthController.create)
 router.post('/login',AuthController.login)
 router.get('/logout',AuthController.logout)
 
 /*------------ User ---------*/
-router.get('/',StoreController.list)
+router.get('/',StoreController.homepage)
+router.get('/products/:storeid',StoreController.products)
 
 router.get('/cart',CartController.list)
 
