@@ -289,38 +289,18 @@
 
       $('#productForm').validate({
         rules: {
-          en_name: {
-            required: true
-          },
-          unit: {
-             required: true,
-           },
-          logo: {
-            required: true
-          },
-          sku: {
-            required: true
-          },
-          weight: {
-            required: true
-          }
+          en_name : { required: true },
+          unit    : {  required: true },
+          logo    : { required: true },
+          sku     : { required: true },
+          weight  : { required: true }
         },
         messages: {
-          name: {
-            required: "Please enter a department name"
-          },
-          unit: {
-             required: "Please select an unit"
-           },
-          logo: {
-            required: "Please select an image"
-          },
-          sku: {
-            required: "Please enter unique sku code"
-          },
-          weight: {
-            required: "Please enter weight value"
-          }
+          name: { required: "Please enter a department name" },
+          unit: { required: "Please select an unit"  },
+          logo: { required: "Please select an image" },
+          sku:  { required: "Please enter unique sku code" },
+          weight: { required: "Please enter weight value" }
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

@@ -21,7 +21,7 @@ const coupanController = require('../controllers/admin/coupanController.js')
 const dashboardController = require('../controllers/admin/dashboardController.js')
 const orderController = require('../controllers/admin/orderController.js')
 const currencyController = require('../controllers/admin/currencyController.js')
-
+const fieldrepController = require('../controllers/admin/fieldrepController.js')
 
 // var auth = function(req, res, next) {
 //   if (req.session.email)
@@ -117,6 +117,10 @@ router.get('/user/delete/:userid', userController.delete);
 router.get('/user/edit/:id', userController.edit);
 router.post('/user/update/:id',userUpload.single('profile_pic'),userController.update)
 router.get('/user/update/status',userController.updateStatus);
+router.post('/user/checkEmail',userController.checkEmail)
+
+/*---------- Field Rep ---------*/
+router.get('/fieldrep/companies',fieldrepController.assignCompanies)
 
 /*------------- Department -------*/
 router.get('/departments',departmentController.list)
@@ -138,9 +142,9 @@ router.post('/store/update/:id', _global.permission('store_edit'),storeControlle
 
 
 /*------------ Products --------*/
-router.get('/products',(req, res)=> {
+/*router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
-})
+})*/
 router.post('/product/delete', productController.product_delete)
 router.post('/product/create',productUpload.single('logo'),_global.permission('product_add'),productController.productsave)
 router.get('/product',_global.permission('product_view'),productController.productlisting)
@@ -255,7 +259,7 @@ router.get('/unit/delete/:id',unitController.delete)
  router.get('/company/create',compController.create)
  router.post('/company/save',compController.save)
  router.get('/company/list',compController.list)
- 
+ router.post('/company/checkEmail',compController.checkEmail)
  /*---- need to discuss ----*/
  /*router.get('/company/delete/:id',compController.delete)*/
  router.get('/company/edit/:id',compController.edit)

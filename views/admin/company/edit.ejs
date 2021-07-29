@@ -101,6 +101,9 @@
                                  <label for="companyemail">Email</label>
                                  <input type="email" name="email" value="<%= data.email %>" class="form-control"
                                     id="companyemail" placeholder="Enter email" readonly>
+                                    <div class="message" style="display:none;">
+                                       <span style="color:red">Email already exists</span>
+                                     </div> 
                               </div>
                            </div>
                            <div class="col-md-6">
@@ -152,7 +155,7 @@
                         
                         <!-- /.card-body -->
                         <div class="card-footer">
-                           <button type="submit" class="btn btn-primary">Submit</button>
+                           <button type="submit" class="btn btn-primary submit">Submit</button>
                         </div>
                      </form>
                   </div>
@@ -205,9 +208,7 @@
                name: {
                   required: true
                },
-               description: {
-                  required: true,
-               },
+               
             },
             messages: {
                name: {
@@ -227,6 +228,28 @@
                $(element).removeClass('is-invalid');
             }
          });
+
+
+         $("#companyemail").keyup(function () {
+            let formdata = {
+            "email": $(this).val()
+            }
+            $.ajax({
+               url: '/admin/company/checkEmail',
+               type: 'POST',
+               data: formdata
+               }).done((data) => {
+               if (!data.status) {
+                  $('.message').show();
+                  $('.submit').prop('disabled', true).css('background-color', 'red');
+               }else{
+                  $('.message').hide();
+                  $('.submit').prop('disabled', false);
+                  $('.submit').addClass('btn btn-primary ').css('background-color', '')
+               }
+            })
+         })
+
       });
    </script>
 

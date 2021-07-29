@@ -101,6 +101,9 @@
                                  <label for="companyemail">Email</label>
                                  <input type="email" name="email" class="form-control" id="companyemail"
                                     placeholder="Enter email">
+                                    <div class="message" style="display:none;">
+                                       <span style="color:red">Email already exists</span>
+                                     </div>   
                               </div>
                            </div>
                            <div class="col-md-6">
@@ -134,7 +137,7 @@
                            </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                           <button type="submit" class="btn btn-primary">Submit</button>
+                           <button type="submit" class="btn btn-primary submit">Submit</button>
                         </div>
                      </form>
                   </div>
@@ -181,35 +184,15 @@
 
          $('#companyForm').validate({
             rules: {
-               name: {
-                  required: true
-               },
-               description: {
-                  required: true,
-               },
-               email: {
-                  required: true,
-               },
-               contact: {
-                  required: true,
-               },
-               address: {
-                  required: true
-               },
-               logo: {
-                  required: true
-               },
+               name: { required: true },
+               email  : { required: true },
+               contact: { required: true },
+               address: { required: true },
+               logo:    { required: true },
             },
             messages: {
-               name: {
-                  required: "Please enter a department name"
-               },
-               description: {
-                  required: "Please enter the description",
-               },
-               logo: {
-                  required: "Please select an image"
-               }
+               name: { required: "Please enter a department name" },
+               logo: { required: "Please select an image" }
             },
             errorElement: 'span',
             errorPlacement: function (error, element) {
@@ -224,6 +207,27 @@
             }
          });
       });
+
+      $("#companyemail").keyup(function () {
+      let formdata = {
+        "email": $(this).val()
+      }
+      $.ajax({
+        url: '/admin/company/checkEmail',
+        type: 'POST',
+        data: formdata
+      }).done((data) => {
+        if (!data.status) {
+          $('.message').show();
+          $('.submit').prop('disabled', true).css('background-color', 'red');
+        }else{
+        $('.message').hide();
+        $('.submit').prop('disabled', false);
+        $('.submit').addClass('btn btn-primary ').css('background-color', '')
+        }
+      })
+    })
+
    </script>
 
 </body>
