@@ -70,6 +70,37 @@
            
         </li>
         <%}%>
+
+        <!--li class="nav-item <% if (menu === 'users') { %> menu-open <% } %>">
+         <a href="#" class="nav-link <% if (menu === 'users') { %> active <% } %>">
+            <i class="nav-icon fas fa-box-open"></i>
+            <p>
+               Field Rep
+               <i class="fas fa-angle-left right"></i>
+            </p>
+         </a>
+         <% if(await check("user_add") ) {%>
+         <ul class="nav nav-treeview">
+            <li class="nav-item">
+               <a href="/admin/fieldrep/companies" class="nav-link <% if (menu === 'fieldrep' && submenu === 'add_companies' ) { %> active <% } %>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Field Rep</p>
+               </a>
+            </li>
+         </ul>
+         <% } %>
+
+         <ul class="nav nav-treeview">
+            <li class="nav-item">
+               <a href="/admin/users" class="nav-link <% if (menu === 'users' && submenu === 'list' ) { %> active <% } %>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manage Filed Rap</p>
+               </a>
+            </li>
+         </ul>
+         
+      </li-->
+
         <!--- Departments ---->
         <% if(await check("system_admin")) {%>
         <li class="nav-item <% if (menu === 'departments') { %> menu-open <% } %>">

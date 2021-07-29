@@ -11,13 +11,15 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- DataTables -->
+  <!-- Select2 -->
+  <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-  <link rel="stylesheet" type="text/css"
-    href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+  
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
 </head>
 <style>
@@ -127,8 +129,23 @@
               <!-- /.card -->
 
               <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">All Products</h3>
+                <div class="card-header row">
+                  <div class="col-md-8">
+                    <h3 class="card-title">All Products</h3>
+                  </div>
+                  <div class="col-md-4"><span class="product-filter">
+                      <select name="stores" id="mostsaved" onchange="myfun(event)" class="select2 form-control custom-select">
+                        <option selected="" disabled="">Select Store</option>
+
+                        <% if(store.length>0){ store.map((item)=>{ %>
+                        <option value="<%=item._id%>"><%=item.name %></option>
+                        <% })}else { %>
+                          <option selected="" disabled="">No data</option>
+                          <% }%>
+                        
+                      </select>
+                    </span>
+                  </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="container-fluid">
@@ -185,12 +202,12 @@
                                   <th>Image</th>
                                   <th>Description</th>
                                   <% if(await check("add_product_pricing")) { %>
-                                  <th>Promotion</th>
-                                  <th>Price</th>
-                                  <% } %>
-                                  <% if(await check("product_edit","product_delete")) { %>
-                                  <th>Action</th>
-                                  <%}%>
+                      <th>Promotion</th>
+                      <th>Price</th>
+                      <% } %>
+                      <% if(await check("product_edit","product_delete")) { %>
+                      <th>Action</th>
+                      <%}%>
                                 </tr>
                               </tfoot>
                             </table>
@@ -235,6 +252,8 @@
               <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
               <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
               <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+              <!-- Select2 -->
+              <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
               <!-- AdminLTE App -->
               <script src="../../dist/js/adminlte.min.js"></script>
               <!-- AdminLTE for demo purposes -->
@@ -245,6 +264,11 @@
 
               <!-- Page specific script -->
               <script>
+                $('.select2').select2({})
+                function myfun(e) {
+                  $('#products').dataTable().fnDestroy();
+                  list_products(e.target.value)
+                }
                 function confirmation(ev) {
                   ev.preventDefault();
                   var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
@@ -343,78 +367,7 @@
                 }
 
                 $(document).ready(function () {
-                  function list_products() {
-                    var admin = $('#admin').val();
-                    var del = $('#delete').val()
-                    var edit = $('#edit').val()
-                    $('#products').DataTable({
-                      "paging": true,
-                      "processing": true,
-                      "serverSide": true,
-                      "ordering": false,
-                      "ajax": {
-                        "url": "/admin/product/list",
-                        "type": "get",
-                      },
-                      "columns": [
-                        {
-                          "data": "ID",
-                          render: function (data, type, row) {
-                            return `<input type="Checkbox" id="${row._id}" onchange="myFunction(this)"
-                              class="test"/>`;
-                          }
-                        },
-                        { "data": "name.english" },
-                        {
-                          "data": "ID",
-                          render: function (data, type, row) {
-                            return `<img class="img-thumbnail" style="width: 6em;height: 4em"
-                            src="/images/products/${row.image}">`;
-                          }
-                        },
-                        { "data": "description" },
-                        <% if(await check("add_product_pricing")) { %> {
-                          data: "ID",
-                          render: function (data, type, row) {
-                            return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
-                          }
-                        },
-                        {
-                          data: "ID",
-                          render: function (data, type, row) {
-                            return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
-                          }
-                        },
-                        <% } %>
-                        {
-                          data: "ID",
-                          "visible": (admin || del || edit) ? true : false,
-                          render: function (data, type, row) {
-                            if (admin || (del && edit)) {
-                              return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirmation(event)">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
-                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
-                            } else if (del) {
-                              return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirmation(event)">
-                            <i class="far fa-trash-alt"></i></a>`
-                            } else if (edit) {
-                              return `<a
-                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
-                            }
-                            return ` <a href="/admin/product/delete/${row._id}"
-                            onclick="return confirmation(event)">
-                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
-                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
-                          }
-                        }
-                      ],
-                      success: function (done) {
-                        // console.log("--ab", done)
-                      }
-                    });
-                  }
+
                   list_products();
                   $(".check_delete").click(function () {
                     $.ajax({
@@ -436,6 +389,84 @@
                     });
                   });
                 });
+                function list_products(data) {
+                  let url
+                  if (data) {
+                    url = `/admin/product/list?_store=${data}`
+                  } else {
+                    url = "/admin/product/list"
+                  }
+                  var admin = $('#admin').val();
+                  var del = $('#delete').val()
+                  var edit = $('#edit').val()
+                  $('#products').DataTable({
+                    "paging": true,
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": false,
+                    "ajax": {
+                      "url": url,
+                      "type": "get",
+                    },
+                    "columns": [
+                      {
+                        "data": "ID",
+                        render: function (data, type, row) {
+                          return `<input type="Checkbox" id="${row._id}" onchange="myFunction(this)"
+                              class="test"/>`;
+                        }
+                      },
+                      { "data": "name.english" },
+                      {
+                        "data": "ID",
+                        render: function (data, type, row) {
+                          return `<img class="img-thumbnail" style="width: 6em;height: 4em"
+                            src="/images/products/${row.image}">`;
+                        }
+                      },
+                      { "data": "description" },
+                        <% if(await check("add_product_pricing")) { %> {
+                    data: "ID",
+                    render: function (data, type, row) {
+                      return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                    }
+                  },
+                  {
+                    data: "ID",
+                    render: function (data, type, row) {
+                      return ` <a href="/admin/regularprice/create/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                    }
+                  },
+                        <% } %>
+                  {
+                    data: "ID",
+                    "visible": (admin || del || edit) ? true : false,
+                    render: function (data, type, row) {
+                      if (admin || (del && edit)) {
+                        return ` <a href="/admin/product/delete/${row._id}"
+                            onclick="return confirmation(event)">
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
+                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+                      } else if (del) {
+                        return ` <a href="/admin/product/delete/${row._id}"
+                            onclick="return confirmation(event)">
+                            <i class="far fa-trash-alt"></i></a>`
+                      } else if (edit) {
+                        return `<a
+                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+                      }
+                      return ` <a href="/admin/product/delete/${row._id}"
+                            onclick="return confirmation(event)">
+                            <i class="far fa-trash-alt"></i></a>&nbsp;&nbsp;<a
+                            href="/admin/product/edit/${row._id}"><i class="fas fa-pencil-alt"></i></a>`
+                    }
+                  }
+                      ],
+                  success: function (done) {
+                    // console.log("--ab", done)
+                  }
+                });
+                  }
 
               </script>
 </body>

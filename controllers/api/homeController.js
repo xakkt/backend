@@ -70,7 +70,7 @@ exports.dashboard = async (req, res) => {
 
 		let banners = await Banner.find({_store: {
 			$in: storeId
-		}}).lean();
+		}}).populate('_deal','name').lean();
 	
 		bannerArr = [];
 		await Promise.all(banners.map( async function(banner){
