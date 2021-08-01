@@ -345,10 +345,10 @@ exports.addPrice = async (req, res) => {
         
         var storesIds = userStores.map(store => store._id)
         
-        let productPrice = await StoreProductPricing.find({ _store:{$in : storesIds},_product:req.params.productid}).populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency', select:'name'}}).lean()
-        console.log("============>>>",productPrice)
-        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean()
-        console.log("============>>>",productPrice)
+        let productPrice = await StoreProductPricing.find({ _store:{$in : storesIds},_product:req.params.productid}).populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency', select:'name'}}).lean({ getters: true })
+        
+        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean({ getters: true })
+        
         let storeData = [];
         productPrice.map((price)=>{
                 pricingData = {}

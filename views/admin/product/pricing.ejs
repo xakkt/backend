@@ -124,7 +124,7 @@
                                     <tr class="tr_clone" id="parent">
                                        <td style="width:18%">
                                           <select name="store[]" class="form-control custom-select store-name" required
-                                             onclick="changeLanguage(this)">
+                                             onclick="changeStore(this)">
                                              <option value="">Select stores</option>
                                              <% if(stores) stores.forEach(function(store){ %>
                                              <option <%=(store._id.equals(prices.storeId))?'selected':''%> value="<%=store._id%>">
@@ -181,7 +181,7 @@
                                  <tr class="tr_clone" id="parent">
                                     <td style="width:18%">
                                        <select name="store[]" required class="form-control custom-select store-name" required
-                                          onclick="changeLanguage(this)">
+                                          onclick="changeStore(this)">
                                           <option value="">Select stores</option>
                                           <% if(stores) stores.forEach(function(store){ %>
                                           <option value="<%=store._id%>">
@@ -340,7 +340,7 @@
            var rowCount = $("#gatePass tr").length - 1;
            $('#store').val(rowCount);
          });
-         function changeLanguage(that) {
+         function changeStore(that) {
            handleDuplicacy(that)
            $.ajax({
              url: '/admin/regularprice/get',

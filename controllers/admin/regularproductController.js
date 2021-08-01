@@ -4,10 +4,13 @@ const Deal = require('../../models/deal');
 const StoreProductPricing = require('../../models/store_product_pricing');
 var ObjectId = require('mongoose').Types.ObjectId;
 const User = require('../../models/user')
+const Product = require('../../models/product')
 
 exports.create = async (req, res) => {
     try {
        
+        let product = await Product.findById(req.params.productid).select('name -_id').lean();
+        
         if(req.session.roles.includes('system_admin')){
             var stores = await Store.find({}).select('name _currency').populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
             userStores = stores
@@ -23,7 +26,8 @@ exports.create = async (req, res) => {
             menu: "RegularPrice",
             regularPrice: regularPrice,
             stores: userStores,
-            productid: req.params.productid
+            productid: req.params.productid,
+            productName:product.name.english
         })
     } catch (err) {
         res.status(400).json({
@@ -40,7 +44,7 @@ exports.addprice = async (req, res) => {
         const arr = [];
         for (i = 0; i < req.body.store.length; i++) {
             data = {};
-            data.regular_price = req.body.regular_price[i];
+            data.regular_price = parseFloat(req.body.regular_price[i]).toFixed(2);
             data._store = req.body.store[i]
             data._product = req.body.productid
             data._user = req.session.userid
@@ -108,7 +112,7 @@ exports.get = async (req, res) => {
         var regularPrice = await RegularPrice.findOne({
             _product: req.body.productid,
             _store: req.body.storeid
-        }).lean();
+        }).lean({ getters: true });
         if (!regularPrice) return res.json({
             status: false,
             message: "Not found"

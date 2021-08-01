@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongooseLeanGetters = require('mongoose-lean-getters')
 const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
 const productRegularPricingSchema = new Schema({ 
@@ -41,9 +42,14 @@ const productRegularPricingSchema = new Schema({
         enum: ['Active','Inactive'],
     },
     regular_price: {
-        type: Number,
+        type: mongoose.Decimal128,
+        get: function(value) {
+            return value.toString();
+        },
         required: true
     },
  },{timestamps:true});
 
+ productRegularPricingSchema.plugin(mongooseLeanGetters)
+ 
 module.exports = mongoose.model('ProductRegularPricing', productRegularPricingSchema);

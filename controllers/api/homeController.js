@@ -79,8 +79,7 @@ exports.dashboard = async (req, res) => {
 			if(dealProducts){
 					bannerArr.push(banner)
 				}
-		})
-		)
+		}))
 
 		_banners = [ {
 						"_id": "60b942742527aa36d0ba23",
@@ -166,8 +165,8 @@ exports.dashboard = async (req, res) => {
 					in_shoppinglist: 0,
 					in_cart: 0,
 					image: `${process.env.BASE_URL}/images/products/${element._product.image}`,
-					deal_price: productPrice.deal_price.toFixed(2),
-					regular_price: productPrice.regular_price.toFixed(2)
+					deal_price: productPrice.deal_price,
+					regular_price: productPrice.regular_price
 				}
 	
 				if (productId in cartProductList) {
@@ -255,8 +254,8 @@ exports.dashboard = async (req, res) => {
 				in_shoppinglist: 0,
 				in_cart: 0,
 				image: `${process.env.BASE_URL}/images/products/${element._product.image}`,
-				deal_price: productPrice.deal_price.toFixed(2),
-				regular_price: productPrice.regular_price.toFixed(2)
+				deal_price: productPrice.deal_price,
+				regular_price: productPrice.regular_price
 			}
 
 			if (productId in cartProductList) {

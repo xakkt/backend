@@ -63,8 +63,8 @@ exports.shoppingList = async (userid, storeid) => {
 }
 exports.productprice = async (storeid,productid) =>{
     var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    let price = await ProductRegularPricing.findOne({_store:storeid,_product:productid}).lean()
-    let store =  await StoreProductPricing.findOne({$and: [ {_store:storeid},{_product:productid}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean()
+    let price = await ProductRegularPricing.findOne({_store:storeid,_product:productid}).lean({ getters: true })
+    let store =  await StoreProductPricing.findOne({$and: [ {_store:storeid},{_product:productid}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).select('-createdAt -updatedAt -__v -_product -_store -_deal' ).lean({ getters: true })
     if(store)
     {
     var enddate = moment(store.deal_end).format('L')
@@ -78,7 +78,7 @@ exports.productprice = async (storeid,productid) =>{
     }else
     {
         store.deal_price = 0,
-       store.effective_price =  store.regular_price
+        store.effective_price =  store.regular_price
     }
     return store
     }
