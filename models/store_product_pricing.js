@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const FKHelper = require('../helper/foreign-key-constraint');
 const Schema = mongoose.Schema;
+const mongooseLeanGetters = require('mongoose-lean-getters')
 
 const storeProductPricingSchema = new Schema({ 
      _product: {
@@ -51,7 +52,10 @@ const storeProductPricingSchema = new Schema({
         type: Number,
     },
     deal_price: {
-        type: Number,
+        type: mongoose.Decimal128,
+        get: function(value) {
+            return value.toString();
+        },        
     },
     _country: {
         type: Schema.Types.ObjectId,
@@ -72,6 +76,8 @@ const storeProductPricingSchema = new Schema({
         required:true
     }
  },{timestamps:true});
+
+ storeProductPricingSchema.plugin(mongooseLeanGetters)
 //  storeProductPricingSchema.index({
 //     _store: 1,
 //     _product: 1
