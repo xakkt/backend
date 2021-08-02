@@ -66,6 +66,7 @@ class Mail {
 	}
 
 exports.create = async (req, res) => {
+	
 	const errors = await validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
@@ -85,7 +86,7 @@ exports.create = async (req, res) => {
 	}
 	
 	User.create(userinfo, function (err, result) {
-		if (err) return res.status(400).json({ data: err.message });
+		if (err) return res.status(400).json({status: 0, data: err.message });
 			//mail.sendmail();
 			return res.json({ status: 1, message: "User Created.", data: result });
 	});

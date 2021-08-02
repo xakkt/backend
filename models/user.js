@@ -78,6 +78,7 @@ const userSchema = Schema({
   },
   contact_no: {
     type: String,
+    unique: true,
     required: false
   },
   status: {
@@ -160,6 +161,15 @@ userSchema.plugin(uniqueValidator)
 
 userSchema.pre('save', async function () {
   this.password = await md5(this.password);
+});
+
+
+userSchema.post('save', function(error, doc, next) {
+  if (error) {
+    next(new Error('User already exists with this email address or contact no'));
+  } else {
+    next(error);
+  }
 });
 
 function dateToString(date) {
