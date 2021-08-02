@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
+const mongooseLeanGetters = require('mongoose-lean-getters')
 const FKHelper = require('../helper/foreign-key-constraint');
 const StoreProductPricing = require("./store_product_pricing");
 const ProductRegularPricing = require("./product_regular_pricing");
@@ -107,6 +108,9 @@ const productSchema = new Schema({
   },
   image: {
     type: String,
+    get: function(value) {
+      return `${process.env.BASE_URL}/images/banners/${value}`;
+   },
     //required: true
   },
   unit_id: {
@@ -146,7 +150,7 @@ productSchema.pre("deleteOne",  function (next) {
   next()
 });
 
-
+productSchema.plugin(mongooseLeanGetters)
 productSchema.plugin(uniqueValidator)
 
 

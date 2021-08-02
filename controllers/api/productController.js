@@ -95,7 +95,7 @@ exports.list = async (req, res) => {
 exports.show = async (req, res) => {
 	try {
 		var productPrice = await _global.productprice(req.body._store, req.body._product)
-		const product = await Product.findById(req.body._product).select("-meta_title -meta_keywords -meta_description -updatedAt -createdAt -__v").lean();
+		const product = await Product.findById(req.body._product).select("-meta_title -meta_keywords -meta_description -updatedAt -createdAt -__v").lean({ getters: true });
 
 		if (!product) return res.json({
 			status: 1,
