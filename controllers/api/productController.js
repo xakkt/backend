@@ -19,7 +19,7 @@ exports.list = async (req, res) => {
 			
 			let stores = await StoreProductPricing.find({
 				'_store': req.params.storeid
-			}).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean()
+			}).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean({ getters: true })
 			
 			if (stores.length) {
 				stores.map((item) => {
@@ -31,7 +31,7 @@ exports.list = async (req, res) => {
 				_product: {
 					$nin: productId
 				}
-			}).populate('_product')
+			}).populate('_product').lean({ getters: true })
 			if (stores.length >0) {
 				// return res.json({
 				// 	status: 0,
