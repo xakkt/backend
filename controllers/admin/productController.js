@@ -286,7 +286,7 @@ exports.priceSave = async (req, res) => {
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
-            data.deal_price = req.body.deal_price[i];
+            data.deal_price = parseFloat(req.body.deal_price[i]).toFixed(2);
             data.deal_start = moment(req.body.stime[i]).startOf('day').toISOString();
             data.deal_end = moment(req.body.etime[i]).endOf('day').toISOString();
             data._store = req.body.store[i]
