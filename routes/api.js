@@ -95,7 +95,7 @@ const userValidation = [
     body('last_name').not().isEmpty().trim().escape().withMessage('last_name should not be empty'),
     body('contact_no').not().isEmpty().trim().escape().withMessage('contact_no should not be empty'),
     body('password').not().isEmpty().trim().escape().withMessage('Password should not be empty'),
-    body('dob').not().isEmpty().trim().escape().withMessage('Date of birth should not be empty'),
+    //body('dob').not().isEmpty().trim().escape().withMessage('Date of birth should not be empty'),
 ]
 
 const authValidation = [
