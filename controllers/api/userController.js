@@ -86,7 +86,7 @@ exports.create = async (req, res) => {
 	}
 	
 	User.create(userinfo, function (err, result) {
-		if (err) return res.status(400).json({status: 0, data: {message:err.message} });
+		if (err) return res.json({status: 0, data: {message:err.message} });
 			//mail.sendmail();
 			return res.json({ status: 1, message: "User Created.", data: result });
 	});
