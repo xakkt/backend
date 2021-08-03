@@ -359,14 +359,14 @@ exports.products = async (req, res) => {
 	
 		/*-------- trending products ------*/		
 
-		/*return res.json({
+		/* return res.json({
 			status: 1,
-			data: pdata[1],
+			data: pdata[0],
 			store:storedata
-		}) */
+		})  */
 	//	let categories = await Categories.find().lean()
   		let brands = await Brands.find().lean()
-   		return res.render('frontend/products',{deal:pdata[2], order_again:pdata[3],store:storedata, brands:brands, trending:pdata[1]})
+   		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2], order_again:pdata[3],store:storedata, brands:brands, trending:pdata[1]})
 
 	} catch (err) {
 		console.log(err)

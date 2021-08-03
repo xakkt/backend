@@ -109,7 +109,7 @@ const productSchema = new Schema({
   image: {
     type: String,
     get: function(value) {
-      return `${process.env.BASE_URL}/images/banners/${value}`;
+      return `${process.env.BASE_URL}/images/products/${value}`;
    },
     //required: true
   },
