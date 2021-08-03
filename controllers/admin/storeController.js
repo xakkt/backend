@@ -14,8 +14,6 @@ const { ['log']: c } = console;
 exports.list = async (req, res) => {
 
 		try {
-			c("session =====>>>",req.session)
-
 			var cond = (req.session.roles.includes('system_admin'))?{}:{ _id :{ $in: req.session.stores } }
 			let stores = await Store.find(cond).exec();
 
@@ -101,6 +99,7 @@ exports.editStore = async (req, res) => {
 	exports.saveStore = async (req, res) => {
 
 			try {
+				
 				var holiday_date = req.body.holiday.split('-').map((item) => item.trim())
 				const storeinfo = {
 					name: req.body.name,
@@ -110,6 +109,7 @@ exports.editStore = async (req, res) => {
 					address: req.body.address,
 					city: req.body.city,
 					state: req.body.state,
+					slug:(req.body.name+req.body.address).replace(/ /g, "-").toLowerCase(),
 					_company: req.session.company,
 					_country: req.body.country,
 					_timezone: req.body.timezone,
@@ -232,7 +232,7 @@ exports.nearByStores = async (req, res) => {
 
 
 exports.updateStore = async function (req, res) {
-
+	
 	try {
 		const errors = await validationResult(req);
 		if (!errors.isEmpty()) {
@@ -249,6 +249,7 @@ exports.updateStore = async function (req, res) {
 			address: req.body.address,
 			city: req.body.city,
 			state: req.body.state,
+			slug:(req.body.name+req.body.address).replace(/ /g, "-").toLowerCase(),
 			_country: req.body.country,
 			_currency: req.body.currency,
 			_timezone: req.body.timezone,

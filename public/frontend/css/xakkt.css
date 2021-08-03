@@ -2,6 +2,9 @@
 body {
 min-height: 100vh;
 }
+#pac-input{
+    width:100%
+}
 .main-body {
     display:flex;
     justify-content:center;
@@ -29,7 +32,7 @@ min-height: 100vh;
     z-index: 9;
     width: 560px;
     margin: 55px;
-    height: 458px;
+    height: 500px;
     left: 0;
     right: 0%;
     padding: 0 50px;

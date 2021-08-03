@@ -274,7 +274,7 @@ exports.dashboard = async (req, res) => {
 				is_favourite: 0,
 				in_shoppinglist: 0,
 				in_cart: 0,
-				image: `${process.env.BASE_URL}/images/products/${element._product.image}`,
+				image: element._product.image,
 				deal_price: productPrice.deal_price,
 				regular_price: productPrice.regular_price
 			}

@@ -29,7 +29,7 @@ router.get('/logout',AuthController.logout)
 
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
-router.get('/products/:storeid',StoreController.products)
+router.get('/products/:slug',StoreController.products)
 
 router.get('/cart',CartController.list)
 
