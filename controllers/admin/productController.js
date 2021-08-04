@@ -18,9 +18,9 @@ const _global = require('../../helper/notification');
 */
 exports.create = async (req, res) => {
     try {
-        var product = await ProductCategory.find({}).lean();
+        var categories = await ProductCategory.find({}).lean();
 
-        res.render('admin/product-category/create', { menu: "productCategory", submenu: "create", product: product })
+        res.render('admin/product-category/create', { menu: "productCategory", submenu: "create", categories: categories })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -45,14 +45,16 @@ exports.productCreate = async (req, res) => {
     */
 exports.save = async (req, res) => {
 
+
+
         try {
             const categoryInfo = {
                 name: req.body.name,
-                logo: req.file.filename
+                logo: req.file?.filename ?? null
             }
-            categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
+            categoryInfo.parent_id = req.body.parentid ?? null;
 
-            const productCategory = await ProductCategory.create(categoryInfo);
+            await ProductCategory.create(categoryInfo);
             await req.flash('success', 'ProductCategory added successfully!');
             res.redirect('/admin/category')
 
@@ -94,9 +96,9 @@ exports.delete = async (req, res) => {
 */
 exports.edit = async (req, res) => {
     try {
-        var product = await ProductCategory.find({}).lean();
+        var allCategories = await ProductCategory.find({}).lean();
         const productCategory = await ProductCategory.findById(req.params.id).exec();
-        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory", submenu: "create" })
+        res.render('admin/product-category/edit', { status: "success", message: "", productCategory:productCategory, allCategories: allCategories, menu: "productCategory", submenu: "create" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -116,6 +118,7 @@ exports.update = async function (req, res) {
 
         const categoryInfo = {
             name: req.body.name,
+            parent_id: req.body.parentid
         }
 
         if (req.file) { categoryInfo.logo = req.file.filename }

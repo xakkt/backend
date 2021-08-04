@@ -80,18 +80,17 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                     <form id="departmentForm" method="post" action="/admin/category/save" enctype="multipart/form-data">
+                     <form id="productCategoryForm" method="post" action="/admin/category/save" enctype="multipart/form-data">
                         <div class="row">
                            <div class="col-md-6">
                               <div class="form-group">
-                                 <label>Parent</label>
+                                 <label>Parent Category</label>
                                  <select class="form-control custom-select" name="parentid"
                                     style="width: 100%;">
-                                    <% console.log("product",product) %>
-                                    <% if(product.length > 0) { %>
-                                    <% product.forEach((department)=>{ %>
-                                       <% console.log("department",department) %>
-                                    <option value="<%=department._id%>"><%=department.name%></option>
+                                    <option value=null></option>
+                                    <% if(categories.length > 0) { %>
+                                    <% categories.forEach((category)=>{ %>
+                                         <option value="<%=category._id%>"><%=category.name%></option>
                                     <%})%>
                                     <% } else { %>
                                     <option value="">No Category Found</option>
@@ -170,28 +169,18 @@
 
                                  $(function () {
 
-                                    $('#departmentForm').validate({
+                                    $('#productCategoryForm').validate({
                                        rules: {
                                           name: {
                                              required: true
-                                          },
-                                          description: {
-                                             required: true,
-                                          },
-                                          logo: {
-                                             required: true
-                                          },
+                                          }
+                                          
                                        },
                                        messages: {
                                           name: {
                                              required: "Please enter a department name"
-                                          },
-                                          description: {
-                                             required: "Please enter the description",
-                                          },
-                                          logo: {
-                                             required: "Please select an image"
                                           }
+                                          
                                        },
                                        errorElement: 'span',
                                        errorPlacement: function (error, element) {

@@ -85,11 +85,12 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label>Parent</label>
-                                 <select class="select2" data-placeholder="Select a State" name="parentid"
+                                 <select class="custom-select" name="parentid"
                                     style="width: 100%;">
-                                    <% if(product.length > 0) { %>
-                                    <% product.forEach((product)=>{ %>
-                                        <option value="<%=product._id%>"><%=product.name%></option>
+                                    <% if(allCategories.length > 0) { %>
+                                       <option value=null></option>
+                                    <% allCategories.forEach((category)=>{ %>
+                                        <option value="<%=category._id%>" <%=productCategory._id%> <%=(category._id.equals(productCategory.parent_id))?'selected':'' %>><%=category.name%></option>
                                     <%})%>
                                     <% } else { %>
                                     <option value="">No Category Found</option>

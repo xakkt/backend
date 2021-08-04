@@ -16,6 +16,9 @@
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
 <style>
+    .xakkti{
+        cursor: pointer;
+    }
     .quantity {
   padding: 10px 0 10px 0;
 }
@@ -51,6 +54,9 @@ input:focus {
 .xshop{
     margin:0;
     padding:10px 0 10px 0;
+}
+.carousel-item img{
+    max-height:350px;
 }
 </style>
 
@@ -142,13 +148,13 @@ input:focus {
    
                                              <div class="xshop row">
                                                <span class="col" style="padding-right:0;">
-                                                   <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="">
+                                                   <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="">
                                                </span>
                                                <span class="col">
-                                                       <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="">
+                                                       <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="">
                                                </span>
                                                <span class="col" style="padding-left:0;">
-                                                   <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" alt="">
+                                                   <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" alt="">
                                                </span>
                                            </div>
                                         </div>
@@ -206,13 +212,13 @@ input:focus {
                                               </div>
                           <div class="xshop row">
                                                <span class="col" style="padding-right:0;">
-                                                   <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="">
+                                                   <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="">
                                                </span>
                                                <span class="col">
-                                                       <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="">
+                                                       <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="">
                                                </span>
                                                <span class="col" style="padding-left:0;">
-                                                   <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" alt="">
+                                                   <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="">
                                                </span>
                                             </div>
                                              
@@ -237,15 +243,95 @@ input:focus {
           
 
       
-
-
-
         
       </div> <!--container-fluid-->
   
 
    </div>
 
+   <!-- Footer -->
+<footer class="page-footer font-small pt-4" style="background-color: #535d61;">
+
+    <!-- Footer Links -->
+    <div class="container-fluid text-center text-md-left">
+  
+      <!-- Grid row -->
+      <div class="row">
+  
+        <!-- Grid column -->
+        <div class="col-md-6 mt-md-0 mt-3">
+  
+          <!-- Content -->
+          <h5 class="text-uppercase">Footer Content</h5>
+          <p>Here you can use rows and columns to organize your footer content.</p>
+  
+        </div>
+        <!-- Grid column -->
+  
+        <hr class="clearfix w-100 d-md-none pb-3">
+  
+        <!-- Grid column -->
+        <div class="col-md-3 mb-md-0 mb-3">
+  
+          <!-- Links -->
+          <h5 class="text-uppercase">Links</h5>
+  
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!">Link 1</a>
+            </li>
+            <li>
+              <a href="#!">Link 2</a>
+            </li>
+            <li>
+              <a href="#!">Link 3</a>
+            </li>
+            <li>
+              <a href="#!">Link 4</a>
+            </li>
+          </ul>
+  
+        </div>
+        <!-- Grid column -->
+  
+        <!-- Grid column -->
+        <div class="col-md-3 mb-md-0 mb-3">
+  
+          <!-- Links -->
+          <h5 class="text-uppercase">Links</h5>
+  
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!">Link 1</a>
+            </li>
+            <li>
+              <a href="#!">Link 2</a>
+            </li>
+            <li>
+              <a href="#!">Link 3</a>
+            </li>
+            <li>
+              <a href="#!">Link 4</a>
+            </li>
+          </ul>
+  
+        </div>
+        <!-- Grid column -->
+  
+      </div>
+      <!-- Grid row -->
+  
+    </div>
+    <!-- Footer Links -->
+  
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+      <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  
+  </footer>
+  <!-- Footer -->
 
    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
 

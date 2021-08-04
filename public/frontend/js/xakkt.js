@@ -1,17 +1,17 @@
 
 
 $('#storeCarousel').on('slide.bs.carousel', function (e) {
-  showPosition(e.relatedTarget.dataset.lat,e.relatedTarget.dataset.long)
+    showPosition(e.relatedTarget.dataset.lat,e.relatedTarget.dataset.long)
 })
 
-function showPosition(lat,long) {
+function showPosition(lat,long) { 
   var lat = lat;
   var lon = long;
   var latlon = new google.maps.LatLng(lat, lon)
   var mapholder = document.getElementById('map')
   
   var myOptions = {
-    center:latlon,zoom:10,
+    center:latlon,zoom:19,
     mapTypeId:google.maps.MapTypeId.ROADMAP,
     mapTypeControl:false,
     navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
@@ -38,69 +38,7 @@ function showError(error) {
   }
 }
 
-    
-    function initAutocomplete() {
-        const map = new google.maps.Map(document.getElementById("map"), {
-          center: { lat: -33.8688, lng: 151.2195 },
-          zoom: 5,
-          mapTypeId: "roadmap",
-        });
-        const input = document.getElementById("pac-input");
-        const searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        map.addListener("bounds_changed", () => {
-          searchBox.setBounds(map.getBounds());
-        });
-        let markers = [];
-        searchBox.addListener("places_changed", () => {
-          const places = searchBox.getPlaces();
-      
-          if (places.length == 0) {
-            return;
-          }
-          // Clear out the old markers.
-          markers.forEach((marker) => {
-            marker.setMap(null);
-          });
-          markers = [];
-          // For each place, get the icon, name and location.
-          const bounds = new google.maps.LatLngBounds();
-          places.forEach((place) => {
-            if (!place.geometry || !place.geometry.location) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
-            const icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25),
-            };
-            // Create a marker for each place.
-            markers.push(
-              new google.maps.Marker({
-                map,
-                icon,
-                title: place.name,
-                position: place.geometry.location,
-              })
-            );
-      
-            if (place.geometry.viewport) {
-              // Only geocodes have viewport.
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
-          });
-          map.fitBounds(bounds);
-        });
-      }
-
-
-
-
+  
   $(".owl-carousel")&&$(".owl-carousel").length&&$('.owl-carousel').owlCarousel({
     loop: true,
     margin: 10,

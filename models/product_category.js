@@ -10,16 +10,7 @@ const productCategorySchema = Schema({
     required: true,
     unique:true
    },
-  // parent_id: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'ProductCategory',
-  //   validate: {
-  //     validator: function(v) {
-  //           return FKHelper(mongoose.model('ProductCategory'), v);
-  //       },
-  //       message: `ProductCategory doesn't exist`
-  //   } 
-  // },
+   parent_id: this,
   _store:{
     type: Schema.Types.ObjectId,
     ref: 'Store',
