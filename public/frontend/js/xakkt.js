@@ -4,17 +4,14 @@ $('#storeCarousel').on('slide.bs.carousel', function (e) {
   showPosition(e.relatedTarget.dataset.lat,e.relatedTarget.dataset.long)
 })
 
-
-
 function showPosition(lat,long) {
   var lat = lat;
   var lon = long;
   var latlon = new google.maps.LatLng(lat, lon)
   var mapholder = document.getElementById('map')
   
-
   var myOptions = {
-    center:latlon,zoom:20,
+    center:latlon,zoom:10,
     mapTypeId:google.maps.MapTypeId.ROADMAP,
     mapTypeControl:false,
     navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
@@ -45,7 +42,7 @@ function showError(error) {
     function initAutocomplete() {
         const map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: -33.8688, lng: 151.2195 },
-          zoom: 13,
+          zoom: 5,
           mapTypeId: "roadmap",
         });
         const input = document.getElementById("pac-input");

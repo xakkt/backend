@@ -48,6 +48,10 @@ button:focus,
 input:focus {
   outline:0;
 }
+.xshop{
+    margin:0;
+    padding:10px 0 10px 0;
+}
 </style>
 
 </head>
@@ -99,6 +103,73 @@ input:focus {
 
       <div class="container-fluid">
                 
+
+        <div class="ccc_viewed">
+            
+            <div class="row">
+                <div class="col">
+                    <div class="ccc_main_container">
+                        <div class="ccc_viewed_title_container">
+                            <h3 class="ccc_viewed_title">Trending Nearby</h3>
+                            <div class="ccc_viewed_nav_container">
+                                <div class="ccc_viewed_nav ccc_viewed_prev"><i class="fas fa-chevron-left"></i></div>
+                                <div class="ccc_viewed_nav ccc_viewed_next"><i class="fas fa-chevron-right"></i></div>
+                            </div>
+                        </div>
+                        <div class="ccc_viewed_slider_container">
+                            <div class="owl-carousel owl-theme ccc_viewed_slider">
+                               
+                              <% for (const [i,product] of trending.product.entries()) { %>
+                              <div class="owl-item">
+                               
+                                    <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
+                                        <div class="ccc_viewed_image"><img src="<%=product.image%>" alt=""></div>
+                                        <div class="ccc_viewed_content text-center">
+                                            <div class="ccc_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
+                                            
+                                            <div class="ccc_viewed_name"><a href="#"><%=product.name.get('english')%></a></div>
+                                            
+                                            <div class="quantity">
+                                               <button class="minus-btn xbtn" type="button" name="button">
+                                                   <i class="fa fa-minus" aria-hidden="true"></i>
+                                               </button>
+                                               <input type="text" name="name" value="1">
+                                               <button class="plus-btn xbtn" type="button" name="button">
+                                                   <i class="fa fa-plus" aria-hidden="true"></i>
+                                               </button>
+                                               
+                                             </div>
+   
+                                             <div class="xshop row">
+                                               <span class="col" style="padding-right:0;">
+                                                   <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="">
+                                               </span>
+                                               <span class="col">
+                                                       <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="">
+                                               </span>
+                                               <span class="col">
+                                                   <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" alt="">
+                                               </span>
+                                           </div>
+                                        </div>
+                                        <!--ul class="item_marks">
+                                            <li class="item_mark item_discount">-25%</li>
+                                            <li class="item_mark item_new">new</li>
+                                        </ul-->
+                                    </div>
+                                </div>
+                                <% }%> 
+                                
+                                
+   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </div>
+
          <div class="bbb_viewed">
             
             <div class="row">
@@ -133,13 +204,24 @@ input:focus {
                                                 </button>
                                                 
                                               </div>
+                        <div class="xshop row">
+                            <span class="col">
+                                <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="">
+                            </span>
+                            <span class="col">
+                                    <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="">
+                            </span>
+                            <span class="col">
+                                <img class="img-responsive" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" alt="">
+                            </span>
+                        </div>
+                                             
 
-                                            <div class="bbb_add_to_cart"><button type="button" class="btn btn-danger">Add to cart</button></div>
                                         </div>
-                                        <ul class="item_marks">
+                                        <!--ul class="item_marks">
                                             <li class="item_mark item_discount">-25%</li>
                                             <li class="item_mark item_new">new</li>
-                                        </ul>
+                                        </ul-->
                                     </div>
                                 </div>
                                
@@ -154,61 +236,7 @@ input:focus {
         </div>  
           
 
-        <div class="ccc_viewed">
-            
-         <div class="row">
-             <div class="col">
-                 <div class="ccc_main_container">
-                     <div class="ccc_viewed_title_container">
-                         <h3 class="ccc_viewed_title">Trending Nearby</h3>
-                         <div class="ccc_viewed_nav_container">
-                             <div class="ccc_viewed_nav ccc_viewed_prev"><i class="fas fa-chevron-left"></i></div>
-                             <div class="ccc_viewed_nav ccc_viewed_next"><i class="fas fa-chevron-right"></i></div>
-                         </div>
-                     </div>
-                     <div class="ccc_viewed_slider_container">
-                         <div class="owl-carousel owl-theme ccc_viewed_slider">
-                            
-                           <% for (const [i,product] of trending.product.entries()) { %>
-                           <div class="owl-item">
-                            
-                                 <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                     <div class="ccc_viewed_image"><img src="<%=product.image%>" alt=""></div>
-                                     <div class="ccc_viewed_content text-center">
-                                         <div class="ccc_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
-                                         
-                                         <div class="ccc_viewed_name"><a href="#"><%=product.name.get('english')%></a></div>
-                                         
-                                         <div class="quantity">
-                                            <button class="minus-btn xbtn" type="button" name="button">
-                                                <i class="fa fa-minus" aria-hidden="true"></i>
-                                            </button>
-                                            <input type="text" name="name" value="1">
-                                            <button class="plus-btn xbtn" type="button" name="button">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                            </button>
-                                            
-                                          </div>
-
-                                         <div class="ccc_add_to_cart"><button type="button" class="btn btn-danger">Add to cart</button></div>
-                                     </div>
-                                     <ul class="item_marks">
-                                         <li class="item_mark item_discount">-25%</li>
-                                         <li class="item_mark item_new">new</li>
-                                     </ul>
-                                 </div>
-                             </div>
-                             <% }%> 
-                             
-                             
-
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     
- </div>
+      
 
 
 
