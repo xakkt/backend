@@ -15,6 +15,41 @@
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
+<style>
+    .quantity {
+  padding: 10px 0 10px 0;
+}
+.quantity input {
+  -webkit-appearance: none;
+  border: none;
+  text-align: center;
+  width: 32px;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+ 
+.xbtn {
+  width: 30px;
+  height: 30px;
+  background-color: #E1E8EE;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.minus-btn img {
+  margin-bottom: 3px;
+}
+.plus-btn img {
+  margin-top: 2px;
+}
+ 
+button:focus,
+input:focus {
+  outline:0;
+}
+</style>
+
 </head>
 <body>
    <!-- Navbar -->
@@ -87,6 +122,18 @@
                                         <div class="bbb_viewed_content text-center">
                                             <div class="bbb_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
                                             <div class="bbb_viewed_name"><a href="#"><%=product.name.english%></a></div>
+
+                                            <div class="quantity">
+                                                <button class="minus-btn xbtn" type="button" name="button">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                                <input type="text" name="name" value="1">
+                                                <button class="plus-btn xbtn" type="button" name="button">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                                
+                                              </div>
+
                                             <div class="bbb_add_to_cart"><button type="button" class="btn btn-danger">Add to cart</button></div>
                                         </div>
                                         <ul class="item_marks">
@@ -131,6 +178,18 @@
                                          <div class="ccc_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
                                          
                                          <div class="ccc_viewed_name"><a href="#"><%=product.name.get('english')%></a></div>
+                                         
+                                         <div class="quantity">
+                                            <button class="minus-btn xbtn" type="button" name="button">
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" name="name" value="1">
+                                            <button class="plus-btn xbtn" type="button" name="button">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                            
+                                          </div>
+
                                          <div class="ccc_add_to_cart"><button type="button" class="btn btn-danger">Add to cart</button></div>
                                      </div>
                                      <ul class="item_marks">
@@ -141,17 +200,7 @@
                              </div>
                              <% }%> 
                              
-                                 <!--div class="owl-carouselll owl-theme">
-            <% for (const [i,product] of deal.product.entries()) { %> 
-                <div class="item">
-                <img src="<%=product.image%>"/>
-                <span class="img-text" style="text-align:center;font-size:16px"><%=product.name.english%></span>
-                <span class="img-text" style="text-align:center;font-size:16px"><strike><%=product.currency%></product.currency><%=product.regular_price%></strike> <%=product.currency%><%=product.deal_price%></span>
-                <span class="img-text add-to-cart">Add to cart</span>
-                </div>
-            <% }%>     
-         </div-->
-         <!---owl-carousel-->
+                             
 
                          </div>
                      </div>
@@ -168,6 +217,7 @@
   
 
    </div>
+
 
    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
 

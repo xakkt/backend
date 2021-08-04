@@ -394,7 +394,8 @@ border-radius: 6px;
 }
 
 .ccc_viewed_name {
-    margin-top: 3px
+    margin-top: 3px;
+    min-height:50px;
 }
 
 .ccc_viewed_name a {
