@@ -237,3 +237,12 @@ border-radius: 6px;
       vertical-align: top;
       margin-left: -10px; 
   }
+
+  #error{
+    text-align: center;
+    background-color: red;
+    color: white;
+    border-radius: 3px;
+    padding: 5px 0 5px 0;
+    /* display: block; */
+    }

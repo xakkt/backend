@@ -85,7 +85,10 @@ io.on('connection', function (socket) {
     io.emit('ridingpoints', data);
   });
 
+
 });
+
+
 //  app.get('/',(req, res)=> {
 //        return  res.render('frontend/index')
 //   })
