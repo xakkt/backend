@@ -361,7 +361,7 @@ exports.products = async (req, res) => {
 
 		/* return res.json({
 			status: 1,
-			data: pdata[0],
+			data: pdata[0], 
 			store:storedata
 		})  */
 	//	let categories = await Categories.find().lean()

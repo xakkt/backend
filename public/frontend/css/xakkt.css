@@ -30,7 +30,7 @@ min-height: 100vh;
     }
 .content {
     z-index: 9;
-    width: 560px;
+    width: 600px;
     margin: 55px;
     height: 500px;
     left: 0;
@@ -217,3 +217,23 @@ border-radius: 6px;
 .store-desc{
     margin:0 10% 0 10%;
 }
+.badge {
+    padding-left: 9px;
+    padding-right: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+  }
+  
+  .label-warning[href],
+  .badge-warning[href] {
+    background-color: #c67605;
+  }
+  #lblCartCount {
+      font-size: 12px;
+      background: #ff0000;
+      color: #fff;
+      padding: 0 5px;
+      vertical-align: top;
+      margin-left: -10px; 
+  }
