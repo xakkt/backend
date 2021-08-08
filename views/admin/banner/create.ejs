@@ -60,12 +60,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>New Banner</h1>
+                            <h1>Add Banner</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">New Banner</li>
+                                <li class="breadcrumb-item active">Add Banner</li>
                             </ol>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
             </section>
             <!-- Main content -->
             <section class="content">
-                <div class="container">
+                <div class="container" style="width:50%">
                     <!-- SELECT2 EXAMPLE -->
                     <div class="card card-primary">
                         <div class="card-header">
@@ -90,7 +90,7 @@
                             <form id="bannerForm" method="post" action="/admin/banner/save"
                                 enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="brands">Store</label>
                                             <select name="store" class="form-control custom-select" id="store">
@@ -102,13 +102,13 @@
                                         </div>
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="departmentLogo">Banner Image</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="logo" class="custom-file-input"
-                                                        accept="image/png,image/jpeg" id="departmentLogo">
+                                                        accept="image/png,image/jpeg" id="departmentLogo" class="departmentLogo">
                                                     <label class="custom-file-label" for="departmentLogo">Choose
                                                         file</label>
                                                 </div>
@@ -118,9 +118,8 @@
                                         <!-- /.col -->
                                     </div>
                                     <!-- /.row -->
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
+                                
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="brands">Deal</label>
                                             <select name="deal" class="form-control custom-select" id="deal">
@@ -210,15 +209,28 @@
 
             $('#bannerForm').validate({
                 rules: {
-                    name: {
+                    logo: {
                         required: true
                     },
+                    store:{
+                        required:true
+                    },
+                    deal:{
+                        required:true
+
+                    }
 
                 },
                 messages: {
-                    name: {
-                        required: "Please enter a department name"
+                    logo: {
+                        required: "Please upload banner"
                     },
+                    store:{
+                        required:"Please select store"
+                    },
+                    deal:{
+                        required:"Please select deal"
+                    }
 
 
                 },
