@@ -23,6 +23,7 @@ var isloggedin = require('./middlewares/isloggedin')
 //moment().tz("America/Los_Angeles").format('ha z');
 //moment.tz.setDefault("America/New_York");
 var sess = {
+  resave: true,
   secret: 'keyboard cat',
   saveUninitialized: true,
   cookie:{maxAge:3600000000}
