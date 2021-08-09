@@ -20,6 +20,13 @@ const userValidation = [
     body('dob').not().isEmpty().trim().escape().withMessage('Date of birth should not be empty'),
 ]
 
+const userLoginValidation = [
+    body('email').not().isEmpty().trim().escape().withMessage('Email should not be empty'),
+    body('email').isEmail().withMessage('Should be an email'),
+    body('password').not().isEmpty().trim().escape().withMessage('Password should not be empty'),
+   
+]
+
 
 /*-------- validation -------------*/
 
@@ -28,7 +35,7 @@ router.post('/cookie',IndexController.cookie)
 router.get('/cookiees',IndexController.cookiees)
 
 router.post('/user/create',userValidation,AuthController.create)
-router.post('/user/login',AuthController.login)
+router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)
 
 /*------------ User ---------*/

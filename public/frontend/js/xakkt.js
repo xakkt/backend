@@ -193,11 +193,12 @@ $('.plus-btn').on('click', function(e) {
   $input.val(value);
 });
 
-const form = $('#registration')
-form.on('submit', function(e){
+const regForm = $('#registration')
+const loginForm = $('#login')
+
+regForm.on('submit', function(e){
   e.preventDefault(); 
- 
-  const obj = form.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+  const obj = regForm.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
   
   $.post('/user/create', obj)
         .done(result => { 
@@ -205,8 +206,28 @@ form.on('submit', function(e){
                             $("#error").show().text(result.errors); }else{
                             location.reload();
                          }
-        }).fail(result=>{ 
+        }).fail(result=>{ console.log(result)
               $("#error").show().text(result.responseJSON.errors);
          });
 
 })
+
+loginForm.on('submit', function(e){
+    e.preventDefault(); 
+    const obj = loginForm.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+    
+    $.post('/user/login', obj)
+          .done(result => { 
+                      if(!result.status){ 
+                              $("#loginError").show().text(result.errors); }else{
+                              location.reload();
+                           }
+          }).fail(result=>{ 
+                $("#loginError").show().text(result.responseJSON.errors);
+           });
+  
+  })
+
+
+
+

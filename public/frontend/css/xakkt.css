@@ -238,7 +238,7 @@ border-radius: 6px;
       margin-left: -10px; 
   }
 
-  #error{
+  .error-msg{
     margin-bottom:5px;  
     text-align: center;
     background-color: red;
