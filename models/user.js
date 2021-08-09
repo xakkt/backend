@@ -58,7 +58,7 @@ const childSchema = new Schema({
 const userSchema = Schema({
   first_name: {
     type: String,
-    required: false,
+    required: true,
   },
   last_name: {
     type: String,
@@ -67,7 +67,7 @@ const userSchema = Schema({
   email: {
     type: String,
     unique: true,
-    required: false
+    required: true
   },
   gender: {
     type: String, enum:['male','female','other'], required:false
@@ -169,6 +169,7 @@ userSchema.pre('save', async function () {
 
 userSchema.post('save', function(error, doc, next) {
   if (error) {
+    console.log(error)
     next(new Error('User already exists with this email address or contact no'));
   } else {
     next(error);

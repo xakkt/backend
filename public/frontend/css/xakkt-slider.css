@@ -412,3 +412,13 @@ border-radius: 6px;
 .ccc_viewed_name a:hover {
     color: #0e8ce4
 }
+
+#error{
+    margin-bottom:5px;  
+    text-align: center;
+    background-color: red;
+    color: white;
+    border-radius: 3px;
+    padding: 5px 0 5px 0;
+    display: block; 
+    }

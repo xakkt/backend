@@ -192,3 +192,21 @@ $('.plus-btn').on('click', function(e) {
 
   $input.val(value);
 });
+
+const form = $('#registration')
+form.on('submit', function(e){
+  e.preventDefault(); 
+ 
+  const obj = form.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+  
+  $.post('/user/create', obj)
+        .done(result => { 
+                    if(!result.status){ 
+                            $("#error").show().text(result.errors); }else{
+                            location.reload();
+                         }
+        }).fail(result=>{ 
+              $("#error").show().text(result.responseJSON.errors);
+         });
+
+})

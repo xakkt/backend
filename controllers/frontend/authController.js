@@ -3,7 +3,6 @@ const User = require('../../models/user');
 const Store = require('../../models/store');
 
 const bcrypt = require("bcrypt")
-const jwt = require('jsonwebtoken');
 // const moment = require('moment')
 var moment = require('moment-timezone');
 
@@ -34,51 +33,36 @@ exports.login = async (req, res) => {
     }
 }
 exports.create = async (req, res) => {
-    try {
-        if(!req.body.fname){
-           return res.json({message: "First name is required.", status:400});  
-         }
-          if(!req.body.lname){
-            return res.json({message: "Last name is required." , status:400});  
-         }
-         if(!req.body.email){
-            return res.json({message: "Email is required.", status:400});  
-         }
-         if(!req.body.dob){
-            return res.json({message: "Date of Birth is required.", status:400});  
-         }
-         if(!req.body.password){
-            return res.json({message: "Password is required.", status:400});  
-         }
-         if(!req.body.confirmpassword){
-            return res.json({message: "Confirm password is required.", status:400});  
-         }
-        const findUser = await User.findOne({$or:[{email: req.body.email}, {contact_no: req.body.mobile}]});
-        if(findUser) {
-            if(findUser.email === req.body.email) {
-              return res.json({message: "Email already exist.",status:401});
+    try { 
+        console.log(req.body,"=============>>>>")
+            const errors = await validationResult(req);
+            if (!errors.isEmpty()) {
+                
+                return res.json({ status:0, errors: errors.array()[0].msg });
             }
-            if(findUser.contact_no === req.body.mobile) {
-                return res.json({message: "Mobile number already exist.",status:401});
+            if(req.body.password==req.body.confirm_password){
+                return res.json({errors: "Password and Confirm password should be same.",status:0});
             }
-        }
+           
+       
         let userInfo = {
-            first_name: req.body.fname,
-            last_name: req.body.lname,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
             email: req.body.email,
             password: req.body.password,
-            contact_no: req.body.mobile,
+            contact_no: req.body.contact_no,
             dob: req.body.dob
         }
         let user = await User.create(userInfo)
         if (user) {
           // return res.render('/index')
-             return res.json({ status: true })
+             return res.json({ status: 1 })
         }
-        return res.json({ status: false })
+        return res.json({ status: 0 })
 
     } catch (err) {
-        res.status(400).json({ status: "false", err: err });
+        console.log(err)
+        res.status(400).json({ status: 0, errors: err.message });
     }
 }
 exports.logout = async (req, res) => {
