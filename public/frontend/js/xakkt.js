@@ -220,13 +220,53 @@ loginForm.on('submit', function(e){
           .done(result => { 
                       if(!result.status){ 
                               $("#loginError").show().text(result.errors); }else{
-                              location.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Logged in successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                  }) 
+                                  location.reload();
                            }
-          }).fail(result=>{ 
-                $("#loginError").show().text(result.responseJSON.errors);
+          }).fail(result=>{
+                    $("#loginError").show().text(result.responseJSON.errors);
            });
   
   })
+
+
+  $(".xakkti").click(function(){ 
+            let sku = $(this).data('sku'); 
+            let section = $(this).data('prop');
+            
+            let greyClass = `.${section}-grey-${sku}`;
+            let redClass  = `.${section}-red-${sku}`;
+            
+            $(`${greyClass}, ${redClass}`).toggleClass("d-none")
+    });
+
+  /*$('.xpdetails').click(function(){
+       $('.product_view').modal('show')
+  })  */
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+
+   })
+
+   $('.product_view').on('show.bs.modal',function(e){
+    var a =  $(e.relatedTarget)
+   
+    var modal = $(this)
+    modal.find('.xproduct-img').prop('src',a.data('img'))
+    modal.find('.modal-title').text(a.data('product-name'))
+    modal.find('.deal-price').text(a.data('deal-price'))
+    modal.find('.regular-price').text(a.data('regular-price'))
+    modal.find('.sku').text(a.data('sku'))
+})
+  
+
+  
 
 
 

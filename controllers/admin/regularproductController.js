@@ -104,11 +104,10 @@ exports.remove = async (req, res) => {
 exports.get = async (req, res) => {
     try {
         
-        let currency = await Store.findOne({
-            _id: req.body.storeid
-        }).populate({
-            path: '_currency'
-        }).exec()
+        let storedata = await Store.findOne({ _id: req.body.storeid }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
+			path: '_currency',
+			select: 'name',
+		 }).lean()
         var regularPrice = await RegularPrice.findOne({
             _product: req.body.productid,
             _store: req.body.storeid
@@ -119,8 +118,9 @@ exports.get = async (req, res) => {
         })
         return res.json({
             status: true,
-            message: regularPrice,
-            currency: currency
+            data: regularPrice,
+            store:storedata
+           
         })
     } catch (err) {
         res.status(400).json({

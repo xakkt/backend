@@ -27,7 +27,17 @@ const userLoginValidation = [
    
 ]
 
+const cartValidation = [
+    body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
+    body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+    body('quantity').not().isEmpty().withMessage('cart_price should not be empty'),
+]
 
+router.use(function(req,res,next){
+    res.locals.userEmail =(req.session?.customer) ?? null;
+    res.locals.userid =(req.session?.userid) ?? null;
+    next();
+})
 /*-------- validation -------------*/
 
 router.get('/product/:id',IndexController.list)
@@ -41,7 +51,11 @@ router.get('/user/logout',AuthController.logout)
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
+router.post('/product/add-to-cart',cartValidation,CartController.addPoductToCart)
+router.get('/dummy',function(req, res){
+    return res.render('frontend/dummy')
+})
 
-router.get('/cart',CartController.list)
+//router.get('/cart',CartController.list)
 
 module.exports = router;

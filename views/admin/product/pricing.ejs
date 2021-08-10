@@ -136,16 +136,10 @@
                                        <td style="width:10%"> <input type="text" class="form-control rgprice"
                                           value="<%= prices.regularprice %>" name="regular_price[]" class="form-control" readonly>
                                        </td>
-                                       <% if(stores) {stores.forEach(function(store){ %>
-                                       <% if (store._id.equals(prices._store)) {%>
-                                       <% var currency = (store._currency)?store._currency.name: '' %>
-                                       <td style="width:10%"> <input type="text" name="currency[]" value="<%= currency  %>"
+                                      
+                                       <td style="width:10%"> <input type="text" name="currency[]" value="<%= prices._currency  %>"
                                           class="currency form-control" readonly required> </td>
-                                       <%}%>
-                                       <% })} else {%>
-                                       <td style="width:10%"> <input type="text" name="currency[]" value=""
-                                          class="currency form-control" readonly required> </td>
-                                       <%}%>
+                                       
                                        <td style="width:15%">
                                           <select name="deal[]" class="form-control custom-select deal-name"
                                              onchange="handleDuplicacy(this)" required>
@@ -351,10 +345,10 @@
              },
          
            }).done((data) => {
-         
+         console.log('ye ria data',data)
              if (data.status) {
-               $(that).closest('.tr_clone').find('.rgprice').val(data.message.regular_price)
-               $(that).closest('.tr_clone').find('.currency').val(data.currency._currency.name)
+               $(that).closest('.tr_clone').find('.rgprice').val(data.data.regular_price)
+               $(that).closest('.tr_clone').find('.currency').val(data.store._currency.name)
          
              }
              else {

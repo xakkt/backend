@@ -61,7 +61,7 @@ exports.create = async (req, res) => {
     }
 }
 exports.logout = async (req, res) => {
-   
+   console.log(req.session)
     if (req.session) {
         req.session.destroy(function (err) {
             if (err) {

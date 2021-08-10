@@ -1,0 +1,26 @@
+
+<div class="quantity">
+    <button class="minus-btn xbtn" type="button" name="button">
+        <i class="fa fa-minus" aria-hidden="true"></i>
+    </button>
+    <input type="text" name="name" value="1">
+    <button class="plus-btn xbtn" type="button" name="button">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+    
+  </div>
+
+<div class="xshop row">
+    <span class="col" style="padding-right:0;">
+        <img class="img-responsive xakkti x-cart x-cart-red-<%=product.sku%> d-none" data-toggle="tooltip" data-placement="bottom" title="Remove from Cart" data-prop="x-cart" data-sku=<%=product.sku%> src="<%= process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="">
+        <img class="img-responsive xakkti x-cart x-cart-grey-<%=product.sku%>"  data-toggle="tooltip" data-placement="bottom" title="Add to Cart" data-prop="x-cart" data-sku=<%=product.sku%> src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="">
+    </span>
+    <span class="col">
+            <img class="img-responsive xakkti x-heart x-heart-red-<%=product.sku%>" data-toggle="tooltip" data-placement="bottom" title="Remove from favourite" data-prop="x-heart" data-sku=<%=product.sku%> src="<%= process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="">
+            <img class="img-responsive xakkti x-heart x-heart-grey-<%=product.sku%> d-none" data-toggle="tooltip" data-placement="bottom" title="Add to favourite" data-prop="x-heart" data-sku=<%=product.sku%> src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="">
+    </span>
+    <span class="col" style="padding-left:0;">
+        <img class="img-responsive xakkti x-list x-list-red-<%=product.sku%> d-none" data-toggle="tooltip" data-placement="bottom" title="Remove from shopping list" data-sku="<%=product.sku%>" data-prop="x-list" data-sku=<%=product.sku%> src="<%= process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="">
+        <img class="img-responsive xakkti x-list x-list-grey-<%=product.sku%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="Add to shopping list" data-sku=<%=product.sku%> data-prop="x-list" alt="">
+    </span>
+ </div>

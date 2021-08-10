@@ -27,15 +27,22 @@
        
 
        <ul class="navbar-nav ml-auto">
-         <li class="nav-item active">
-           <a class="nav-link btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
-
-         </li>
-         <li class="nav-item active">
-           <a class="nav-link btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
-         </li>
-         
-         
+          
+         <%if(userEmail==null){%>
+            <li class="nav-item active">
+               <a class="nav-link btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
+            </li>
+            <li class="nav-item active">
+               <a class="nav-link btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
+            </li>
+            <%}else{%>
+               <li class="nav-item active">
+                  <a class="nav-link btn btn-default btn-rounded mb-4" href="javascript:void(0);"><%=userEmail%></a>
+               </li>
+               <li class="nav-item active">
+                  <a class="nav-link btn btn-default btn-rounded mb-4" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
+               </li>
+            <%}%>
          <li class="nav-item">
             <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" style="width:10%" alt="">
             <span class='badge badge-warning' id='lblCartCount'> 5 </span>

@@ -367,7 +367,7 @@ exports.addPrice = async (req, res) => {
                 storeData.push(pricingData)
                 //console.log(price._store._id,"==========",regularPricee)
         }) 
-
+//return res.json(storeData)
         res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid:req.params.productid, brands:brands, deals:deals, storeData:storeData, stores:userStores, moment:moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {

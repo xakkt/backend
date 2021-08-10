@@ -84,25 +84,25 @@ exports.dashboard = async (req, res) => {
 		_banners = [ {
 						"_id": "60b942742527aa36d0ba23",
 						"type": "default",
-						"_deal": "60b72629b707492d27c576ba",
-						"image": "badshah_chana_masala_100gm._1622753908.jpg",
+						"_deal": "",
+						"image": "default.jpg",
 					},
 					{
 						"_id": "60b942742527aa36d0ba23",
 						"type": "default",
-						"_deal": "60b72629b707492d27c576ba",
-						"image": "badshah_chana_masala_100gm._1622753908.jpg",
+						"_deal": "",
+						"image": "default_one.jpg",
 					}]
 
 /* ------------- code for banners ---------*/
 
-		if(!banners.length){
+		if(!bannerArr.length){
 			//banners.concat(_banners)
      		pdata[0] = {
 				path: `${process.env.BASE_URL}/images/banners/`,
 				type: "banner",
 				message: "No banner found",
-				banner: []
+				banner: _banners
 			}
 
 		}else{
@@ -197,9 +197,6 @@ exports.dashboard = async (req, res) => {
 					}
 				}
 								
-					
-								
-					
 							}))
 							product = getUniqueListBy(product, '_id')
 							
@@ -210,9 +207,6 @@ exports.dashboard = async (req, res) => {
 											sub_type: "Deals",
 											product: product
 										};
-
-
-
 
 
 		}

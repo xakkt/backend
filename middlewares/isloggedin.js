@@ -26,8 +26,7 @@ module.exports = async (req, res, next)=>{
             if(!permission) return false
             return true
            }
-       
-
+   
         next()
     }
     else {

@@ -16,78 +16,12 @@ function getUniqueListBy(product, key) {
 
 exports.homepage = async (req, res) => {
   let stores =   await Store.find().lean();
-   if(stores) return res.render('frontend/index',{data:req.session.customer,stores:stores})
-}
-
-exports.productss = async (req, res) => {
-  var storess = []
-  var productId = []
-
-  let store = await Store.findOne({slug:req.params.slug}).select('_currency').populate('_currency','name').lean();
-  
-  /*let stores = await StoreProductPricing.find({
-    '_store': store._id
-  }).select('-createdAt -updatedAt -__v').populate('_product', 'name image sku').populate('_deal').lean()
-  
-  if (stores.length) {
-    stores.map((item) => {
-      productId.push(item._product._id)
-    })
-  }
-  console.log("====>>>>",store._id)
-  let regular = await ProductRegularPricing.find({
-    _store: store._id,
-    _product: {
-      $nin: productId
-    }
-  }).populate('_product')
-
-
-  if (stores.length >0) {
-      
-    await Promise.all(stores.map(async (store) => {
-      var data = {}
-       let prices = await _global.productprice(store._id, store._product)
-      _product = store._product,
-        _deal = store._deal
-      delete store._product;
-      delete store._deal;
-      data = {
-        ...store,
-        _product: _product._id,
-        name: _product.name,
-        regular_price: prices.regular_price,
-        image: `${process.env.BASE_URL}/images/products/${_product.image}`,
-        sku: _product.sku,
-        currency: store._currency.name,
-        deal: _deal.name
-      }
-      storess.push(data)
-
-    }))
-  }
-
-  regular.filter((item) => {
-
-    let regularData = {
-      _product: item._product._id,
-      _store: item._store,
-      image: `${process.env.BASE_URL}/images/products/${item._product.image}`,
-      sku: item._product.sku,
-      name: item._product.name,
-      deal_price: 0,
-      regular_price: item.regular_price,
-
-    }
-    storess.push(regularData)
-  })*/
-  let categories = await Categories.find().lean()
-  let brands = await Brands.find().lean()
-   return res.render('frontend/products',{data:req.session.customer,categories:[], brands:brands, products:[]})
+  if(stores) return res.render('frontend/index',{stores:stores})
 }
 
 exports.products = async (req, res) => {
-	var userid;
+	
+	var userid = res.locals.userid
 	var pdata = [];
 	var product = [];
 	//await _time.store_time(req.params.storeid)
@@ -116,9 +50,6 @@ exports.products = async (req, res) => {
 			}
 		}).select('name address city state contact_no')
 
-
-		
-
 		var storeId = []
 		nearbystores.filter((item) => {
 			storeId.push(item._id)
@@ -132,42 +63,46 @@ exports.products = async (req, res) => {
 		}}).populate('_deal','name').lean();
 		
 		bannerArr = [];
+		
 		await Promise.all(banners.map( async function(banner){
 			let dealProducts =  await StoreProductPricing.findOne({$and: [ {_store:banner._store, _deal:banner._deal}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).lean()
-		
+			console.log(dealProducts,"=====================step one>>>>")
+			
 			if(dealProducts){
 					bannerArr.push(banner)
 				}
-		}))
 
-		_banners = [ {
-						"_id": "60b942742527aa36d0ba23",
-						"type": "default",
-						"_deal": "60b72629b707492d27c576ba",
-						"image": "badshah_chana_masala_100gm._1622753908.jpg",
-					},
-					{
-						"_id": "60b942742527aa36d0ba23",
-						"type": "default",
-						"_deal": "60b72629b707492d27c576ba",
-						"image": "badshah_chana_masala_100gm._1622753908.jpg",
-					}]
+				console.log(bannerArr,"=====================>>>>")
+		}))
+		
+		var _banners = [ {
+			"_id": "60b942742527aa36d0ba23",
+			"type": "default",
+			"_deal": "",
+			"image": "default.jpg",
+		},
+		{
+			"_id": "60b942742527aa36d0ba23",
+			"type": "default",
+			"_deal": "",
+			"image": "default_one.jpg",
+		}]
 
 /* ------------- code for banners ---------*/
 
-		if(!banners.length){
+		if(!bannerArr.length){
 			//banners.concat(_banners)
      		pdata[0] = {
 				path: `${process.env.BASE_URL}/images/banners/`,
-				type: "banner",
+				type: "banner1",
 				message: "No banner found",
-				banner: []
+				banner: _banners
 			}
 
 		}else{
 			pdata[0] = {
 				path: `${process.env.BASE_URL}/images/banners/`,
-				type: "banner",
+				type: "banner2",
 				banner: bannerArr.reverse()
 			}
 		}
@@ -223,6 +158,7 @@ exports.products = async (req, res) => {
 									name: element._product.name,
 									unit: element._product._unit?.name??'n/a',
 									weight: element._product.weight,
+									sku: element._product.sku,
 									is_favourite: 0,
 									in_shoppinglist: 0,
 									in_cart: 0,
@@ -324,6 +260,7 @@ exports.products = async (req, res) => {
 				name: element._product.name,
 				unit: element._product._unit?.name??'n/a',
 				weight: element._product.weight,
+				sku:element._product.sku,
 				is_favourite: 0,
 				in_shoppinglist: 0,
 				in_cart: 0,
@@ -359,11 +296,11 @@ exports.products = async (req, res) => {
 	
 		/*-------- trending products ------*/		
 
-		/* return res.json({
+		 /*  return res.json({
 			status: 1,
-			data: pdata[0], 
+			data: pdata, 
 			store:storedata
-		})  */
+		})    */
 	//	let categories = await Categories.find().lean()
   		let brands = await Brands.find().lean()
    		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2], order_again:pdata[3],store:storedata, brands:brands, trending:pdata[1]})
@@ -377,3 +314,5 @@ exports.products = async (req, res) => {
 		});
 	}
 }
+
+
