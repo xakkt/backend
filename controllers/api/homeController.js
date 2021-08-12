@@ -84,13 +84,11 @@ exports.dashboard = async (req, res) => {
 		_banners = [ {
 						"_id": "60b942742527aa36d0ba23",
 						"type": "default",
-						"_deal": "",
 						"image": "default.jpg",
 					},
 					{
 						"_id": "60b942742527aa36d0ba23",
 						"type": "default",
-						"_deal": "",
 						"image": "default_one.jpg",
 					}]
 

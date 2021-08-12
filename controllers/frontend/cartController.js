@@ -41,7 +41,6 @@ exports.addPoductToCart = async (req, res) => {
 		if (product?.cart) {
 			return res.json({ status: 0, message: "Product is already in the cart" })
 		} else {
-
 			product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store });
 			if (!product) {
 				product = await Cart.create(cartInfo);

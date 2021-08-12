@@ -31,7 +31,6 @@ exports.products = async (req, res) => {
 		let storedata = await Store.findOne({ slug: req.params.slug }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
 			path: '_currency',
 			select: 'name',
-			
 		  }).lean()
 
 		  
@@ -66,13 +65,9 @@ exports.products = async (req, res) => {
 		
 		await Promise.all(banners.map( async function(banner){
 			let dealProducts =  await StoreProductPricing.findOne({$and: [ {_store:banner._store, _deal:banner._deal}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).lean()
-			console.log(dealProducts,"=====================step one>>>>")
+						
+			if(dealProducts) bannerArr.push(banner)
 			
-			if(dealProducts){
-					bannerArr.push(banner)
-				}
-
-				console.log(bannerArr,"=====================>>>>")
 		}))
 		
 		var _banners = [ {

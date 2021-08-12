@@ -52,8 +52,12 @@ router.get('/user/logout',AuthController.logout)
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
 router.post('/product/add-to-cart',cartValidation,CartController.addPoductToCart)
-router.get('/dummy',function(req, res){
-    return res.render('frontend/dummy')
+router.get('/checkout',function(req, res){
+    return res.render('frontend/checkout')
+})
+
+router.get('/cart',function(req, res){
+    return res.render('frontend/cart')
 })
 
 //router.get('/cart',CartController.list)

@@ -345,7 +345,7 @@
              },
          
            }).done((data) => {
-         console.log('ye ria data',data)
+        
              if (data.status) {
                $(that).closest('.tr_clone').find('.rgprice').val(data.data.regular_price)
                $(that).closest('.tr_clone').find('.currency').val(data.store._currency.name)

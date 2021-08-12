@@ -263,8 +263,36 @@ loginForm.on('submit', function(e){
     modal.find('.deal-price').text(a.data('deal-price'))
     modal.find('.regular-price').text(a.data('regular-price'))
     modal.find('.sku').text(a.data('sku'))
+    modal.find('.currency').text(a.data('store-currency'))
 })
   
+$('.x-cart').click(function(){
+     $(this).closest("form").submit()
+   // alert($(this).data('sku'))
+ })
+
+ $('.cart-form').submit(function(e){
+     e.preventDefault()
+     const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+     
+     $.post('/product/add-to-cart', obj)
+          .done(result => { console.log(result)
+                      if(!result.status){ 
+                              $("#loginError").show().text(result.errors); }else{
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Logged in successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                  }) 
+                                  location.reload();
+                           }
+          }).fail(result=>{
+                    $("#loginError").show().text(result.responseJSON.errors);
+           });
+     
+ })
+
 
   
 

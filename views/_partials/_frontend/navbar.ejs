@@ -20,7 +20,7 @@
        </ul>
       
        <div class="mx-auto">
-          <a href="#" class="text-sm-left text-md-right text-lg-right navbar-brand">
+          <a href="/" class="text-sm-left text-md-right text-lg-right navbar-brand">
                <img src="<%= process.env.BASE_URL %>/frontend/images/xakkt.png" alt="User Avatar" style="width:25%" class="img-size-50 img-circle mr-3">
             </a>
        </div>
@@ -44,7 +44,7 @@
                </li>
             <%}%>
          <li class="nav-item">
-            <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" style="width:10%" alt="">
+            <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" data-target="#cartModal" style="width:10%" alt="">
             <span class='badge badge-warning' id='lblCartCount'> 5 </span>
          </li>
        </ul> 
@@ -53,7 +53,7 @@
     </div>
  </nav>
 
-
+ <%- await include('../../frontend/modals/cart-details.ejs'); %>
 
 
 

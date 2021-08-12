@@ -1,9 +1,11 @@
+<input type="hidden" name="_product" value="<%=product._id%>" />
+
 
 <div class="quantity">
     <button class="minus-btn xbtn" type="button" name="button">
         <i class="fa fa-minus" aria-hidden="true"></i>
     </button>
-    <input type="text" name="name" value="1">
+    <input type="text" name="quantity" value="1">
     <button class="plus-btn xbtn" type="button" name="button">
         <i class="fa fa-plus" aria-hidden="true"></i>
     </button>
@@ -24,3 +26,5 @@
         <img class="img-responsive xakkti x-list x-list-grey-<%=product.sku%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="Add to shopping list" data-sku=<%=product.sku%> data-prop="x-list" alt="">
     </span>
  </div>
+
+ 
