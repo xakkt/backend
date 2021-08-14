@@ -204,7 +204,13 @@ regForm.on('submit', function(e){
         .done(result => { 
                     if(!result.status){ 
                             $("#error").show().text(result.errors); }else{
-                            location.reload();
+                              Swal.fire({
+                                icon: 'success',
+                                title: 'Signed up, try to login',
+                                showConfirmButton: false,
+                                timer: 1500
+                              }) 
+                              location.reload();
                          }
         }).fail(result=>{ console.log(result)
               $("#error").show().text(result.responseJSON.errors);

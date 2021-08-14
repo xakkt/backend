@@ -35,7 +35,7 @@ exports.create = async (req, res) => {
             if (!errors.isEmpty()) {
                      return res.json({ status:0, errors: errors.array()[0].msg });
             }
-            if(req.body.password==req.body.confirm_password){
+            if(req.body.password!=req.body.confirm_password){
                 return res.json({errors: "Password and Confirm password should be same.",status:0});
             }
            
