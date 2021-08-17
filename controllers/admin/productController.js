@@ -165,6 +165,7 @@ exports.productsave = async (req, res) => {
         productinfo.image = (req.file.filename) ? req.file.filename : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
+        await ProductCategory.findByIdAndUpdate({_id:req.body._category},{$push:{ _products : product._id }})
         res.redirect("/admin/regularprice/create/" + product._id)
     } catch (err) {
         await req.flash('failure', err.message);
@@ -248,6 +249,7 @@ exports.productupdate = async function (req, res) {
        
         const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: true, upsert: true });
         if (product) {
+            await ProductCategory.findByIdAndUpdate({_id:req.body._category},{$push:{ _products : product._id }})
             await req.flash('success', 'Product updated successfully!');
             res.redirect('/admin/product')
         }else{
