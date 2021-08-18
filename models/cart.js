@@ -16,6 +16,11 @@ const cartSchema = new Schema({
       }
     
   },
+  sessionId: {
+    type: String,
+    unique: true,
+    required: false
+  },
   cart:[ {
     _product:{ 
               type:Schema.Types.ObjectId, 
