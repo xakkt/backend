@@ -1,10 +1,6 @@
 const Role = require('../../models/role');
 const User = require('../../models/user');
-const Store = require('../../models/store');
 const md5 = require("md5")
-const bcrypt = require("bcrypt")
-const jwt = require('jsonwebtoken');
-// const moment = require('moment')
 var moment = require('moment-timezone');
 
 const { validationResult } = require('express-validator');
@@ -31,7 +27,6 @@ exports.login = async (req, res) => {
         req.session.company = userInfo._company;
         req.session.email = userInfo.email;
         req.session.userid = userInfo._id;
-        req.session.stores = userInfo._store;
         req.session.roles = userInfo.role_id.map(obj => obj.key );
         req.session.rolesId = userInfo.role_id.map( obj => obj._id );  
 

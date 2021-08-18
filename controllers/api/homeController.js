@@ -1,15 +1,9 @@
 const Product = require('../../models/product');
 const ProductCategory = require('../../models/product_category');
 const Store = require('../../models/store');
-
-var ObjectId = require('mongoose').Types.ObjectId;
-
 let jwt = require('jsonwebtoken');
-const Setting = require('../../models/setting')
 const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
-
-const _time = require('../../helper/storetimezone')
 
 const StoreProductPricing = require('../../models/store_product_pricing')
 const ProductRegularPricing = require('../../models/product_regular_pricing')
@@ -293,7 +287,6 @@ exports.dashboard = async (req, res) => {
 				sub_type: "trending",
 				product: trendingProducts
 			}	
-			
 	   }
 	
 		/*-------- trending products ------*/		
