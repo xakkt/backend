@@ -44,7 +44,7 @@
                </li>
             <%}%>
          <li class="nav-item">
-            <img class="img-responsive xakkti" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" data-target="#cartModal" style="width:10%" alt="">
+            <img class="img-responsive xakkti" data-userid="<%=userid%>" data-storeid="<%=store._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" data-target="#cartModal" style="width:10%" alt="">
             <span class='badge badge-warning' id='lblCartCount'> 5 </span>
          </li>
        </ul> 
@@ -54,11 +54,3 @@
  </nav>
 
  <%- await include('../../frontend/modals/cart-details.ejs'); %>
-
-
-
-
-
-
-
-

@@ -60,6 +60,5 @@ router.get('/cart',function(req, res){
     return res.render('frontend/cart')
 })
 
-//router.get('/cart',CartController.list)
-
+router.post('/products/cart',CartController.cartProducts)
 module.exports = router;

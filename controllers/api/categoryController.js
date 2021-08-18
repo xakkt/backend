@@ -1,4 +1,5 @@
 const ProductCategory = require('../../models/product_category');
+const _global = require('../../helper/common')
 const Product = require('../../models/product')
 var moment = require('moment');
 const { validationResult } = require('express-validator');
@@ -56,9 +57,52 @@ exports.create = async(req, res) => {
 
 exports.productsByCategory = async function(req, res){
 		try{
-			const products = await Product.find({_category:req.params.id}).exec();
-			if(!products.length) return res.json({message: "No product for this category", data:products});
-			return res.json({status:1, message: "", data:products});
+			
+			const categories = await ProductCategory.findById(req.params.id).populate('_products','-crv -meta_description -_category').lean()
+			var storeProduct= []
+			var product = {}
+			
+			//return res.json(categories)
+
+			await Promise.all(categories._products.map(async (product) => {
+				var data = {}
+				var productId = product._id.toString();
+				
+				var productPrice = await _global.productprice(req.query._store, productId)
+				
+				data = {
+					...data,
+					_id: product._id,
+					name: product.name,
+					unit: product._unit?.name??'n/a',
+					weight: product.weight,
+					is_favourite: 0,
+					in_shoppinglist: 0,
+					in_cart: 0,
+					image: product.image,
+					deal_price: productPrice.deal_price,
+					regular_price: productPrice.regular_price
+				}
+	
+				
+
+				/*if (productId in cartProductList) {
+					data.in_cart = cartProductList[productId]
+				}
+	
+				if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
+					data.is_favourite = 1,
+					data.in_shoppinglist = 1
+				} else if (shoppinglistProductIds.includes(productId)) {
+					data.in_shoppinglist = 1
+				} else if (wishlistids.includes(productId)) {
+					data.is_favourite = 1
+				} */
+				storeProduct.push(data) 
+	
+			}))
+
+			return res.json({status:1, data:storeProduct});
 		}catch(err){
 			console.log(err)
 			return res.status(400).send(err);
@@ -66,7 +110,7 @@ exports.productsByCategory = async function(req, res){
 };
 
 exports.update = async function(req, res){
-console.log('here');
+
 	try{
 
 		const errors = await validationResult(req);
