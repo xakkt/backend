@@ -1,9 +1,7 @@
 const Cart = require('../../models/cart')
 const Product = require('../../models/product');
-var moment = require('moment');
 const { validationResult } = require('express-validator');
 const _global = require('../../helper/common');
-const product_category = require('../../models/product_category');
 
 exports.listCartProduct = async (req, res) => {
      var product_list = []
@@ -57,57 +55,57 @@ exports.listCartProduct = async (req, res) => {
     }
 },
 
-    exports.addPoductToCart = async (req, res) => {
+exports.addPoductToCart = async (req, res) => {
 
-        const errors = await validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+    const errors = await validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        var productInfo = await Product.findById(req.body._product);
+        let productprice = await _global.productprice(req.body._store, req.body._product)
+        if (!productprice) return res.json({ status: 0, message: "Product Price of this id not set yet" })
+        if (!productInfo) return res.json({ status: 0, message: "Product with this id not exists" })
+        const cartInfo = {
+            _user: req.decoded.id,
+            _store: req.body._store,
+            cart: {
+                _product: req.body._product,
+                quantity: req.body.quantity,
+                total_price: productprice.effective_price * req.body.quantity,
+            },
         }
 
-        try {
-            var productInfo = await Product.findById(req.body._product);
-            let productprice = await _global.productprice(req.body._store, req.body._product)
-            if (!productprice) return res.json({ status: 0, message: "Product Price of this id not set yet" })
-            if (!productInfo) return res.json({ status: 0, message: "Product with this id not exists" })
-            const cartInfo = {
-                _user: req.decoded.id,
-                _store: req.body._store,
-                cart: {
-                    _product: req.body._product,
-                    quantity: req.body.quantity,
-                    total_price: productprice.effective_price * req.body.quantity,
-                },
-            }
 
+        var product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo.cart._product } } });
+        if (product?.cart) {
+            return res.json({ status: 0, message: "Product is already in the cart" })
+        } else {
 
-            var product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store, cart: { $elemMatch: { _product: cartInfo.cart._product } } });
-            if (product?.cart) {
-                return res.json({ status: 0, message: "Product is already in the cart" })
+            product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store });
+            if (!product) {
+                product = await Cart.create(cartInfo);
+                console.log(product)
             } else {
-
-                product = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store });
-                if (!product) {
-                    product = await Cart.create(cartInfo);
-                    console.log(product)
-                } else {
-                    product.cart.push(cartInfo.cart)
-                    await product.save();
-                }
+                product.cart.push(cartInfo.cart)
+                await product.save();
             }
-            var prod = product.toObject();
-
-            product = prod.cart.map(data => {
-                data.in_cart = data.quantity;
-                delete (data.quantity)
-                return data;
-            })
-            return res.json({ status: 1, message: "Product added to cart successfully", data: product });
-        } catch (err) {
-            console.log("--errr", err)
-            return res.status(400).json({ data: err.message });
         }
+        var prod = product.toObject();
 
-    };
+        product = prod.cart.map(data => {
+            data.in_cart = data.quantity;
+            delete (data.quantity)
+            return data;
+        })
+        return res.json({ status: 1, message: "Product added to cart successfully", data: product });
+    } catch (err) {
+        console.log("--errr", err)
+        return res.status(400).json({ data: err.message });
+    }
+
+};
 
 exports.removeProductFromCart = async (req, res) => {
 

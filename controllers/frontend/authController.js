@@ -1,10 +1,9 @@
 const Role = require('../../models/role');
 const User = require('../../models/user');
+const Cart = require('../../models/cart')
 const Store = require('../../models/store');
 var md5 = require('md5');
 const bcrypt = require("bcrypt")
-// const moment = require('moment')
-var moment = require('moment-timezone');
 
 const { validationResult } = require('express-validator');
 
@@ -21,6 +20,9 @@ exports.login = async (req, res) => {
             await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
             req.session.customer = userInfo.email;
             req.session.userid = userInfo._id
+
+            await Cart.updateMany({ sessionId: req.sessionID },{ $set: { _user: userInfo._id } }).lean()
+            //console.log("====>>>>",req.sessionID)              
 
             return res.json({ status:1,errors: '' });
     } catch (err) {

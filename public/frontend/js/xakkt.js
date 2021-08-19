@@ -296,23 +296,33 @@ $('.cart-form').submit(function(e){
 $('#cartModal').on('show.bs.modal',function(e){ 
   var tag = $(e.relatedTarget) 
   var data ={}
- 
+ if(!tag.data('storeid')){
+      Swal.fire({
+        title: "No store selected!",
+        text: "For your cart, you need to select your store first",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }) 
+    return false;
+  }
   data.userid = tag.data('userid')??null
   data.storeid = tag.data('storeid')??null 
 
   $.post('/products/cart', data).done(result => { 
               if(result.status){ 
                 
-
-var tableHtml = ''
-
+    var tableHtml = ''
+    var total = 0;
                 result.data.forEach((product,index)=>{
+                total += product.total_price;
+
                     tableHtml += `<tr>
                                     <td class="w-25">
                                       <img src="http://xgrocery.cf/images/products/${product._product.image}" class="img-fluid img-thumbnail" alt="Sheep">
                                     </td>
                                     <td>${product._product.name.english}</td>
-                                    <td class="qty"><input type="text" class="form-control" id="input1" value="${product.quantity}"></td>
+                                    <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
                                     <td>${product.total_price}</td>
                                     <td>
                                       <a href="#" class="btn btn-danger btn-sm">
@@ -322,19 +332,19 @@ var tableHtml = ''
                               </tr>`
                   })
                  
+                  $('.cart-price').html(total)
 
-                $('#cart-table').html(tableHtml)
                        }else{
                         
                         tableHtml = `<tr>
-                        <td colspan="5">
-                         No data for cart
-                        </td>
-                        
-                  </tr>`
+                                        <td colspan="5">
+                                        No data for cart
+                                        </td>
+                                      </tr>`
+                  $('.cart-price').html()
+                 }
+                 $('#cart-table').html(tableHtml) 
 
-                  $('#cart-table').html(tableHtml)      
-                    }
   }).fail(result=>{
             $("#loginError").show().text(result.responseJSON.errors);
   });
