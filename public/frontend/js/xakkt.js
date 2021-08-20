@@ -304,7 +304,7 @@ $('#cartModal').on('show.bs.modal',function(e){
         buttons: true,
         dangerMode: true,
       }) 
-    return false;
+    return ;
   }
   data.userid = tag.data('userid')??null
   data.storeid = tag.data('storeid')??null 

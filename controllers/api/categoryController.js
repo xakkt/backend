@@ -63,7 +63,7 @@ exports.productsByCategory = async function(req, res){
 			var product = {}
 			
 			//return res.json(categories)
-
+            if(!categories)return res.json({status:0, message:'Category not available'})
 			await Promise.all(categories._products.map(async (product) => {
 				var data = {}
 				var productId = product._id.toString();

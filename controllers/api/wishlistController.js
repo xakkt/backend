@@ -11,7 +11,7 @@ exports.addPoductToWishlist = async (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	}
-	console.log(req.body);
+	
 	try {
 		const wishlistInfo = {
 			_user: req.decoded.id,
@@ -26,13 +26,7 @@ exports.addPoductToWishlist = async (req, res) => {
 		if (productPrice.effective_price <= req.body.wish_price) {
 			return res.json({ status: 0, message: "Wish price should be less than  product price" })
 		}
-		else if (productPrice.effective_price <= req.body.max_price) {
-			return res.json({ status: 0, message: "Max price should be less than product price" })
-		}
-		else if (req.body.max_price <= req.body.wish_price) {
-			var price =  req.body.wish_price - req.body.max_price 
-			return res.json({ status: 0, message: "Max price should be greather than Wish price "+ price.toFixed(2) + "" })
-		}
+		
 		const wishlist = await Wishlist.create(wishlistInfo);
 		return res.json({ status: 1, message: "Product added to wishlist successfully", data: wishlist });
 
