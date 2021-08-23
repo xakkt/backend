@@ -17,7 +17,21 @@
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
    <style>
-       .carousel-item img {
+       .pricing{
+           color:#df3b3b;
+       }
+       .pricing span{
+            text-decoration: line-through;
+            position: relative;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.6);
+            margin-left: 8px;
+       }
+.d-block.mb-5{
+    text-align: center;
+}
+.carousel-item img {
     max-height: 350px;
 }
        .quantity {
@@ -115,17 +129,27 @@ input:focus {
                 <div class="col-md-2 col-sm-12">
                     <div class="p-card bg-white p-2 rounded px-3">
                        <!--div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">2 credits</span></div-->
-                       <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image cap"><span class="badge badge-primary py-1 mb-2">integrations</span>
+                       <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image cap">
                        
-                        <div class="quantity d-block mb-5">
-                            <button class="minus-btn xbtn" type="button" name="button">
-                                <i class="fa fa-minus" aria-hidden="true"></i>
-                            </button>
-                            <input type="text" name="quantity" value="1">
-                            <button class="plus-btn xbtn" type="button" name="button">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                            </button>
-                            
+                       <span class="badge badge-primary py-1 mb-2">integrations</span>
+                       
+
+
+                        <div class="d-block mb-5">
+
+                            <div class="pricing">
+                                <%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span>
+                            </div>
+
+                            <div class="quantity">
+                                <button class="minus-btn xbtn" type="button" name="button">
+                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                </button>
+                                <input type="text" name="quantity" value="1">
+                                <button class="plus-btn xbtn" type="button" name="button">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>  
                             <div class="xshop ">
                                 <span class="" style="padding-right:0;">
                                     <img class="img-responsive xakkti x-cart x-cart-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="" data-original-title="Remove from Cart">
@@ -144,10 +168,7 @@ input:focus {
                           </div>
                        
                        
-                          
-                            
-                          
-                       
+                   
                     </div>
                  </div>
                  <% }%> 

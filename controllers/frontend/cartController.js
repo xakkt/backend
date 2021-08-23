@@ -6,10 +6,10 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.cartProducts = async (req, res) => {
     try {
-		console.log("============>>>>>>>>",req.body)
+		
     	 let condition = {_store:req.body.storeid}
 		 condition = (req.session.userid)?{ ...condition, _user: req.session.userid} : { ...condition, sessionId: req.sessionID} ;
-console.log('condition======>>',condition)
+
 		 var cartProducts = await Cart.findOne(condition).populate({
 			 path: 'cart',
 			 populate: {
