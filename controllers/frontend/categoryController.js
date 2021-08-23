@@ -8,6 +8,7 @@ const ProductRegularPricing = require('../../models/product_regular_pricing')
 const _global = require('../../helper/common')
 var moment = require('moment');
 const Banner = require('../../models/banner')
+const ProductCategory = require('../../models/product_category');
 
 function getUniqueListBy(product, key) {
 	return [...new Map(product.map(item => [item[key], item])).values()]
@@ -55,7 +56,9 @@ exports.categoryProducts = async (req, res) => {
 		}}).populate('_deal','name').lean();
 		
 		bannerArr = [];
-		
+        
+        
+        
 		await Promise.all(banners.map( async function(banner){
 			let dealProducts =  await StoreProductPricing.findOne({$and: [ {_store:banner._store, _deal:banner._deal}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).lean()
 						
@@ -98,200 +101,57 @@ exports.categoryProducts = async (req, res) => {
 		//	const mergedArray = [...banners, ..._banners];
 /* ----------------- end of code for banners ----------*/
 
-	
-	let categories = await StoreProductPricing.find({
-		_store: storedata._id
-	}).populate({
-		path: '_product',
-		select: 'name sku image weight',
-		populate: {
-		  path: '_unit',
-		  select: 'name'
-	    }
-	  }).populate({
-		path:'_deal',
-		select:'name'
-	  }).lean();
 
-	  
-	if (userid) {
-		cartProductList = await _global.cartProducts(userid, storedata._id);
-		wishlistids = await _global.wishList(userid, storedata._id)
-		shoppinglistProductIds = await _global.shoppingList(userid, storedata._id)
-	}
+        const categories = await ProductCategory.findOne({slug:req.params.category}).populate('_products','-crv -meta_description -_category').lean();
+        var storeProduct= []
+        var product = {}
 
-	if (!categories.length){
-			pdata[2] = {
-				path: `${process.env.BASE_URL}/images/products/`,
-				type: "product",
-				sub_type: "Deals",
-				message: 'No Product on this store available',
-				product: []
-			}
-		}else{
-			var deal_name = '';
-			await Promise.all(categories.map(async (element) => {
-				
-				var data = {}
-				var productId = element._product._id.toString();
-				var productPrice = await _global.productprice(storedata._id, productId)
-				
-				if(productPrice){
+        if(!categories)return res.json({status:0, message:'Category not available'})
+       
+       
+        await Promise.all(categories._products.map(async (product) => {
+            var data = {}
+            var productId = product._id.toString();
+            
+            var productPrice = await _global.productprice(storedata._id, productId)
+            
+            data = {
+                ...data,
+                _id: product._id,
+                name: product.name,
+                unit: product._unit?.name??'n/a',
+                weight: product.weight,
+                is_favourite: 0,
+                in_shoppinglist: 0,
+                in_cart: 0,
+                image: product.image,
+                deal_price: productPrice.deal_price,
+                regular_price: productPrice.regular_price,
+                description: product.description
+            }
 
-					deal_name = element._deal.name;
-								data = {
-									...data,
-									type: "product",
-									_id: element._product._id,
-									name: element._product.name,
-									unit: element._product._unit?.name??'n/a',
-									weight: element._product.weight,
-									sku: element._product.sku,
-									is_favourite: 0,
-									in_shoppinglist: 0,
-									in_cart: 0,
-									image: `${process.env.BASE_URL}/images/products/${element._product.image}`,
-									deal_price: productPrice.deal_price,
-									regular_price: productPrice.regular_price
-								}
-								
+            
 
-								if (productId in cartProductList) {
-									data.in_cart = cartProductList[productId]
-								}
-					
-								if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
-									data.is_favourite = 1,
-									data.in_shoppinglist = 1
-								} else if (shoppinglistProductIds.includes(productId)) {
-									data.in_shoppinglist = 1
-								} else if (wishlistids.includes(productId)) {
-									data.is_favourite = 1
-								}
-								product.push(data)
-					
-				}else{
-					pdata[2] = {
-						path: `${process.env.BASE_URL}/images/products/`,
-						type: "product",
-						sub_type: "Deals",
-						message: 'No Product on this store available',
-						product: []
-					}
-				}
-								
-					
-							}))
-							product = getUniqueListBy(product, '_id')
-							
-							pdata[2] = {
-											path: `${process.env.BASE_URL}/images/products/`,
-											type: "product",
-											dealName: deal_name,
-											sub_type: "Deals",
-											product: product
-										};
+            /*if (productId in cartProductList) {
+                data.in_cart = cartProductList[productId]
+            }
 
-		}
-		
-		/*--------- order again --------*/			
-		let orderAgain = []			
-		pdata[3] = 	{
-						path: `${process.env.BASE_URL}/images/products/`,
-						type: "product",
-						sub_type: "order_again",
-						message: "You have not placed any orders in the last 90 days",
-						product: orderAgain
-					}			
-		/*--------- order again --------*/
+            if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
+                data.is_favourite = 1,
+                data.in_shoppinglist = 1
+            } else if (shoppinglistProductIds.includes(productId)) {
+                data.in_shoppinglist = 1
+            } else if (wishlistids.includes(productId)) {
+                data.is_favourite = 1
+            } */
+            storeProduct.push(data) 
+
+        }))
 
 
-		/*--------- trending products --------*/
-		
-		var trendingProducts = []	
-		let allTrendings = await Product.find({
-			trending:true
-		}).distinct('_id').lean({getter:true});
-		let allTrendingIds = allTrendings.map(x => x.toString());
-		
-		let storeTrending = await ProductRegularPricing.find({ _store:storedata._id,
-			_product:{$in: allTrendingIds }}).populate(
-				{
-				path: '_product',
-				select: 'name sku image trending weight',
-				populate: {
-						path: '_unit',
-						select: 'name'
-					}
-				
-				})	
-		
-	      if(!storeTrending.length){
-			pdata[1] = 	{
-				path: `${process.env.BASE_URL}/images/products/`,
-				type: "product",
-				sub_type: "trending",
-				message: "No trending product available",
-				product: []
-			}	
-	   }else{
-		trendingProducts = [];   
-		await Promise.all(storeTrending.map(async (element) => {
-			var data = {}
-			var productId = element._product._id.toString();
-			var productPrice = await _global.productprice(storedata._id, productId)
-
-			data = {
-				...data,
-				type: "product",
-				_id: element._product._id,
-				name: element._product.name,
-				unit: element._product._unit?.name??'n/a',
-				weight: element._product.weight,
-				sku:element._product.sku,
-				is_favourite: 0,
-				in_shoppinglist: 0,
-				in_cart: 0,
-				image: element._product.image,
-				deal_price: productPrice.deal_price,
-				regular_price: productPrice.regular_price
-			}
-
-			if (productId in cartProductList) {
-				data.in_cart = cartProductList[productId]
-			}
-
-			if (wishlistids.includes(productId) && shoppinglistProductIds.includes(productId)) {
-				data.is_favourite = 1,
-				data.in_shoppinglist = 1
-			} else if (shoppinglistProductIds.includes(productId)) {
-				data.in_shoppinglist = 1
-			} else if (wishlistids.includes(productId)) {
-				data.is_favourite = 1
-			}
-			trendingProducts.push(data)
-
-		}))
-
-			pdata[1] = 	{
-				path: `${process.env.BASE_URL}/images/products/`,
-				type: "product",
-				sub_type: "trending",
-				product: trendingProducts
-			}	
-			
-	   }
-	
-		/*-------- trending products ------*/		
-
-		 /*  return res.json({
-			status: 1,
-			data: pdata, 
-			store:storedata
-		})    */
 		let productCatogories = await Categories.find().lean()
-  		//let brands = await Brands.find().lean()
-   		return res.render('frontend/category-product',{banners:pdata[0],deal:pdata[2], order_again:pdata[3],store:storedata, categories:productCatogories, trending:pdata[1]})
+  		
+   		return res.render('frontend/category-product',{banners:pdata[0],store:storedata, storeProducts:storeProduct,categories:productCatogories})
 
 	} catch (err) {
 		console.log(err)

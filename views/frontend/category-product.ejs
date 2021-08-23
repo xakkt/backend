@@ -16,86 +16,14 @@
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
-<style>
-      
-
-.xakkti,.ccc_viewed_image, .bbb_viewed_image{
-    cursor: pointer;
-}
-.quantity {
-padding: 10px 0 10px 0;
-}
-.quantity input {
-  -webkit-appearance: none;
-  border: none;
-  text-align: center;
-  width: 32px;
-  font-size: 16px;
-  color: #43484D;
-  font-weight: 300;
-}
- 
-.xbtn {
-  width: 30px;
-  height: 30px;
-  background-color: #E1E8EE;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-.minus-btn img {
-  margin-bottom: 3px;
-}
-.plus-btn img {
-  margin-top: 2px;
-}
- 
-button:focus,
-input:focus {
-  outline:0;
-}
-.xshop{
-    margin:0;
-    /* padding:10px 0 10px 0; */
-    padding:10px ​20px 10px 20px;
-}
-.carousel-item img{
-    max-height:350px;
-}
-
-.homeicon{
-    padding: 0;
-    background-repeat: no-repeat;
-    background-size: contain;
-   
-}
-
-.product_view .modal-dialog{max-width: 800px; width: 100%;}
-.pre-cost{text-decoration: line-through; color: #a5a5a5;}
-.space-ten{padding: 10px 0;}
-
-
-.table-image thead td,
-.table-image thead th {
-  border: 0;
-  color: #666;
-  font-size: 0.8rem;
-}
-.table-image td,
-.table-image th {
-  vertical-align: middle;
-  text-align: center;
-}
-.table-image td.qty,
-.table-image th.qty {
-  max-width: 4rem;
-}
-
-.cart-price {
-  margin-left: 1rem;
-}
-
-</style>
+   <style>
+       .xshop img {
+                width: 28px;
+            }
+        .xshop {
+            display: flex;
+        }
+   </style>
 
 </head>
 <body>
@@ -143,108 +71,56 @@ input:focus {
       </div>
 
 
-      <div class="container-fluid">
-                
-       <div class="ccc_viewed">
+      <div class="container">
+        <div class="container mt-5 mb-5">
             
-            <div class="row">
-                <div class="col">
-                    <div class="ccc_main_container">
-                        <div class="ccc_viewed_title_container">
-                            <h3 class="ccc_viewed_title">Trending Nearby</h3>
-                            <div class="ccc_viewed_nav_container">
-                                <div class="ccc_viewed_nav ccc_viewed_prev"><i class="fas fa-chevron-left"></i></div>
-                                <div class="ccc_viewed_nav ccc_viewed_next"><i class="fas fa-chevron-right"></i></div>
-                            </div>
-                        </div>
-                        <div class="ccc_viewed_slider_container">
-                            <div class="owl-carousel owl-theme ccc_viewed_slider">
-                               
-                              <% for (const [i,product] of trending.product.entries()) { %>
-                              <div class="owl-item">
-                               
-                                    <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" >
-                                            <img src="<%=product.image%>" alt="">
-                                        </div>
-                                        <div class="ccc_viewed_content text-center">
-                                            <div class="ccc_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
-                                            
-                                            <div class="ccc_viewed_name">
-                                                  <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-sku="<%=product.sku%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
-                                            </div>
-                                            <form class="cart-form" method="post">
-                                               <input type="hidden" name="_store" value="<%=store._id%>" />
-                                                <%- await include('_partials/productSliders.ejs',{product:product}); %>
-                                           </form>
-
-                                        </div>
-                                      
-                                   </div>
-                                </div>
-                                <% }%> 
-       
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-    </div>
-
-         <div class="bbb_viewed">
-            
-            <div class="row">
-                <div class="col">
-                    <div class="bbb_main_container">
-                        <div class="bbb_viewed_title_container">
-                            <h3 class="bbb_viewed_title">Deals at <%=store.name%></h3>
-                            <div class="bbb_viewed_nav_container">
-                                <div class="bbb_viewed_nav bbb_viewed_prev"><i class="fas fa-chevron-left"></i></div>
-                                <div class="bbb_viewed_nav bbb_viewed_next"><i class="fas fa-chevron-right"></i></div>
-                            </div>
-                        </div>
-                        <div class="bbb_viewed_slider_container">
-                            <div class="owl-carousel owl-theme bbb_viewed_slider">
-                               
-                              <% for (const [i,product] of deal.product.entries()) { %> 
-                              
-                              <div class="owl-item">
-                                    <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
-                                            <div class="bbb_viewed_name">
-                                              <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a></div>
-
-                                              <form class="cart-form">
-                                                <input type="hidden" name="_store" value="<%=store._id%>" />  
-                                                  <%- await include('_partials/productSliders.ejs',{product:product}); %>
-                                              </form>
-
-                                        </div>
-                                        <!--ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul-->
-                                    </div>
-                                </div>
-                               
-                                <% }%>  
-
+            <div class="row mt-1">
+                <% for (const [i,product] of storeProducts.entries()) { %>
+                <div class="col-md-2">
+                    <div class="p-card bg-white p-2 rounded px-3">
+                       <!--div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">2 credits</span></div-->
+                       <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image cap"><span class="badge badge-primary py-1 mb-2">integrations</span><span class="d-block mb-5"></span>
+                       <div class="d-flex justify-content-between stats">
+                          
+                          <div class="d-flex flex-row align-items-center">
+                            <div class="xshop">
+                                <span class="col" style="padding-right:0;">
+                                    <img class="img-responsive xakkti x-cart x-cart-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/RED_Cart.png" alt="" data-original-title="Remove from Cart">
+                                    <img class="img-responsive xakkti x-cart x-cart-grey-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/GREY_Cart.png" alt="" data-original-title="Add to Cart">
+                                </span>
+                                <span class="col">
+                                        <img class="img-responsive xakkti x-heart x-heart-red-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/RED_Favorite.png" alt="" data-original-title="Remove from favourite">
+                                        <img class="img-responsive xakkti x-heart x-heart-grey-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/GREY_Favorite.png" alt="" data-original-title="Add to favourite">
+                                </span>
+                                <span class="col" style="padding-left:0;">
+                                    <img class="img-responsive xakkti x-list x-list-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" src="http://localhost:4800/frontend/images/RED_shopping_List.png" alt="" data-original-title="Remove from shopping list">
+                                    <img class="img-responsive xakkti x-list x-list-grey-6281006859548" src="http://localhost:4800/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" alt="" data-original-title="Add to shopping list">
+                                </span>
+                             </div>
                           </div>
-                        </div>
+                       </div>
                     </div>
-                </div>
+                 </div>
+                 <% }%> 
             </div>
-        
-        </div>  
-          
-
-      
-        
+           
+         </div>                   
       </div> <!--container-fluid-->
   
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
 
    </div>
 
@@ -254,87 +130,7 @@ input:focus {
 
 
    <!-- Footer -->
-<footer class="page-footer font-small pt-4" style="background-color: #535d61;">
 
-    <!-- Footer Links -->
-    <div class="container-fluid text-center text-md-left">
-  
-      <!-- Grid row -->
-      <div class="row">
-  
-        <!-- Grid column -->
-        <div class="col-md-6 mt-md-0 mt-3">
-  
-          <!-- Content -->
-          <h5 class="text-uppercase">Footer Content</h5>
-          <p>Here you can use rows and columns to organize your footer content.</p>
-  
-        </div>
-        <!-- Grid column -->
-  
-        <hr class="clearfix w-100 d-md-none pb-3">
-  
-        <!-- Grid column -->
-        <div class="col-md-3 mb-md-0 mb-3">
-  
-          <!-- Links -->
-          <h5 class="text-uppercase">Links</h5>
-  
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
-          </ul>
-  
-        </div>
-        <!-- Grid column -->
-  
-        <!-- Grid column -->
-        <div class="col-md-3 mb-md-0 mb-3">
-  
-          <!-- Links -->
-          <h5 class="text-uppercase">Links</h5>
-  
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
-          </ul>
-  
-        </div>
-        <!-- Grid column -->
-  
-      </div>
-      <!-- Grid row -->
-  
-    </div>
-    <!-- Footer Links -->
-  
-    <!-- Copyright -->
-    <div class="footer-copyright text-center py-3">© 2020 Copyright:
-      <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
-    </div>
-    <!-- Copyright -->
-  
-  </footer>
   <!-- Footer -->
 
    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
