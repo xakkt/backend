@@ -47,6 +47,16 @@
             <img class="img-responsive xakkti" id="cartbutton" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:10%" alt="">
             <span class='badge badge-warning' id='lblCartCount'> 5 </span>
          </li>
+         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">Dashboard</a>
+              <a class="dropdown-item" href="#">Edit Profile</a>
+              <a class="dropdown-item" href="#">Log Out</a>
+            </div>
+          </li> 
        </ul> 
       
      
