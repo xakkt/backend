@@ -293,61 +293,72 @@ $('.cart-form').submit(function(e){
    
 })
 
+
+$('#cartbutton').on('click',function(){
+   if(!$(this).data('storeid')){ 
+
+    Swal.fire({
+      title: "No store selected!",
+      text: "For your cart, you need to select your store first",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }) 
+
+    }else{
+          $('#cartModal').modal('show')
+    }
+})
+
 $('#cartModal').on('show.bs.modal',function(e){ 
-  var tag = $(e.relatedTarget) 
+  
   var data ={}
- if(!tag.data('storeid')){
-      Swal.fire({
-        title: "No store selected!",
-        text: "For your cart, you need to select your store first",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }) 
-    return ;
-  }
-  data.userid = tag.data('userid')??null
-  data.storeid = tag.data('storeid')??null 
+  data.userid = $("#cartbutton").data('userid')??null
+  data.storeid = $("#cartbutton").data('storeid')
 
   $.post('/products/cart', data).done(result => { 
-              if(result.status){ 
+     
+    if(result.status){ 
+        
+        var tableHtml = ''
+        var total = 0;
+        result.data.forEach((product,index)=>{
+            
+            total += product.total_price;
+
+            tableHtml += `<tr>
+                            <td class="w-25">
+                              <img src="http://xgrocery.cf/images/products/${product._product.image}" class="img-fluid img-thumbnail" alt="Sheep">
+                            </td>
+                            <td>${product._product.name.english}</td>
+                            <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
+                            <td>${product.total_price}</td>
+                            <td>
+                              <a href="#" class="btn btn-danger btn-sm">
+                                <i class="fa fa-times"></i>
+                              </a>
+                            </td>
+                      </tr>`
+          })
+         
+          $('.cart-price').html(total)
+
+               }else{
                 
-    var tableHtml = ''
-    var total = 0;
-                result.data.forEach((product,index)=>{
-                total += product.total_price;
-
-                    tableHtml += `<tr>
-                                    <td class="w-25">
-                                      <img src="http://xgrocery.cf/images/products/${product._product.image}" class="img-fluid img-thumbnail" alt="Sheep">
-                                    </td>
-                                    <td>${product._product.name.english}</td>
-                                    <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
-                                    <td>${product.total_price}</td>
-                                    <td>
-                                      <a href="#" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-times"></i>
-                                      </a>
-                                    </td>
+                tableHtml = `<tr>
+                                <td colspan="5">
+                                No data for cart
+                                </td>
                               </tr>`
-                  })
-                 
-                  $('.cart-price').html(total)
+                $('.cart-price').html()
+         }
+         $('#cart-table').html(tableHtml) 
 
-                       }else{
-                        
-                        tableHtml = `<tr>
-                                        <td colspan="5">
-                                        No data for cart
-                                        </td>
-                                      </tr>`
-                  $('.cart-price').html()
-                 }
-                 $('#cart-table').html(tableHtml) 
+}).fail(result=>{
+    $("#loginError").show().text(result.responseJSON.errors);
+});
 
-  }).fail(result=>{
-            $("#loginError").show().text(result.responseJSON.errors);
-  });
+  
 
 })
 

@@ -9,17 +9,11 @@ const _global = require('../../helper/common')
 var moment = require('moment');
 const Banner = require('../../models/banner')
 
-
 function getUniqueListBy(product, key) {
 	return [...new Map(product.map(item => [item[key], item])).values()]
 }
 
-exports.homepage = async (req, res) => {
-  let stores =   await Store.find().lean();
-  if(stores) return res.render('frontend/index',{stores:stores})
-}
-
-exports.products = async (req, res) => {
+exports.categoryProducts = async (req, res) => {
 	
 	var userid = res.locals.userid??req.sessionId
 	var pdata = [];
@@ -28,7 +22,7 @@ exports.products = async (req, res) => {
 	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 	try {
 		
-		let storedata = await Store.findOne({ slug: req.params.slug }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
+		let storedata = await Store.findOne({ slug: req.params.store }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
 			path: '_currency',
 			select: 'name',
 		  }).lean()
@@ -39,7 +33,6 @@ exports.products = async (req, res) => {
 				data: 'Store does not exists'
 			})
 		}
-
 		let nearbystores = await Store.find({
 			location: {
 				$near: {
@@ -298,7 +291,7 @@ exports.products = async (req, res) => {
 		})    */
 		let productCatogories = await Categories.find().lean()
   		//let brands = await Brands.find().lean()
-   		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2], order_again:pdata[3],store:storedata, categories:productCatogories, trending:pdata[1]})
+   		return res.render('frontend/category-product',{banners:pdata[0],deal:pdata[2], order_again:pdata[3],store:storedata, categories:productCatogories, trending:pdata[1]})
 
 	} catch (err) {
 		console.log(err)
@@ -309,5 +302,3 @@ exports.products = async (req, res) => {
 		});
 	}
 }
-
-

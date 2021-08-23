@@ -8,8 +8,8 @@ var isloggedin = require('../middlewares/isloggedin')
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
 const StoreController = require('../controllers/frontend/storeController')
-const CartController = require('../controllers/frontend/cartController')
-
+const cartController = require('../controllers/frontend/cartController')
+const categoryController = require('../controllers/frontend/categoryController')
 
 const userValidation = [
     body('email').not().isEmpty().trim().escape().withMessage('Email should not be empty'),
@@ -51,14 +51,15 @@ router.get('/user/logout',AuthController.logout)
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
-router.post('/product/add-to-cart',cartValidation,CartController.addPoductToCart)
+router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
 router.get('/checkout',function(req, res){
     return res.render('frontend/checkout')
 })
+router.get('/:store/category/products/:slug',categoryController.categoryProducts)
 
 router.get('/cart',function(req, res){
     return res.render('frontend/cart')
 })
 
-router.post('/products/cart',CartController.cartProducts)
+router.post('/products/cart',cartController.cartProducts)
 module.exports = router;

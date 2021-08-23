@@ -44,13 +44,11 @@ exports.productCreate = async (req, res) => {
     *params[name,filename]
     */
 exports.save = async (req, res) => {
-
-
-
         try {
             const categoryInfo = {
                 name: req.body.name,
-                logo: req.file?.filename ?? null
+                logo: req.file?.filename ?? null,
+                slug:(req.body.name+Math.floor((Math.random() * 100) + 1)).replace(/ /g, "-").toLowerCase()                
             }
             categoryInfo.parent_id = req.body.parentid ?? null;
 
@@ -118,7 +116,8 @@ exports.update = async function (req, res) {
 
         const categoryInfo = {
             name: req.body.name,
-            parent_id: req.body.parentid
+            parent_id: req.body.parentid,
+            slug: req.body.name.replace(/ /g, "-").toLowerCase()
         }
 
         if (req.file) { categoryInfo.logo = req.file.filename }

@@ -25,6 +25,10 @@ const productCategorySchema = Schema({
       type: String,
       default: null
   },
+  slug: {
+    type: String,
+    required:true
+},
   _products:[{
     type: Schema.Types.ObjectId,
     ref: 'Product'
