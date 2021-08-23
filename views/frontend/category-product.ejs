@@ -17,11 +17,44 @@
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
    <style>
+       .quantity {
+padding: 10px 0 10px 0;
+}
+.quantity input {
+  -webkit-appearance: none;
+  border: none;
+  text-align: center;
+  width: 32px;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+ 
+.xbtn {
+  width: 30px;
+  height: 30px;
+  background-color: #E1E8EE;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.minus-btn img {
+  margin-bottom: 3px;
+}
+.plus-btn img {
+  margin-top: 2px;
+}
+ 
+button:focus,
+input:focus {
+  outline:0;
+}
        .xshop img {
-                width: 28px;
+                width: 30px;
             }
         .xshop {
-            display: flex;
+           margin-top: 8px;
+
         }
    </style>
 
@@ -76,29 +109,42 @@
             
             <div class="row mt-1">
                 <% for (const [i,product] of storeProducts.entries()) { %>
-                <div class="col-md-2">
+                <div class="col-md-2 col-sm-12">
                     <div class="p-card bg-white p-2 rounded px-3">
                        <!--div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">2 credits</span></div-->
-                       <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image cap"><span class="badge badge-primary py-1 mb-2">integrations</span><span class="d-block mb-5"></span>
-                       <div class="d-flex justify-content-between stats">
-                          
-                          <div class="d-flex flex-row align-items-center">
-                            <div class="xshop">
-                                <span class="col" style="padding-right:0;">
-                                    <img class="img-responsive xakkti x-cart x-cart-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/RED_Cart.png" alt="" data-original-title="Remove from Cart">
-                                    <img class="img-responsive xakkti x-cart x-cart-grey-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/GREY_Cart.png" alt="" data-original-title="Add to Cart">
+                       <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image cap"><span class="badge badge-primary py-1 mb-2">integrations</span>
+                       
+                        <div class="quantity d-block mb-5">
+                            <button class="minus-btn xbtn" type="button" name="button">
+                                <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <input type="text" name="quantity" value="1">
+                            <button class="plus-btn xbtn" type="button" name="button">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                            
+                            <div class="xshop ">
+                                <span class="" style="padding-right:0;">
+                                    <img class="img-responsive xakkti x-cart x-cart-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="" data-original-title="Remove from Cart">
+                                    <img class="img-responsive xakkti x-cart x-cart-grey-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="" data-original-title="Add to Cart">
                                 </span>
-                                <span class="col">
-                                        <img class="img-responsive xakkti x-heart x-heart-red-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/RED_Favorite.png" alt="" data-original-title="Remove from favourite">
-                                        <img class="img-responsive xakkti x-heart x-heart-grey-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="http://localhost:4800/frontend/images/GREY_Favorite.png" alt="" data-original-title="Add to favourite">
+                                <span class="">
+                                        <img class="img-responsive xakkti x-heart x-heart-red-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="" data-original-title="Remove from favourite">
+                                        <img class="img-responsive xakkti x-heart x-heart-grey-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="" data-original-title="Add to favourite">
                                 </span>
-                                <span class="col" style="padding-left:0;">
-                                    <img class="img-responsive xakkti x-list x-list-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" src="http://localhost:4800/frontend/images/RED_shopping_List.png" alt="" data-original-title="Remove from shopping list">
-                                    <img class="img-responsive xakkti x-list x-list-grey-6281006859548" src="http://localhost:4800/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" alt="" data-original-title="Add to shopping list">
+                                <span class="" style="padding-left:0;">
+                                    <img class="img-responsive xakkti x-list x-list-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" src="<%=process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="" data-original-title="Remove from shopping list">
+                                    <img class="img-responsive xakkti x-list x-list-grey-6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" alt="" data-original-title="Add to shopping list">
                                 </span>
                              </div>
+
                           </div>
-                       </div>
+                       
+                       
+                          
+                            
+                          
+                       
                     </div>
                  </div>
                  <% }%> 
