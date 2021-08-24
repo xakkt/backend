@@ -51,7 +51,7 @@ exports.createShoppingList = async function (req, res) {
 	try {
 		const errors = await validationResult(req);
 		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
+			return res.status(400).json({ status:0,errors: errors.array() });
 		}
 console.log(req.decoded);
 		const ShoppinglistInfo = {
@@ -64,8 +64,8 @@ console.log(req.decoded);
 		return res.json({ status: 1, message: "Shopping List Created", data: shoppinglist });
 
 	} catch (err) { console.log(err)
-		if (err.code == 11000) return res.status(400).json({ data: "List with this name already exist" });
-		res.status(400).json({ data: err.message });
+		if (err.code == 11000) return res.status(400).json({ status:0,data: "List with this name already exist" });
+		res.status(400).json({status:0, data: err.message });
 	}
 },
 	exports.updateShoppinglist = async function (req, res) {
