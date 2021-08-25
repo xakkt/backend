@@ -185,7 +185,7 @@
                     <div class="form-group">
                       <label for="brands">Brand</label>
                       <select name="brand" class="form-control custom-select" id="brand">
-                        <option value="">Choose one</option>
+                        <option value="">Select a brand</option>
                         <% if(brands) brands.forEach(function(brand){ %>
                         <option value="<%=brand._id%>"><%=brand.name%></option>
                         <% }) %>
@@ -196,7 +196,7 @@
                     <div class="form-group">
                       <label for="mostsaved">Cuisine</label>
                       <select name="cuisine" id="mostsaved" class="form-control custom-select">
-                        <option selected="" disabled="">Select one</option>
+                        <option value="">Select a cuisine</option>
                         <option value="Indian">Indian</option>
                         <option value="American">American</option>
                         <option value="Middle Eastern">Middle Eastern</option>
@@ -248,6 +248,7 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
+    $('#brand').select2({})
     $("#sku").keyup(function () {
       let formdata = {
         "sku": $(this).val()

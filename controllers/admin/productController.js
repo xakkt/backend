@@ -117,7 +117,7 @@ exports.update = async function (req, res) {
         const categoryInfo = {
             name: req.body.name,
             parent_id: req.body.parentid,
-            slug: req.body.name.replace(/ /g, "-").toLowerCase()
+            slug: req.body.name.replace(/ /g, "-").toLowerCase(),
         }
 
         if (req.file) { categoryInfo.logo = req.file.filename }
@@ -155,12 +155,11 @@ exports.productsave = async (req, res) => {
             is_featured: req.body.is_featured,
             _unit: req.body.unit,
             price: req.body.price,
-            cuisine:req.body.cuisine,
+            cuisine:req.body.cuisine||null,
             trending:req.body.trending,
             status: req.body.status,
-            brand_id: req.body.brand
+            brand_id: req.body.brand||null
         }
-
         productinfo.image = (req.file.filename) ? req.file.filename : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
@@ -239,10 +238,10 @@ exports.productupdate = async function (req, res) {
             is_featured: req.body.is_featured,
             price: req.body.price,
             _unit: req.body.unit,
-            cuisine:req.body.cuisine,
+            cuisine:req.body.cuisine||null,
             trending:req.body.trending,
             status: req.body.status,
-            brand_id:req.body.brand
+            brand_id:req.body.brand||null
         }
         if (req.file) { productinfo.image = req.file.filename }
        

@@ -11,8 +11,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const productSchema = new Schema({
   brand_id: {
     type: Schema.Types.ObjectId,
-    ref:'Brand',
-    default: null
+    ref:'Brand'
   },
   deal_id: {
     type: Schema.Types.ObjectId,
@@ -69,7 +68,7 @@ const productSchema = new Schema({
   },
   cuisine:{
     type:String,
-    required:true
+    required:false
   },
   trending:{
     type:Boolean,
