@@ -39,6 +39,7 @@
     "mongodb": "^3.6.2",
     "mongoose": "^5.12.13",
     "mongoose-lean-getters": "^0.1.2",
+    "mongoose-paginate-v2": "^1.4.2",
     "mongoose-seed": "^0.6.0",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0",

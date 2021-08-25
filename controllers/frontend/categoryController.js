@@ -1,18 +1,11 @@
-const Department = require('../../models/department');
-const Product = require('../../models/product');
 const Store = require('../../models/store');
 const Categories = require('../../models/product_category')
-const Brands = require('../../models/brand')
 const StoreProductPricing = require('../../models/store_product_pricing')
-const ProductRegularPricing = require('../../models/product_regular_pricing')
 const _global = require('../../helper/common')
 var moment = require('moment');
 const Banner = require('../../models/banner')
 const ProductCategory = require('../../models/product_category');
 
-function getUniqueListBy(product, key) {
-	return [...new Map(product.map(item => [item[key], item])).values()]
-}
 
 exports.categoryProducts = async (req, res) => {
 	
@@ -102,12 +95,23 @@ exports.categoryProducts = async (req, res) => {
 /* ----------------- end of code for banners ----------*/
 
 
-        const categories = await ProductCategory.findOne({slug:req.params.category}).populate('_products','-crv -meta_description -_category').lean();
+        const categories = await ProductCategory.findOne({slug:req.params.category}).populate(
+            {
+                path: '_products',
+                select: '-crv -meta_description -_category',
+                model:'Product',
+                options: {
+                    sort:{ },
+                    offset: 0,
+                    limit : 5
+                }
+           }
+            ).lean();
         var storeProduct= []
         var product = {}
 
         if(!categories)return res.json({status:0, message:'Category not available'})
-       
+       //return res.json({data:categories})
        
         await Promise.all(categories._products.map(async (product) => {
             var data = {}

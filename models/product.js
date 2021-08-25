@@ -4,16 +4,15 @@ const mongooseLeanGetters = require('mongoose-lean-getters')
 const FKHelper = require('../helper/foreign-key-constraint');
 const StoreProductPricing = require("./store_product_pricing");
 const ProductRegularPricing = require("./product_regular_pricing");
-const Order = require("./order");
 const Cart = require("./cart");
-const Banner = require("./banner");
 const Schema = mongoose.Schema;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const productSchema = new Schema({
   brand_id: {
     type: Schema.Types.ObjectId,
-    ref:'Brand'
-    //required: true,
+    ref:'Brand',
+    default: null
   },
   deal_id: {
     type: Schema.Types.ObjectId,
@@ -144,6 +143,8 @@ const productSchema = new Schema({
     type: Date,
   },
 }, {timestamps:true});
+
+productSchema.plugin(mongoosePaginate);
 
 productSchema.pre("deleteOne",  function (next) {
   const _product = this.getQuery()["_id"];
