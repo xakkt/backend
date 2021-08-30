@@ -95,7 +95,7 @@ exports.deleteShoppinglist = async (req, res) => {
 		const delList = await ShoppinglistName.deleteOne({ _id: req.params.id }).then();
 		if (!delList.deletedCount) { return res.json({ status: 1, message: "No category found", data: "" }); }
 		const delProducts = await Shoppinglist.deleteMany({ _shoppinglist: req.params.id }).exec();
-		res.json({ status: 0, message: "List deleted", data: delProducts })
+		res.json({ status: 1, message: "List deleted", data: delProducts })
 	} catch (err) {
 		return res.status(400).json({ status: 0, message: "", data: err });
 	}
@@ -130,7 +130,7 @@ exports.shoppinglistProducts = async (req, res) => {
 
 	} catch (err) {
 		console.log(err)
-		res.status(400).json({ status:0, message: "", data: err });
+		res.status(400).json({ status:0, message: err });
 	}
 }
 
