@@ -117,7 +117,7 @@
                   <div class="col-md-6">
                     
                     <div class="form-group">
-                      <label for="imgInp"><img id="blah" src="/images/products/<%=product.image%>" style="height:100px; cursor:pointer;" alt="your image" /></label>
+                      <label for="imgInp"><img id="blah" src="<%=product.image%>" style="height:100px; cursor:pointer;" alt="your image" /></label>
                       <div class="input-group" style="display:none;">
                         <div class="custom-file">
                           <input type="file" name="logo" class="custom-file-input" accept="image/png,image/jpeg"
@@ -202,8 +202,7 @@
                       <select name="brand" class="form-control custom-select" id="brand">
                         <option value="">Select a brand</option>
                         <% if(brands) brands.forEach(function(brand){ %>
-                        <option value="<%=brand._id%>" 
-                          ><%=brand.name%></option>
+                        <option value="<%=brand._id%>"  <%=(brand._id.equals(product.brand_id))?'selected':''%>><%=brand.name%></option>
                         <% }) %>
                       </select>
                     </div>
