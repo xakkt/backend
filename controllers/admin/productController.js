@@ -146,7 +146,7 @@ exports.productsave = async (req, res) => {
                 english: req.body.en_name
             },
             description: req.body.description,
-            sku: req.body.sku,
+           // sku: req.body.sku,
             _category: req.body._category,
 			slug:(req.body.en_name+req.body.sku).replace(/ /g, "-").toLowerCase(),
             weight: req.body.weight,
@@ -230,7 +230,7 @@ exports.productupdate = async function (req, res) {
                 english: req.body.en_name
             },
             description: req.body.description,
-            sku: req.body.sku,
+           // sku: req.body.sku,
             _category: req.body._category,
             weight: req.body.weight,
             slug:(req.body.en_name+req.body.sku).replace(/ /g, "-").toLowerCase(),
