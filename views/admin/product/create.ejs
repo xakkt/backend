@@ -87,7 +87,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="_category">Product Category</label>
-                      <select name="_category" class="form-control custom-select" id="_category">
+                      <select name="_category" class="form-control custom-select" id="category">
                         <option value="">Choose one</option>
                         <% if(productCategories) productCategories.forEach(function(category){ %>
                         <option value="<%=category._id%>"><%=category.name%></option>
@@ -194,8 +194,8 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="mostsaved">Cuisine</label>
-                      <select name="cuisine" id="mostsaved" class="form-control custom-select">
+                      <label for="cuisine">Cuisine</label>
+                      <select name="cuisine" id="cuisine" class="form-control custom-select">
                         <option value="">Select a cuisine</option>
                         <option value="Indian">Indian</option>
                         <option value="American">American</option>
@@ -238,6 +238,10 @@
   <!-- Bootstrap 4 -->
   <script src="<%= process.env.BASE_URL %>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- bs-custom-file-input -->
+
+   <!-- Select2 -->
+   <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
+
   <script src="<%= process.env.BASE_URL %>/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<%= process.env.BASE_URL %>/dist/js/adminlte.min.js"></script>
@@ -248,7 +252,7 @@
   <script src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
   <script>
-    $('#brand').select2({})
+    $('#brand, #cuisine, #category').select2({})
     $("#sku").keyup(function () {
       let formdata = {
         "sku": $(this).val()
@@ -269,18 +273,7 @@
       })
     })
 
-    $(function () {
-      $.ajax({
-        url: '/admin/product/delete',
-        type: 'POST',
-        data: {
-          id: fruitsGranted
-        },
-
-      }).done((data) => {
-
-      })
-    })
+  
 
     $(function () {
       bsCustomFileInput.init();

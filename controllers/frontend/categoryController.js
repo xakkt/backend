@@ -94,45 +94,65 @@ exports.categoryProducts = async (req, res) => {
 		//	const mergedArray = [...banners, ..._banners];
 /* ----------------- end of code for banners ----------*/
 
+		var pageNo = (req.query.page)?parseInt(req.query.page):1
+		const pc = await ProductCategory.findOne({slug:req.params.category}).populate('_products');
+		totalItem=pc._products.length;
+		var option = {sort: { 'name.english': 1 }}
+		option.limit = 4
+
+		if(pageNo!=1){ option.skip = option.limit*(pageNo-1) }
 
         const categories = await ProductCategory.findOne({slug:req.params.category}).populate(
             {
                 path: '_products',
                 select: '-crv -meta_description -_category',
                 model:'Product',
-                options: {
-                    sort:{ },
-                    offset: 0,
-                    limit : 5
-                }
-           }
-            ).lean();
+				options: option,
+				populate:{ path:'_unit'}
+				
+		   }).lean();
+		   
         var storeProduct= []
-        var product = {}
-
+       
         if(!categories)return res.json({status:0, message:'Category not available'})
        //return res.json({data:categories})
-       
+	   
+	
         await Promise.all(categories._products.map(async (product) => {
             var data = {}
             var productId = product._id.toString();
-            
             var productPrice = await _global.productprice(storedata._id, productId)
-            
-            data = {
-                ...data,
-                _id: product._id,
-                name: product.name,
-                unit: product._unit?.name??'n/a',
-                weight: product.weight,
-                is_favourite: 0,
-                in_shoppinglist: 0,
-                in_cart: 0,
-                image: product.image,
-                deal_price: productPrice.deal_price,
-                regular_price: productPrice.regular_price,
-                description: product.description
-            }
+            if(!productPrice){
+
+				data = {
+					...data,
+					_id: product._id,
+					name: product.name,
+					unit: product._unit?.name??'n/a',
+					weight: product.weight,
+					is_favourite: 0,
+					in_shoppinglist: 0,
+					in_cart: 0,
+					image: product.image
+				}
+
+			}else{
+				data = {
+					...data,
+					_id: product._id,
+					name: product.name,
+					unit: product._unit?.name??'n/a',
+					weight: product.weight,
+					is_favourite: 0,
+					in_shoppinglist: 0,
+					in_cart: 0,
+					image: product.image,
+					deal_price: productPrice.deal_price,
+					regular_price: productPrice.regular_price,
+					description: product.description
+				}
+			}
+				
 
             
 
@@ -154,8 +174,25 @@ exports.categoryProducts = async (req, res) => {
 
 
 		let productCatogories = await Categories.find().lean()
-  		
-   		return res.render('frontend/category-product',{banners:pdata[0],store:storedata, storeProducts:storeProduct,categories:productCatogories})
+		  
+		var result = {}
+		
+		result.data = storeProduct
+		var totalPages = Math.ceil(totalItem/option.limit)
+		
+
+		result.banners = pdata[0]
+		result.store   = storedata
+		result.storeProducts = storeProduct
+		result.categories = productCatogories
+		result.totalPages = totalPages
+		result.currentPage = pageNo
+
+		if(pageNo>1)result.pre=pageNo-1
+		if(pageNo<totalPages)result.next=pageNo+1
+
+		//return res.json(result)
+		return res.render('frontend/category-product',result)
 
 	} catch (err) {
 		console.log(err)

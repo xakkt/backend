@@ -35,6 +35,17 @@ const productCategorySchema = Schema({
   }]
 }, {timestamps:true});
 
+
+productCategorySchema.virtual('productCount', {
+  ref: 'Product',
+  localField: '_id',
+  foreignField: '_products',
+  count: true // Set `count: true` on the virtual
+});
+
+
+mongoose.set('toJSON', { virtuals: true });
+
 productCategorySchema.plugin(uniqueValidator)
 module.exports = mongoose.model('ProductCategory', productCategorySchema);
 
