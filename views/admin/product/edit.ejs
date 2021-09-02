@@ -202,7 +202,7 @@
                       <select name="brand" class="form-control custom-select" id="brand">
                         <option value="">Select a brand</option>
                         <% if(brands) brands.forEach(function(brand){ %>
-                        <option value="<%=brand._id%>"
+                        <option value="<%=brand._id%>" 
                           ><%=brand.name%></option>
                         <% }) %>
                       </select>
@@ -300,9 +300,7 @@ $("#sku").keyup(function () {
           // logo: {
           //   required: true
           // },
-          sku: {
-            required: true
-          },
+          
           weight: {
             required: true
           }
