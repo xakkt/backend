@@ -16,10 +16,7 @@
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
-   <link rel="stylesheet" type="text/css" href="<%= process.env.BASE_URL %>/frontend/css/slick-theme.css"/>   
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
+ 
 
 
 				
@@ -70,9 +67,7 @@ input:focus {
 .carousel-item img{
     max-height:350px;
 }
-.owl-carousel .owl-item img {
-     max-height: 160px;
-  }
+
 .homeicon{
     padding: 0;
     background-repeat: no-repeat;
@@ -160,20 +155,7 @@ input:focus {
 
       <div class="container">
                 
-        <div class="multiple-items">
-            <% for (const [i,category] of categories.entries()) { %>
-                <div class="card" style="width: 18rem;">
-                    <div class="cat-img">
-                        <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/departments/<%=category.logo%>" alt="Card image cap">
-                    </div>
-                     <div class="card-body">
-                      <h5 class="card-title"><%=category.name%></h5>
-                        
-                    </div>
-                  </div>
-            <% }%>   
-          </div>
-
+        
        <div class="ccc_viewed">
             
             <div class="row">
@@ -193,7 +175,7 @@ input:focus {
                               <div class="owl-item">
                                
                                     <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" >
+                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" data-toggle="modal" data-target="#product_view" >
                                             <img src="<%=product.image%>" alt="">
                                         </div>
                                         <div class="ccc_viewed_content text-center">
@@ -287,36 +269,7 @@ input:focus {
   <!-- Footer -->
 
    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
- <script>
-   
 
-        $('.multiple-items').slick({
-  centerMode: true,
-  centerPadding: '60px',
-  slidesToShow: 6,
-  responsive: [
-    {
-      breakpoint: 768,
-      settings: {
-        arrows: true,
-        centerMode: true,
-        centerPadding: '40px',
-        slidesToShow: 3
-      }
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        arrows: true,
-        centerMode: true,
-        centerPadding: '40px',
-        slidesToShow: 1
-      }
-    }
-  ]
-});
-
- </script>
   
 </body>
 </html>

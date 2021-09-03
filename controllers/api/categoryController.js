@@ -60,6 +60,7 @@ exports.productsByCategory = async function(req, res){
 			
 			var pageNo = (req.query.page)?parseInt(req.query.page):1
 			const pc = await ProductCategory.findById(req.params.id).populate('_products');
+			return res.json({status:0, message:"no data found"});
 			totalItem=pc._products.length;
 			var option = {sort: { 'name.english': 1 }}
 			option.limit = 3
@@ -130,11 +131,11 @@ exports.productsByCategory = async function(req, res){
 	
 			}))
 			var result = {}
-			result.data = storeProduct
+			//result.data = storeProduct
 			var totalPages = Math.ceil(totalItem/option.limit)
 			if(totalPages!=pageNo)result.nextPage=pageNo+1	
  
-			return res.json({status:1, result});
+			return res.json({status:1, data:storeProduct, result});
 		}catch(err){
 			console.log(err)
 			return res.status(400).send(err);

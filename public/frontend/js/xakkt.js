@@ -40,6 +40,7 @@ switch(error.code) {
 
 
 $(".owl-carousel")&&$(".owl-carousel").length&&$('.owl-carousel').owlCarousel({
+  stagePadding: 50,
   loop: true,
   margin: 10,
   nav: true,
@@ -73,11 +74,11 @@ $(document).ready(function() {
       var viewedSlider = $('.bbb_viewed_slider');
 
       viewedSlider.owlCarousel({
+          stagePadding:50,
           loop: true,
-          margin: 30,
           autoplay: true,
           autoplayTimeout: 6000,
-          nav: false,
+          nav: true,
           dots: false,
           responsive: {
               0: {
@@ -118,8 +119,8 @@ $(document).ready(function() {
     var viewedCSlider = $('.ccc_viewed_slider');
 
     viewedCSlider.owlCarousel({
+        stagePadding:50,
         loop: true,
-        margin: 30,
         autoplay: true,
         autoplayTimeout: 6000,
         nav: false,
