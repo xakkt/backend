@@ -180,7 +180,9 @@
                       </th>
                       <th>Name</th>
                       <th>Image</th>
-                      <th>Description</th>
+                      <th>Brand</th>
+                      <th>Unit</th>
+                      <th>Quantity</th>
                       <% if(await check("add_product_pricing")) { %>
                       <th>Promotion</th>
                       <th>Price</th>
@@ -200,7 +202,9 @@
                                       onchange="checkUncheck(this)"></th>
                                   <th>Name</th>
                                   <th>Image</th>
-                                  <th>Description</th>
+                                  <th>Brand</th>
+                                  <th>Unit</th>
+                                  <th>Quantity</th>
                                   <% if(await check("add_product_pricing")) { %>
                       <th>Promotion</th>
                       <th>Price</th>
@@ -424,11 +428,13 @@
                             src="/images/products/${row.image}">`;
                         }
                       },
-                      { "data": "description" },
+                      { "data": "brand_id.name" },
+                      {"data": "_unit.name"},
+                      {"data":"weight"},
                         <% if(await check("add_product_pricing")) { %> {
-                    data: "ID",
-                    render: function (data, type, row) {
-                      return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
+                          data: "ID",
+                          render: function (data, type, row) {
+                            return `<a href="/admin/product/pricing/${row._id}"> <i class="fa fa-tags" aria-hidden="true"></i></a>`;
                     }
                   },
                   {

@@ -415,13 +415,14 @@ exports.product_listing = async (req, res) => {
                 {_id : {$in : productForSpecificCompany}}
             ]
         }
-        let product = await Product.find(where)
+        
+        let product = await Product.find(where).populate('brand_id','name status').populate('_unit','name')
             .skip((pagno - 1) * limit) //Notice here
             .limit(limit)
             .lean();
-        let total = await Product.find(
-            where
-        ).lean()
+       
+            let total = await Product.find(where).populate('brand_id','name status').populate('_unit','name').lean()
+        
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
         }
     } catch (err) {
