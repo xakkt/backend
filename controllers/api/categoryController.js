@@ -133,7 +133,7 @@ exports.productsByCategory = async function(req, res){
 			var result = {}
 			result.status=1;
 			var totalPages = Math.ceil(totalItem/option.limit)
-			if(totalPages!=pageNo)result.nextPage=pageNo+1	
+			if(totalPages-1!=pageNo)result.nextPage=pageNo+1	
 			result.data=storeProduct;
 			
 			return res.json(result);
