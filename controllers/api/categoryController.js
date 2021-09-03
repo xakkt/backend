@@ -63,7 +63,7 @@ exports.productsByCategory = async function(req, res){
 			if(!pc)return res.json({status:0, message:"no data found"});
 			totalItem=pc._products.length;
 			var option = {sort: { 'name.english': 1 }}
-			option.limit = 3
+			option.limit = 25
 
 			if(pageNo!=1){ option.skip = option.limit*(pageNo-1) }
 			
