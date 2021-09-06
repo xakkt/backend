@@ -172,8 +172,7 @@ exports.categoryProducts = async (req, res) => {
 
         }))
 
-
-		let productCatogories = await Categories.find().lean()
+		let productCatogories = await Categories.find({ parent_id: { $eq: null } }).lean()
 		  
 		var result = {}
 		

@@ -10,7 +10,10 @@ const productCategorySchema = Schema({
     required: true,
     unique:true
    },
-   parent_id: this,
+   parent_id: {
+      type:Schema.Types.ObjectId,
+      ref: 'ProductCategory',
+   },
   _store:{
     type: Schema.Types.ObjectId,
     ref: 'Store',
@@ -34,15 +37,6 @@ const productCategorySchema = Schema({
     ref: 'Product'
   }]
 }, {timestamps:true});
-
-
-productCategorySchema.virtual('productCount', {
-  ref: 'Product',
-  localField: '_id',
-  foreignField: '_products',
-  count: true // Set `count: true` on the virtual
-});
-
 
 mongoose.set('toJSON', { virtuals: true });
 

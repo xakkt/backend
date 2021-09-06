@@ -113,7 +113,7 @@ exports.dashboard = async (req, res) => {
 		_store: req.params.storeid
 	}).populate({
 		path: '_product',
-		select: 'name sku image weight',
+		select: 'name sku image weight description',
 		populate: {
 		  path: '_unit',
 		  select: 'name'
@@ -156,6 +156,7 @@ exports.dashboard = async (req, res) => {
 									name: element._product.name,
 									unit: element._product._unit?.name??'n/a',
 									weight: element._product.weight,
+									description: element._product.description,
 									is_favourite: 0,
 									in_shoppinglist: 0,
 									in_cart: 0,
@@ -227,7 +228,7 @@ exports.dashboard = async (req, res) => {
 			_product:{$in: allTrendingIds }}).populate(
 				{
 				path: '_product',
-				select: 'name sku image trending weight',
+				select: 'name sku image trending weight description',
 				populate: {
 						path: '_unit',
 						select: 'name'
@@ -257,6 +258,7 @@ exports.dashboard = async (req, res) => {
 				name: element._product.name,
 				unit: element._product._unit?.name??'n/a',
 				weight: element._product.weight,
+				description: element._product.description,
 				is_favourite: 0,
 				in_shoppinglist: 0,
 				in_cart: 0,

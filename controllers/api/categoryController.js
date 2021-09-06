@@ -8,7 +8,7 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let category = await ProductCategory.find().exec();
+			let category = await ProductCategory.find({ parent_id: { $eq: null } }).exec();
 			if(!category.length) return res.json({status: "false", message: "No data found", data: category});
 			category.map(element =>{
 				return element.logo =  `${process.env.BASE_URL}/images/products/${element.logo}`

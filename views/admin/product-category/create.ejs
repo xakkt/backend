@@ -34,8 +34,18 @@
    <!-- Theme style -->
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/dist/css/adminlte.min.css">
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
-   <link rel="stylesheet"
-      href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+      <style>
+       
+         .select2-container .select2-selection--single {
+            height: 37px !important;
+         }
+         .select2-selection__arrow {
+            height: 36px !important;
+         }
+      </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -85,15 +95,15 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label>Parent Category</label>
-                                 <select class="form-control custom-select" name="parentid"
-                                    style="width: 100%;">
-                                    <option value=null></option>
+                                 <select class="category-select" name="parentid" style="width: 100%;">
+                                    
                                     <% if(categories.length > 0) { %>
+                                       <option></option>
                                     <% categories.forEach((category)=>{ %>
                                          <option value="<%=category._id%>"><%=category.name%></option>
                                     <%})%>
-                                    <% } else { %>
-                                    <option value="">No Category Found</option>
+                                    <% }else{ %>
+                                          <option value="">No Category Found</option>
                                     <%}%>
                                </select>
                            </div>
@@ -153,6 +163,9 @@
                               <script
                                  src="<%= process.env.BASE_URL %>/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
                               <!-- AdminLTE App -->
+                                 <!-- Select2 -->
+                              <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
+   
                               <script src="<%= process.env.BASE_URL %>/dist/js/adminlte.min.js"></script>
                               <!-- AdminLTE for demo purposes -->
 
@@ -164,6 +177,10 @@
 
                               <script>
                                  $(function () {
+                                    $('.category-select').select2({
+                                       placeholder: "Select a category",
+                                       allowClear: true
+                                    });
                                     bsCustomFileInput.init();
                                  });
 
