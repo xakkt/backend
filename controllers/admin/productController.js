@@ -72,7 +72,7 @@ exports.save = async (req, res) => {
 exports.list = async (req, res) => {
 
     try {
-        let productCategory = await ProductCategory.find().populate('parent_id','name').lean();
+        let productCategory = await ProductCategory.find().lean();
         
         if (!productCategory.length) return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: productCategory, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
