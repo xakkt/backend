@@ -94,7 +94,9 @@ exports.creatOrder = async (req, res) => {
 
 
         var user = await User.findOne({_id:req.decoded.id},{ address: { $elemMatch: { _id: mongoose.Types.ObjectId(req.body.address) } } }).lean()
-       //return res.json(user.address[0])
+      // return res.json(user.address)
+    
+       if(user.address===undefined){  return res.json({status:0, message:'address not found'}) }
             delete  user.address[0]._id
             var address = {...user.address[0]}
 
