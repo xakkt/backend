@@ -7,7 +7,7 @@ ul.list-inline{
 padding:35px 0 35px 0   
 }
 li.list-inline-item{
-padding:0 10px 10px 0;
+padding:0 10px 0px 0;
 }
 .list-inline-item a{
 border-radius:10px;
@@ -184,8 +184,8 @@ border-radius: 6px;
      border-radius: 2px;
      padding-top: 25px;
      padding-bottom: 25px;
-     padding-left: 30px;
-     padding-right: 30px
+     /*padding-left: 30px;
+     padding-right: 30px */
  }
 
  .bbb_viewed_image {

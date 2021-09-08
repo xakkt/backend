@@ -149,29 +149,20 @@ input:focus {
 
          <div class="container-list">
             <ul class="list-inline">
-                <% for (const [i,category] of categories.entries()) { %>
-                    <%if(i==20){%>
-                        <li class="list-inline-item"><a href="">Check More</a></li>
-                    <% break; }%>
+                <% for (const [key,parent] of Object.entries(categories)) { %>
+                  
                     <li class="nav-item dropdown list-inline-item">
-                        <a class="nav-link" href="/<%=store.slug%>/category/products/<%=category.slug%>"><%=category.name%></a>
+                        <a class="nav-link" href="/<%=store.slug%>/category/products/<%=key%>"><%=key%></a>
                         
+                        <% if(categories[key].length) {%>   
                         <div class="dropdown-menu cs-drop-mn" aria-labelledby="dropdownMenuLink">
-                           <a class="dropdown-item" href="https://codepen.io">Item 1</a>
-                           <a class="dropdown-item" href="#">Item 2</a>
-                           <a class="dropdown-item" href="#">Item 3</a>
+                         <% categories[key].forEach((key,value)=>{  %> 
+                            <a class="dropdown-item" href="<%=process.env.BASE_URL%>/<%=store.slug%>/category/products/<%=key.slug%>"><%=key.name%></a>
+                          <% }) %> 
                         </div>
+                        <% } %>
                      </li>
-                    <!-- <li class="nav-item dropdown list-inline-item" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <a class="nav-link dropdown-toggle" href="/<%=store.slug%>/category/products/<%=category.slug%>" >
-                            <%=category.name%>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li> -->
+                    
 
 
                 <% }%>    

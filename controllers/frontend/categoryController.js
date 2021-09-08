@@ -98,7 +98,7 @@ exports.categoryProducts = async (req, res) => {
 		const pc = await ProductCategory.findOne({slug:req.params.category}).populate('_products');
 		totalItem=pc._products.length;
 		var option = {sort: { 'name.english': 1 }}
-		option.limit = 4
+		option.limit = 18
 
 		if(pageNo!=1){ option.skip = option.limit*(pageNo-1) }
 
@@ -154,8 +154,6 @@ exports.categoryProducts = async (req, res) => {
 			}
 				
 
-            
-
             /*if (productId in cartProductList) {
                 data.in_cart = cartProductList[productId]
             }
@@ -172,7 +170,7 @@ exports.categoryProducts = async (req, res) => {
 
         }))
 
-		let productCatogories = await Categories.find({ parent_id: { $eq: null } }).lean()
+		let productCatogories = await Categories.find({ parent_id: categories.parent_id }).populate('parent_id','slug name').lean()
 		  
 		var result = {}
 		
@@ -184,13 +182,15 @@ exports.categoryProducts = async (req, res) => {
 		result.store   = storedata
 		result.storeProducts = storeProduct
 		result.categories = productCatogories
+		result.parentCategory = productCatogories[0].parent_id
 		result.totalPages = totalPages
 		result.currentPage = pageNo
+		result.storeSlug = req.params.store
+		result.categorySlug = req.params.category
 
 		if(pageNo>1)result.pre=pageNo-1
 		if(pageNo<totalPages)result.next=pageNo+1
 
-		//return res.json(result)
 		return res.render('frontend/category-product',result)
 
 	} catch (err) {

@@ -116,12 +116,11 @@ input:focus {
 
          <div class="container-list">
             <ul class="list-inline">
+              <%if(parentCategory){%>
+              <li class="list-inline-item"><a href="<%=process.env.BASE_URL%>/products/<%=store.slug%>"><%=parentCategory.name%></a></li>
+              <%}%>
                 <% for (const [i,category] of categories.entries()) { %>
-                    <%if(i==20){%>
-                        <li class="list-inline-item"><a href="">Check More</a></li>
-                    <% break; }%>    
-                        <li class="list-inline-item"><a href="/<%=store.slug%>/category/products/<%=category.slug%>"><%=category.name%></a></li>
-                    
+                     <li class="list-inline-item"><a href="<%=process.env.BASE_URL%>/<%=store.slug%>/category/products/<%=category.slug%>"><%=category.name%></a></li>
                 <% }%>    
             </ul>
          </div>
@@ -193,17 +192,17 @@ input:focus {
           
           <%if(locals.pre){%>
             <li class="page-item">
-              <a class="page-link" href="<%=process.env.BASE_URL%>/aviation-supermarket17-a-street/category/products/spices?page=<%=pre%>" tabindex="-1">Previous</a>
+              <a class="page-link" href="<%=process.env.BASE_URL%>/<%=storeSlug%>/category/products/<%=categorySlug%>?page=<%=pre%>" tabindex="-1">Previous</a>
             </li>
           <% } %>
 
           <%for( var i=1; i<totalPages; i++) {%>
-            <li class="page-item <%=(currentPage==i)?'active':''%>"><a class="page-link" href="<%=process.env.BASE_URL%>/aviation-supermarket17-a-street/category/products/spices?page=<%=i%>"><%=i%></a></li>
+            <li class="page-item <%=(currentPage==i)?'active':''%>"><a class="page-link" href="<%=process.env.BASE_URL%>/<%=storeSlug%>/category/products/<%=categorySlug%>?page=<%=i%>"><%=i%></a></li>
           <%}%>
 
           <%if(locals.next){%>
           <li class="page-item" >
-            <a href="<%=process.env.BASE_URL%>/aviation-supermarket17-a-street/category/products/spices?page=<%=next%>" class="page-link" >Next</a>
+            <a href="<%=process.env.BASE_URL%>/<%=storeSlug%>/category/products/<%=categorySlug%>?page=<%=next%>" class="page-link" >Next</a>
           </li>
           <% } %>
         </ul>
