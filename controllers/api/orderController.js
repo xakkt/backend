@@ -1,9 +1,11 @@
 const Order = require('../../models/order')
+const User = require('../../models/user')
 var moment = require('moment');
 const { validationResult } = require('express-validator');
 const orderid = require('order-id')(process.env.ORDER_SECRET);
 const _time = require('../../helper/storetimezone')
-
+const mongoose = require('mongoose')
+const _global = require('../../helper/common')
 
 exports.listOrders = async (req, res) => {
 
@@ -79,8 +81,6 @@ exports.updateOrderStatus = async (req, res) => {
     }
 },
 
-
-
 exports.creatOrder = async (req, res) => {
 
         const errors = await validationResult(req);
@@ -88,35 +88,65 @@ exports.creatOrder = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        try {
-            var orderInfo = {
-                _user: req.decoded.id,
-                _store: req.body._store,
-                shipping: {
-                    address: req.body.address,
-                    city: req.body.city,
-                    region: req.body.region,
-                    state: req.body.state,
-                    country: req.body.country,
-                    delivery_notes: req.body.delivery_notes,
-                    order_id: orderid.generate(),
-                    tracking: {
-                        company: req.body.tracking.company,
-                        tracking_number: req.body.tracking.tracking_number,
-                        status: req.body.tracking.status,
-                        estimated_delivery: req.body.tracking.estimated_delivery
-                    }
-                },
 
-                payment: {
-                    method: req.body.payment.method,
-                    transaction_id: req.body.payment.transaction_id
-                },
-                products: req.body.products
-            }
+
+        try {
+
+
+        var user = await User.findOne({_id:req.decoded.id},{ address: { $elemMatch: { _id: mongoose.Types.ObjectId(req.body.address) } } }).lean()
+       //return res.json(user.address[0])
+            delete  user.address[0]._id
+            var address = {...user.address[0]}
+
+            var product = []
+            await Promise.all(req.body.products.map(async (element) => {
+				
+				var data = {}
+				var productId = element._product;
+				var productPrice = await _global.productprice(req.body._store, productId)
+
+				if(productPrice){
+                                    data = {
+                                            ...data,
+                                            _product:productId,
+                                            quantity:element.quantity,
+                                            deal_price: productPrice.deal_price,
+                                            regular_price: productPrice.regular_price
+                                           }
+                                           
+					
+                                    }else{
+                                        data = {
+                                            ...data,
+                                            _product:productId,
+                                            quantity:element.quantity,
+                                            deal_price: 0,
+                                            regular_price: 0
+                                        }
+                                    }
+                                    product.push(data)
+                            }))
+                            
+                            var orderInfo = {
+                                _user: req.decoded.id,
+                                _store: req.body._store,
+                                shipping: {
+                                    address: address,
+                                    delivery_notes: req.body.delivery_notes??null,
+                                    order_id: orderid.generate()
+                                },
+                
+                                payment: {
+                                    method: req.body.payment_method,
+                                   // transaction_id: req.body.payment.transaction_id
+                                },
+                                products:product,
+                                total_cost:req.body.total_cost
+                            }
+                            
             var order = await Order.create(orderInfo);
            
-           return res.json({ status: 1, message: "Order created", data: order });
+           return res.json({ status: 1, message: "Order created", data: {order_id:order._id} });
         } catch (err) {
             console.log("---value",err)
             return res.status(400).json({ data: err.message });

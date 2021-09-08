@@ -114,16 +114,34 @@ const listProductsVali = [
      body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
 ]
 
-const orderValidation = [
+const orderValidationn = [
    // body('rating').isInt().withMessage('rating should not be empty') 
 ]
+
+const orderValidation = [
+    body('products').not().isEmpty().withMessage('_product should not be empty'),
+    body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+  //  body('tracking.status').not().isEmpty().trim().escape().withMessage('wish_price should not be empty'),
+   // body('max_price').not().isEmpty().trim().escape().withMessage('max_price should not be empty')
+]
+
+const addressValidation = [
+    body('address1').not().isEmpty().trim().escape().withMessage('address should not be empty'),
+    body('address_type').not().isEmpty().trim().escape().withMessage('address_type should not be empty'),
+    body('emirate').not().isEmpty().trim().escape().withMessage('state should not be empty'),
+    body('country').not().isEmpty().trim().escape().withMessage('country should not be empty'),
+    body('countrycode').not().isEmpty().trim().escape().withMessage('country code should not be empty'),
+    body('lat').not().isEmpty().trim().escape().withMessage('latitude should not be empty'),
+    body('long').not().isEmpty().trim().escape().withMessage('longitude should not be empty')
+]
+
 /*--- user ---*/
 router.post('/user/forgetpassword',userController.forgotPassword);
 router.post('/user/create',userValidation,userController.create);
 router.get('/user/list',verifyjwt.checkToken, userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
 router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
-router.post('/user/address', verifyjwt.checkToken,userController.address)
+router.post('/user/address', addressValidation, verifyjwt.checkToken,userController.address)
 router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
 router.put('/user/update/:id',verifyjwt.checkToken,userValidation,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
@@ -162,7 +180,7 @@ router.get('/category/:id', verifyjwt.checkToken, categoryController.show);
 
 /*--- order ---*/
 router.get('/order/myorder',verifyjwt.checkToken, orderController.myorder);
-router.post('/order/create',verifyjwt.checkToken, orderController.creatOrder);
+router.post('/order/create', orderValidation, verifyjwt.checkToken, orderController.creatOrder);
 router.get('/orders/:storeid',verifyjwt.checkToken, orderController.listOrders);
 router.put('/order/feedback/:orderid',orderValidation,verifyjwt.checkToken, orderController.rateOrder);
 router.get('/order/:orderid',verifyjwt.checkToken, orderController.orderDetails);

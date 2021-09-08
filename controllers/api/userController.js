@@ -226,18 +226,25 @@ exports.authenticate = async (req, res) => {
 exports.address = async (req, res) => {
 
 	try {
+
+
+		const errors = await validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
+
 		var address_array = [];
 		address_array.push({
-			address: req.body.address,
+			address1: req.body.address1,
+			address2: req.body.address2,
 			city: req.body.city,
-			name: req.body.name,
 			address_type: req.body.address_type,
+			countrycode: req.body.countrycode,
 			country: req.body.country,
 			region: req.body.region,
-			phoneno: req.body.phoneno,
-			countrycode: req.body.countrycode,
-			pincode: req.body.pincode,
-			state: req.body.state,
+			contactno: req.body.contactno,
+			zipcode: req.body.zipcode,
+			emirate: req.body.emirate,
 			location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 		})
 		console.log("0--00000", address_array)

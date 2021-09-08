@@ -11,7 +11,10 @@ const saltRounds = 10;
 const childSchema = new Schema({
 
  
-  address: {
+  address1: {
+    type: String,
+  },
+  address2: {
     type: String,
   },
   address_type:{
@@ -19,7 +22,7 @@ const childSchema = new Schema({
     enum : ['Home','Office','Other'],
         default: 'Home'
   },
-  pincode: {
+  zipcode: {
     type: Number
   },
   phoneno: {
@@ -31,10 +34,7 @@ const childSchema = new Schema({
   city: {
     type: String
   },
-  region: {
-    type: String
-  },
-  state: {
+  emirate: {
     type: String
   },
   country: {

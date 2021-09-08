@@ -3,6 +3,55 @@ const Schema = mongoose.Schema;
 const FKHelper = require('../helper/foreign-key-constraint');
 var uniqueValidator = require('mongoose-unique-validator');
 
+
+const addressSchema = new Schema({
+
+ 
+  address1: {
+    type: String,
+  },
+  address2: {
+    type: String,
+  },
+  address_type:{
+    type: String,
+    enum : ['home','office','other'],
+        default: 'home'
+  },
+  zipcode: {
+    type: Number
+  },
+  phoneno: {
+    type: Number
+  },
+  countrycode :{
+    type:String
+  },
+  city: {
+    type: String
+  },
+  emirate: {
+    type: String
+  },
+  country: {
+    type: String
+  },
+ 
+ location: {
+    type: {
+        type: String,
+        enum: ['Point'],
+        required: false
+    },
+    coordinates: {
+        type: [Number],
+        required: false
+    }
+},
+
+});
+
+
 const OrderSchema = Schema({
   _user: {
     type: Schema.Types.ObjectId,
@@ -29,13 +78,8 @@ const OrderSchema = Schema({
     
   },
   shipping: {
-    
-    address: { type:String, required: true },
-    city:  { type:String, required: true },
-    region:  { type:String, required: true },
-    state:  { type:String, required: true },
-    country:  { type:String, required: true },
-    delivery_notes:  { type:String, required: true },
+    address: addressSchema,
+    delivery_notes:  { type:String },
     order_id: { type:String,required: true, unique: true  },
     tracking: {
       company:  { type:String },
@@ -43,6 +87,7 @@ const OrderSchema = Schema({
       status:  { 
         type: String, 
         enum: ['pending','recieved','dispatched','cancelled','delivered','refunded','disputed' ],
+        default:'pending',
         required: true
       },
       estimated_delivery:  { type:String},
@@ -50,11 +95,11 @@ const OrderSchema = Schema({
   },
   payment: {
     method:{
-      type:String,
-      enum: ['NetBanking','Stripe','Cash on Delivery'],
+      type:Number,
+      enum: [0,1],
       required: true
     },
-    transaction_id:  { type:String, required: true },
+    transaction_id:  { type:String },
     payment_date:{type:String }
   },
   feedback: {
@@ -63,7 +108,7 @@ const OrderSchema = Schema({
   },
   products: [
     { 
-      quantity:  { type:String, required: true }, 
+      quantity:  { type:Number, required: true }, 
       _product: {
         type: Schema.Types.ObjectId,
         ref:'Product',
@@ -75,13 +120,11 @@ const OrderSchema = Schema({
             message: `Product doesn't exist`
           }
         
-      },
-      title:  { type:String, required: true }, 
-      unit_cost: { type:String, required: true }, 
-      currency: { type:String, required: true }
+      }
+      
     }
-  ]
-    
+  ],
+  total_cost: {type: Number, required: true}
   
 }, {timestamps:true});
 
