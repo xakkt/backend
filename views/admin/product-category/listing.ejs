@@ -89,7 +89,7 @@
                                             <% if(productCategory) productCategory.forEach(function(product){ %>
                                             <tr>
                                                 <td><%= product.name %></td>
-                                                <td><%=product.name %></td>
+                                                <td><%=product.parent_id?.name %></td>
                                                 <td><img class="img-thumbnail" style="width: 6em;height: 4em"
                                                         src="/images/departments/<%= product.logo %>" /></td>
                                                 <td><a href="/admin/category/delete/<%= product._id %>"
