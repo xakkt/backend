@@ -55,29 +55,114 @@ exports.create = async(req, res) => {
 					
 			}; 
 
+
+exports.productbyParentCategory = async function(req, res){
+	 try{
+		var pageNo = (req.query.page)?parseInt(req.query.page):1
+			
+		const pc = await ProductCategory.findById(req.params.id).select('_products').populate('_products');
+		totalItem=pc._products.length;
+		var option = {sort: { 'name.english': 1 }}
+		option.limit = 4
+
+		if(pageNo!=1){ option.skip = option.limit*(pageNo-1) }
+
+
+		const category = await ProductCategory.find({$or: [{parent_id:req.params.id},{_id:req.params.id}]})
+									.populate({
+										path:'_products',
+										select:'-crv -meta_description -_category -__v -cuisine -brand_id -createdAt -updatedAt -meta_title -meta_keywords',
+										option:option,
+										populate:{ path:'_unit', select:'-createdAt -updatedAt -__v'}
+									}).lean()
+
+		var bigArr= []		
+					
+		 category.map((data)=>{			
+			bigArr = bigArr.concat(data._products)
+		})	
+							
+		var storeProduct = []
+		await Promise.all(bigArr.map(async (product) => {
+			var data = {}
+			var productId = product._id.toString();
+			var productPrice = await _global.productprice(req.query._store, productId)
+			
+			if(productPrice)
+			{ 
+				data = {
+					...data,
+					_id: product._id,
+					name: product.name,
+					unit: product._unit?.name??'n/a',
+					weight: product.weight,
+					description: product.description,
+					is_favourite: 0,
+					in_shoppinglist: 0,
+					in_cart: 0,
+					image: product.image,
+					deal_price: productPrice.deal_price,
+					regular_price: productPrice.regular_price
+				}
+
+			}else{
+					data = {
+						...data,
+						_id: product._id,
+						name: product.name,
+						unit: product._unit?.name??'n/a',
+						weight: product.weight,
+						description: product.description,
+						is_favourite: 0,
+						in_shoppinglist: 0,
+						in_cart: 0,
+						image: product.image
+					}
+			}
+
+			
+			storeProduct.push(data) 
+			
+
+		}))							
+
+		var result = {}
+		result.status=1;
+		var totalPages = Math.ceil(totalItem/option.limit)
+		if(totalPages-1!=pageNo)result.nextPage=pageNo+1	
+		result.data=storeProduct;
+
+		return res.json({data:result});							
+
+	 }catch(err){
+		 console.log(err)
+		return res.status(400).json({error:err});
+	 }
+}, 
+
 exports.productsByCategory = async function(req, res){
 		try{
 			
 			var pageNo = (req.query.page)?parseInt(req.query.page):1
-			const pc = await ProductCategory.findById(req.params.id).populate('_products');
+			const pc = await ProductCategory.findById(req.params.id).select('_products').populate('_products');
 			if(!pc)return res.json({status:0, message:"no data found"});
+
 			totalItem=pc._products.length;
 			var option = {sort: { 'name.english': 1 }}
 			option.limit = 25
 
 			if(pageNo!=1){ option.skip = option.limit*(pageNo-1) }
 			
-			const categories = await ProductCategory.findById(req.params.id)
+			const category = await ProductCategory.findById(req.params.id)
 									.populate({
 										path:'_products',
-										select:'-crv -meta_description -_category',
-										options: option,
-										populate:{ path:'_unit'}
+										select:'-crv -meta_description -_category -__v -cuisine -brand_id -createdAt -updatedAt -meta_title -meta_keywords',
+										populate:{ path:'_unit', select:'-createdAt -updatedAt -__v'}
 									})
 			var storeProduct= []
 		
-            if(!categories)return res.json({status:0, message:'Category not available'})
-			await Promise.all(categories._products.map(async (product) => {
+            if(!category)return res.json({status:0, message:'Category not available'})
+			await Promise.all(category._products.map(async (product) => {
 				var data = {}
 				var productId = product._id.toString();
 				

@@ -172,6 +172,7 @@ router.put('/cart/update_quantity', verifyjwt.checkToken, cartValidation,cartCon
 
 /*--- product category ---*/
 //router.post('/category/create', verifyjwt.checkToken,categoryValidation, categoryController.create);
+router.get('/main-category/:id/products',categoryController.productbyParentCategory)
 router.get('/category/:id/products', categoryValidation, categoryController.productsByCategory);
 router.get('/category/list',categoryController.list);
 //router.delete('/category/:id/delete', verifyjwt.checkToken, categoryController.delete);

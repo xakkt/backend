@@ -56,7 +56,7 @@ router.get('/checkout',function(req, res){
     return res.render('frontend/checkout')
 })
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
-
+router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)
 router.get('/cart',function(req, res){
     return res.render('frontend/cart')
 })

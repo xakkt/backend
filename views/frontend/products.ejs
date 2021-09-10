@@ -152,7 +152,7 @@ input:focus {
                 <% for (const [key,parent] of Object.entries(categories)) { %>
                   
                     <li class="nav-item dropdown list-inline-item">
-                        <a class="nav-link" href="/<%=store.slug%>/category/products/<%=key%>"><%=key%></a>
+                        <a class="nav-link" href="/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>"><%=key%></a>
                         
                         <% if(categories[key].length) {%>   
                         <div class="dropdown-menu cs-drop-mn" aria-labelledby="dropdownMenuLink">
@@ -171,7 +171,7 @@ input:focus {
       </div>
 
 
-      <div class="container">
+      <div class="container-fluid">
                 
         
        <div class="ccc_viewed">

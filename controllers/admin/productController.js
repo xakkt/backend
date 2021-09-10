@@ -4,6 +4,7 @@ const User = require('../../models/user')
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
+var ObjectId = require('mongoose').Types.ObjectId;
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -50,7 +51,7 @@ exports.save = async (req, res) => {
                 name: req.body.name,
                 logo: req.file?.filename||null,
                 parent_id: req.body.parentid??null,
-                slug:(req.body.name+Math.floor((Math.random() * 100) + 1)).replace(/ /g, "-").toLowerCase()                
+                slug:req.body.name.replace(/ /g, "-").toLowerCase()                
             }
 
             categoryInfo.parent_id = req.body.parentid ?? null;
@@ -121,7 +122,7 @@ exports.update = async function (req, res) {
         const categoryInfo = {
             name: req.body.name,
             parent_id: req.body.parentid||null,
-            slug: (req.body.name+Math.floor((Math.random() * 100) + 1)).replace(/ /g, "-").toLowerCase(),
+            slug:req.body.name.replace(/ /g, "-").toLowerCase(),
         }
   
         if (req.file) { categoryInfo.logo = req.file.filename }
@@ -249,9 +250,11 @@ exports.productupdate = async function (req, res) {
         }
         if (req.file) { productinfo.image = req.file.filename }
        
-        const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: true, upsert: true });
+        const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: false, upsert: true });
+
         if (product) {
-            await ProductCategory.findByIdAndUpdate({_id:req.body._category},{$push:{ _products : product._id }})
+            await ProductCategory.findByIdAndUpdate({_id:product._category},{ $pull:{ _products : product._id  }})
+            await ProductCategory.findByIdAndUpdate({_id:req.body._category},{ $push:{ _products : product._id }})
             await req.flash('success', 'Product updated successfully!');
             res.redirect('/admin/product')
         }else{
@@ -261,7 +264,7 @@ exports.productupdate = async function (req, res) {
         
 
     } catch (err) {
-        console.log(err)
+        console.log("================>>>>>>>>>>",err)
         await req.flash('failure', err.message);
         res.redirect('/admin/product')
     }
