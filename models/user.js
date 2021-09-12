@@ -22,6 +22,10 @@ const childSchema = new Schema({
     enum : ['Home','Office','Other'],
         default: 'Home'
   },
+  is_default :{
+      type: Boolean,
+      default: false
+  },
   zipcode: {
     type: Number
   },

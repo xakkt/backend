@@ -290,6 +290,46 @@ exports.deleteaddress = async (req, res) => {
 
 	}
 }
+exports.makeDefaultAddress = async(req, res)=>{
+	try {
+		let resetDefaultAddress =  await User.find({_id:req.decoded.id,'address.is_default':false  }).lean()
+
+		let resetDefault = await User.update(
+			{
+			  _id: req.decoded.id,
+			  //address: { $elemMatch: { is_default: true} }
+			},
+			{ $set: { "address.$[].is_default" : false } }
+		 )
+		 
+		 let setDefault = await User.update(
+			{
+			  _id: req.decoded.id,
+			  "address._id": req.body._address
+			},
+			{ $set: { "address.$.is_default" : true } }
+		 )
+
+		return res.json({data:setDefault})
+
+		let user = await User.findOneAndUpdate({ 'address._id': req.params.id },
+			{
+				$set: {
+					"address.$.is_default": true,
+					}
+			},
+			// { $push: { address: address_array } }, 
+			{ returnOriginal: false }).exec()
+		if (!user) return res.json({ status: 1, message: "Data not found" })
+		return res.json({ status: 1, data: user })
+		return res.json({ state: 1, message: "Address deleted successfully" })
+
+
+	} catch (err) {
+		return res.status(404).json({ message: err.message })
+
+	}
+},
 exports.updateaddress = async (req, res) => {
 	try {
 		// var address_array = [];

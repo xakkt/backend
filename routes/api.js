@@ -148,7 +148,7 @@ router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
 router.get('/user/delete/:id', verifyjwt.checkToken,userController.deleteaddress);
 router.get('/user/edit/:id',verifyjwt.checkToken,userController.editaddress);
 router.post('/user/edit/:id',verifyjwt.checkToken,userController.updateaddress);
-
+router.post('/user/set_default_address',verifyjwt.checkToken,userController.makeDefaultAddress)
 
 /*--- home ---*/
 router.get('/app/dashboard/:storeid', homeController.dashboard);
