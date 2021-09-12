@@ -310,20 +310,8 @@ exports.makeDefaultAddress = async(req, res)=>{
 			{ $set: { "address.$.is_default" : true } }
 		 )
 
-		return res.json({data:setDefault})
-
-		let user = await User.findOneAndUpdate({ 'address._id': req.params.id },
-			{
-				$set: {
-					"address.$.is_default": true,
-					}
-			},
-			// { $push: { address: address_array } }, 
-			{ returnOriginal: false }).exec()
-		if (!user) return res.json({ status: 1, message: "Data not found" })
-		return res.json({ status: 1, data: user })
-		return res.json({ state: 1, message: "Address deleted successfully" })
-
+		if(setDefault.nModified) return res.json({ state: 1, message: "Default address selected" })
+		return res.json({ state: 1, message: "Something went wrong" })	
 
 	} catch (err) {
 		return res.status(404).json({ message: err.message })
