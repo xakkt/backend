@@ -261,6 +261,13 @@ exports.address = async (req, res) => {
 exports.addresslist = async (req, res) => {
 
 	try {
+
+		if(req.query.default){
+			
+			var defaultAddress = await User.findOne({_id:req.decoded.id},{ address: { $elemMatch: { is_default: req.query.default } } }).lean()
+			return res.json({data:defaultAddress}) 
+		}
+
 		let user = await User.findOne({ _id: req.decoded.id }, "contact_no email first_name last_name address").select('-_id').lean()
 		// let user = await User.findOne({ _id: req.decoded.id }).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').lean()
 
@@ -292,9 +299,7 @@ exports.deleteaddress = async (req, res) => {
 }
 exports.makeDefaultAddress = async(req, res)=>{
 	try {
-		let resetDefaultAddress =  await User.find({_id:req.decoded.id,'address.is_default':false  }).lean()
-
-		let resetDefault = await User.update(
+		 let resetDefault = await User.update(
 			{
 			  _id: req.decoded.id,
 			  //address: { $elemMatch: { is_default: true} }
@@ -302,6 +307,8 @@ exports.makeDefaultAddress = async(req, res)=>{
 			{ $set: { "address.$[].is_default" : false } }
 		 )
 		 
+		 if(!resetDefault.nModified)return res.json({ state: 0, message: "Could not updated" })
+
 		 let setDefault = await User.update(
 			{
 			  _id: req.decoded.id,

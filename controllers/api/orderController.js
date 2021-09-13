@@ -88,9 +88,7 @@ exports.creatOrder = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-
-
-        try {
+       try {
 
 
         var user = await User.findOne({_id:req.decoded.id},{ address: { $elemMatch: { _id: mongoose.Types.ObjectId(req.body.address) } } }).lean()
