@@ -155,7 +155,33 @@ exports.creatOrder = async (req, res) => {
     };
 exports.myorder = async (req,res) =>{
     try {
-        var order = await Order.find({_user: req.decoded.id}).lean();
+        var order = await Order.find({_user: req.decoded.id}).select('-feedback').populate({
+            path:'products._product',
+            select:'name description _category weight _unit image quantity',
+            populate:{
+                path:'_unit',
+                select:'name'
+            }
+        }).lean({ getters: true });
+
+        
+
+        order.map((element) => {
+           
+            for (const [i,product] of element.products.entries()) {
+                
+                product._product.deal_price= product.deal_price
+                product._product.regular_price= product.regular_price
+
+                delete(product.deal_price)
+                delete(product.regular_price)
+                
+            }
+            
+                         
+        })
+
+
         // console.log(order)
         if (!order.length) return res.json({ message: "No Order found", data: "" });
         return res.json({ status: 1, message: "", data:order});

@@ -253,6 +253,8 @@ exports.productupdate = async function (req, res) {
         const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: false, upsert: true });
 
         if (product) {
+
+            //db.getCollection('productcategories').aggregate([{'$addFields': {'_products': {'$setUnion': ['$_products', []]}}}])
             await ProductCategory.findByIdAndUpdate({_id:product._category},{ $pull:{ _products : product._id  }})
             await ProductCategory.findByIdAndUpdate({_id:req.body._category},{ $push:{ _products : product._id }})
             await req.flash('success', 'Product updated successfully!');

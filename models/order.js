@@ -120,7 +120,9 @@ const OrderSchema = Schema({
             message: `Product doesn't exist`
           }
         
-      }
+      },
+      deal_price:{ type: Number, required:true},
+      regular_price:{type: Number, required:true} 
       
     }
   ],
