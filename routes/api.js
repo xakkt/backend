@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 
 const homeController = require('../controllers/api/homeController')
 const productController = require('../controllers/api/productController')
@@ -54,6 +54,10 @@ const cartValidation = [
     body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
     body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
     body('quantity').not().isEmpty().withMessage('cart_price should not be empty'),
+]
+
+const emptyCartValidation = [
+    param('storeid').not().isEmpty().trim().escape().withMessage('storeid should not be empty'),
 ]
 
 const removeProductValidation = [
@@ -168,7 +172,7 @@ router.post('/cart/add_product', verifyjwt.checkToken,cartValidation,cartControl
 router.get('/cart/products/:store', verifyjwt.checkToken, cartController.listCartProduct);
 router.delete('/cart/remove_product', verifyjwt.checkToken,removeProductValidation, cartController.removeProductFromCart);
 router.put('/cart/update_quantity', verifyjwt.checkToken, cartValidation,cartController.updateProductQuantity);
-
+router.delete('/cart/empty/:storeid',verifyjwt.checkToken,emptyCartValidation,cartController.makeCartEmpty)
 
 /*--- product category ---*/
 //router.post('/category/create', verifyjwt.checkToken,categoryValidation, categoryController.create);

@@ -229,3 +229,20 @@ exports.updateProductQuantity = async (req, res) => {
     }
 }
 
+exports.makeCartEmpty = async (req, res) => {
+    
+    const errors = await validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        let remove = await Cart.deleteOne({  _user: req.decoded.id,_store:req.params.storeid }).exec()
+        if (!remove) return res.json({ status: false })
+        return res.json({ status: true, message:"Cart is empty now"})
+    }catch (err) {
+        res.send(err)
+    }
+
+}
+

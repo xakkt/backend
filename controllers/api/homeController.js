@@ -4,7 +4,7 @@ const Store = require('../../models/store');
 let jwt = require('jsonwebtoken');
 const Banner = require('../../models/banner')
 const _global = require('../../helper/common')
-
+const Order = require('../../models/order')
 const StoreProductPricing = require('../../models/store_product_pricing')
 const ProductRegularPricing = require('../../models/product_regular_pricing')
 var moment = require('moment');
@@ -206,13 +206,79 @@ exports.dashboard = async (req, res) => {
 		
 		/*--------- order again --------*/			
 		let orderAgain = []			
-		pdata[3] = 	{
-						path: `${process.env.BASE_URL}/images/products/`,
-						type: "product",
-						sub_type: "order_again",
-						message: "You have not placed any orders in the last 90 days",
-						product: orderAgain
-					}			
+
+		if(userid){
+			var order = await Order.find({_user: userid, _store:req.params.storeid}).select('-feedback -shipping -payment -createdAt -updatedAt -__v').populate({
+				path:'products._product',
+				select:'name description _category weight _unit image quantity',
+				populate:{
+					path:'_unit',
+					select:'name'
+				}
+			}).lean({ getters: true });
+	
+			
+	
+			await Promise.all( order.map(async (element) => {
+			   
+				for (const [i,product] of element.products.entries()) {
+					var productId = product._product._id.toString();
+				    var productPrice = await _global.productprice(req.params.storeid, productId)
+					delete(product._id)
+					product._id = product._product._id
+					product.name = product._product.name
+					product.description = product._product.description
+					product._category = product._product._category
+					product.weight = product._product.weight
+					product._unit = product._product._unit
+					product.image = product._product.image
+					product._product.deal_price= productPrice.deal_price
+					product._product.regular_price= productPrice.regular_price
+					product.is_favourite = 0
+					product.in_shoppinglist = 0
+					product.in_cart = 0
+
+					if (product._product._id in cartProductList) {
+						product.in_cart = cartProductList[product._product._id]
+					}
+		
+					if (wishlistids.includes(product._product._id) && shoppinglistProductIds.includes(product._product._id)) {
+						product.is_favourite = 1,
+						product.in_shoppinglist = 1
+					} else if (shoppinglistProductIds.includes(product._product._id)) {
+						product.in_shoppinglist = 1
+					} else if (wishlistids.includes(product._product._id)) {
+						product.is_favourite = 1
+					}
+
+					delete(product._product)
+					delete(product.quantity)
+
+					orderAgain.push(product)
+					}
+		   		})
+			)
+			pdata[3] = 	{
+				path: `${process.env.BASE_URL}`,
+				type: "product",
+				sub_type: "order_again",
+				message: "Order Again",
+				product: orderAgain
+			}
+			
+			
+	
+		}else{
+			pdata[3] = 	{
+				path: `${process.env.BASE_URL}`,
+				type: "product",
+				sub_type: "order_again",
+				message: "You have not placed any orders in the last 90 days",
+				product: orderAgain
+			}	
+		}
+
+				
 		/*--------- order again --------*/
 
 
