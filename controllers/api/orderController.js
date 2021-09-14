@@ -155,7 +155,7 @@ exports.creatOrder = async (req, res) => {
     };
 exports.myorder = async (req,res) =>{
     try {
-        var order = await Order.find({_user: req.decoded.id}).select('-feedback').populate({
+        var order = await Order.find({_user: req.decoded.id},{ _id: 0 }).select('-feedback').populate({
             path:'products._product',
             select:'name description _category weight _unit image quantity',
             populate:{
@@ -169,12 +169,18 @@ exports.myorder = async (req,res) =>{
         order.map((element) => {
            
             for (const [i,product] of element.products.entries()) {
-                
-                product._product.deal_price= product.deal_price
-                product._product.regular_price= product.regular_price
+                delete(product._id)
+                product._id = product._product._id
+                product.name = product._product.name
+                product.description = product._product.description
+                product._category = product._product._category
+                product.weight = product._product.weight
+                product._unit = product._product._unit
+                product.image = product._product.image
+                /*product._product.deal_price= product.deal_price
+                product._product.regular_price= product.regular_price*/
 
-                delete(product.deal_price)
-                delete(product.regular_price)
+                delete(product._product)
                 
             }
             
