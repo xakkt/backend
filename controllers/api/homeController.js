@@ -228,15 +228,16 @@ exports.dashboard = async (req, res) => {
 					product._id = product._product._id
 					product.name = product._product.name
 					product.description = product._product.description
-					product._category = product._product._category
-					product.weight = product._product.weight
-					product._unit = product._product._unit
-					product.image = product._product.image
-					product._product.deal_price= productPrice.deal_price
-					product._product.regular_price= productPrice.regular_price
 					product.is_favourite = 0
 					product.in_shoppinglist = 0
 					product.in_cart = 0
+					product._category = product._product._category
+					product.weight = product._product.weight
+					product._unit = product._product._unit.name
+					product.image = product._product.image
+					product._product.deal_price= productPrice.deal_price
+					product._product.regular_price= productPrice.regular_price
+					
 
 					if (product._product._id in cartProductList) {
 						product.in_cart = cartProductList[product._product._id]
