@@ -157,71 +157,72 @@ exports.authenticate = async (req, res) => {
 
 },
 
-	exports.updatestatus = async (req, res,) => {
+exports.updatestatus = async (req, res,) => {
 
-		try {
-			const user = await User.updateOne({ _id: req.params.userid }, { rider_status: req.params.status });
-			if (user.nModified) {
-				res.json({ status: 1, message: "Status updated" });
-			} else {
-				res.json({ status: 0, message: "Not found" });
-			}
-		} catch (err) {
-			res.status(400).json({ status: 0, message: "Not updated", data: err });
+	try {
+		const user = await User.updateOne({ _id: req.params.userid }, { rider_status: req.params.status });
+		if (user.nModified) {
+			res.json({ status: 1, message: "Status updated" });
+		} else {
+			res.json({ status: 0, message: "Not found" });
 		}
-
-	},
-
-	exports.forgotPassword = async (req, res) => {
-
-		try {
-			const password = randomstring.generate({ length: 12, charset: 'alphanumeric' });
-			const info = { email: req.body.email, password: password }
-			mail = new Mail(info);
-			const encrypted_password = await bcrypt.hashSync(password, saltRounds);
-			const user = await User.updateOne({ email: req.body.email }, { password: encrypted_password });
-
-			if (user.nModified) {
-				if (mail.sendmail()) {
-					res.status(200).json({ status: 1, 'data': 'Auto-generated password is sent to your email.' });
-				} else {
-					res.status(400).json({ 'data': 'Unable to send mail' })
-				}
-
-			} else {
-				res.status(400).json({ status: 0, message: "Email not found" });
-			}
-
-
-		} catch (err) {
-			res.status(400).json({ 'data': err })
-		}
-	},
-	exports.changePassword = async (req, res) => {
-		try {
-
-			const encrypted_password = await bcrypt.hashSync(req.body.password, saltRounds);
-
-			const query = User.findOne({ email: req.body.email }).exec();
-			const userInfo = await query.then();
-			console.log(encrypted_password);
-
-			if (userInfo != null && bcrypt.compareSync(req.body.oldpassword, userInfo.password)) {
-				const query = User.updateOne({ email: req.body.email }, { password: encrypted_password }).exec();
-				query.then(function (result) {
-					res.status(200).json({ status: 1, message: "Pasword updated", data: result });
-				})
-
-			} else {
-				res.status(400).json({ status: 0, message: "Invalid email/password!!!", data: null });
-			}
-
-
-		} catch (err) {
-			console.log(err)
-			res.status(400).json({ status: 0, message: "not updated", data: err });
-		}
+	} catch (err) {
+		res.status(400).json({ status: 0, message: "Not updated", data: err });
 	}
+
+},
+
+exports.forgotPassword = async (req, res) => {
+
+	try {
+		const password = randomstring.generate({ length: 12, charset: 'alphanumeric' });
+		const info = { email: req.body.email, password: password }
+		mail = new Mail(info);
+		//const encrypted_password = await bcrypt.hashSync(password, saltRounds);
+		const encrypted_password = await md5(password);
+		const user = await User.updateOne({ email: req.body.email }, { password: encrypted_password });
+
+		if (user.nModified) {
+			if (mail.sendmail()) {
+				res.status(200).json({ status: 1, 'data': 'Auto-generated password is sent to your email.' });
+			} else {
+				res.status(400).json({ 'data': 'Unable to send mail' })
+			}
+
+		} else {
+			res.status(400).json({ status: 0, message: "Email not found" });
+		}
+
+
+	} catch (err) {
+		res.status(400).json({ 'data': err })
+	}
+},
+exports.changePassword = async (req, res) => {
+	try {
+
+		const encrypted_password = await md5(req.body.password);
+
+		const query = User.findOne({ email: req.body.email }).exec();
+		const userInfo = await query.then();
+		console.log(encrypted_password);
+
+		if (userInfo != null && (md5(req.body.oldpassword) == userInfo.password)) {
+			const query = User.updateOne({ email: req.body.email }, { password: encrypted_password }).exec();
+			query.then(function (result) {
+				res.status(200).json({ status: 1, message: "Pasword updated", data: result });
+			})
+
+		} else {
+			res.status(400).json({ status: 0, message: "Invalid email/password!!!", data: null });
+		}
+
+
+	} catch (err) {
+		console.log(err)
+		res.status(400).json({ status: 0, message: "not updated", data: err });
+	}
+}
 
 exports.address = async (req, res) => {
 

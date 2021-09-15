@@ -183,10 +183,7 @@ exports.myorder = async (req,res) =>{
                 delete(product._product)
                 
             }
-            
-                         
-        })
-
+       })
 
         // console.log(order)
         if (!order.length) return res.json({ message: "No Order found", data: "" });
