@@ -66,7 +66,7 @@ class Mail {
 	}
 
 exports.create = async (req, res) => {
-	
+	try{
 	const errors = await validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
@@ -90,7 +90,9 @@ exports.create = async (req, res) => {
 			//mail.sendmail();
 			return res.json({ status: 1, message: "User Created.", data: result });
 	});
-
+  }catch (err) {
+		res.status(400).json({ 'data': err })
+	}
 };
 
 exports.updateProfile = async function (req, res) {
