@@ -32,9 +32,6 @@ exports.bannderproduct = async (req, res) => {
                 data._product.image = `${process.env.BASE_URL}/images/products/${element._product.image}`,
                 data._product.regular_price = productPrice.regular_price
                 data._product.deal_price = productPrice.deal_price
-                data.product.is_favourite = 0
-                data.product.in_shoppinglist = 0
-                data.product.in_cart = 0
             }
             
             delete (data.deal_price)
