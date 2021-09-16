@@ -53,7 +53,7 @@ $(".owl-carousel")&&$(".owl-carousel").length&&$('.owl-carousel').owlCarousel({
           items: 3
       },
       1000: {
-          items: 8
+          items: 6
       }
   }
 })

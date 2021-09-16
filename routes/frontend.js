@@ -55,6 +55,9 @@ router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart
 router.get('/checkout',function(req, res){
     return res.render('frontend/checkout')
 })
+router.get('/myorders',function(req, res){
+    return res.render('frontend/order-listing')
+})
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
 router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)
 router.get('/cart',function(req, res){
