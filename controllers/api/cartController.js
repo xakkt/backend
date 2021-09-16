@@ -7,7 +7,7 @@ exports.listCartProduct = async (req, res) => {
      var product_list = []
     const errors = await validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ status:0, errors: errors.array() });
     }
 
     try {
@@ -17,7 +17,7 @@ exports.listCartProduct = async (req, res) => {
         }
 
         var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
-        if (!data) return res.json({ success: 0, message: "cart is empty", data: "" });
+        if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
         let total_quantity, total_price, coupon, discounted_price;
         total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
             return acc + cur;
@@ -48,10 +48,10 @@ exports.listCartProduct = async (req, res) => {
             code: 'AZXPN102',
             discount: '20%'
         }
-        return res.json({ status: "success", message: "All cart products", data: data, subtotal: { in_cart: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+        return res.json({ status: 1, message: "All cart products", data: data, subtotal: { in_cart: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
 
     } catch (err) {
-        return res.status(400).json({ data: err.message });
+        return res.status(400).json({ status:0, data: err.message });
     }
 },
 
