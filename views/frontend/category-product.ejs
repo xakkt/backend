@@ -161,16 +161,16 @@ input:focus {
                             </div>  
                             <div class="xshop ">
                                 <span class="" style="padding-right:0;">
-                                    <img class="img-responsive xakkti x-cart x-cart-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="" data-original-title="Remove from Cart">
-                                    <img class="img-responsive xakkti x-cart x-cart-grey-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="" data-original-title="Add to Cart">
+                                    <img class="img-responsive xakkti x-cart x-cart-red-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-id="<%=product._id%>" src="<%=process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="" data-original-title="Remove from Cart">
+                                    <img class="img-responsive xakkti x-cart x-cart-grey-<%=product._id%>" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-cart" data-id="<%=product._id%>" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="" data-original-title="Add to Cart">
                                 </span>
                                 <span class="">
-                                        <img class="img-responsive xakkti x-heart x-heart-red-6281006859548" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="" data-original-title="Remove from favourite">
-                                        <img class="img-responsive xakkti x-heart x-heart-grey-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="" data-original-title="Add to favourite">
+                                        <img class="img-responsive xakkti x-heart x-heart-red-<%=product._id%>" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="<%=product._id%>" src="<%=process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="" data-original-title="Remove from favourite">
+                                        <img class="img-responsive xakkti x-heart x-heart-grey-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="" data-prop="x-heart" data-sku="<%=product._id%>" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="" data-original-title="Add to favourite">
                                 </span>
                                 <span class="" style="padding-left:0;">
-                                    <img class="img-responsive xakkti x-list x-list-red-6281006859548 d-none" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" src="<%=process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="" data-original-title="Remove from shopping list">
-                                    <img class="img-responsive xakkti x-list x-list-grey-6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="" data-sku="6281006859548" data-prop="x-list" alt="" data-original-title="Add to shopping list">
+                                    <img class="img-responsive xakkti x-list x-list-red-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="" data-sku="<%=product._id%>" data-prop="x-list" src="<%=process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="" data-original-title="Remove from shopping list">
+                                    <img class="img-responsive xakkti x-list x-list-grey-6281006859548" src="<%=process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="" data-sku="<%=product._id%>" data-prop="x-list" alt="" data-original-title="Add to shopping list">
                                 </span>
                              </div>
 

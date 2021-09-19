@@ -126,7 +126,8 @@ const OrderSchema = Schema({
       
     }
   ],
-  total_cost: {type: Number, required: true}
+  delivered_on:{type:Date, required:false},
+  total_cost: {type:Number, required: true}
   
 }, {timestamps:true});
 

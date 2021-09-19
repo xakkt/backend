@@ -2,7 +2,9 @@ const Product = require('../../models/product');
 const { validationResult } = require('express-validator');
 const _global = require('../../helper/common');
 const Cart = require('../../models/cart')
+const User = require('../../models/user')
 var ObjectId = require('mongoose').Types.ObjectId;
+const Store = require('../../models/store');
 
 exports.cartProducts = async (req, res) => {
     try {
@@ -27,7 +29,6 @@ exports.cartProducts = async (req, res) => {
 		return res.status(400).json({ data: "Something Went Wrong" });
     }
 }
-
 
 exports.addPoductToCart = async (req, res) => {
     try {
@@ -59,7 +60,7 @@ exports.addPoductToCart = async (req, res) => {
 		if (product?.cart) {
 			
 			await Cart.findOneAndUpdate(condition, { $pull: { cart: { _product:req.body._product } } });
-			return res.json({ status: 0, message: "Product removed from cart" })
+			return res.json({ status: 1, message: "Product removed from cart" })
 	
 		} else {
 			
@@ -76,5 +77,41 @@ exports.addPoductToCart = async (req, res) => {
 	}
 
 };
+
+exports.checkoutPage = async (req, res)=>{
+	try{
+		let storedata = await Store.findOne({ slug: req.params.store }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
+			path: '_currency',
+			select: 'name',
+		  }).lean()
+
+
+		var user = await User.findOne({_id:req.session.userid }).lean()
+			//if(!addresses.address){ return res.json({ status: 0, message: "No default address added for you" }) }
+			//return res.json({data:addresses}) 
+
+
+		let condition = {_store:storedata._id}
+		 condition = (req.session.userid)?{ ...condition, _user: req.session.userid} : { ...condition, sessionId: req.sessionID} ;
+
+		 var cartProducts = await Cart.findOne(condition).populate({
+			 path: 'cart',
+			 populate: {
+				 path: '_product',
+				 model: Product,
+				 select:'name image unit'
+			 }
+			}).lean();
+
+
+		//if(cartProducts?.cart.length)return res.json({status:1,data:cartProducts.cart, store: storedata})
+	
+		return res.render('frontend/checkout',{ status:1, data:cartProducts, addresses:user.address, store:storedata })
+	}catch (err) {
+		console.log("--err", err)
+		return res.status(400).json({ data: "Something Went Wrong" });
+    }
+	
+}
 
 

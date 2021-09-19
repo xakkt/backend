@@ -253,6 +253,15 @@ exports.address = async (req, res) => {
 		console.log("0--00000", address_array)
 
 		let user = await User.findOneAndUpdate({ _id: req.decoded.id }, { $push: { address: address_array } }, { returnOriginal: false }).exec()
+		if(user.address.length==1){
+			await User.update(
+				{
+				  _id: req.decoded.id,
+				  "address._id": user.address[0]._id
+				},
+				{ $set: { "address.$.is_default" : true } }
+			 )
+		}
 		if (!user) return res.json({ status: 1, message: "Data not found" })
 		return res.json({ status: 1, message: "Data saved successfully" })
 
@@ -268,6 +277,7 @@ exports.addresslist = async (req, res) => {
 		if(req.query.default){
 			
 			var defaultAddress = await User.findOne({_id:req.decoded.id},{ address: { $elemMatch: { is_default: req.query.default } } }).lean()
+			if(!defaultAddress.address){ return res.json({ status: 0, message: "No default address added for you" }) }
 			return res.json({data:defaultAddress}) 
 		}
 

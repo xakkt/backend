@@ -13,110 +13,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
   
-   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
+<link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
 
-<style>
-      
-
-.xakkti,.ccc_viewed_image, .bbb_viewed_image{
-    cursor: pointer;
-}
-.quantity {
-padding: 10px 0 10px 0;
-}
-.quantity input {
-  -webkit-appearance: none;
-  border: none;
-  text-align: center;
-  width: 32px;
-  font-size: 16px;
-  color: #43484D;
-  font-weight: 300;
-}
- 
-.xbtn {
-  width: 30px;
-  height: 30px;
-  background-color: #E1E8EE;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-.minus-btn img {
-  margin-bottom: 3px;
-}
-.plus-btn img {
-  margin-top: 2px;
-}
- 
-button:focus,
-input:focus {
-  outline:0;
-}
-.xshop{
-    margin:0;
-    /* padding:10px 0 10px 0; */
-    padding:10px ​20px 10px 20px;
-}
-.carousel-item img{
-    max-height:350px;
-}
-
-.homeicon{
-    padding: 0;
-    background-repeat: no-repeat;
-    background-size: contain;
-   
-}
-
-.product_view .modal-dialog{max-width: 800px; width: 100%;}
-.pre-cost{text-decoration: line-through; color: #a5a5a5;}
-.space-ten{padding: 10px 0;}
-
-
-.table-image thead td,
-.table-image thead th {
-  border: 0;
-  color: #666;
-  font-size: 0.8rem;
-}
-.table-image td,
-.table-image th {
-  vertical-align: middle;
-  text-align: center;
-}
-.table-image td.qty,
-.table-image th.qty {
-  max-width: 4rem;
-}
-
-.cart-price {
-  margin-left: 1rem;
-}
-
-.slick-slide img {
-    display: block;
-    height: 120px;
-    object-fit: cover;
-}
-.dropdown:hover > .dropdown-menu {
-  display: block;
-}
-.dropdown .dropdown-toggle::after {
-  display: none;
-}
-.dropdown .dropdown-toggle:active {
-  pointer-events: none;
-}
-.cs-drop-mn a {
-    color: #000;
-}
-img.img-responsive.xakkti{
-  width:50%
-}
-</style>
 
 </head>
 <body>
@@ -196,14 +96,14 @@ img.img-responsive.xakkti{
                               <div class="owl-item">
                                
                                     <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" data-toggle="modal" data-target="#product_view" >
+                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" data-toggle="modal" data-target="#product_view" >
                                             <img src="<%=product.image%>" alt="">
                                         </div>
                                         <div class="ccc_viewed_content text-center">
                                             <div class="ccc_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
                                             
                                             <div class="ccc_viewed_name">
-                                                  <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-sku="<%=product.sku%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
+                                                  <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
                                             </div>
                                             <form class="cart-form" method="post">
                                                <input type="hidden" name="_store" value="<%=store._id%>" />
@@ -243,11 +143,11 @@ img.img-responsive.xakkti{
                               
                               <div class="owl-item">
                                     <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
+                                        <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
                                         <div class="bbb_viewed_content text-center">
                                             <div class="bbb_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
                                             <div class="bbb_viewed_name">
-                                              <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-sku="<%=product.sku%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a></div>
+                                              <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a></div>
 
                                               <form class="cart-form">
                                                 <input type="hidden" name="_store" value="<%=store._id%>" />  

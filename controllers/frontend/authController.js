@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
             }
             const userInfo = await User.findOne({ email: req.body.email }).lean()
             if (!userInfo) return res.status(400).json({ status:0,errors: 'Email not exists' });
-            if (md5(req.body.password) !== userInfo.password) return res.status(400).json({ status:0,errors: 'Email not exists' })
+            if (md5(req.body.password) !== userInfo.password) return res.status(400).json({ status:0,errors: 'You have entered wrong password' })
 
             await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
             req.session.customer = userInfo.email;

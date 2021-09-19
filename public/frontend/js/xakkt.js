@@ -244,7 +244,8 @@ loginForm.on('submit', function(e){
 
 
 $(".xakkti").click(function(){ 
-          let sku = $(this).data('sku'); 
+ 
+          let sku = $(this).data('id'); 
           let section = $(this).data('prop');
           
           let greyClass = `.${section}-grey-${sku}`;
@@ -274,16 +275,44 @@ $(function () {
   modal.find('.currency').text(a.data('store-currency'))
 })
 
-$('.x-cart').click(function(){
-   $(this).closest("form").submit()
- // alert($(this).data('sku'))
+$('.x-cart,.x-heart,.x-list').click(function(){
+     
+
+     switch ($(this).data('prop')) {
+      case "x-cart":
+          $(this).parents('.xshop').siblings('.button_type').val('x-cart');
+        break;
+      case "x-heart":
+          $(this).parents('.xshop').siblings('.button_type').val('x-heart');
+        break;
+      case "x-list":
+          $(this).parents('.xshop').siblings('.button_type').val('x-list');
+        break;
+      
+    }
+
+     $(this).closest("form").submit()
 })
 
 $('.cart-form').submit(function(e){
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
-   
-   $.post('/product/add-to-cart', obj)
+ 
+ switch (obj.button_type) {
+    case "x-cart":
+          url = 'http://localhost:4800/product/add-to-cart';
+      break;
+    case "x-heart":
+      url = 'http://localhost:4800/product/add-to-favlist';
+      break;
+    case "x-list":
+      url = 'http://localhost:4800/product/add-to-shoppinglist';    
+      break;
+    
+  }
+
+console.log('0pobj',obj)
+   $.post(url, obj)
         .done(result => { 
                     if(!result.status){ 
                             $("#loginError").show().text(result.errors); }else{
@@ -294,7 +323,7 @@ $('.cart-form').submit(function(e){
    
 })
 
-
+/*
 $('#cartbutton').on('click',function(){
    if(!$(this).data('storeid')){ 
 
@@ -309,13 +338,76 @@ $('#cartbutton').on('click',function(){
     }else{
           $('#cartModal').modal('show')
     }
+})*/
+
+
+$('.xakkt-popup').on('click',function(e){
+
+   if(!$(this).data('storeid')){ 
+         Swal.fire({
+        title: "No store selected!",
+        text: "For your cart, you need to select your store first",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }) 
+  }else{
+    var modal = $(this).data('modal')
+    $(`#${modal}`).modal('show')
+  }
+
+})
+
+$('#favListModal').on('show.bs.modal',function(e){
+  var data ={}
+  data._user = $(".cartbutton").data('userid')??null
+  data._store = $(".cartbutton").data('storeid')
+
+
+  $.post('/wishlist/products', data).done(result => { 
+     
+    if(result.status){ 
+        
+        var tableHtml = ''
+        var total = 0;
+        result.data.forEach((product,index)=>{
+         
+            tableHtml += `<tr>
+                            <td class="w-25">
+                              <img src="${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="">
+                            </td>
+                            <td>${product._product.name.english}</td>
+                            <td>50</td>
+                            <td>
+                              <a href="#" class="btn btn-danger btn-sm">
+                                <i class="fa fa-times"></i>
+                              </a>
+                            </td>
+                      </tr>`
+          })
+          
+          }else{
+                
+                tableHtml = `<tr>
+                                <td colspan="5">
+                                No data for cart
+                                </td>
+                              </tr>`
+                $('.fav-table').html()
+         }
+         $('#fav-table').html(tableHtml) 
+
+}).fail(result=>{
+    $("#loginError").show().text(result.responseJSON.errors);
+});
+ 
 })
 
 $('#cartModal').on('show.bs.modal',function(e){ 
   
   var data ={}
-  data.userid = $("#cartbutton").data('userid')??null
-  data.storeid = $("#cartbutton").data('storeid')
+  data.userid = $(".cartbutton").data('userid')??null
+  data.storeid = $(".cartbutton").data('storeid')
 
   $.post('/products/cart', data).done(result => { 
      
@@ -324,12 +416,11 @@ $('#cartModal').on('show.bs.modal',function(e){
         var tableHtml = ''
         var total = 0;
         result.data.forEach((product,index)=>{
-            
             total += product.total_price;
 
             tableHtml += `<tr>
                             <td class="w-25">
-                              <img src="http://xgrocery.cf/images/products/${product._product.image}" class="img-fluid img-thumbnail" alt="Sheep">
+                              <img src="http://xgrocery.cf/images/products/${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>
                             <td>${product._product.name.english}</td>
                             <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
@@ -341,10 +432,8 @@ $('#cartModal').on('show.bs.modal',function(e){
                             </td>
                       </tr>`
           })
-         
           $('.cart-price').html(total)
-
-               }else{
+          }else{
                 
                 tableHtml = `<tr>
                                 <td colspan="5">

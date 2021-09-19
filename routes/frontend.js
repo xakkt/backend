@@ -10,6 +10,9 @@ const AuthController = require('../controllers/frontend/authController')
 const StoreController = require('../controllers/frontend/storeController')
 const cartController = require('../controllers/frontend/cartController')
 const categoryController = require('../controllers/frontend/categoryController')
+const orderController = require('../controllers/frontend/orderController')
+const shoppingController = require('../controllers/frontend/shoppinglistController')
+const wishController = require('../controllers/frontend/wishlistControllers')
 
 const userValidation = [
     body('email').not().isEmpty().trim().escape().withMessage('Email should not be empty'),
@@ -33,6 +36,11 @@ const cartValidation = [
     body('quantity').not().isEmpty().withMessage('cart_price should not be empty'),
 ]
 
+const wishlistValidation = [
+    body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
+    body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+]
+
 router.use(function(req,res,next){
     res.locals.userEmail =(req.session?.customer) ?? null;
     res.locals.userid =(req.session?.userid) ?? null;
@@ -52,12 +60,43 @@ router.get('/user/logout',AuthController.logout)
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
-router.get('/checkout',function(req, res){
-    return res.render('frontend/checkout')
-})
-router.get('/myorders',function(req, res){
-    return res.render('frontend/order-listing')
-})
+router.get('/checkout/:store',cartController.checkoutPage);
+
+
+/*---- shoppinglist ----*/
+
+const updateListValidation = [
+    body('_shoppinglist').not().isEmpty().trim().escape().withMessage('_shoppinglist should not be empty'),
+    body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
+    body('quantity').not().isEmpty().trim().escape().withMessage('quantity should not be empty')   
+]
+
+const shoppinglistValidation = [
+    body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+    body('name').not().isEmpty().trim().escape().withMessage('name should not be empty')
+]
+
+const getListValidation = [
+       body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+   ]
+
+
+router.post('/shoppinglist/add_product',  updateListValidation, shoppingController.addProductToshoppinglist);
+router.post('/shoppinglist/create',shoppinglistValidation, shoppingController.createShoppingList);
+router.post('/shoppinglist',getListValidation,shoppingController.allShoppingLists);
+router.delete('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
+router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
+router.delete('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
+router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistProducts)
+
+
+router.post('/product/add-to-favlist', wishlistValidation, wishController.addPoductToWishlist);
+router.post('/wishlist/products', wishController.allWishlistProducts);
+router.delete('/wishlist/remove/product',wishController.deleteProductWishlist);
+router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice);
+
+router.get('/myorders/:store',orderController.myorder)
+router.post('/order/create/:store',orderController.creatOrder)
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
 router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)
 router.get('/cart',function(req, res){
