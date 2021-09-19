@@ -2,7 +2,198 @@
 
 <%- await include('./auth.ejs'); %>
 
-<nav class="custom-nav navbar navbar-expand-lg navbar-light bg-light">
+<style>
+  ul, li {
+         list-style: none;
+         text-decoration: none;
+         }
+         .user_img img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    box-shadow: 0 0 2px #929292;
+}
+.profile-area {
+    line-height: 0.8;
+    padding-top: 4px;
+}
+.profile-area .u-mail {
+    font-size: 13px;
+    color: #5f5f5f;
+}
+.dropdown:hover > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+@media (max-width: 991px) {
+   .for-desktop {
+      display: none;
+   }
+}
+@media (min-width: 992px) {
+   .for-mobile {
+      display: none;
+   }
+}
+</style>
+
+<nav class="custom-nav navbar navbar-expand-lg navbar-light bg-light for-desktop">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo2" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo2">
+    <div class="col-4">
+       <ul class="navbar-nav mt-2 mt-lg-0">
+          <li class="nav-item active">
+             <a class="nav-link" href="#">Products <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Deals</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Contact us</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Deals</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Contact us</a>
+          </li>
+          
+       </ul>
+   </div>
+      <div class="col-4">
+       <div class="mx-auto">
+          <a href="/" class="text-sm-left text-md-right text-lg-right navbar-brand">
+               <img src="<%= process.env.BASE_URL %>/frontend/images/xakkt.png" alt="User Avatar" style="width:25%" class="img-size-50 img-circle mr-3">
+            </a>
+       </div>
+       </div>
+       <div class="col-4 p-0">
+        <ul class="navbar-nav ml-auto align-items-center justify-content-end">
+            <li class="">
+               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
+            </li>
+            <li class="">
+               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
+            </li>
+            <li class="">
+               <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
+               <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+            </li>
+            <li class="nav-item dropdown">
+               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <span class="user_img">
+                  <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+               </span>
+               <span class=""><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+               </a>
+               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                     <div class="profile-area">
+                        <a class="dropdown-item u-name" href="javascript:void(0);">Manoj Singh</a>
+                        <a class="dropdown-item u-mail" href="javascript:void(0);"><%=userEmail%></a>
+                     </div>
+                  <hr/>
+                  <a class="dropdown-item" href="#">Dashboard</a>
+                  <a class="dropdown-item" href="#">Edit Profile</a>
+                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="shoppingListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping List</a>
+                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
+                  <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
+                
+               </div>
+            </li> 
+         </ul>
+         </div>
+
+     
+    </div>
+ </nav>
+
+
+ <!-- mobile nav -->
+
+ <nav class="custom-nav navbar navbar-expand-lg navbar-light bg-light for-mobile" >
+ <div class="col-5 d-flex align-items-center ">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class=" ml-3">
+       <div class="mx-auto">
+          <a href="/" class="navbar-brand">
+               <img src="<%= process.env.BASE_URL %>/frontend/images/xakkt.png" alt="User Avatar" style="width:85px" class="img-size-50 img-circle mr-3">
+            </a>
+       </div>
+      </div>
+      </div>
+       <div class="col-7 p-0">
+        <ul class="d-flex align-items-center justify-content-end mb-0">
+            <li class="">
+               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
+            </li>
+            <li class="">
+               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
+            </li>
+            <li class="">
+               <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
+               <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+            </li>
+            <li class="nav-item dropdown">
+               <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="user_img">
+                     <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+                  </span>
+                  <span class="ml-2"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+               </a>
+               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                     <div class="profile-area">
+                        <a class="dropdown-item u-name" href="javascript:void(0);">Manoj Singh</a>
+                        <a class="dropdown-item u-mail" href="javascript:void(0);"><%=userEmail%></a>
+                     </div>
+                  <hr/>
+                  <a class="dropdown-item" href="#">Dashboard</a>
+                  <a class="dropdown-item" href="#">Edit Profile</a>
+                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="shoppingListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping List</a>
+                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
+                  <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
+                
+               </div>
+            </li> 
+         </ul>
+         </div>
+
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <div class="col-4">
+       <ul class="navbar-nav mt-2 mt-lg-0">
+          <li class="nav-item active">
+             <a class="nav-link" href="#">Products <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Deals</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Contact us</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Deals</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Contact us</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Deals</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">Contact us</a>
+          </li>
+       </ul>
+   </div>
+    </div>
+ </nav>
+
+
+
+<!-- <nav class="custom-nav navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -20,7 +211,7 @@
        </ul>
       
        <div class="mx-auto">
-          <a href="/" class="text-sm-left text-md-right text-lg-right navbar-brand">
+          <a href="/" class="text-center">
                <img src="<%= process.env.BASE_URL %>/frontend/images/xakkt.png" alt="User Avatar" style="width:25%" class="img-size-50 img-circle mr-3">
             </a>
        </div>
@@ -66,7 +257,7 @@
       
      
     </div>
- </nav>
+ </nav> -->
 
  <%- await include('../../frontend/modals/fav-list.ejs'); %>
  <%- await include('../../frontend/modals/shoping-list.ejs'); %>

@@ -14,16 +14,21 @@
 
 <div class="xshop row mx-72">
     <span class="col" style="padding-right:0;">
-        <img class="img-responsive xakkti x-cart x-cart-red-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="Remove from Cart" data-prop="x-cart" data-id="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="No Image">
-        <img class="img-responsive xakkti x-cart x-cart-grey-<%=product._id%>"  data-toggle="tooltip" data-placement="bottom" title="Add to Cart" data-prop="x-cart" data-id="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="No Image">
+       
+       <img class="img-responsive xakkti x-list x-list-red-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="Remove from shopping list" data-id="<%=product._id%>" data-prop="x-list" data-id=<%=product._id%> src="<%= process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="No Image">
+        <img class="img-responsive xakkti x-list x-list-grey-<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="Add to shopping list" data-id=<%=product._id%> data-prop="x-list" alt="No Image">
+    
     </span>
     <span class="col">
             <img class="img-responsive xakkti x-heart x-heart-red-<%=product._id%>" data-toggle="tooltip" data-placement="bottom" title="Remove from favourite" data-prop="x-heart" data-id="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="No Image">
             <img class="img-responsive xakkti x-heart x-heart-grey-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="Add to favourite" data-prop="x-heart" data-id="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="No Image">
     </span>
     <span class="col" style="padding-left:0;">
-        <img class="img-responsive xakkti x-list x-list-red-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="Remove from shopping list" data-id="<%=product._id%>" data-prop="x-list" data-id=<%=product._id%> src="<%= process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="No Image">
-        <img class="img-responsive xakkti x-list x-list-grey-<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" data-toggle="tooltip" data-placement="bottom" title="Add to shopping list" data-id=<%=product._id%> data-prop="x-list" alt="No Image">
+
+        <img class="img-responsive xakkti x-cart x-cart-red-<%=product._id%> d-none" data-toggle="tooltip" data-placement="bottom" title="Remove from Cart" data-prop="x-cart" data-id="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="No Image">
+        <img class="img-responsive xakkti x-cart x-cart-grey-<%=product._id%>"  data-toggle="tooltip" data-placement="bottom" title="Add to Cart" data-prop="x-cart" data-id="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" alt="No Image">    
+
+        
     </span>
  </div>
 
