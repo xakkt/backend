@@ -112,7 +112,7 @@ border-radius: 6px;
      font-family: 'Rubik', sans-serif;
      font-size: 14px;
      font-weight: 400;
-     background: #eff6fa;
+     background: #e9ecef;
      color: #000000
  }
 
@@ -124,11 +124,11 @@ border-radius: 6px;
      box-sizing: border-box
  }
 
- .bbb_viewed {
+ /*.bbb_viewed {
      
      padding-bottom: 60px;
      background: #eff6fa
- }
+ }*/
 
  .bbb_main_container {
      background-color: #fff;
@@ -287,9 +287,9 @@ border-radius: 6px;
  }
 
  .ccc_viewed {
-    padding-top: 51px;
-    padding-bottom: 60px;
-    background: #eff6fa
+    /*padding-top: 51px;*/
+    padding-bottom: 20px;
+    /*background: #eff6fa*/
 }
 
 .ccc_main_container {

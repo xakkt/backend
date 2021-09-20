@@ -65,6 +65,34 @@ exports.listCartProduct = async (req, res) => {
     }
 },
 
+exports.cartSize = async (req, res) => {
+ 
+   const errors = await validationResult(req);
+   if (!errors.isEmpty()) {
+       return res.status(400).json({ status:0, errors: errors.array() });
+   }
+
+   try {
+       const cartInfo = {
+           _user: req.decoded.id,
+           _store: req.params.storeid,
+       }
+
+       var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).lean();
+
+       if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
+       let total_quantity;
+        total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        return res.json({ status: 1, message: "total products in the cart", data: { total_products: total_quantity}});
+   } catch (err) {
+       return res.status(400).json({ status:0, data: err.message });
+   }
+},
+
+
 exports.addPoductToCart = async (req, res) => {
 
     const errors = await validationResult(req);

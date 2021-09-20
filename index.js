@@ -37,7 +37,7 @@ app.use(session(sess))
 app.use(cookieParser())
 
 app.use(function(req, res, next) {
-  res.locals.user = 'xakkt';
+  res.locals.user = req.session.customer;
   next();
 });
 

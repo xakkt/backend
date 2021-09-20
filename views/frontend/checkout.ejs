@@ -45,6 +45,13 @@
                   <strong><%=store._currency.name%> <%=total%></strong>
                </li>
             </ul>
+
+            <form class="card p-2">
+               <div class="input-group">
+                  <button class="btn btn-primary btn-lg btn-block" type="submit">Place your order</button>
+               </div>
+             </form>
+
          </div>
          <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Billing address</h4>
@@ -66,11 +73,14 @@
                   </div>
               </div>
             </div>
+            
+            <% for (const [i,address] of addresses.address.entries()) { %> 
+            
             <div class="col-md-4 mb-3 px-2">
                <div class="xact-add-card">
-                  <div class="defaut_add">
-                     <span class="d-flex align-items-center">Default: <img src="http://localhost:4800/frontend/images/xakkt.png" alt="User Avatar"  class="d-xat-logo"></span>
-                  </div>
+                  <%if(address.is_default){%> <div class="defaut_add">
+                         <span class="d-flex align-items-center">Default: <img src="<%=process.env.BASE_URL%>/frontend/images/xakkt.png" alt="User Avatar"  class="d-xat-logo"></span>
+                  </div><%}%>
                   <div class="address_xat">
                      <div class="xact-box-inner ">
                         <div class="a-section address-section-no-default">
@@ -78,14 +88,13 @@
                               <ul class="mb-0">
                                  <li>
                                     <span class="a-list-item">
-                                       <h5 class="addr-search-name  a-text-bold">Manoj Kumar Singh</h5>
+                                       <h5 class="addr-search-name  a-text-bold"><%=addresses.first_name%> <%addresses.last_name%></h5>
                                     </span>
                                  </li>
-                                 <li><span class="addr-search-text">2100</span></li>
-                                 <li><span class="addr-search-text">Gillco Valley, Kharar</span></li>
-                                 <li><span class="addr-search-text">MOHALI, PUNJAB 140301</span></li>
-                                 <li><span class="addr-search-text">India</span></li>
-                                 <li><span class="addr-search-text">Phone number: ‪8076227696‬</span></li>
+                                 <li><span class="addr-search-text"><%=address.address1%> <%=address.address2%></span></li>
+                                 <li><span class="addr-search-text"><%=address.emirate%> <%=address.zipcode%></span></li>
+                                 <li><span class="addr-search-text"><%=address.country%></span></li>
+                                 <li><span class="addr-search-text">Contact number: <%=addresses.contact_no%></span></li>
                               </ul>
                               <div class="mt-2"><a class="add-declarative"href="#">Add delivery instructions </a>
                               </div>
@@ -100,106 +109,8 @@
                   </div>
                </div>
             </div>
-            <div class="col-md-4 mb-3 px-2">
-               <div class="xact-add-card">
-                  <div class="defaut_add">
-                     <span class="d-flex align-items-center">Default: <img src="http://localhost:4800/frontend/images/xakkt.png" alt="User Avatar"  class="d-xat-logo"></span>
-                  </div>
-                  <div class="address_xat">
-                     <div class="xact-box-inner ">
-                        <div class="a-section address-section-no-default">
-                           <div class="a-row a-spacing-small">
-                              <ul class="mb-0">
-                                 <li>
-                                    <span class="a-list-item">
-                                       <h5 class="addr-search-name  a-text-bold">Manoj Kumar Singh</h5>
-                                    </span>
-                                 </li>
-                                 <li><span class="addr-search-text">2100</span></li>
-                                 <li><span class="addr-search-text">Gillco Valley, Kharar</span></li>
-                                 <li><span class="addr-search-text">MOHALI, PUNJAB 140301</span></li>
-                                 <li><span class="addr-search-text">India</span></li>
-                                 <li><span class="addr-search-text">Phone number: ‪8076227696‬</span></li>
-                              </ul>
-                              <div class="mt-2"><a class="add-declarative"href="#">Add delivery instructions </a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="aedit-address-desktop-link">
-                        <a href="#" class="a-link-normal">Edit</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal delete-link" href="#">Remove</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal" href="#">Set as Default</a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-4 mb-3 px-2">
-               <div class="xact-add-card">
-                  <div class="defaut_add">
-                     <span class="d-flex align-items-center">Default: <img src="http://localhost:4800/frontend/images/xakkt.png" alt="User Avatar"  class="d-xat-logo"></span>
-                  </div>
-                  <div class="address_xat">
-                     <div class="xact-box-inner ">
-                        <div class="a-section address-section-no-default">
-                           <div class="a-row a-spacing-small">
-                              <ul class="mb-0">
-                                 <li>
-                                    <span class="a-list-item">
-                                       <h5 class="addr-search-name  a-text-bold">Manoj Kumar Singh</h5>
-                                    </span>
-                                 </li>
-                                 <li><span class="addr-search-text">2100</span></li>
-                                 <li><span class="addr-search-text">Gillco Valley, Kharar</span></li>
-                                 <li><span class="addr-search-text">MOHALI, PUNJAB 140301</span></li>
-                                 <li><span class="addr-search-text">India</span></li>
-                                 <li><span class="addr-search-text">Phone number: ‪8076227696‬</span></li>
-                              </ul>
-                              <div class="mt-2"><a class="add-declarative"href="#">Add delivery instructions </a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="aedit-address-desktop-link">
-                        <a href="#" class="a-link-normal">Edit</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal delete-link" href="#">Remove</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal" href="#">Set as Default</a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-4 mb-3 px-2">
-               <div class="xact-add-card">
-                  <div class="address_xat">
-                     <div class="xact-box-inner ">
-                        <div class="a-section address-section-no-default">
-                           <div class="a-row a-spacing-small">
-                              <ul class="mb-0">
-                                 <li>
-                                    <span class="a-list-item">
-                                       <h5 class="addr-search-name  a-text-bold">Manoj Kumar Singh</h5>
-                                    </span>
-                                 </li>
-                                 <li><span class="addr-search-text">2100</span></li>
-                                 <li><span class="addr-search-text">Gillco Valley, Kharar</span></li>
-                                 <li><span class="addr-search-text">MOHALI, PUNJAB 140301</span></li>
-                                 <li><span class="addr-search-text">India</span></li>
-                                 <li><span class="addr-search-text">Phone number: ‪8076227696‬</span></li>
-                              </ul>
-                              <div class="mt-2"><a class="add-declarative"href="#">Add delivery instructions </a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     
-                  </div>
-                  <div class="aedit-address-desktop-link">
-                        <a href="#" class="a-link-normal">Edit</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal delete-link" href="#">Remove</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal" href="#">Set as Default</a>
-                     </div>
-               </div>
-            </div>
+
+            <%}%>
 
           
 

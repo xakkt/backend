@@ -173,6 +173,7 @@ router.get('/cart/products/:store', verifyjwt.checkToken, cartController.listCar
 router.delete('/cart/remove_product', verifyjwt.checkToken,removeProductValidation, cartController.removeProductFromCart);
 router.put('/cart/update_quantity', verifyjwt.checkToken, cartValidation,cartController.updateProductQuantity);
 router.delete('/cart/empty/:storeid',verifyjwt.checkToken,emptyCartValidation,cartController.makeCartEmpty)
+router.get('/cart/size/:storeid',verifyjwt.checkToken,emptyCartValidation,cartController.cartSize)
 
 /*--- product category ---*/
 //router.post('/category/create', verifyjwt.checkToken,categoryValidation, categoryController.create);
