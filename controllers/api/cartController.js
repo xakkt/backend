@@ -18,7 +18,7 @@ exports.listCartProduct = async (req, res) => {
 
         var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate({
                                                                                                 path:'cart._product', 
-                                                                                                select:'name sku price image _unit',
+                                                                                                select:'name sku price image _unit weight',
                                                                                                 populate:{
                                                                                                           path:'_unit',
                                                                                                           select: 'name' 
@@ -35,7 +35,7 @@ exports.listCartProduct = async (req, res) => {
         })
 
        await Promise.all(products = data.cart.map(async(list) => {
-            // console.log("---product",list)
+             console.log("---product",list)
             var data ={}
             if (!list._product) return
              let product_price = await  _global.productprice(req.params.store,list._product._id)

@@ -103,7 +103,13 @@ exports.deleteShoppinglist = async (req, res) => {
 
 exports.shoppinglistProducts = async (req, res) => {
 	try {
-		let shoppinglist = await Shoppinglist.find({ _shoppinglist: req.params.shoplist }).populate('_product', 'name sku price image').populate('_shoppinglist', 'name _store').lean();
+		let shoppinglist = await Shoppinglist.find({ _shoppinglist: req.params.shoplist }).populate({
+																									path:'_product', 
+																									select:'name sku price image weight',
+																									populate:{
+																										path:'_unit',
+																										select:'name'
+																									}}).populate('_shoppinglist', 'name _store').lean();
 
 		if (!shoppinglist.length) return res.json({ status:0, message: "No data found", data: shoppinglist });
 
@@ -113,7 +119,7 @@ exports.shoppinglistProducts = async (req, res) => {
 			var productId = list._product._id.toString();
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
 			let image = `${process.env.BASE_URL}/images/products/${image_path}`;
-
+			let unit = list._product._unit.name;
 			var wishList = await _global.wishList(req.decoded.id, list._shoppinglist._store)
 			var shoppingList = await _global.shoppingList(req.decoded.id, list._shoppinglist._store)
 			var cartProducts = await _global.cartProducts(req.decoded.id, list._shoppinglist._store)
@@ -123,7 +129,8 @@ exports.shoppinglistProducts = async (req, res) => {
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
 			var list_quantity = list.quantity;
 			delete(list.quantity)
-			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, quantity:list_quantity } };
+			delete(list._product._unit)
+			return { ...list, _product: { ...list._product, image: image, unit:unit,is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, quantity:list_quantity } };
 		}).filter(Boolean));
 
 		return res.json({ status:1, message: "", data: shoppinglist });
