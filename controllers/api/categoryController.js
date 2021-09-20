@@ -8,15 +8,25 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let category = await ProductCategory.find({ parent_id: { $eq: null } }).exec();
-			if(!category.length) return res.json({status: "false", message: "No data found", data: category});
-			category.map(element =>{
-				return element.logo =  `${process.env.BASE_URL}/images/products/${element.logo}`
-			})
-			return res.json({status: 1, message: "", data: category});
+			let categories = await ProductCategory.find({ parent_id: { $eq: null } }).select('name slug').lean();
+			if(!categories.length) return res.json({status: "false", message: "No data found", data: category});
+			
+			var data = [...categories]
+			
+			//categories.childs = []
+		    for (const [i,category] of categories.entries()) {    	
+				chidCats = await ProductCategory.find({ parent_id: category._id }).select('name slug').exec();
+				if(chidCats.length){
+					categories[i].child = chidCats
+					console.log(categories.childs)
+				}
+				
+			  }
+			return res.json({status: 1, message: "", data: categories});
 			
 	   }catch(err){
-			res.status(400).json({status: 1, message: "Category added successfully", data: err});
+		   console.log(err)
+			res.status(400).json({status: 1, message: "Something Went wrong", data: err});
 	   }
 },
 
