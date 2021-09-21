@@ -28,6 +28,7 @@
                <span class="text-muted">Your cart</span>
                <span class="badge badge-secondary badge-pill"><%=data.cart.length%></span>
             </h4>
+            <form class="card p-2" method="post" action="<%=process.env.BASE_URL%>//order/placeorder">
             <ul class="list-group mb-3">
                <% var total = 0 %>
                <% for (const [i,product] of data.cart.entries()) { %>   
@@ -46,7 +47,7 @@
                </li>
             </ul>
 
-            <form class="card p-2">
+            
                <div class="input-group">
                   <button class="btn btn-primary btn-lg btn-block" type="submit">Place your order</button>
                </div>
@@ -74,7 +75,7 @@
               </div>
             </div>
             
-            <% for (const [i,address] of addresses.address.entries()) { %> 
+            <% if(addresses.address) for (const [i,address] of addresses.address.entries()) { %> 
             
             <div class="col-md-4 mb-3 px-2">
                <div class="xact-add-card">

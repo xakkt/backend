@@ -17,6 +17,9 @@ var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
 var isloggedin = require('./middlewares/isloggedin')
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/xlates";
+
 
 
 //var moment = require('moment-timezone');
@@ -56,6 +59,33 @@ app.use(bodyParser.json({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api-docs', swaggerUi.serve);
+
+function unique(arr) {
+  console.log("here we go",arr)
+  var hash = {}, result = [];
+  for (var i = 0, l = arr.length; i < l; ++i) {
+      if (!hash.hasOwnProperty(arr[i])) {
+          hash[arr[i]] = true;
+          result.push(arr[i]);
+      }
+  }
+  return result;
+}
+
+app.get('/filter', function(req,res){
+
+  MongoClient.connect("mongodb://localhost:27017/", function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("xlates");
+    dbo.collection("productcategories").find({}).forEach(async function (doc) {
+      
+         dbo.collection("productcategories").update({ _id: doc._id }, { $set: { "_products": unique(doc._products) } });
+       
+      });
+  });
+
+  res.json({data:'abc'})
+})
 app.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.set('views', path.join(__dirname, 'views'))
