@@ -36,7 +36,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "mongo-gui": "0.0.12",
-    "mongodb": "^3.6.2",
+    "mongodb": "^3.7.1",
     "mongoose": "^5.12.13",
     "mongoose-lean-getters": "^0.1.2",
     "mongoose-paginate-v2": "^1.4.2",
