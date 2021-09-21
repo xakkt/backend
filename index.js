@@ -76,7 +76,7 @@ app.get('/filter', function(req,res){
 
   MongoClient.connect("mongodb://localhost:27017/", function(err, db) {
     if (err) throw err;
-    var dbo = db.db("xlates");
+    var dbo = db.db("xakkt-latest");
     dbo.collection("productcategories").find({}).forEach(async function (doc) {
       
          dbo.collection("productcategories").update({ _id: doc._id }, { $set: { "_products": unique(doc._products) } });
