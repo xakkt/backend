@@ -84,6 +84,12 @@ exports.allWishlistProducts = async (req, res) => {
 			var productId = list._product._id.toString();
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
 			let image = `${process.env.BASE_URL}/images/products/${image_path}`;
+			
+
+			var productPrice = await _global.productprice(req.body._store, productId)
+			if(!productPrice) return res.json({status:0,message:"_Store and _Product are invalid"})
+
+			console.log(productPrice,"=========>>>>")
 
 			var wishList = await _global.wishList(req.decoded.id, req.body._store)
 			var shoppingList = await _global.shoppingList(req.decoded.id, req.body._store)
@@ -98,7 +104,14 @@ exports.allWishlistProducts = async (req, res) => {
 			delete (list.max_price);
 			delete (list.createdAt)
 			delete (list.updatedAt)
-			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, wish_price: wish_price, max_price: max_price } };
+			return { ...list, _product: { ...list._product, 
+														image: image, 
+														is_favourite: in_wishlist, 
+														in_shoppinglist: in_shoppinglist, 
+														in_cart: quantity, 
+														deal_price: productPrice.effective_price,
+														regular_price: productPrice.regular_price,
+													} };
 		}).filter(Boolean));
 		return res.json({ status: 1, message: "", data: wishlist })
 	} catch (err) {
