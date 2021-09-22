@@ -20,7 +20,7 @@ exports.listOrders = async (req, res) => {
             _store: req.params.storeid,
         }
        await _time.store_time(req.params.storeid)
-        var order = await Order.find(orderInfo).lean();
+        var order = await Order.find(orderInfo).populate('_store','name').lean();
         if (!order.length) return res.json({ message: "No Order found", data: "" });
         return res.json({ status:1, message: "Order Listing", data:order});
 
@@ -155,14 +155,14 @@ exports.creatOrder = async (req, res) => {
     };
 exports.myorder = async (req,res) =>{
     try {
-        var order = await Order.find({_user: req.decoded.id},{ _id: 0 }).select('-feedback').populate({
+        var order = await Order.find({_user: req.decoded.id},).select('-feedback').populate({
             path:'products._product',
             select:'name description _category weight _unit image quantity',
             populate:{
                 path:'_unit',
                 select:'name'
             }
-        }).lean({ getters: true });
+        }).populate('_store','name').lean({ getters: true });
 
         
 
