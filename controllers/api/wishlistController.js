@@ -77,7 +77,14 @@ exports.allWishlistProducts = async (req, res) => {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate('_product', 'name image price').lean();
+		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate({
+				path:'_product', 
+				select:'name image price weight',
+				populate:{
+					path:'_unit',
+					select:'name'
+				}
+				}).lean();
 		if (!wishlist.length) return res.json({ status:1, message: "no data found", data: [] })
 		wishlist = await Promise.all(wishlist.map(async (list) => {
 			if (!list._product) return
