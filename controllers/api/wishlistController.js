@@ -107,6 +107,8 @@ exports.allWishlistProducts = async (req, res) => {
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
 			var wish_price = list.wish_price;
 			var max_price = list.max_price;
+			var unit = list._product._unit.name;
+			delete(list._product._unit)
 			delete (list.wish_price);
 			delete (list.max_price);
 			delete (list.createdAt)
@@ -116,6 +118,7 @@ exports.allWishlistProducts = async (req, res) => {
 														is_favourite: in_wishlist, 
 														in_shoppinglist: in_shoppinglist, 
 														in_cart: quantity, 
+														unit:unit,
 														deal_price: productPrice.effective_price,
 														regular_price: productPrice.regular_price,
 													} };
