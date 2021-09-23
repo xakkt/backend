@@ -20,9 +20,10 @@ exports.listOrders = async (req, res) => {
             _store: req.params.storeid,
         }
        await _time.store_time(req.params.storeid)
-        var order = await Order.find(orderInfo).populate('_store','name').lean();
-        if (!order.length) return res.json({ message: "No Order found", data: "" });
-        return res.json({ status:1, message: "Order Listing", data:order});
+        var orders = await Order.find(orderInfo).populate('_store','name').lean({ getters: true });
+
+        if (!orders.length) return res.json({ message: "No Order found", data: "" });
+        return res.json({ status:1, message: "Order Listing", data:orders});
 
     } catch (err) {
         return res.status(400).json({ data: err.message });

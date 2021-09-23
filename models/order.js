@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const FKHelper = require('../helper/foreign-key-constraint');
 var uniqueValidator = require('mongoose-unique-validator');
-
+const mongooseLeanGetters = require('mongoose-lean-getters')
 
 const addressSchema = new Schema({
 
@@ -121,16 +121,34 @@ const OrderSchema = Schema({
           }
         
       },
-      deal_price:{ type: Number, required:true},
-      regular_price:{type: Number, required:true} 
+      deal_price:{ 
+                  type: mongoose.Decimal128,
+                  get: function(value) {
+                      return value.toString();
+                  },
+                  required: true
+      },
+      regular_price:{ 
+                  type: mongoose.Decimal128,
+                  get: function(value) {
+                      return value.toString();
+                  },
+                  required: true
+      } 
       
     }
   ],
   delivered_on:{type:Date, required:false},
-  total_cost: {type:Number, required: true}
+  total_cost: {
+    type: mongoose.Decimal128,
+                  get: function(value) {
+                      return value.toString();
+                  },
+                  required: true
+  }
   
 }, {timestamps:true});
-
+OrderSchema.plugin(mongooseLeanGetters)
 OrderSchema.plugin(uniqueValidator)
 module.exports = mongoose.model('orders', OrderSchema);
 
