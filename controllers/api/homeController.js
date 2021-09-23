@@ -225,15 +225,16 @@ exports.dashboard = async (req, res) => {
 					var productId = product._product._id.toString();
 				    var productPrice = await _global.productprice(req.params.storeid, productId)
 					delete(product._id)
+					producttype = "product",
 					product._id = product._product._id
 					product.name = product._product.name
 					product.description = product._product.description
 					product.is_favourite = 0
 					product.in_shoppinglist = 0
 					product.in_cart = 0
-					product._category = product._product._category
+					//product._category = product._product._category
 					product.weight = product._product.weight
-					product._unit = product._product._unit.name
+					product.unit = product._product._unit.name
 					product.image = product._product.image
 					product._product.deal_price= productPrice.deal_price
 					product._product.regular_price= productPrice.regular_price

@@ -28,7 +28,7 @@
                <span class="text-muted">Your cart</span>
                <span class="badge badge-secondary badge-pill"><%=data.cart.length%></span>
             </h4>
-            <form class="card p-2" method="post" action="<%=process.env.BASE_URL%>//order/placeorder">
+            <form class="card p-2" method="post" action="<%=process.env.BASE_URL%>/placeorder">
             <ul class="list-group mb-3">
                <% var total = 0 %>
                <% for (const [i,product] of data.cart.entries()) { %>   
@@ -43,7 +43,7 @@
                <% } %>
                <li class="list-group-item d-flex justify-content-between">
                   <span>Total</span>
-                  <strong><%=store._currency.name%> <%=total%></strong>
+                  <strong><%=store._currency.name%> <%=total.toFixed(2)%></strong>
                </li>
             </ul>
 

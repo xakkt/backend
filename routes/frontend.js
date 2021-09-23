@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+var app = express()
+
 const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
-var isloggedin = require('../middlewares/isloggedin')
+var isloggedin = require('../middlewares/customerloggedin')
 
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
@@ -77,13 +79,14 @@ const shoppinglistValidation = [
 ]
 
 const getListValidation = [
-       body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+     body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
    ]
 
 
-router.post('/shoppinglist/add_product',  updateListValidation, shoppingController.addProductToshoppinglist);
-router.post('/shoppinglist/create',shoppinglistValidation, shoppingController.createShoppingList);
-router.post('/shoppinglist',getListValidation,shoppingController.allShoppingLists);
+
+router.post('/shoppinglist/add_product', updateListValidation, shoppingController.addProductToshoppinglist);
+router.post('/shoppinglist/create',isloggedin, shoppinglistValidation, shoppingController.createShoppingList);
+router.post('/list/shoppinglist',getListValidation,shoppingController.allShoppingLists);
 router.delete('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
 router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
 router.delete('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
@@ -96,8 +99,8 @@ router.delete('/wishlist/remove/product',wishController.deleteProductWishlist);
 router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice);
 
 router.get('/myorders/:store',orderController.myorder)
-//router.post('/order/placeorder/:store',orderController.placeOrder);
-router.post('/order/create/:store',orderController.creatOrder)
+router.post('/placeorder',orderController.placeOrder);
+//router.post('/order/create/:store',orderController.creatOrder)
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
 router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)
 router.get('/cart',function(req, res){

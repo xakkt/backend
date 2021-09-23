@@ -9,19 +9,21 @@ exports.allShoppingLists = async (req, res) => {
 
 	try {
 		const listInfo = {
-			_user: req.decoded.id,
+			_user: req.body._user,
 			_store: req.body._store
 		}
-		let shoppinglist = await ShoppinglistName.find(listInfo, 'name').exec();
+		
+		let shoppinglist = await ShoppinglistName.find(listInfo, 'name').lean();
 		if (!shoppinglist.length) return res.json({ status: "false", message: "No data found", data: shoppinglist });
 		return res.json({ status: 1, message: "", data: shoppinglist });
 
 	} catch (err) {
+		console.log(err)
 		res.status(400).json({ status:1, message: "", data: err });
 	}
 },
 
-	exports.addProductToshoppinglist = async (req, res) => {
+exports.addProductToshoppinglist = async (req, res) => {
 
 		const errors = await validationResult(req);
 		if (!errors.isEmpty()) {
@@ -44,8 +46,6 @@ exports.allShoppingLists = async (req, res) => {
 		}
 
 	};
-
-
 exports.createShoppingList = async function (req, res) {
 
 	try {
@@ -53,15 +53,17 @@ exports.createShoppingList = async function (req, res) {
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ status:0,errors: errors.array() });
 		}
-console.log(req.decoded);
+
 		const ShoppinglistInfo = {
 			name: req.body.name,
-			_user: req.decoded.id,
+			_user: req.session.userid,
 			_store: req.body._store
 		};
 
 		const shoppinglist = await ShoppinglistName.create(ShoppinglistInfo);
-		return res.json({ status: 1, message: "Shopping List Created", data: shoppinglist });
+		
+		res.redirect(req.header('Referer'));
+		//return res.json({ status: 1, message: "Shopping List Created", data: shoppinglist });
 
 	} catch (err) { console.log(err)
 		if (err.code == 11000) return res.status(400).json({ status:0,data: "List with this name already exist" });

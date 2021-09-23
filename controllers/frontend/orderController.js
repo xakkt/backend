@@ -81,7 +81,7 @@ exports.updateOrderStatus = async (req, res) => {
     }
 },
 
-exports.creatOrder = async (req, res) => {
+exports.placeOrder = async (req, res) => {
 
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {

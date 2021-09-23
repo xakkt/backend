@@ -17,10 +17,6 @@ var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
 var isloggedin = require('./middlewares/isloggedin')
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/xlates";
-
-
 
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
@@ -86,6 +82,7 @@ app.get('/filter', function(req,res){
 
   res.json({data:'abc'})
 })
+
 app.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.set('views', path.join(__dirname, 'views'))
@@ -107,6 +104,7 @@ app.engine('ejs', async (path, data, cb) => {
 app.locals.moment = require('moment');
 
 io.on('connection', function (socket) {
+  
   console.log('a user connected');
   socket.on('disconnect', function () {
     console.log('user disconnected');

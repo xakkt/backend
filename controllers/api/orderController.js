@@ -164,8 +164,6 @@ exports.myorder = async (req,res) =>{
             }
         }).populate('_store','name').lean({ getters: true });
 
-        
-
         order.map((element) => {
            
             for (const [i,product] of element.products.entries()) {

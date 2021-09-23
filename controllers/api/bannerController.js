@@ -16,7 +16,7 @@ exports.bannderproduct = async (req, res) => {
                 { _deal: req.body._deal },
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
-        }).populate({
+        }).select('-createdAt -updatedAt -__v').populate({
                         path:'_product',
                         select:'name image unit weight description',
                         populate: {
@@ -45,7 +45,7 @@ exports.bannderproduct = async (req, res) => {
                 data._product.in_cart = 0
                 
             }
-            delete(element._product._unit.name)
+            delete(element._product._unit)
             delete (data.deal_price)
             delete (data._deal)
             delete (data._store)

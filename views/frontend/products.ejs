@@ -105,7 +105,7 @@
                                             <div class="ccc_viewed_name">
                                                   <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
                                             </div>
-                                            <form class="cart-form" method="post">
+                                            <form class="cart-form" method="post" action="sgd">
                                                <input type="hidden" name="_store" value="<%=store._id%>" />
                                                 <%- await include('_partials/productSliders.ejs',{product:product}); %>
                                            </form>
@@ -149,7 +149,7 @@
                                             <div class="bbb_viewed_name">
                                               <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a></div>
 
-                                              <form class="cart-form">
+                                              <form class="cart-form" method="POST" action="asf">
                                                 <input type="hidden" name="_store" value="<%=store._id%>" />  
                                                   <%- await include('_partials/productSliders.ejs',{product:product}); %>
                                               </form>
@@ -184,10 +184,9 @@
 
 <%- await include('modals/product-details.ejs'); %>
 
-
-   <!-- Footer -->
-   <%- await include('_partials/footer.ejs'); %>
-  <!-- Footer -->
+<!-- Footer -->
+<%- await include('_partials/footer.ejs'); %>
+<!-- Footer -->
 
    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
 

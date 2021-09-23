@@ -294,7 +294,7 @@ $('.x-cart,.x-heart,.x-list').click(function(){
      $(this).closest("form").submit()
 })
 
-$('.cart-form').submit(function(e){
+$('.cart-form').submit(function(e){ alert('here')
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
  
@@ -306,12 +306,10 @@ $('.cart-form').submit(function(e){
       url = 'http://localhost:4800/product/add-to-favlist';
       break;
     case "x-list":
-      url = 'http://localhost:4800/product/add-to-shoppinglist';    
+      url = 'http://localhost:4800/shoppinglist/add_product';    
       break;
     
   }
-
-console.log('0pobj',obj)
    $.post(url, obj)
         .done(result => { 
                     if(!result.status){ 
@@ -448,12 +446,41 @@ $('#cartModal').on('show.bs.modal',function(e){
     $("#loginError").show().text(result.responseJSON.errors);
 });
 
-  
 
 })
 
+$('#shoppingListModal').on('show.bs.modal',function(e){
+  var data ={}
+  data._user = $(".cartbutton").data('userid')??null
+  data._store = $(".cartbutton").data('storeid')
+  
+  
+              
+                  $.post('/list/shoppinglist', data).done(result => { 
+              
+                    if(result.status){ 
+                        var tableHtml = ''
+                        result.data.forEach((list,index)=>{
+                            tableHtml += `<tr>
+                                            <td class="lsname" onclick="listnameClick(this)" data-id="${list._id}">${list.name}</td>
+                                          </tr>`
+                              })
+                          
+                            }else{
+                                tableHtml = `<tr> <td> No data for cart </td> </tr>`
+                              }
+                          $('#shopping-table').html(tableHtml) 
+                }).fail(result=>{
+                    $("#loginError").show().text(result.responseJSON.errors);
+                });
+            
+})
 
-
+function listnameClick(that){
+  $('.shoplist').val($(that).data('id'))
+  $('.cart-form').submit()
+  
+}
 
 
 
