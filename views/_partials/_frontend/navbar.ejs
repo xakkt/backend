@@ -97,6 +97,7 @@
                   <a class="dropdown-item" href="#">Dashboard</a>
                   <a class="dropdown-item" href="#">Edit Profile</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="createShoppingList" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Create Shopping List</a>
+                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
                   <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
                 

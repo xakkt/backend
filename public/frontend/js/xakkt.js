@@ -281,9 +281,11 @@ $('.x-cart,.x-heart,.x-list').click(function(){
      switch ($(this).data('prop')) {
       case "x-cart":
           $(this).parents('.xshop').siblings('.button_type').val('x-cart');
+          $(this).closest("form").submit()
         break;
       case "x-heart":
           $(this).parents('.xshop').siblings('.button_type').val('x-heart');
+          $(this).closest("form").submit()
         break;
       case "x-list":
           $(this).parents('.xshop').siblings('.button_type').val('x-list');
@@ -291,10 +293,10 @@ $('.x-cart,.x-heart,.x-list').click(function(){
       
     }
 
-     $(this).closest("form").submit()
+     
 })
 
-$('.cart-form').submit(function(e){ alert('here')
+$('.cart-form').submit(function(e){ 
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
  
@@ -313,10 +315,11 @@ $('.cart-form').submit(function(e){ alert('here')
    $.post(url, obj)
         .done(result => { 
                     if(!result.status){ 
-                            $("#loginError").show().text(result.errors); }else{
-                          }
+                            $("#shopilistError").show().text(result.message); 
+                        }
         }).fail(result=>{
-                  $("#loginError").show().text(result.responseJSON.errors);
+          console.log(result.responseJSON.message,"========================>>>>>")
+                      $("#shopilistError").removeClass('d-none').html(result.responseJSON.message);
          });
    
 })
@@ -449,20 +452,22 @@ $('#cartModal').on('show.bs.modal',function(e){
 
 })
 
-$('#shoppingListModal').on('show.bs.modal',function(e){
+$('#shoppingListModal').on('show.bs.modal',function(event){
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
   
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var productForm = button.data('formid')
   
-              
+             
                   $.post('/list/shoppinglist', data).done(result => { 
               
                     if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((list,index)=>{
                             tableHtml += `<tr>
-                                            <td class="lsname" onclick="listnameClick(this)" data-id="${list._id}">${list.name}</td>
+                                            <td class="lsname" data-formid="#${productForm}" onclick="listnameClick(this)" data-id="${list._id}">${list.name}</td>
                                           </tr>`
                               })
                           
@@ -476,9 +481,73 @@ $('#shoppingListModal').on('show.bs.modal',function(e){
             
 })
 
+$('#allAhoppingListsModal').on('show.bs.modal',function(event){
+  var data ={}
+  data._user = $(".cartbutton").data('userid')??null
+  data._store = $(".cartbutton").data('storeid')
+  
+             
+                  $.post('/list/shoppinglist', data).done(result => { 
+              
+                    if(result.status){ 
+                        var tableHtml = ''
+                        result.data.forEach((list,index)=>{
+                            tableHtml += `<tr>
+                                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
+                                          </tr>`
+                              })
+                          
+                            }else{
+                                tableHtml = `<tr> <td> No data for cart </td> </tr>`
+                              }
+                          $('#shopping-table-navbar').html(tableHtml) 
+                }).fail(result=>{
+                    $("#loginError").show().text(result.responseJSON.errors);
+                });
+            
+})
+
+$('#shoppingListProducsModal').on('show.bs.modal',function(event){
+  $('#allAhoppingListsModal').modal('hide')
+ 
+   var button = $(event.relatedTarget) // Button that triggered the modal
+  var shoplist = button.data('listid')
+  
+             
+                  $.get(`/shoppinglist/${shoplist}/products`).done(result => { 
+                     console.log('============>>>',result)
+                    if(result.status){ 
+                        var tableHtml = ''
+                        result.data.forEach((product,index)=>{
+                          tableHtml += `<tr>
+                                            <td class="w-25">
+                                              <img src="${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
+                                            </td>
+                                            <td>${product._product.name.english}</td>
+                                            <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
+                                            <td>${product._product._unit.name}</td>
+                                            <td>
+                                              <a href="#" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-times"></i>
+                                              </a>
+                                            </td>
+                                      </tr>`
+                              })
+                          
+                            }else{
+                                tableHtml = `<tr> <td> No data for cart </td> </tr>`
+                              }
+                          $('#shoppinglist-product-table').html(tableHtml) 
+                }).fail(result=>{
+                    $("#loginError").show().text(result.responseJSON.errors);
+                });
+            
+})
+
 function listnameClick(that){
+  
   $('.shoplist').val($(that).data('id'))
-  $('.cart-form').submit()
+  $($(that).data('formid')).submit()
   
 }
 

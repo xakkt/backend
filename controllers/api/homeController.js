@@ -255,11 +255,18 @@ exports.dashboard = async (req, res) => {
 
 					delete(product._product)
 					delete(product.quantity)
+					
 
-					orderAgain.push(product)
+					var index = orderAgain.findIndex(x => x._id==product._id); 
+					index === -1 ? orderAgain.push(product) : console.log("object already exists")
+ 
+
+					//orderAgain.push(product)
 					}
 		   		})
 			)
+
+
 			pdata[3] = 	{
 				path: `${process.env.BASE_URL}`,
 				type: "product",

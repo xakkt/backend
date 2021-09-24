@@ -41,7 +41,7 @@ exports.addProductToshoppinglist = async (req, res) => {
 			return res.json({ status:1, message: "Product added to shoppinglist successfully", data: product });
 
 		} catch (err) {
-
+			if (err.code == 11000) return res.status(400).json({ status:0,message: "Product already added for this shopping list for this store" });
 			res.status(400).json({ data: err.message });
 		}
 
@@ -70,7 +70,7 @@ exports.createShoppingList = async function (req, res) {
 		res.status(400).json({status:0, data: err.message });
 	}
 },
-	exports.updateShoppinglist = async function (req, res) {
+exports.updateShoppinglist = async function (req, res) {
 		try {
 			const updatedList = await Shoppinglist.findByIdAndUpdate(req.body._shoppinglistid, { $set: { quantity: req.body.quantity } }, { new: true }).exec();
 			return res.json({ status: 1, message: "Shopping List Updated", data: updatedList });
@@ -105,7 +105,11 @@ exports.deleteShoppinglist = async (req, res) => {
 
 exports.shoppinglistProducts = async (req, res) => {
 	try {
-		let shoppinglist = await Shoppinglist.find({ _shoppinglist: req.params.shoplist }).populate('_product', 'name sku price image').populate('_shoppinglist', 'name _store').lean();
+		let shoppinglist = await Shoppinglist.find({ _shoppinglist: req.params.shoplist }).select('-createdAt -updatedAt').populate({
+			path:'_product', 
+			select:'name sku price image weight _unit',
+			populate:{ path:'_unit',select:'name' }
+		}).populate('_shoppinglist', 'name _store').lean();
 
 		if (!shoppinglist.length) return res.json({ status:0, message: "No data found", data: shoppinglist });
 
@@ -116,9 +120,9 @@ exports.shoppinglistProducts = async (req, res) => {
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
 			let image = `${process.env.BASE_URL}/images/products/${image_path}`;
 
-			var wishList = await _global.wishList(req.decoded.id, list._shoppinglist._store)
-			var shoppingList = await _global.shoppingList(req.decoded.id, list._shoppinglist._store)
-			var cartProducts = await _global.cartProducts(req.decoded.id, list._shoppinglist._store)
+			var wishList = await _global.wishList(req.session.userid, list._shoppinglist._store)
+			var shoppingList = await _global.shoppingList(req.session.userid, list._shoppinglist._store)
+			var cartProducts = await _global.cartProducts(req.session.userid, list._shoppinglist._store)
 
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
@@ -132,7 +136,7 @@ exports.shoppinglistProducts = async (req, res) => {
 
 	} catch (err) {
 		console.log(err)
-		res.status(400).json({ status:0, message: err });
+		res.status(400).json({ status:0, message: err.message });
 	}
 }
 
