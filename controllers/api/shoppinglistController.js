@@ -124,14 +124,15 @@ exports.shoppinglistProducts = async (req, res) => {
 			let unit = list._product._unit.name;
 			let deal_price = productPrice.deal_price;
 			let regular_price =  productPrice.regular_price;
+			
 			var wishList = await _global.wishList(req.decoded.id, list._shoppinglist._store)
 			var shoppingList = await _global.shoppingList(req.decoded.id, list._shoppinglist._store)
 			var cartProducts = await _global.cartProducts(req.decoded.id, list._shoppinglist._store)
 
-
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
+
 			var list_quantity = list.quantity;
 			delete(list.quantity)
 			delete(list._product._unit)

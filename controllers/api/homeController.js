@@ -217,8 +217,7 @@ exports.dashboard = async (req, res) => {
 				}
 			}).lean({ getters: true });
 	
-			
-	
+
 			await Promise.all( order.map(async (element) => {
 			   
 				for (const [i,product] of element.products.entries()) {
@@ -243,13 +242,13 @@ exports.dashboard = async (req, res) => {
 					if (product._product._id in cartProductList) {
 						product.in_cart = cartProductList[product._product._id]
 					}
-		
-					if (wishlistids.includes(product._product._id) && shoppinglistProductIds.includes(product._product._id)) {
+					
+					if (wishlistids.includes(product._product._id.toString()) && shoppinglistProductIds.includes(product._product._id.toString())) {
 						product.is_favourite = 1,
 						product.in_shoppinglist = 1
-					} else if (shoppinglistProductIds.includes(product._product._id)) {
+					} else if (shoppinglistProductIds.includes(product._product._id.toString())) {
 						product.in_shoppinglist = 1
-					} else if (wishlistids.includes(product._product._id)) {
+					} else if (wishlistids.includes(product._product._id.toString())) {
 						product.is_favourite = 1
 					}
 
@@ -274,8 +273,6 @@ exports.dashboard = async (req, res) => {
 				message: "Order Again",
 				product: orderAgain
 			}
-			
-			
 	
 		}else{
 			pdata[3] = 	{
@@ -286,8 +283,7 @@ exports.dashboard = async (req, res) => {
 				product: orderAgain
 			}	
 		}
-
-				
+			
 		/*--------- order again --------*/
 
 

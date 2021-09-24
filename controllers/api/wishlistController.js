@@ -96,7 +96,7 @@ exports.allWishlistProducts = async (req, res) => {
 			var productPrice = await _global.productprice(req.body._store, productId)
 			if(!productPrice) return res.json({status:0,message:"_Store and _Product are invalid"})
 
-			console.log(productPrice,"=========>>>>")
+			
 
 			var wishList = await _global.wishList(req.decoded.id, req.body._store)
 			var shoppingList = await _global.shoppingList(req.decoded.id, req.body._store)
@@ -105,8 +105,7 @@ exports.allWishlistProducts = async (req, res) => {
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
-			var wish_price = list.wish_price;
-			var max_price = list.max_price;
+			
 			var unit = list._product._unit.name;
 			delete(list._product._unit)
 			delete (list.wish_price);
