@@ -239,18 +239,9 @@ exports.dashboard = async (req, res) => {
 					product._product.regular_price= productPrice.regular_price
 					
 
-					if (product._product._id in cartProductList) {
-						product.in_cart = cartProductList[product._product._id]
-					}
-					
-					if (wishlistids.includes(product._product._id.toString()) && shoppinglistProductIds.includes(product._product._id.toString())) {
-						product.is_favourite = 1,
-						product.in_shoppinglist = 1
-					} else if (shoppinglistProductIds.includes(product._product._id.toString())) {
-						product.in_shoppinglist = 1
-					} else if (wishlistids.includes(product._product._id.toString())) {
-						product.is_favourite = 1
-					}
+					product.is_favourite = (wishlistids.includes(product._product._id.toString())) ? 1 : 0;
+					product.in_shoppinglist = (shoppinglistProductIds.includes(product._product._id.toString())) ? 1 : 0;
+					product.in_cart = (product._product._id in cartProductList) ? cartProductList[product._product._id] : 0;	
 
 					delete(product._product)
 					delete(product.quantity)

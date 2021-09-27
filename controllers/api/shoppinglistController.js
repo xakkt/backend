@@ -136,7 +136,7 @@ exports.shoppinglistProducts = async (req, res) => {
 			var list_quantity = list.quantity;
 			delete(list.quantity)
 			delete(list._product._unit)
-			return { ...list, _product: { ...list._product, unit:unit,image: image,is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, deal_price:deal_price, regular_price:regular_price, in_cart: quantity, quantity:list_quantity } };
+			return { ...list, _product: { ...list._product, unit:unit,image: image,is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, deal_price:deal_price, regular_price:regular_price, in_cart: list_quantity, quantity:list_quantity } };
 		}).filter(Boolean));
 
 		return res.json({ status:1, message: "", data: shoppinglist });
