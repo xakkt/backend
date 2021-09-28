@@ -547,6 +547,7 @@ $('#shoppingListProducsModal').on('show.bs.modal',function(event){
 function listnameClick(that){
   
   $('.shoplist').val($(that).data('id'))
+  $(that).toggleClass('active')
   $($(that).data('formid')).submit()
   
 }
