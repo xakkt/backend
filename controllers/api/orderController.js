@@ -145,7 +145,7 @@ exports.creatOrder = async (req, res) => {
                             
             var order = await Order.create(orderInfo);
            
-           return res.json({ status: 1, message: "Order created", data: {order_id:order.order_id} });
+           return res.json({ status: 1, message: "Order createddd", data: {order_id:orderInfo.shipping.order_id} });
         } catch (err) {
             console.log("---value",err)
             return res.status(400).json({ data: err.message });
