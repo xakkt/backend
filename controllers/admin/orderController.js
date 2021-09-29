@@ -13,20 +13,14 @@ exports.listing = async (req, res) => {
             var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
             var limit = parseInt(req.query.length) || 5;
             let searchString = req.query.search.value || ''
-            let order = await Order.find({
-
-                // coupon_code: { $regex: '.*' + searchString + '.*', $options: 'i' }
-            }).populate('_store')
+            let order = await Order.find({}).populate('_store','name address contact_no').populate('_user','first_name last_name address')
                 .skip((pagno - 1) * limit) //Notice here
                 .limit(limit)
                 .lean();
-            let total = await Order.find(
-                {
-                    // coupon_code: { $regex: '.*' + searchString + '.*', $options: 'i' }
-                }
-            ).lean()
+                // coupon_code: { $regex: '.*' + searchString + '.*', $options: 'i' }
+            let total = await Order.find({}).count()
             console.log("--order",order)
-            return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: order })
+            return res.json({ draw: page, recordsTotal: total, recordsFiltered: total, data: order })
 
         }
         else {
