@@ -140,7 +140,7 @@ exports.creatOrder = async (req, res) => {
                                    // transaction_id: req.body.payment.transaction_id
                                 },
                                 products:product,
-                                total_cost:req.body.total_cost
+                                total_cost:req.body.total_cost.toFixed(2)
                             }
                             
             var order = await Order.create(orderInfo);

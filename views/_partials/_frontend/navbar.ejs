@@ -71,12 +71,14 @@
        </div>
        <div class="col-4 p-0">
         <ul class="navbar-nav ml-auto align-items-center justify-content-end">
+         <%if(userEmail==null){%> 
             <li class="">
                <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
             </li>
             <li class="">
                <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
             </li>
+            <%}%>
             <li class="">
                <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
                <span class='badge badge-warning' id='lblCartCount'> 5 </span>
@@ -89,18 +91,20 @@
                <span class=""><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                </a>
                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <%if(userEmail!=null){%>
                      <div class="profile-area">
-                        <a class="dropdown-item u-name" href="javascript:void(0);">Manoj Singh</a>
+                        <a class="dropdown-item u-name" href="javascript:void(0);"><%=fullName%></a>
                         <a class="dropdown-item u-mail" href="javascript:void(0);"><%=userEmail%></a>
                      </div>
                   <hr/>
-                  <a class="dropdown-item" href="#">Dashboard</a>
+                 
                   <a class="dropdown-item" href="#">Edit Profile</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="createShoppingList" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Create Shopping List</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
                   <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
-                
+                  <%}%>
+                  <a class="dropdown-item" href="#">About Us</a>
                </div>
             </li> 
          </ul>
@@ -151,13 +155,14 @@
                         <a class="dropdown-item u-mail" href="javascript:void(0);"><%=userEmail%></a>
                      </div>
                   <hr/>
-                  <a class="dropdown-item" href="#">Dashboard</a>
+                  <%if(userEmail!=null){%>
                   <a class="dropdown-item" href="#">Edit Profile</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="createShoppingListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Create Shopping List</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="shoppingListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping List</a>
                   <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
+                  
                   <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
-                
+                  <%}%>   
                </div>
             </li> 
          </ul>

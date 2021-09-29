@@ -19,6 +19,8 @@ exports.login = async (req, res) => {
 
             await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
             req.session.customer = userInfo.email;
+            req.session.fullName = userInfo.first_name+' '+userInfo.last_name;
+            req.session.customer = userInfo.email;
             req.session.userid = userInfo._id
 
             await Cart.updateMany({ sessionId: req.sessionID },{ $set: { _user: userInfo._id } }).lean()

@@ -44,6 +44,8 @@ const wishlistValidation = [
 ]
 
 router.use(function(req,res,next){
+    console.log("================>>>>",req.session.customer)
+    res.locals.fullName  =(req.session?.fullName) ?? null;
     res.locals.userEmail =(req.session?.customer) ?? null;
     res.locals.userid =(req.session?.userid) ?? null;
     next();

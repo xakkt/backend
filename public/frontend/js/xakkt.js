@@ -515,8 +515,7 @@ $('#shoppingListProducsModal').on('show.bs.modal',function(event){
   
              
                   $.get(`/shoppinglist/${shoplist}/products`).done(result => { 
-                     console.log('============>>>',result)
-                    if(result.status){ 
+                      if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((product,index)=>{
                           tableHtml += `<tr>
