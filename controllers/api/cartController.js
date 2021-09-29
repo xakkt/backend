@@ -58,7 +58,7 @@ exports.listCartProduct = async (req, res) => {
             code: 'AZXPN102',
             discount: '20%'
         }
-        return res.json({ status: 1, message: "All cart products", data: data, subtotal: { in_cart: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, sub_total: total_price.toFixed(2) } });
+        return res.json({ status: 1, message: "All cart products", data: data, subtotal: { in_cart: total_quantity, price: total_price.toFixed(2), shipping_cost: 100.00, sub_total: total_price.toFixed(2) } });
 
     } catch (err) {
         return res.status(400).json({ status:0, data: err.message });
@@ -195,7 +195,7 @@ exports.removeProductFromCart = async (req, res) => {
             code: 'AZXPN102',
             discount: '20%'
         }
-        return res.json({ status: 1, message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+        return res.json({ status: 1, message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100.00, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
     } catch (err) {
         return res.status(400).json({ data: err.message });
     }
@@ -258,7 +258,7 @@ exports.updateProductQuantity = async (req, res) => {
                 code: 'AZXPN102',
                 discount: '20%'
             }
-            return res.json({ status: 1, message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: 100, coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+            return res.json({ status: 1, message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: "100.00", coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
         }
         return res.json({ status:0, message: "No data found", data: {} });
     } catch (err) {
