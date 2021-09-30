@@ -318,7 +318,6 @@ $('.cart-form').submit(function(e){
                             $("#shopilistError").show().text(result.message); 
                         }
         }).fail(result=>{
-          console.log(result.responseJSON.message,"========================>>>>>")
                       $("#shopilistError").removeClass('d-none').html(result.responseJSON.message);
          });
    

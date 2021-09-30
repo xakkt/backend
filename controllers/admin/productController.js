@@ -266,7 +266,6 @@ exports.productupdate = async function (req, res) {
         
 
     } catch (err) {
-        console.log("================>>>>>>>>>>",err)
         await req.flash('failure', err.message);
         res.redirect('/admin/product')
     }

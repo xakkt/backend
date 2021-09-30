@@ -191,7 +191,6 @@
         }).then((result) => {
           if (result.isConfirmed) {
 
-
             var id = $(that).attr('id');
             let data = {
               "status": $(that).val()
@@ -208,10 +207,7 @@
             )
             });
             
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
             $('#order').DataTable().ajax.reload()
             /*swalWithBootstrapButtons.fire(
               'Cancelled',
@@ -241,7 +237,55 @@
    function deleteOrder(that){
      var url = $(that).data('url');
 
-     $.ajax({
+
+     const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: true
+        })
+
+        swalWithBootstrapButtons.fire({
+          title: 'Are you sure?',
+          text: "You wants to delete the order!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, it was mistake!',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            var id = $(that).attr('id');
+            let data = {
+              "status": $(that).val()
+            }
+                $.ajax({
+                  url: url,
+                  type: 'get',              
+                }).done((data) => {
+                  Swal.fire(
+                      'Done!',
+                      'Order deleted!',
+                      'success'
+                    )
+                    $(that).parents('tr').remove()
+                });
+            
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            $('#order').DataTable().ajax.reload()
+            /*swalWithBootstrapButtons.fire(
+              'Cancelled',
+              'Your imaginary file is safe :)',
+              'error'
+            )*/
+          }
+        })
+
+
+
+    /* $.ajax({
               url: url,
               type: 'get',              
             }).done((data) => {
@@ -252,7 +296,7 @@
                 )
                 $(that).parents('tr').remove()
             });
-
+            */
 
    }
 
