@@ -60,7 +60,7 @@ exports.rateOrder = async(req, res) => {
         if (!order) return res.json({ message: "No Order found", data: "" });
         return res.json({ status: 1, message: "", data:order});
     }catch (err){
-        return res.status(400).json({ data: err.message });
+        return res.status(400).json({ status:0, data: err.message });
     }
 }
 
@@ -78,7 +78,7 @@ exports.updateOrderStatus = async (req, res) => {
         return res.json({ status:1, message: "", data:order});
 
     } catch (err) {
-        return res.status(400).json({ data: err.message });
+        return res.status(400).json({ status:0, data: err.message });
     }
 },
 
@@ -86,7 +86,7 @@ exports.creatOrder = async (req, res) => {
 
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ status:0, errors: errors.array() });
         }
 
        try {
@@ -148,7 +148,7 @@ exports.creatOrder = async (req, res) => {
            return res.json({ status: 1, message: "Order createddd", data: {order_id:orderInfo.shipping.order_id} });
         } catch (err) {
             console.log("---value",err)
-            return res.status(400).json({ data: err.message });
+            return res.status(400).json({status:0, data: err.message });
         }
 
     };
@@ -183,7 +183,7 @@ exports.myorder = async (req,res) =>{
        })
 
         // console.log(order)
-        if (!order.length) return res.json({ message: "No Order found", data: "" });
+        if (!order.length) return res.json({  status: 1, message: "No Order found", data: [] });
         return res.json({ status: 1, message: "", data:order});
 
     } catch (err) {

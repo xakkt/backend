@@ -39,16 +39,29 @@ exports.edit = async (req, res) => {
 }
 exports.update = async (req, res) => {
     try{
-    let order = await Order.findOneAndUpdate({ _id: req.params.id },
-       { $set:{
-           'shipping.tracking.status':req.body.status
-       }
-    }).lean();
-    return res.json({status:true})
+        await Order.findOneAndUpdate({ _id: req.params.id },
+        { $set:{
+            'shipping.tracking.status':req.body.status
+        }
+        }).lean();
+        return res.json({status:true})
     }catch(err)
-    {
-        console.log('------',err)
-
+    {        
+        return res.json({status:false})
     }
 
+}
+
+exports.orderDelete = async(req, res) => {
+    
+    try{
+        Order.deleteOne({ _id: req.params.id }, function (err) {
+            if (err) return res.status(400).json({ data: err });
+            return res.json({status:1, message:"Deleted"})
+        });
+    }catch(err)
+    {    
+           return res.json({status:0, message:"Something Went Wrong."})
+
+    }
 }

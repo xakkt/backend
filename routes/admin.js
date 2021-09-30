@@ -282,6 +282,7 @@ router.post('/coupon/update/:id',coupanController.update)
 router.get('/order/list',orderController.listing) 
 router.get('/order/edit/:id',orderController.edit) 
 router.post('/order/update/:id',orderController.update) 
+router.get('/order/delete/:id',orderController.orderDelete) 
 /******Currecny******/
 router.post('/currency/add',currencyController.save) 
 router.get('/currency/create',currencyController.create) 

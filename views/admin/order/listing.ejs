@@ -228,21 +228,23 @@
       
     }
     function getSelectOptions(value) {
-    var options = ['pending','delivered','dispatched','cancelled','refunded','disputed','recieved']
-    var selectHtml='<select>';
+      var options = ['pending','delivered','dispatched','cancelled','refunded','disputed','recieved']
+      var selectHtml='<select>';
+      
+      for(i=0;i< options.length; i++)
+      {
+        selected = (value==options[i])?'selected':'';  
+        selectHtml +=`<option value=${options[i]}  ${selected}>${options[i].toUpperCase()}</option>`
+      }
 
-    
-    for(i=0;i< options.length; i++)
-    {
-      selected = (value==options[i])?'selected':'';  
-      selectHtml +=`<option value=${options[i]}  ${selected}>${options[i].toUpperCase()}</option>`
-    }
+      selectHtml += '</select>';
+      return $(selectHtml).html()
+   }
 
-    selectHtml += '</select>';
-    
-    
-    return $(selectHtml).html()
-  }
+   function deleteOrder(that){
+     alert($(that).data('url'))
+   }
+
     $(document).ready(function () {
       $.fn.dataTable.moment('HH:mm DD/MM/YYYY');
 
@@ -327,7 +329,7 @@
           {
             "data": null,
             "render": function (data, type, row) {
-              return '<a href=""><i class="far fa-trash-alt"></i></a>';
+              return `<a href="javascript:void(0);"><i class="fas fa-pencil-alt"></i></a>&nbsp &nbsp<a onclick=deleteOrder(this) data-url="http://localhost:4800/admin/order/delete/${row._id}" href="javascript:void(0);"><i class="far fa-trash-alt"></i></a>`;
             }
           }
         ],
