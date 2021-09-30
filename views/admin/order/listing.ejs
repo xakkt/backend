@@ -171,10 +171,7 @@
   <!-- Page specific script -->
   <script>
     function setOrderStatus(that) {
-
-
-
-      
+  
       const swalWithBootstrapButtons = Swal.mixin({
           customClass: {
             confirmButton: 'btn btn-success',
@@ -242,7 +239,20 @@
    }
 
    function deleteOrder(that){
-     alert($(that).data('url'))
+     var url = $(that).data('url');
+
+     $.ajax({
+              url: url,
+              type: 'get',              
+            }).done((data) => {
+              swalWithBootstrapButtons.fire(
+              'Deleted!',
+              'status has been updated.',
+              'success'
+            )
+            });
+
+
    }
 
     $(document).ready(function () {

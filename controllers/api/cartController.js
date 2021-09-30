@@ -258,7 +258,7 @@ exports.updateProductQuantity = async (req, res) => {
                 code: 'AZXPN102',
                 discount: '20%'
             }
-            return res.json({ status: 1, message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: "100.00", coupon: coupon, sub_total: (total_price - 100).toFixed(2) } });
+            return res.json({ status: 1, message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: "100.00", sub_total: total_price.toFixed(2) } });
         }
         return res.json({ status:0, message: "No data found", data: {} });
     } catch (err) {
