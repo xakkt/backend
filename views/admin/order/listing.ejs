@@ -245,11 +245,12 @@
               url: url,
               type: 'get',              
             }).done((data) => {
-              swalWithBootstrapButtons.fire(
-              'Deleted!',
-              'status has been updated.',
-              'success'
-            )
+              Swal.fire(
+                  'Done!',
+                  'Order deleted!',
+                  'success'
+                )
+                $(that).parents('tr').remove()
             });
 
 
