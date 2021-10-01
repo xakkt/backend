@@ -303,7 +303,6 @@ exports.products = async (req, res) => {
 				chilCategories = await Categories.find({ parent_id:element._id}).select('-_products -createdAt -updatedAt -__v').lean()
 				categorySet[element.name] = chilCategories
 		}))
-console.log("===========>>>",pdata[2])
   		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, categories:categorySet,trending:pdata[1]})
 
 	} catch (err) {

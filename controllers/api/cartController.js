@@ -131,13 +131,15 @@ exports.addPoductToCart = async (req, res) => {
             }
         }
         var prod = product.toObject();
-
+        var total_products = 0
         product = prod.cart.map(data => {
             data.in_cart = data.quantity;
+            total_products += data.quantity
             delete (data.quantity)
             return data;
         })
-        return res.json({ status: 1, message: "Product added to cart successfully", data: product });
+        
+        return res.json({ status: 1, message: "Product added to cart successfully", data: product, total_products: total_products });
     } catch (err) {
         console.log("--errr", err)
         return res.status(400).json({ data: err.message });

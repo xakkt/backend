@@ -295,7 +295,6 @@ exports.priceSave = async (req, res) => {
         
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
-            console.log("--product", req.body)
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];

@@ -106,8 +106,6 @@ exports.allWishlistProducts = async (req, res) => {
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
 			
-			console.log(wishList.includes(productId),"wishlist array")
-			console.log(wishList,'========>>>>>>',productId)
 			var unit = list._product._unit.name;
 			delete(list._product._unit)
 			delete (list.wish_price);

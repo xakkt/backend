@@ -57,7 +57,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/api-docs', swaggerUi.serve);
 
 function unique(arr) {
-  console.log("here we go",arr)
+  
   var hash = {}, result = [];
   for (var i = 0, l = arr.length; i < l; ++i) {
       if (!hash.hasOwnProperty(arr[i])) {
@@ -105,9 +105,8 @@ app.locals.moment = require('moment');
 
 io.on('connection', function (socket) {
   
-  console.log('a user connected');
   socket.on('disconnect', function () {
-    console.log('user disconnected');
+    
   });
 
   socket.on('trackrider', function (data) {

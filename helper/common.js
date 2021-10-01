@@ -20,7 +20,6 @@ exports.cartProducts = async (userid, storeid) => {
     cartProducts.map(product => {
         cartProductList[product.cart._product] = product.cart.quantity
     })
-    console.log(cartProductList)
     return cartProductList;
 
 }
