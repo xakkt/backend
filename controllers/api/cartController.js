@@ -133,13 +133,11 @@ exports.addPoductToCart = async (req, res) => {
         var prod = product.toObject();
         var total_products = 0
         product = prod.cart.map(data => {
-            data.in_cart = data.quantity;
             total_products += data.quantity
-            delete (data.quantity)
             return data;
         })
         
-        return res.json({ status: 1, message: "Product added to cart successfully", data: product, total_products: total_products });
+        return res.json({ status: 1, message: "Product added to cart successfully", total_products: total_products });
     } catch (err) {
         console.log("--errr", err)
         return res.status(400).json({ data: err.message });
@@ -205,6 +203,8 @@ exports.removeProductFromCart = async (req, res) => {
 }
 
 exports.updateProductQuantity = async (req, res) => {
+
+    
     const errors = await validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -260,7 +260,23 @@ exports.updateProductQuantity = async (req, res) => {
                 code: 'AZXPN102',
                 discount: '20%'
             }
-            return res.json({ status: 1, message: "Product Update", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: "100.00", sub_total: total_price.toFixed(2) } });
+
+            if(req.query.view_cart==1){
+                        var responseData = { 
+                                            status: 1, 
+                                            message: "Product Update", 
+                                            total_products:total_quantity,
+                                            data: data, 
+                                            subtotal: { price: total_price.toFixed(2), shipping_cost: "100.00", sub_total: total_price.toFixed(2) } 
+                                        }
+                        }else{                
+                        var responseData   = {
+                                            status: 1, 
+                                            message: "Product Update", 
+                                            total_products:total_quantity,
+                        }       
+            }       
+            return res.json(responseData);
         }
         return res.json({ status:0, message: "No data found", data: {} });
     } catch (err) {
