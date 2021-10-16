@@ -15,6 +15,7 @@ const categoryController = require('../controllers/frontend/categoryController')
 const orderController = require('../controllers/frontend/orderController')
 const shoppingController = require('../controllers/frontend/shoppinglistController')
 const wishController = require('../controllers/frontend/wishlistControllers')
+const userController = require('../controllers/frontend/userController')
 
 const userValidation = [
     body('email').not().isEmpty().trim().escape().withMessage('Email should not be empty'),
@@ -50,6 +51,16 @@ router.use(function(req,res,next){
     next();
 })
 /*-------- validation -------------*/
+const addressValidation = [
+    body('address1').not().isEmpty().trim().escape().withMessage('address should not be empty'),
+    body('address_type').not().isEmpty().trim().escape().withMessage('address_type should not be empty'),
+    body('emirate').not().isEmpty().trim().escape().withMessage('state should not be empty'),
+    body('country').not().isEmpty().trim().escape().withMessage('country should not be empty'),
+    body('countrycode').not().isEmpty().trim().escape().withMessage('country code should not be empty'),
+    body('lat').not().isEmpty().trim().escape().withMessage('latitude should not be empty'),
+    body('long').not().isEmpty().trim().escape().withMessage('longitude should not be empty')
+]
+
 
 router.get('/product/:id',IndexController.list)
 router.post('/cookie',IndexController.cookie)
@@ -58,18 +69,21 @@ router.get('/cookiees',IndexController.cookiees)
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)
-
+router.post('/user/add-address', userController.addAddress)
+router.get('/user/defautl-address/:address', userController.makeDefaultAddress)
+router.get('/user/delete-address/:address', userController.deleteAddress)
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
-router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
 router.get('/checkout/:store',cartController.checkoutPage);
 
-
+/*------- cart api ----------*/
+router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
+router.post('/product/remove-from-cart',cartController.removeProductFromCart)
 /*---- shoppinglist ----*/
 
 const updateListValidation = [
-    body('_shoppinglist').not().isEmpty().trim().escape().withMessage('_shoppinglist should not be empty'),
+   // body('_shoppinglist').not().isEmpty().trim().escape().withMessage('_shoppinglist should not be empty'),
     body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
     body('quantity').not().isEmpty().trim().escape().withMessage('quantity should not be empty')   
 ]
@@ -84,11 +98,11 @@ const getListValidation = [
    ]
 
 
-
 router.post('/shoppinglist/add_product', updateListValidation, shoppingController.addProductToshoppinglist);
+router.post('/shoppinglists/remove_from_all_list',shoppingController.removeFromAllList)
 router.post('/shoppinglist/create',isloggedin, shoppinglistValidation, shoppingController.createShoppingList);
 router.post('/list/shoppinglist',getListValidation,shoppingController.allShoppingLists);
-router.delete('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
+router.get('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
 router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
 router.delete('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
 router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistProducts)
@@ -96,7 +110,7 @@ router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistPr
 
 router.post('/product/add-to-favlist', wishlistValidation, wishController.addPoductToWishlist);
 router.post('/wishlist/products', wishController.allWishlistProducts);
-router.delete('/wishlist/remove/product',wishController.deleteProductWishlist);
+router.get('/wishlist/remove/product/:listid',wishController.deleteProductWishlist);
 router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice);
 
 router.get('/myorders/:store',orderController.myorder)

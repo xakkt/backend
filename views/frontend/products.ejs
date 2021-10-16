@@ -105,11 +105,13 @@
                                                   <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
                                             </div>
 
-                                            <div class="ccc_viewed_price"><%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span></div>
+                                            <div class="ccc_viewed_price">
+                                                <%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span>
+                                            </div>
 
-                                            <form class="cart-form" method="post" id="product_form_<%=product._id%>">
+                                            <form class="cart-form" method="post" id="product_form_nearby_<%=product._id%>">
                                                <input type="hidden" name="_store" value="<%=store._id%>" />
-                                                <%- await include('_partials/productSliders.ejs',{product:product}); %>
+                                                <%- await include('_partials/productSliders.ejs',{product:product,slider:'nearby'}); %>
                                            </form>
 
                                         </div>
@@ -156,9 +158,9 @@
                                                 <div><%=store._currency.name%><%=product.deal_price%></div>
                                             </div>
                                           
-                                              <form class="cart-form" method="POST" id="product_form_<%=product._id%>">
+                                              <form class="cart-form" method="POST" id="product_form_deals_<%=product._id%>">
                                                 <input type="hidden" name="_store" value="<%=store._id%>" />  
-                                                  <%- await include('_partials/productSliders.ejs',{product:product}); %>
+                                                  <%- await include('_partials/productSliders.ejs',{product:product, slider:'deals'}); %>
                                               </form>
                                         </div>
                                         <!--ul class="item_marks">

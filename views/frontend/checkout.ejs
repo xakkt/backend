@@ -58,13 +58,11 @@
             <h4 class="mb-3">Billing address</h4>
             <div class="row">
 
-
-            
             <div class="col-md-4 mb-3 px-2">
               <div class="xact-add-card">
                 <div class="d-flex align-items-center justify-content-center h-100">
                     
-                    <div class="add-address-card py-5">
+                    <div class="add-address-card py-5" data-toggle="modal" data-target="#addAddressModal">
                       
                       <div class="add-icon text-center"><i class="fa fa-plus" aria-hidden="true"></i></div>
                       <h2 class="text-center">Add Address</h2>
@@ -74,8 +72,8 @@
                   </div>
               </div>
             </div>
-            
-            <% if(addresses.address) for (const [i,address] of addresses.address.entries()) { %> 
+            <% console.log('========>>>',addresses) %>
+            <% if(addresses) for (const [i,address] of addresses.entries()) { %> 
             
             <div class="col-md-4 mb-3 px-2">
                <div class="xact-add-card">
@@ -95,7 +93,7 @@
                                  <li><span class="addr-search-text"><%=address.address1%> <%=address.address2%></span></li>
                                  <li><span class="addr-search-text"><%=address.emirate%> <%=address.zipcode%></span></li>
                                  <li><span class="addr-search-text"><%=address.country%></span></li>
-                                 <li><span class="addr-search-text">Contact number: <%=addresses.contact_no%></span></li>
+                                 <li><span class="addr-search-text">Contact number: <%=address.phoneno%></span></li>
                               </ul>
                               <div class="mt-2"><a class="add-declarative"href="#">Add delivery instructions </a>
                               </div>
@@ -104,8 +102,8 @@
                      </div>
                      <div class="aedit-address-desktop-link">
                         <a href="#" class="a-link-normal">Edit</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal delete-link" href="#">Remove</a> &nbsp; | &nbsp;
-                        <a class="a-link-normal" href="#">Set as Default</a>
+                        <%if(!address.is_default){%><a class="a-link-normal delete-link" href="<%=process.env.BASE_URL%>/user/delete-address/<%=address._id%>">Remove</a> &nbsp; | &nbsp;<%}%>
+                        <%if(!address.is_default){%>  <a class="a-link-normal" href="<%=process.env.BASE_URL%>/user/defautl-address/<%=address._id%>">Set as Default</a> <%}%>
                      </div>
                   </div>
                </div>
@@ -121,6 +119,64 @@
       </div>
       </div>
       <!-- Footer -->
+
+      <!-- add address modal-->
+       <div class="modal" id="addAddressModal">
+         <div class="modal-dialog">
+           <div class="modal-content">
+       
+             <!-- Modal Header -->
+             <!--div class="modal-header">
+               <h4 class="modal-title">Modal Heading</h4>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+             </div-->
+       
+             <!-- Modal body -->
+             <div class="modal-body">
+               <form action="<%=process.env.BASE_URL%>/user/add-address%>" method="POST">
+                  <div class="form-group">
+                    <label for="address1">Address1</label>
+                    <input type="text" class="form-control" required placeholder="Address" name="address1">
+                  </div>
+                  <div class="form-group">
+                     <label for="address2">Address2</label>
+                     <input type="text" class="form-control" required placeholder="Address" name="address2">
+                   </div>
+                   <div class="form-group">
+                     <label for="address1">Emirate or States</label>
+                     <input type="text" class="form-control" required placeholder="Emirate" name="emirate">
+                   </div>
+                   <div class="form-group">
+                     <label for="contactno">Contact</label>
+                     <input type="text" class="form-control" required placeholder="Contact" name="contact_no">
+                   </div>
+                   <div class="form-group">
+                     <label for="country">Country</label>
+                     <input type="text" class="form-control" required placeholder="Country" name="country">
+                   </div>
+                  <div class="form-group row">
+                    <label class="form-check-label col-md-6">
+                      <input class="form-check-input" name="address_type" value="home" type="radio"> Home
+                    </label>
+                    <label class="form-check-label col-md-6">
+                     <input class="form-check-input" name="address_type" value="office" type="radio"> Office
+                   </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+             </div>
+       
+             <!-- Modal footer -->
+             <!--div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+             </div-->
+       
+           </div>
+         </div>
+       </div>
+       
+       <!--modal for address-->
+
       <%- await include('_partials/footer.ejs'); %>
       <!-- Footer -->
      

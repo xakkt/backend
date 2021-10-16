@@ -30,6 +30,15 @@ exports.addProductToshoppinglist = async (req, res) => {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
+		if(!req.body._shoppinglist){
+				sLists = await ShoppinglistName.find({_user:req.body._user,_store:req.body._store},'name').lean();
+				if(!sLists){ return res.json({ status: 1, message: "Shopping list not found" }); }
+				var ids = sLists.map(data => data._id)
+				await Shoppinglist.deleteMany({ _product:req.body._product,_shoppinglist: {$in: ids} });
+				return res.json({ status: 1, message: "Product removed from all lists", data: [] });
+			}
+
+
 		try {
 			shoppinglistInfo = {
 				_shoppinglist: req.body._shoppinglist,
@@ -41,8 +50,15 @@ exports.addProductToshoppinglist = async (req, res) => {
 			return res.json({ status:1, message: "Product added to shoppinglist successfully", data: product });
 
 		} catch (err) {
-			if (err.code == 11000) return res.status(400).json({ status:0,message: "Product already added for this shopping list for this store" });
-			res.status(400).json({ data: err.message });
+			if (err.code == 11000) {
+				try{
+					await Shoppinglist.deleteOne({_shoppinglist: req.body._shoppinglist,_product: req.body._product})
+					return res.status(200).json({ status:0,message: "Product removed for this shopping list for this store" });
+				}catch (err) {
+					return res.status(400).json({ data: err.message });
+				}
+			}
+			return res.status(400).json({ data: err.message });
 		}
 
 	};
@@ -66,8 +82,35 @@ exports.createShoppingList = async function (req, res) {
 		//return res.json({ status: 1, message: "Shopping List Created", data: shoppinglist });
 
 	} catch (err) { console.log(err)
-		if (err.code == 11000) return res.status(400).json({ status:0,data: "List with this name already exist" });
+		if (err.code == 11000) {
+				sLists = await ShoppinglistName.find({_user:req.body._user,_store:req.body._store},'name').lean();
+				if(!sLists){ return res.json({ status: 1, message: "Shopping list not found" }); }
+				var ids = sLists.map(data => data._id)
+				console.log("=======>>>",ids)
+				Shoppinglist.deleteMany({ _product:req.body._product,_shoppinglist: {$in: ids} }, function (err,data) {
+					if (err) return res.json({ status: 1, message: "", data: err });
+					console.log("=================>>>",data)
+					return res.json({ status: 1, message: "Product removed", data: [] });
+				});
+		}
 		res.status(400).json({status:0, data: err.message });
+	}
+},
+exports.removeFromAllList = async (req, res) => {
+	try { 
+		sLists = await ShoppinglistName.find({_user:req.body._user,_store:req.body._store},'name').lean();
+		if(!sLists){ return res.json({ status: 1, message: "Shopping list not found" }); }
+		var ids = sLists.map(data => data._id)
+		console.log("=======>>>",ids)
+		Shoppinglist.deleteMany({ _product:req.body._product,_shoppinglist: {$in: ids} }, function (err,data) {
+			if (err) return res.json({ status: 1, message: "", data: err });
+			console.log("=================>>>",data)
+			return res.json({ status: 1, message: "Product removed", data: [] });
+		});
+
+	} catch (err) {
+		console.log(err)
+		return res.status(400).json({ status: 0, message: "", data: err });
 	}
 },
 exports.updateShoppinglist = async function (req, res) {
@@ -81,7 +124,7 @@ exports.updateShoppinglist = async function (req, res) {
 
 exports.deleteProductFromShoppinglist = async (req, res) => {
 
-	try {
+	try { 
 		Shoppinglist.deleteOne({ _id: req.params.shoppinglistid }, function (err) {
 			if (err) return res.json({ status: 1, message: "", data: err });
 			return res.json({ status: 1, message: "Product removed", data: [] });
@@ -139,4 +182,6 @@ exports.shoppinglistProducts = async (req, res) => {
 		res.status(400).json({ status:0, message: err.message });
 	}
 }
+
+
 

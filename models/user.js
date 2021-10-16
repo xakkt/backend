@@ -30,7 +30,7 @@ const childSchema = new Schema({
     type: Number
   },
   phoneno: {
-    type: Number
+    type: String
   },
   countrycode :{
     type:String

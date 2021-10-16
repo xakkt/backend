@@ -31,7 +31,7 @@ exports.addPoductToWishlist = async (req, res) => {
 		return res.json({ status: 1, message: "Product added to wishlist successfully", data: wishlist });
 
 	} catch (err) {
-		console.log(res.body,"=====================>>>")
+		
 		if (err.code == 11000){ 
             await Wishlist.deleteOne({_user: res.locals.userid,_product: req.body._product,_store: req.body._store})
             return res.status(200).json({ status:1, data: "Product removed from wishlist" })
@@ -57,13 +57,10 @@ exports.updateProductWishPrice = async (req, res) => {
 
 	exports.deleteProductWishlist = async (req, res) => {
 		try {
-			const queryInfo = {
-				_store: req.body._store,
-				_product: req.body._product,
-				_user: req.decoded.id
-			}
-			Wishlist.deleteOne(queryInfo, function (err, data) {
-				if (err) return res.json({ err: err });
+			
+
+			Wishlist.deleteOne({_id:req.params.listid}, function (err, data) {
+				if (err) return res.json({ err: err.message });
 				if (!data.deletedCount) { return res.json({ status: 1, message: "No product found", data: "" }); }
 				return res.json({ status: 1, message: "Product Removed from Wishlist", data: data });
 			});
@@ -95,14 +92,14 @@ exports.allWishlistProducts = async (req, res) => {
 
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
-			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
+			var in_cart = (productId in cartProducts) ? cartProducts[productId] : 0;
 			var wish_price = list.wish_price;
 			var max_price = list.max_price;
 			delete (list.wish_price);
 			delete (list.max_price);
 			delete (list.createdAt)
 			delete (list.updatedAt)
-			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist } };
+			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart:in_cart } };
 		}).filter(Boolean));
 		return res.json({ status: 1, message: "", data: wishlist })
 	} catch (err) {

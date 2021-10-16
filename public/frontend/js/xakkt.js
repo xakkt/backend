@@ -1,4 +1,15 @@
-
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+    
+function showPosition(position) {
+    x.innerHTML="Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;
+}
 
 $('#storeCarousel').on('slide.bs.carousel', function (e) {
   showPosition(e.relatedTarget.dataset.lat,e.relatedTarget.dataset.long)
@@ -41,7 +52,7 @@ switch(error.code) {
 
 $(".owl-carousel")&&$(".owl-carousel").length&&$('.owl-carousel').owlCarousel({
   stagePadding: 50,
-  loop: true,
+  loop: false,
   margin: 10,
   nav: true,
   navText: ["<div class='nav-btn prev-slide'></div>", "<div class='nav-btn next-slide'></div>"],
@@ -59,12 +70,10 @@ $(".owl-carousel")&&$(".owl-carousel").length&&$('.owl-carousel').owlCarousel({
 })
 
 
-
 $('.carousel')&&$('.carousel').length&&$('.carousel').carousel({
   interval: false,
   touch:true
 });
-
 
 
 $(document).ready(function() {
@@ -75,7 +84,7 @@ $(document).ready(function() {
 
       viewedSlider.owlCarousel({
           stagePadding:50,
-          loop: true,
+          loop: false,
           autoplay: true,
           autoplayTimeout: 6000,
           nav: true,
@@ -120,7 +129,7 @@ $(document).ready(function() {
 
     viewedCSlider.owlCarousel({
         stagePadding:50,
-        loop: true,
+        loop: false,
         autoplay: true,
         autoplayTimeout: 6000,
         nav: false,
@@ -162,36 +171,22 @@ $(document).ready(function() {
 });
 
 
+$(document).delegate('.minus-btn','click', function(e) {
 
-$('.minus-btn').on('click', function(e) {
-e.preventDefault();
-var $this = $(this);
-var $input = $this.closest('div').find('input');
-var value = parseInt($input.val());
-
-if (value > 1) {
-    value = value - 1;
-} else {
-    value = 0;
-}
-
-$input.val(value);
-
+  input = ($(this).data('place'))? $(`#${$(this).data('place')} .qnty`):$(this).closest('div').find('input'); 
+  value = parseInt(input.val());
+  value = (value > 1)?value-1:1;
+  input.val(value);
+  $(this).closest('div').find('input').val(value);
 });
 
-$('.plus-btn').on('click', function(e) {
-e.preventDefault();
-var $this = $(this);
-var $input = $this.closest('div').find('input');
-var value = parseInt($input.val());
-
-if (value < 100) {
-    value = value + 1;
-} else {
-    value =100;
-}
-
-$input.val(value);
+$(document).delegate('.plus-btn','click', function(e) {
+  
+  input = ($(this).data('place'))? $(`#${$(this).data('place')} .qnty`):$(this).closest('div').find('input'); 
+  value = parseInt(input.val());
+  value = (value < 100)?value+1:100
+  input.val(value);
+  $(this).closest('div').find('input').val(value);
 });
 
 const regForm = $('#registration')
@@ -243,21 +238,6 @@ loginForm.on('submit', function(e){
 })
 
 
-$(".xakkti").click(function(){ 
- 
-          let sku = $(this).data('id'); 
-          let section = $(this).data('prop');
-          
-          let greyClass = `.${section}-grey-${sku}`;
-          let redClass  = `.${section}-red-${sku}`;
-          
-          $(`${greyClass}, ${redClass}`).toggleClass("d-none")
-  });
-
-/*$('.xpdetails').click(function(){
-     $('.product_view').modal('show')
-})  */
-
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 
@@ -275,20 +255,45 @@ $(function () {
   modal.find('.currency').text(a.data('store-currency'))
 })
 
-$('.x-cart,.x-heart,.x-list').click(function(){
-     
-
-     switch ($(this).data('prop')) {
+$(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
+     var btntype = $(this).data('prop')
+      switch (btntype) {
       case "x-cart":
-          $(this).parents('.xshop').siblings('.button_type').val('x-cart');
-          $(this).closest("form").submit()
-        break;
-      case "x-heart":
-          $(this).parents('.xshop').siblings('.button_type').val('x-heart');
-          $(this).closest("form").submit()
+        
+       productId = $(this).data('productid')
+
+       greyClass = `.${btntype}-grey-${productId}`;
+       redClass  = `.${btntype}-red-${productId}`;
+      
+      $(`${greyClass},${redClass}`).toggleClass("d-none")
+      $(this).parents('.xshop').siblings('.button_type').val(btntype);
+      $(this).closest("form").submit()
+      break;
+      case "x-heart": 
+      productId = $(this).data('productid')
+
+       greyClass = `.${btntype}-grey-${productId}`;
+       redClass  = `.${btntype}-red-${productId}`;
+      
+      $(`${greyClass},${redClass}`).toggleClass("d-none")
+      $(this).parents('.xshop').siblings('.button_type').val(btntype);
+      $(this).closest("form").submit()
         break;
       case "x-list":
-          $(this).parents('.xshop').siblings('.button_type').val('x-list');
+             $(this).parents('.xshop').siblings('.button_type').val(btntype);
+             if(!$(this).data('action')){
+                   $('.shoplist').val('')
+                  
+                    productId = $(this).data('productid')
+
+                     greyClass = `.${btntype}-grey-${productId}`;
+                     redClass  = `.${btntype}-red-${productId}`;
+                    
+                    $(`${greyClass}`).removeClass("d-none")
+                    $(`${redClass}`).addClass("d-none")
+                    
+                    $(this).closest("form").submit()
+             }
         break;
       
     }
@@ -296,29 +301,31 @@ $('.x-cart,.x-heart,.x-list').click(function(){
      
 })
 
-$('.cart-form').submit(function(e){ 
+$(document).delegate('.cart-form','submit',function(e){ 
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
- 
+ console.log("===========>>>",obj)
+ //return false;
  switch (obj.button_type) {
     case "x-cart":
-          url = 'http://localhost:4800/product/add-to-cart';
+      url = 'http://localhost:4800/product/add-to-cart';
       break;
     case "x-heart":
       url = 'http://localhost:4800/product/add-to-favlist';
       break;
     case "x-list":
       url = 'http://localhost:4800/shoppinglist/add_product';    
-      break;
-    
-  }
+      
+    }
    $.post(url, obj)
         .done(result => { 
-                    if(!result.status){ 
-                            $("#shopilistError").show().text(result.message); 
-                        }
+               if(result.status){
+                 
+               }     
+              $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
+                        
         }).fail(result=>{
-                      $("#shopilistError").removeClass('d-none').html(result.responseJSON.message);
+          $(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
          });
    
 })
@@ -364,24 +371,58 @@ $('#favListModal').on('show.bs.modal',function(e){
   data._store = $(".cartbutton").data('storeid')
 
 
-  $.post('/wishlist/products', data).done(result => { 
+$.post('/wishlist/products', data).done(result => { 
      
     if(result.status){ 
         
         var tableHtml = ''
         var total = 0;
         result.data.forEach((product,index)=>{
-         
-            tableHtml += `<tr>
+         console.log('=------->>',product)
+
+              tableHtml += `<tr>
                             <td class="w-25">
                               <img src="${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="">
                             </td>
                             <td>${product._product.name.english}</td>
-                            <td>50</td>
+                            <td class="qty">
+                                <div class="quantity">
+                                  <button class="xbtn minus-btn" data-place="shipping_${product._product._id}" type="button" name="button">
+                                      <i class="fa fa-minus" aria-hidden="true"></i>
+                                  </button>
+                                  <input type="text" class="cartqnty" name="quantity" value=1>
+                                  <button class="xbtn plus-btn" data-place="shipping_${product._product._id}" type="button" name="button">
+                                      <i class="fa fa-plus" aria-hidden="true"></i>
+                                  </button>
+                                  
+                                </div>
+                            </td>
                             <td>
-                              <a href="#" class="btn btn-danger btn-sm">
-                                <i class="fa fa-times"></i>
-                              </a>
+                            <form class="cart-form" method="post" id="shipping_${product._product._id}">
+                                <input type="hidden" name="_product" value="${product._product._id}" />
+                                <input type="hidden" class="button_type" name="button_type" value=""/>
+                                <input type="hidden" class="shoplist" name="_shoppinglist" value="" />
+                                <input type="hidden" class="qnty" name="quantity" value="1" />
+                                <input type="hidden" name="_store" value=${$(".cartbutton").data('storeid')} /> 
+                                <input type="hidden" class="user" name="_user" value=${$(".cartbutton").data('userid')} />
+                                <span class="action_icon xshop">
+                                      
+                                <img style="width:26px" data-id="${product._product._id}" data-prop="x-list" data-toggle="modal" data-formid="shipping_${product._product._id}" data-action=1 data-target="#shoppingListModal" class="img-responsive x-list xakkti xakkt-popup x-list-grey-${product._product._id} ${product._product.in_shoppinglist?'d-none':''}" src="http://localhost:4800/frontend/images/GREY_Shopping_List.png" title="Add to shopping list" alt="No Image">
+                                
+                                <img style="width:26px" data-action=0 data-productid="${product._product._id}" data-prop="x-list" class="img-responsive x-list xakkti xakkt-popup ${product._product.in_shoppinglist?'':'d-none'} x-list-red-${product._product._id}" src="http://localhost:4800/frontend/images/RED_shopping_List.png" title="Remove from all shopping lists" alt="No Image">
+                                      
+                                </span>
+                                <span class="action_icon xshop">
+                                       <img class="img-responsive xakkti x-cart x-cart-red-${product._product._id} ${product._product.in_cart?'':'d-none' }" title="Remove from Cart" data-prop="x-cart" data-productid="${product._product._id}" src="http://localhost:4800/frontend/images/RED_Cart.png" alt="No Image">
+        
+                                       <img class="img-responsive xakkti x-cart x-cart-grey-${product._product._id} ${product._product.in_cart?'d-none':''}" title="Add to Cart" data-prop="x-cart" data-productid="${product._product._id}" src="http://localhost:4800/frontend/images/GREY_Cart.png" alt="No Image"> 
+             
+                                </span>
+                                <span class="action_icon" data-id="${product._id}" onclick="deleteFavorioutProduct(this)">
+                                    <img style="width:26px" data-prop="x-delete" class="img-responsive" src="http://localhost:4800/frontend/images/trash.png" title="Add to shopping list" alt="No Image">
+                                </span>
+                              
+                              </form>
                             </td>
                       </tr>`
           })
@@ -410,7 +451,7 @@ $('#cartModal').on('show.bs.modal',function(e){
   data.storeid = $(".cartbutton").data('storeid')
 
   $.post('/products/cart', data).done(result => { 
-     
+     console.log('cart api result =======>>>',result)
     if(result.status){ 
         
         var tableHtml = ''
@@ -423,13 +464,21 @@ $('#cartModal').on('show.bs.modal',function(e){
                               <img src="http://xgrocery.cf/images/products/${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>
                             <td>${product._product.name.english}</td>
-                            <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
-                            <td>${product.total_price}</td>
-                            <td>
-                              <a href="#" class="btn btn-danger btn-sm">
-                                <i class="fa fa-times"></i>
-                              </a>
+                            <td class="qty">
+                                <div class="quantity">
+                                  <button class="xbtn minus-btn" type="button" name="button">
+                                      <i class="fa fa-minus" aria-hidden="true"></i>
+                                  </button>
+                                  <input type="text" class="cartqnty" name="quantity" value="${product.quantity}">
+                                  <button class="xbtn plus-btn" type="button" name="button">
+                                      <i class="fa fa-plus" aria-hidden="true"></i>
+                                  </button>
+                                  
+                                </div>
                             </td>
+                            
+                            <td>${product.total_price}</td>
+                            <td> <span data-productid="${product._product._id}" class="action_icon" onclick="removeProductFromCart(this)"><i class="fa fa-trash"></i></span> </td>
                       </tr>`
           })
           $('.cart-price').html(total)
@@ -455,18 +504,21 @@ $('#shoppingListModal').on('show.bs.modal',function(event){
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
+ 
   
   var button = $(event.relatedTarget) // Button that triggered the modal
   var productForm = button.data('formid')
+  var productId = button.data('id')
+  let section = button.data('prop');
   
-             
+ 
                   $.post('/list/shoppinglist', data).done(result => { 
               
                     if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((list,index)=>{
                             tableHtml += `<tr>
-                                            <td class="lsname" data-formid="#${productForm}" onclick="listnameClick(this)" data-id="${list._id}">${list.name}</td>
+                                            <td class="lsname" data-section="${section}" data-productid=${productId} data-formid="#${productForm}" onclick="listnameClick(this)" data-id="${list._id}">${list.name}</td>
                                           </tr>`
                               })
                           
@@ -485,8 +537,7 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
   
-             
-                  $.post('/list/shoppinglist', data).done(result => { 
+         $.post('/list/shoppinglist', data).done(result => { 
               
                     if(result.status){ 
                         var tableHtml = ''
@@ -509,25 +560,43 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
 $('#shoppingListProducsModal').on('show.bs.modal',function(event){
   $('#allAhoppingListsModal').modal('hide')
  
-   var button = $(event.relatedTarget) // Button that triggered the modal
+  var button = $(event.relatedTarget) // Button that triggered the modal
   var shoplist = button.data('listid')
   
-             
+            
                   $.get(`/shoppinglist/${shoplist}/products`).done(result => { 
-                      if(result.status){ 
+
+                     if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((product,index)=>{
+                          listname = product._shoppinglist.name
                           tableHtml += `<tr>
                                             <td class="w-25">
-                                              <img src="${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
+                                              <img src="${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="no image available">
                                             </td>
                                             <td>${product._product.name.english}</td>
-                                            <td class="qty"><input type="number" class="form-control" id="input1" value="${product.quantity}"></td>
+                                            <td class="qty">
+                                              <div class="quantity">
+                                                <button class="xbtn minus-btn" type="button" name="button">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                                <input type="text" class="cartqnty" name="quantity" value=1>
+                                                <button class="xbtn plus-btn" type="button" name="button">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                                
+                                              </div>
+                                            </td>
+                                            
                                             <td>${product._product._unit.name}</td>
                                             <td>
-                                              <a href="#" class="btn btn-danger btn-sm">
-                                                <i class="fa fa-times"></i>
-                                              </a>
+                                            <a href="javascript"void(0);">
+                                              <img style="width:26px" class="img-responsive" src="http://localhost:4800/frontend/images/RED_Cart.png" title="Add to shopping list" alt="No Image"></a>
+                                              <a style="width:26px" href="javascript"void(0);">
+                                              <img style="width:26px" class="img-responsive" src="http://localhost:4800/frontend/images/RED_Favorite.png" title="Add to shopping list" alt="No Image"></a>
+                                              <span class="action_icon" data-id="${product._id}" onclick="removeProductFromShoppingList(this)">
+                                                <i class="fa fa-trash"></i>
+                                              </span>
                                             </td>
                                       </tr>`
                               })
@@ -536,19 +605,95 @@ $('#shoppingListProducsModal').on('show.bs.modal',function(event){
                                 tableHtml = `<tr> <td> No data for cart </td> </tr>`
                               }
                           $('#shoppinglist-product-table').html(tableHtml) 
+                          $('#shopListModalLabel').html(listname)
                 }).fail(result=>{
                     $("#loginError").show().text(result.responseJSON.errors);
                 });
             
 })
-
 function listnameClick(that){
   
-  $('.shoplist').val($(that).data('id'))
+ $('.shoplist').val($(that).data('id'))
+ 
+  section = $(that).data('section')
+  productId = $(that).data('productid')
+
+  let greyClass = `.${section}-grey-${productId}`;
+  let redClass  = `.${section}-red-${productId}`;
+  
   $(that).toggleClass('active')
+
+  if($('.lsname').hasClass('active')){
+      $(`${greyClass}`).addClass("d-none")
+      $(`${redClass}`).removeClass("d-none")
+  }else{
+      $(`${greyClass}`).removeClass("d-none")
+      $(`${redClass}`).addClass("d-none")
+  }
+
+
   $($(that).data('formid')).submit()
   
 }
+function deleteFavorioutProduct(that){
+  var listid = $(that).data('id')
+  $.get(`/wishlist/remove/product/${listid}`).done(result => { 
+      console.log(result);
+  }).fail(result=>{
+      //$("#loginError").show().text(result.responseJSON.errors);
+  });
+    $(that).parents('tr').remove()
+}
+function removeProductFromShoppingList(that){
+  var listid = $(that).data('id')
+  $.get(`/shoppinglist/remove_product/${listid}`).done(result => { 
+      console.log(result);
+  }).fail(result=>{
+      //$("#loginError").show().text(result.responseJSON.errors);
+  });
+    $(that).parents('tr').remove()
+}
 
+function removeFromAllShoppingList(that){
+  
+   $.post('/shoppinglists/removeproduct/', data).done(result => { 
+              
+    if(result.status){ 
+        var tableHtml = ''
+        result.data.forEach((list,index)=>{
+            tableHtml += `<tr>
+                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
+                          </tr>`
+              })
+          
+            }else{
+                tableHtml = `<tr> <td> No data for cart </td> </tr>`
+              }
+          $('#shopping-table-navbar').html(tableHtml) 
+    }).fail(result=>{
+        $("#loginError").show().text(result.responseJSON.errors);
+    });
+}
+
+function removeProductFromCart(that){
+  var data ={}
+  data.userid = $(".cartbutton").data('userid')??null
+  data._store = $(".cartbutton").data('storeid')
+  data._product = $(that).data('productid')
+  $.post('/product/remove-from-cart', data).done(result => { 
+     console.log('cart remove result =======>>>',result)
+    result.status&&$(that).parents('tr').remove()
+     
+
+}).fail(result=>{
+    $("#loginError").show().text(result.responseJSON.errors);
+});
+
+}
+
+
+$('#shoppingListModal').on('hide.bs.modal', function (e) {
+    $('#error-x-list').html('').addClass('d-none')
+})
 
 

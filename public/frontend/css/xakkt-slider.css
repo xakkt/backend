@@ -496,11 +496,6 @@ input:focus {
   vertical-align: middle;
   text-align: center;
 }
-.table-image td.qty,
-.table-image th.qty {
-  max-width: 4rem;
-}
-
 .cart-price {
   margin-left: 1rem;
 }
@@ -592,4 +587,7 @@ img.img-responsive.xakkti{
     font-weight: 600;
     padding-top: 12px;
     color: #777;
+}
+.add-address-card,.action_icon{
+    cursor:pointer;
 }
