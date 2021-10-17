@@ -683,19 +683,44 @@ function removeProductFromCart(that){
   data._store = $(".cartbutton").data('storeid')
   data._product = $(that).data('productid')
   $.post('/product/remove-from-cart', data).done(result => { 
-     console.log('cart remove result =======>>>',result)
-    result.status&&$(that).parents('tr').remove()
-     
-
+       result.status&&$(that).parents('tr').remove()
+   
 }).fail(result=>{
     $("#loginError").show().text(result.responseJSON.errors);
 });
 
 }
 
-
 $('#shoppingListModal').on('hide.bs.modal', function (e) {
     $('#error-x-list').html('').addClass('d-none')
 })
 
+$('#editAddressModal').on('show.bs.modal',function(){
+  
+  /*$.post('/shoppinglists/removeproduct/', data).done(result => { 
+              
+    if(result.status){ 
+        var tableHtml = ''
+        result.data.forEach((list,index)=>{
+            tableHtml += `<tr>
+                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
+                          </tr>`
+              })
+          
+            }else{
+                tableHtml = `<tr> <td> No data for cart </td> </tr>`
+              }
+          $('#shopping-table-navbar').html(tableHtml) 
+    }).fail(result=>{
+        $("#loginError").show().text(result.responseJSON.errors);
+    }); */
+})
 
+$('.xact-add-card').click(function(){
+  $('.xact-add-card').removeClass('active')
+  $(this).toggleClass('active')
+})
+
+$('.x-order-head').click(function(){ 
+  $(this).next('.gold-members').toggle(1000)
+})

@@ -537,6 +537,7 @@ img.img-responsive.xakkti{
          position: relative;
          }
          .xact-add-card {
+         cursor: pointer;    
          box-sizing: border-box;
          border: 1px solid #C7C7C7;
          box-shadow: 0 2px 1px 0 rgb(0 0 0 / 16%);
@@ -544,6 +545,9 @@ img.img-responsive.xakkti{
          border-radius: 3px;
          position: relative;
          height: 100%;
+         }
+         .xact-add-card.active{
+             background-color: #ced4da70;
          }
          .aedit-address-desktop-link {
          position: absolute;
@@ -590,4 +594,10 @@ img.img-responsive.xakkti{
 }
 .add-address-card,.action_icon{
     cursor:pointer;
+}
+.x-order-head{
+    cursor: pointer;
+}
+.gold-members{
+    display: none;
 }

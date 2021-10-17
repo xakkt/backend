@@ -139,8 +139,7 @@ exports.cartSize = async (req, res) => {
 		return res.status(400).json({ status:0, data: err.message });
 	}
  },
- 
- 
+  
  exports.removeProductFromCart = async (req, res) => {
  
 	 const errors = await validationResult(req);

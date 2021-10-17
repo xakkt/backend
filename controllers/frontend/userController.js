@@ -123,19 +123,9 @@ exports.makeDefaultAddress = async(req, res)=>{
 
 	}
 },
-exports.updateaddress = async (req, res) => {
+exports.updateAddress = async (req, res) => {
 	try {
-		// var address_array = [];
-		// const address_value = {
-		// 	address: req.body.address,
-		// 	city: req.body.city,
-		// 	address_type: req.body.address_type,
-		// 	country: req.body.country,
-		// 	region: req.body.region,
-		// 	pincode: req.body.pincode,
-		// 	state: req.body.state,
-		// 	location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
-		// }
+		
 		let user = await User.findOneAndUpdate({ 'address._id': req.params.id },
 			{
 				$set: {

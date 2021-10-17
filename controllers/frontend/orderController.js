@@ -91,7 +91,7 @@ exports.placeOrder = async (req, res) => {
        try {
 
 
-        var user = await User.findOne({_id:req.decoded.id},{ address: { $elemMatch: { _id: mongoose.Types.ObjectId(req.body.address) } } }).lean()
+        var user = await User.findOne({_id:req.session.userid},{ address: { $elemMatch: { _id: mongoose.Types.ObjectId(req.body.address) } } }).lean()
        
     
        if(user.address===undefined){  return res.json({status:0, message:'address not found'}) }
@@ -128,7 +128,7 @@ exports.placeOrder = async (req, res) => {
                             }))
                             
                             var orderInfo = {
-                                _user: req.decoded.id,
+                                _user: req.session.userid,
                                 _store: req.body._store,
                                 shipping: {
                                     address: address,
@@ -146,7 +146,7 @@ exports.placeOrder = async (req, res) => {
                             
             var order = await Order.create(orderInfo);
            
-           return res.json({ status: 1, message: "Order created", data: {order_id:order._id} });
+           return res.redirect('myorders/'+req.body.slug);
         } catch (err) {
             console.log("---value",err)
             return res.status(400).json({ data: err.message });
@@ -191,7 +191,7 @@ exports.myorder = async (req,res) =>{
        })*/
 
         // console.log(order)
-        if (!order.length) return res.json({ message: "No Order found", data: "" });
+        //if (!order.length) return res.json({ message: "No Order found", data: "" });
         //return res.json({ status: 1, message: "", data:order});
         return res.render('frontend/order-listing',{orders:order})
 
