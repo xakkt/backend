@@ -21,7 +21,7 @@
         },
         body: JSON.stringify(user)
     }
-    let fetchRes = fetch("http://localhost:4800/api/v1/user/create", options);
+    let fetchRes = fetch("<%=process.env.BASE_URL%>/api/v1/user/create", options);
     fetchRes.then(res =>
         res.json()).then(resp => {
             if (resp.status) {

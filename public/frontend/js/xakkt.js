@@ -1,3 +1,5 @@
+var baseUrl = "http://xgrocery.cf"
+
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition(showPosition);
@@ -308,13 +310,13 @@ $(document).delegate('.cart-form','submit',function(e){
  //return false;
  switch (obj.button_type) {
     case "x-cart":
-      url = 'http://localhost:4800/product/add-to-cart';
+      url = `${baseUrl}/product/add-to-cart`;
       break;
     case "x-heart":
-      url = 'http://localhost:4800/product/add-to-favlist';
+      url = `${baseUrl}/product/add-to-favlist`;
       break;
     case "x-list":
-      url = 'http://localhost:4800/shoppinglist/add_product';    
+      url = `${baseUrl}/shoppinglist/add_product`;    
       
     }
    $.post(url, obj)
@@ -407,19 +409,19 @@ $.post('/wishlist/products', data).done(result => {
                                 <input type="hidden" class="user" name="_user" value=${$(".cartbutton").data('userid')} />
                                 <span class="action_icon xshop">
                                       
-                                <img style="width:26px" data-id="${product._product._id}" data-prop="x-list" data-toggle="modal" data-formid="shipping_${product._product._id}" data-action=1 data-target="#shoppingListModal" class="img-responsive x-list xakkti xakkt-popup x-list-grey-${product._product._id} ${product._product.in_shoppinglist?'d-none':''}" src="http://localhost:4800/frontend/images/GREY_Shopping_List.png" title="Add to shopping list" alt="No Image">
+                                <img style="width:26px" data-id="${product._product._id}" data-prop="x-list" data-toggle="modal" data-formid="shipping_${product._product._id}" data-action=1 data-target="#shoppingListModal" class="img-responsive x-list xakkti xakkt-popup x-list-grey-${product._product._id} ${product._product.in_shoppinglist?'d-none':''}" src="${baseUrl}/frontend/images/GREY_Shopping_List.png" title="Add to shopping list" alt="No Image">
                                 
-                                <img style="width:26px" data-action=0 data-productid="${product._product._id}" data-prop="x-list" class="img-responsive x-list xakkti xakkt-popup ${product._product.in_shoppinglist?'':'d-none'} x-list-red-${product._product._id}" src="http://localhost:4800/frontend/images/RED_shopping_List.png" title="Remove from all shopping lists" alt="No Image">
+                                <img style="width:26px" data-action=0 data-productid="${product._product._id}" data-prop="x-list" class="img-responsive x-list xakkti xakkt-popup ${product._product.in_shoppinglist?'':'d-none'} x-list-red-${product._product._id}" src="${baseUrl}/frontend/images/RED_shopping_List.png" title="Remove from all shopping lists" alt="No Image">
                                       
                                 </span>
                                 <span class="action_icon xshop">
-                                       <img class="img-responsive xakkti x-cart x-cart-red-${product._product._id} ${product._product.in_cart?'':'d-none' }" title="Remove from Cart" data-prop="x-cart" data-productid="${product._product._id}" src="http://localhost:4800/frontend/images/RED_Cart.png" alt="No Image">
+                                       <img class="img-responsive xakkti x-cart x-cart-red-${product._product._id} ${product._product.in_cart?'':'d-none' }" title="Remove from Cart" data-prop="x-cart" data-productid="${product._product._id}" src="${baseUrl}/frontend/images/RED_Cart.png" alt="No Image">
         
-                                       <img class="img-responsive xakkti x-cart x-cart-grey-${product._product._id} ${product._product.in_cart?'d-none':''}" title="Add to Cart" data-prop="x-cart" data-productid="${product._product._id}" src="http://localhost:4800/frontend/images/GREY_Cart.png" alt="No Image"> 
+                                       <img class="img-responsive xakkti x-cart x-cart-grey-${product._product._id} ${product._product.in_cart?'d-none':''}" title="Add to Cart" data-prop="x-cart" data-productid="${product._product._id}" src="${baseUrl}/frontend/images/GREY_Cart.png" alt="No Image"> 
              
                                 </span>
                                 <span class="action_icon" data-id="${product._id}" onclick="deleteFavorioutProduct(this)">
-                                    <img style="width:26px" data-prop="x-delete" class="img-responsive" src="http://localhost:4800/frontend/images/trash.png" title="Add to shopping list" alt="No Image">
+                                    <img style="width:26px" data-prop="x-delete" class="img-responsive" src="${baseUrl}/frontend/images/trash.png" title="Add to shopping list" alt="No Image">
                                 </span>
                               
                               </form>
@@ -591,9 +593,9 @@ $('#shoppingListProducsModal').on('show.bs.modal',function(event){
                                             <td>${product._product._unit.name}</td>
                                             <td>
                                             <a href="javascript"void(0);">
-                                              <img style="width:26px" class="img-responsive" src="http://localhost:4800/frontend/images/RED_Cart.png" title="Add to shopping list" alt="No Image"></a>
+                                              <img style="width:26px" class="img-responsive" src="${baseUrl}/frontend/images/RED_Cart.png" title="Add to shopping list" alt="No Image"></a>
                                               <a style="width:26px" href="javascript"void(0);">
-                                              <img style="width:26px" class="img-responsive" src="http://localhost:4800/frontend/images/RED_Favorite.png" title="Add to shopping list" alt="No Image"></a>
+                                              <img style="width:26px" class="img-responsive" src="${baseUrl}/frontend/images/RED_Favorite.png" title="Add to shopping list" alt="No Image"></a>
                                               <span class="action_icon" data-id="${product._id}" onclick="removeProductFromShoppingList(this)">
                                                 <i class="fa fa-trash"></i>
                                               </span>
