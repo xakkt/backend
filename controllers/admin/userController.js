@@ -151,7 +151,6 @@ exports.update = async function (req, res) {
             _supervisor: req.session.userid,
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
-
             superbuckId: req.body.superbuckId,
             _timezone: req.body.timezone,
             dob: moment(req.body.dob).format('YYYY-MM-DD')
@@ -216,7 +215,6 @@ exports.authenticate = async (req, res) => {
 
     },
     exports.delete = (req, res) => {
-
         User.deleteOne({ _id: req.params.userid }, async (err) => {
             if (err) return res.status(400).json({ data: err });
             await req.flash('success', 'User deleted!');

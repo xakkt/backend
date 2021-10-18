@@ -128,7 +128,7 @@
                                 <!-- <tr class="parent"> -->
                                 <tr data-toggle="collapse" data-target="#<%= permission.type %>" data-parent="#myTable">
                                   <th colspan="<%=roles.length+1%>">
-                                    <%=permission.type.toUpperCase()%>
+                                    <%= permission?.type?.toUpperCase() %>
                                   </th>
                                 </tr>
                                 <% } %>
