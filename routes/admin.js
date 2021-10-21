@@ -22,6 +22,9 @@ const dashboardController = require('../controllers/admin/dashboardController.js
 const orderController = require('../controllers/admin/orderController.js')
 const currencyController = require('../controllers/admin/currencyController.js')
 const fieldrepController = require('../controllers/admin/fieldrepController.js')
+const paymentController = require('../controllers/admin/paymentController.js')
+const shippingController = require('../controllers/admin/shippingController.js')
+
 
 // var auth = function(req, res, next) {
 //   if (req.session.email)
@@ -291,6 +294,11 @@ router.get('/currency/delete/:id',currencyController.delete)
 router.get('/currency/edit/:id',currencyController.edit) 
 router.post('/currency/update/:id',currencyController.update) 
 
+
+router.get('/payment/list',paymentController.listing)
+
+router.get('/shipping/list',shippingController.listing)
+router.get('/zone/list',shippingController.list)
 router.get('/forbidden',(req, res) => {
   return res.render('admin/forbidden/forbidden')
 })
