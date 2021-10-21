@@ -30,7 +30,7 @@ exports.listing = async (req, res) => {
 
         }
         else {
-            return res.render('admin/Payment/listing', { menu: "payment", submenu: "list", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+            return res.render('admin/payment/listing', { menu: "payment", submenu: "list", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         }
 
 

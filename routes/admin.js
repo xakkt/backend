@@ -25,7 +25,6 @@ const fieldrepController = require('../controllers/admin/fieldrepController.js')
 const paymentController = require('../controllers/admin/paymentController.js')
 const shippingController = require('../controllers/admin/shippingController.js')
 
-
 // var auth = function(req, res, next) {
 //   if (req.session.email)
 //       return next();
@@ -246,46 +245,46 @@ router.post('/unit/edit/:id',unitController.update)
 router.get('/unit/delete/:id',unitController.delete)
 
  /*----------Banner -------*/
- router.get('/banner/create',bannerController.create)
+ router.get('/banner/create',_global.permission('banner_add'),bannerController.create)
  router.post('/banner/deal',bannerController.deals)
- router.post('/banner/save',bannerUpload.single('logo'),bannerController.save)
- router.get('/banner/list',bannerController.list)
- router.get('/banner/delete/:id',bannerController.delete)
- router.get('/banner/edit/:id',bannerController.edit)
- router.post('/banner/update/:id',bannerUpload.single('banner_image'),bannerController.update)
+ router.post('/banner/save',_global.permission('banner_add'),bannerUpload.single('logo'),bannerController.save)
+ router.get('/banner/list',_global.permission('banner_view'),bannerController.list)
+ router.get('/banner/delete/:id',_global.permission('banner_delete'),bannerController.delete)
+ router.get('/banner/edit/:id',_global.permission('banner_edit'),bannerController.edit)
+ router.post('/banner/update/:id',_global.permission('banner_edit'),bannerUpload.single('banner_image'),bannerController.update)
  router.get('/banner/agreement',bannerController.agreement)
 
 
 
  /*---------Company--------- */
  
- router.get('/company/create',compController.create)
- router.post('/company/save',compController.save)
- router.get('/company/list',compController.list)
+ router.get('/company/create',_global.permission('company_add'),compController.create)
+ router.post('/company/save',_global.permission('company_add'),compController.save)
+ router.get('/company/list',_global.permission('company_view'),compController.list)
  router.post('/company/checkEmail',compController.checkEmail)
  /*---- need to discuss ----*/
  /*router.get('/company/delete/:id',compController.delete)*/
- router.get('/company/edit/:id',compController.edit)
- router.post('/company/update/:id',compController.update)
+ router.get('/company/edit/:id',_global.permission('company_edit'),compController.edit)
+ router.post('/company/update/:id',_global.permission('company_edit'),compController.update)
 
 
 /******-------upload */
  router.post('/upload', csvUpload.single('file'),uploadController.upload)
 
-
+ 
 /********Coupon*********/
-router.get('/coupon/create',coupanController.create) 
-router.post('/coupon/save',coupanController.save) 
-router.get('/coupon/list',coupanController.listing) 
-router.get('/coupon/delete/:id',coupanController.delete) 
-router.get('/coupon/edit/:id',coupanController.edit) 
-router.post('/coupon/update/:id',coupanController.update) 
+router.get('/coupon/create',_global.permission('coupon_add'),coupanController.create) 
+router.post('/coupon/save',_global.permission('coupon_add'),coupanController.save) 
+router.get('/coupon/list',_global.permission('coupon_view'),coupanController.listing) 
+router.get('/coupon/delete/:id',_global.permission('coupon_delete'),coupanController.delete) 
+router.get('/coupon/edit/:id',_global.permission('coupon_edit'),coupanController.edit) 
+router.post('/coupon/update/:id',_global.permission('coupon_edit'),coupanController.update) 
 
 /*****Order ******/
-router.get('/order/list',orderController.listing) 
-router.get('/order/edit/:id',orderController.edit) 
-router.post('/order/update/:id',orderController.update) 
-router.get('/order/delete/:id',orderController.orderDelete) 
+router.get('/order/list',_global.permission('order_view'),orderController.listing) 
+router.get('/order/edit/:id',_global.permission('order_edit'),orderController.edit) 
+router.post('/order/update/:id',_global.permission('order_edit'),orderController.update) 
+router.get('/order/delete/:id',_global.permission('order_delete'),orderController.orderDelete) 
 /******Currecny******/
 router.post('/currency/add',currencyController.save) 
 router.get('/currency/create',currencyController.create) 
@@ -295,10 +294,14 @@ router.get('/currency/edit/:id',currencyController.edit)
 router.post('/currency/update/:id',currencyController.update) 
 
 
+/*****Payment ******/
+
 router.get('/payment/list',paymentController.listing)
 
 router.get('/shipping/list',shippingController.listing)
 router.get('/zone/list',shippingController.list)
+
+
 router.get('/forbidden',(req, res) => {
   return res.render('admin/forbidden/forbidden')
 })
