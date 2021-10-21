@@ -248,6 +248,7 @@
         </li>
         <%}%>
         <!-----------Banner------------>
+        <% if(await check("banner_view") ) {%>
         <li class="nav-item <% if (menu === 'banner') { %> menu-open <% } %>">
            <a href="#" class="nav-link <% if (menu === 'banner') { %> active <% } %>">
               <i class="nav-icon fas fa-box-open"></i>
@@ -273,6 +274,7 @@
               </li>
            </ul>
         </li>
+        <%}%>
         <!--------Banner--------->
         <!--------------Unit--------->
         <% if(await check("unit_view") ) {%>
@@ -312,7 +314,7 @@
               <p>
                  Deals
                  <i class="fas fa-angle-left right"></i>
-              </p>
+              </p> 
            </a>
            <% if(await check("deal_add")) {%>
            <ul class="nav nav-treeview">
@@ -411,6 +413,7 @@
         </li>
         <%}%>
         <!----- Payments ---->
+        <% if(await check("payment_view") ) {%>
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="nav-icon fab fa-cc-stripe"></i>
@@ -430,6 +433,7 @@
             
           </ul>
         </li>
+        <%}%>
         <li class="nav-item">
          <a href="#" class="nav-link">
            <i class="nav-icon fab fa-cc-stripe"></i>
