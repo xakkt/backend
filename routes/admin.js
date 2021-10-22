@@ -295,9 +295,10 @@ router.post('/currency/update/:id',currencyController.update)
 
 
 /*****Payment ******/
+router.get('/payment/list',_global.permission('view_payment'),paymentController.listing)
 
-router.get('/payment/list',paymentController.listing)
 
+/*****Shipping ******/
 router.get('/shipping/list',shippingController.listing)
 router.get('/zone/list',shippingController.list)
 

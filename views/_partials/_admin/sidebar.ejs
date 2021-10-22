@@ -257,6 +257,8 @@
                  <i class="fas fa-angle-left right"></i>
               </p>
            </a>
+        <% if(await check("banner_add") ) {%>
+
            <ul class="nav nav-treeview">
               <li class="nav-item">
                  <a href="/admin/banner/create" class="nav-link <% if (menu === 'banner' && submenu === 'create' ) { %> active <% } %>">
@@ -265,6 +267,7 @@
                  </a>
               </li>
            </ul>
+           <%}%>
            <ul class="nav nav-treeview">
               <li class="nav-item">
                  <a href="/admin/banner/list" class="nav-link <% if (menu === 'banner' && submenu === 'list' ) { %> active <% } %>">
@@ -413,9 +416,9 @@
         </li>
         <%}%>
         <!----- Payments ---->
-        <% if(await check("payment_view") ) {%>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <% if(await check("view_payment") ) {%>
+        <li class="nav-item <% if (menu === 'payment') { %> menu-open <% } %>" >
+         <a href="#" class="nav-link <% if (menu === 'payment') { %> active <% } %>">
             <i class="nav-icon fab fa-cc-stripe"></i>
             <p>
               Payments
@@ -425,7 +428,7 @@
           <ul class="nav nav-treeview">
             
             <li class="nav-item">
-              <a href="/admin/payment/list" class="nav-link">
+              <a href="/admin/payment/list" class="nav-link ">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Manage Payments</p>
               </a>
@@ -453,7 +456,7 @@
            
          </ul>
        </li>
-        <% if(await check("view_company") ) {%>
+        <% if(await check("company_view") ) {%>
         <!-------Company------->
         <li class="nav-item <% if (menu === 'company') { %> menu-open <% } %> " >
            <a href="#" class="nav-link <% if (menu === 'company') { %> active <% } %>">
@@ -464,7 +467,7 @@
               </p>
            </a>
            <ul class="nav nav-treeview">
-              <% if(await check("add_company")) {%>
+              <% if(await check("company_add")) {%>
               <li class="nav-item">
                  <a href="/admin/company/create" class="nav-link <% if (menu === 'company' && submenu === 'create' ) { %> active <% } %>">
                     <i class="far fa-circle nav-icon"></i>
@@ -483,7 +486,8 @@
            </ul>
         </li>
         <%}%>
-        <% if(await check("system_admin")) {%>
+        
+        <% if(await check("order_view")) {%>
         <li class="nav-item <% if (menu === 'orders') { %> menu-open <% } %>">
            <a href="#" class="nav-link <% if (menu === 'orders') { %> active <% } %>">
               <i class="nav-icon fas fa-box-open"></i>
