@@ -161,7 +161,7 @@ exports.removeProductFromCart = async (req, res) => {
 
         var product = await Cart.findOneAndUpdate({ _user: cartInfo._user, _store: cartInfo._store }, { $pull: { cart: { '_product': cartInfo._product } } }, { new: true });
         if (product?.cart) {
-            product.cart.pull({ quantity: 10 })
+            product.cart.pull({ _product: cartInfo._product })
             await product.save()
             // product.cart.id().remove();
             console.log(product)
