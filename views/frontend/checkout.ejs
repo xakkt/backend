@@ -96,7 +96,7 @@
                         </div>
                      </div>
                      <div class="aedit-address-desktop-link">
-                        <a href="#" class="a-link-normal"  data-toggle="modal" data-target="#editAddressModal">Edit</a> &nbsp; | &nbsp;
+                        <a href="#" class="a-link-normal"  data-toggle="modal" data-id=<%=address._id%> data-target="#editAddressModal">Edit</a> &nbsp; | &nbsp;
                         <%if(!address.is_default){%><a class="a-link-normal delete-link" href="<%=process.env.BASE_URL%>/user/delete-address/<%=address._id%>">Remove</a> &nbsp; | &nbsp;<%}%>
                         <%if(!address.is_default){%>  <a class="a-link-normal" href="<%=process.env.BASE_URL%>/user/defautl-address/<%=address._id%>">Set as Default</a> <%}%>
                      </div>
@@ -156,7 +156,7 @@
                    </div>
                    <div class="form-group">
                      <label for="contactno">Contact</label>
-                     <input type="text" class="form-control" required placeholder="Contact" name="contact_no">
+                     <input type="text" class="form-control" required placeholder="Contact" name="phoneno">
                    </div>
                    <div class="form-group">
                      <label for="country">Country</label>
@@ -196,10 +196,10 @@
        
              <!-- Modal body -->
              <div class="modal-body">
-               <form action="<%=process.env.BASE_URL%>/user/add-address%>" method="POST">
+               <form action="<%=process.env.BASE_URL%>/user/get-address" id="editAddress"  method="GET">
                   <div class="form-group">
                     <label for="address1">Address1</label>
-                    <input type="text" class="form-control" required placeholder="Address" name="address1">
+                    <input type="text" id="edit_address1" class="form-control" required placeholder="Address" name="address1">
                   </div>
                   <div class="form-group">
                      <label for="address2">Address2</label>
@@ -211,7 +211,7 @@
                    </div>
                    <div class="form-group">
                      <label for="contactno">Contact</label>
-                     <input type="text" class="form-control" required placeholder="Contact" name="contact_no">
+                     <input type="text" class="form-control" required placeholder="Contact" name="phoneno">
                    </div>
                    <div class="form-group">
                      <label for="country">Country</label>
@@ -239,6 +239,7 @@
        </div>
        <!-- edit address -->
 
+             <!--- payment modal-->
        <div class="col-md-6 order-md-1" style="margin-left: 180px; padding-bottom: 20px;">
         <form class="needs-validation" novalidate="">
           <hr class="mb-4">
@@ -297,6 +298,7 @@
           <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
         </form>
       </div>
+          <!--- payment modal-->
 
       <%- await include('_partials/footer.ejs'); %>
       <!-- Footer -->

@@ -1,5 +1,5 @@
-// var baseUrl = "http://localhost:4800"
-var baseUrl = "http://xgrocery.cf"
+var baseUrl = "http://localhost:4000"
+// var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -394,6 +394,8 @@ $('.xakkt-popup').on('click',function(e){
 
 })
 
+
+
 $('#favListModal').on('show.bs.modal',function(e){
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
@@ -683,7 +685,7 @@ function listnameClick(that){
 function deleteFavorioutProduct(that){
   var listid = $(that).data('id')
   $.get(`/wishlist/remove/product/${listid}`).done(result => { 
-      console.log(result);
+      console.log("========datatata",result);
   }).fail(result=>{
       //$("#loginError").show().text(result.responseJSON.errors);
   });
@@ -698,7 +700,7 @@ function removeProductFromShoppingList(that){
       //$("#loginError").show().text(result.responseJSON.errors);
   });
     $(that).parents('tr').remove()
-}
+} 
 
 function removeFromAllShoppingList(that){
   
@@ -763,11 +765,32 @@ $('#shoppingListModal').on('hide.bs.modal', function (e) {
     $('#error-x-list').html('').addClass('d-none')
 })
 
-$('#editAddressModal').on('show.bs.modal',function(){
-  
+$('#editAddressModal').on('show.bs.modal',function(event){
+  //alert('dsfa')
+  var ediButton = $(event.relatedTarget)
+
+  var id = $(ediButton).data('id');
+
+  $.get(`/user/get-address/${id}`).done(result => { 
+    if(result.status){
+      $("#editAddress input[name=address1]").val(result.data.address1)
+      $("#editAddress input[name=address2]").val(result.data.address2)
+      $("#editAddress input[name=address_type]").val(result.data.address_type)
+      $("#editAddress input[name=country]").val(result.data.country)
+      $("#editAddress input[name=emirate]").val(result.data.emirate)
+      $("#editAddress input[name=phoneno]").val(result.data.phoneno)
+
+    }
+    result.status&&$(event).parents('tr').remove()
+  }).fail(result=>{
+    $("#shoplisterror").removeClass('d-none').text(result.responseJSON.errors);
+  });
+
+  // $("#editAddress input[name=address1]").val('dsaf')
+  // $("#editAddress input[name=address2]").val('dsaf')
   /*$.post('/shoppinglists/removeproduct/', data).done(result => { 
               
-    if(result.status){ 
+    if(result.status){
         var tableHtml = ''
         result.data.forEach((list,index)=>{
             tableHtml += `<tr>

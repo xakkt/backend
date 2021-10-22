@@ -73,6 +73,8 @@ router.post('/user/add-address', userController.addAddress)
 router.get('/user/defautl-address/:address', userController.makeDefaultAddress)
 router.get('/user/delete-address/:address', userController.deleteAddress)
 router.post('/user/update-address', userController.updateAddress)
+router.get('/user/get-address/:id', userController.editaddress)
+
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
