@@ -140,7 +140,7 @@ exports.cartSize = async (req, res) => {
 	}
  },
   
- exports.removeProductFromCart = async (req, res) => {
+exports.removeProductFromCart = async (req, res) => {
  
 	 const errors = await validationResult(req);
 	 if (!errors.isEmpty()) {
@@ -154,8 +154,10 @@ exports.cartSize = async (req, res) => {
  		 }
  
 		 var product = await Cart.findOneAndUpdate({ _user: cartInfo._user, _store: cartInfo._store }, { $pull: { cart: { '_product': cartInfo._product } } }, { new: true });
+
+		 
 		 if (product?.cart) {
-			 product.cart.pull({ quantity: 10 })
+			 product.cart.pull({ _product: cartInfo._product})
 			 await product.save()
 			 // product.cart.id().remove();
 			 console.log(product)
@@ -164,7 +166,7 @@ exports.cartSize = async (req, res) => {
 		 if (!data) return res.json({ success: 0, message: "cart is empty", data: "" });
  
 		 let total_quantity, total_price, coupon, discounted_price;
- 
+		
 		 total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
 			 return acc + cur;
 		 })
@@ -191,6 +193,7 @@ exports.cartSize = async (req, res) => {
 		 }
 		 return res.json({ status: 1, message: "Product removed", data: data, subtotal: { quantity: total_quantity, price: total_price.toFixed(2), shipping_cost: "100.00", coupon: coupon, sub_total: total_price.toFixed(2) } });
 	 } catch (err) {
+		 console.log(err)
 		 return res.status(400).json({ data: err.message });
 	 }
  
@@ -208,7 +211,7 @@ exports.cartSize = async (req, res) => {
 			 quantity: req.body.quantity,
 			 _store: req.body._store,
 			 _product: req.body._product,
-			 _user: req.decoded.id,
+			 _user: req.session.userid,
 		 }
 		 var productInfo = await Product.findById(req.body._product);
 		 let productprice = await _global.productprice(req.body._store, req.body._product)
@@ -223,21 +226,22 @@ exports.cartSize = async (req, res) => {
 				 "cart.$.quantity": pQuantity, 'cart.$.total_price': pPrice
 			 }
 		 }, { new: true, upsert: true }).lean();
+		 
 		 //  var product = await Cart.findOneAndUpdate({_user:cartInfo._user,_store:cartInfo._store,cart:{$elemMatch: {_product:cartInfo._product}}},{$set:{cart: {'cart.$.quantity': cartInfo.quantity, 'cart.$.total_price':cartInfo.total_price }}},{new: true});
 		 if (product?.cart) {
 			 var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
 			 if (!data) return res.json({ success: 0, message: "cart is empty", data: "" });
- 
+            
 			 let total_quantity, total_price, coupon, discounted_price;
  
 			 total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
 				 return acc + cur;
 			 })
- 
+			 
 			 total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
 				 return acc + cur;
 			 })
- 
+			
 			 products = data.cart.map((list) => {
 				 if (!list._product) return
 				 let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
@@ -287,7 +291,7 @@ exports.cartSize = async (req, res) => {
 	 }
  
 	 try {
-		 let remove = await Cart.deleteOne({  _user: req.decoded.id,_store:req.params.storeid }).exec()
+		 let remove = await Cart.deleteOne({  _user: req.session.userid,_store:req.params.storeid }).exec()
 		 if (!remove) return res.json({ status: false })
 		 return res.json({ status: true, message:"Cart is empty now"})
 	 }catch (err) {

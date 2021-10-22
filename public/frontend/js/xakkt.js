@@ -1,5 +1,6 @@
-//var baseUrl = "http://xgrocery.cf"
-var baseUrl = "http://localhost:4000"
+// var baseUrl = "http://localhost:4800"
+var baseUrl = "http://xgrocery.cf"
+
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition(showPosition);
@@ -175,20 +176,46 @@ $(document).ready(function() {
 
 $(document).delegate('.minus-btn','click', function(e) {
 
-  input = ($(this).data('place'))? $(`#${$(this).data('place')} .qnty`):$(this).closest('div').find('input'); 
+  input = $(this).closest('div').find('input'); 
   value = parseInt(input.val());
   value = (value > 1)?value-1:1;
   input.val(value);
-  $(this).closest('div').find('input').val(value);
+
+  if($(this).data('storeid')){
+    var data ={}
+    data._store = $(this).data('storeid')
+    data._product = $(this).data('productid')
+    data.quantity = value
+
+    $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
+          $('.cart-price').html(result.subtotal.sub_total)
+     }).fail(result=>{ console.log(result)
+          $("#error").show().text(result.responseJSON.errors);
+     });
+  }
 });
 
 $(document).delegate('.plus-btn','click', function(e) {
   
-  input = ($(this).data('place'))? $(`#${$(this).data('place')} .qnty`):$(this).closest('div').find('input'); 
+  input = $(this).closest('div').find('input'); 
   value = parseInt(input.val());
   value = (value < 100)?value+1:100
   input.val(value);
-  $(this).closest('div').find('input').val(value);
+
+  if($(this).data('storeid')){
+    var data ={}
+    data._store = $(this).data('storeid')
+    data._product = $(this).data('productid')
+    data.quantity = value
+
+    $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
+          $('.cart-price').html(result.subtotal.sub_total)
+     }).fail(result=>{ console.log(result)
+          $("#error").show().text(result.responseJSON.errors);
+     });
+  }
+
+
 });
 
 const regForm = $('#registration')
@@ -389,27 +416,26 @@ $.post('/wishlist/products', data).done(result => {
                             <td>${product._product.name.english}</td>
                             <td class="qty">
                                 <div class="quantity">
-                                  <button class="xbtn minus-btn" data-place="shipping_${product._product._id}" type="button" name="button">
+                                  <button class="xbtn minus-btn" data-place="fav_${product._product._id}" type="button" name="button">
                                       <i class="fa fa-minus" aria-hidden="true"></i>
                                   </button>
-                                  <input type="text" class="cartqnty" name="quantity" value=1>
-                                  <button class="xbtn plus-btn" data-place="shipping_${product._product._id}" type="button" name="button">
+                                  <input type="text" form="fav_${product._product._id}" class="cartqnty" name="quantity" value=1>
+                                  <button class="xbtn plus-btn" data-place="fav_${product._product._id}" type="button" name="button">
                                       <i class="fa fa-plus" aria-hidden="true"></i>
                                   </button>
                                   
                                 </div>
                             </td>
                             <td>
-                            <form class="cart-form" method="post" id="shipping_${product._product._id}">
+                            <form class="cart-form" method="post" id="fav_${product._product._id}">
                                 <input type="hidden" name="_product" value="${product._product._id}" />
                                 <input type="hidden" class="button_type" name="button_type" value=""/>
                                 <input type="hidden" class="shoplist" name="_shoppinglist" value="" />
-                                <input type="hidden" class="qnty" name="quantity" value="1" />
                                 <input type="hidden" name="_store" value=${$(".cartbutton").data('storeid')} /> 
                                 <input type="hidden" class="user" name="_user" value=${$(".cartbutton").data('userid')} />
                                 <span class="action_icon xshop">
                                       
-                                <img style="width:26px" data-id="${product._product._id}" data-prop="x-list" data-toggle="modal" data-formid="shipping_${product._product._id}" data-action=1 data-target="#shoppingListModal" class="img-responsive x-list xakkti xakkt-popup x-list-grey-${product._product._id} ${product._product.in_shoppinglist?'d-none':''}" src="${baseUrl}/frontend/images/GREY_Shopping_List.png" title="Add to shopping list" alt="No Image">
+                                <img style="width:26px" data-id="${product._product._id}" data-prop="x-list" data-toggle="modal" data-formid="fav_${product._product._id}" data-action=1 data-target="#shoppingListModal" class="img-responsive x-list xakkti xakkt-popup x-list-grey-${product._product._id} ${product._product.in_shoppinglist?'d-none':''}" src="${baseUrl}/frontend/images/GREY_Shopping_List.png" title="Add to shopping list" alt="No Image">
                                 
                                 <img style="width:26px" data-action=0 data-productid="${product._product._id}" data-prop="x-list" class="img-responsive x-list xakkti xakkt-popup ${product._product.in_shoppinglist?'':'d-none'} x-list-red-${product._product._id}" src="${baseUrl}/frontend/images/RED_shopping_List.png" title="Remove from all shopping lists" alt="No Image">
                                       
@@ -468,19 +494,19 @@ $('#cartModal').on('show.bs.modal',function(e){
                             <td>${product._product.name.english}</td>
                             <td class="qty">
                                 <div class="quantity">
-                                  <button class="xbtn minus-btn" type="button" name="button">
+                                  <button class="xbtn minus-btn"  data-storeid="${data.storeid}" data-productid="${product._product._id}" type="button" name="button">
                                       <i class="fa fa-minus" aria-hidden="true"></i>
                                   </button>
                                   <input type="text" class="cartqnty" name="quantity" value="${product.quantity}">
-                                  <button class="xbtn plus-btn" type="button" name="button">
+                                  <button class="xbtn plus-btn" data-storeid="${data.storeid}" data-productid="${product._product._id}" type="button" name="button">
                                       <i class="fa fa-plus" aria-hidden="true"></i>
                                   </button>
                                   
                                 </div>
                             </td>
                             
-                            <td>${product.total_price}</td>
-                            <td> <span data-productid="${product._product._id}" class="action_icon" onclick="removeProductFromCart(this)"><i class="fa fa-trash"></i></span> </td>
+                            <td id='total_qnty_${product._product._id}'>${product.total_price}</td>
+                            <td> <span data-storeid="${data.storeid}" data-productid="${product._product._id}" class="action_icon" onclick="removeProductFromCart(this)"><i class="fa fa-trash"></i></span> </td>
                       </tr>`
           })
           $('.cart-price').html(total)
@@ -582,7 +608,7 @@ $('#shoppingListProducsModal').on('show.bs.modal',function(event){
                                                 <button class="xbtn minus-btn" type="button" name="button">
                                                     <i class="fa fa-minus" aria-hidden="true"></i>
                                                 </button>
-                                                <input type="text" class="cartqnty" name="quantity" value=1>
+                                                <input form="shipping_${product._product._id}" type="text" class="cartqnty" name="quantity" value=1>
                                                 <button class="xbtn plus-btn" type="button" name="button">
                                                     <i class="fa fa-plus" aria-hidden="true"></i>
                                                 </button>
@@ -592,13 +618,30 @@ $('#shoppingListProducsModal').on('show.bs.modal',function(event){
                                             
                                             <td>${product._product._unit.name}</td>
                                             <td>
-                                            <a href="javascript"void(0);">
-                                              <img style="width:26px" class="img-responsive" src="${baseUrl}/frontend/images/RED_Cart.png" title="Add to shopping list" alt="No Image"></a>
-                                              <a style="width:26px" href="javascript"void(0);">
-                                              <img style="width:26px" class="img-responsive" src="${baseUrl}/frontend/images/RED_Favorite.png" title="Add to shopping list" alt="No Image"></a>
-                                              <span class="action_icon" data-id="${product._id}" onclick="removeProductFromShoppingList(this)">
-                                                <i class="fa fa-trash"></i>
-                                              </span>
+                                            <form class="cart-form" method="post" id="shipping_${product._product._id}">
+                                            <input type="hidden" name="_product" value="${product._product._id}" />
+                                            <input type="hidden" class="button_type" name="button_type" value=""/>
+                                            <input type="hidden" class="shoplist" name="_shoppinglist" value="" />
+                                            <input type="hidden" name="_store" value=${$(".cartbutton").data('storeid')} /> 
+                                            <input type="hidden" class="user" name="_user" value=${$(".cartbutton").data('userid')} />
+                                            <span class="action_icon xshop">
+                                                  
+                                            <img style="width:26px" data-id="${product._product._id}" data-prop="x-list" data-toggle="modal" data-formid="shipping_${product._product._id}" data-action=1 data-target="#shoppingListModal" class="img-responsive x-list xakkti xakkt-popup x-list-grey-${product._product._id} ${product._product.in_shoppinglist?'d-none':''}" src="${baseUrl}/frontend/images/GREY_Shopping_List.png" title="Add to shopping list" alt="No Image">
+                                            
+                                            <img style="width:26px" data-action=0 data-productid="${product._product._id}" data-prop="x-list" class="img-responsive x-list xakkti xakkt-popup ${product._product.in_shoppinglist?'':'d-none'} x-list-red-${product._product._id}" src="${baseUrl}/frontend/images/RED_shopping_List.png" title="Remove from all shopping lists" alt="No Image">
+                                                  
+                                            </span>
+                                            <span class="action_icon xshop">
+                                                   <img class="img-responsive xakkti x-cart x-cart-red-${product._product._id} ${product._product.in_cart?'':'d-none' }" title="Remove from Cart" data-prop="x-cart" data-productid="${product._product._id}" src="${baseUrl}/frontend/images/RED_Cart.png" alt="No Image">
+                    
+                                                   <img class="img-responsive xakkti x-cart x-cart-grey-${product._product._id} ${product._product.in_cart?'d-none':''}" title="Add to Cart" data-prop="x-cart" data-productid="${product._product._id}" src="${baseUrl}/frontend/images/GREY_Cart.png" alt="No Image"> 
+                         
+                                            </span>
+                                            <span class="action_icon" data-id="${product._id}" onclick="deleteProductFromShoppingList(this)">
+                                                <img style="width:26px" data-prop="x-delete" class="img-responsive" src="${baseUrl}/frontend/images/trash.png" title="Add to shopping list" alt="No Image">
+                                            </span>
+                                          
+                                          </form>
                                             </td>
                                       </tr>`
                               })
@@ -648,6 +691,7 @@ function deleteFavorioutProduct(that){
 }
 function removeProductFromShoppingList(that){
   var listid = $(that).data('id')
+  
   $.get(`/shoppinglist/remove_product/${listid}`).done(result => { 
       console.log(result);
   }).fail(result=>{
@@ -680,15 +724,39 @@ function removeFromAllShoppingList(that){
 function removeProductFromCart(that){
   var data ={}
   data.userid = $(".cartbutton").data('userid')??null
-  data._store = $(".cartbutton").data('storeid')
+  data._store = $(that).data('storeid')
   data._product = $(that).data('productid')
+  
+  if($('#cart-table .action_icon').length==1){
+      $.post(`/cart/empty_cart/${data._store}`, data).done(result => { 
+        result.status&&$(that).parents('tr').remove()
+        $('#cart-table .cart-price').html(0)
+      }).fail(result=>{
+      $("#loginError").show().text(result.responseJSON.errors);
+      });
+  }else{
+      $.post('/product/remove-from-cart', data).done(result => { 
+        result.status&&$(that).parents('tr').remove()
+      }).fail(result=>{
+      $("#loginError").show().text(result.responseJSON.errors);
+      });
+  }
+
   $.post('/product/remove-from-cart', data).done(result => { 
        result.status&&$(that).parents('tr').remove()
-   
-}).fail(result=>{
+   }).fail(result=>{
     $("#loginError").show().text(result.responseJSON.errors);
-});
+   });
 
+}
+function deleteProductFromShoppingList(that){
+  
+  var lsitid = $(that).data('id');
+  $.get(`/shoppinglist/remove_product/${lsitid}`).done(result => { 
+    result.status&&$(that).parents('tr').remove()
+  }).fail(result=>{
+    $("#shoplisterror").removeClass('d-none').text(result.responseJSON.errors);
+  });
 }
 
 $('#shoppingListModal').on('hide.bs.modal', function (e) {

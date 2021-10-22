@@ -65,20 +65,7 @@
             <h4 class="mb-3">Billing address</h4>
             <div class="row">
 
-            <div class="col-md-4 mb-3 px-2">
-              <div class="xact-add-card">
-                <div class="d-flex align-items-center justify-content-center h-100">
-                    
-                    <div class="add-address-card py-5" data-toggle="modal" data-target="#addAddressModal">
-                      
-                      <div class="add-icon text-center"><i class="fa fa-plus" aria-hidden="true"></i></div>
-                      <h2 class="text-center">Add Address</h2>
-                    
-                    </div>
-
-                  </div>
-              </div>
-            </div>
+            
            
             <% if(addresses) for (const [i,address] of addresses.entries()) { %> 
             
@@ -119,7 +106,20 @@
 
             <%}%>
 
-          
+            <div class="col-md-4 mb-3 px-2">
+              <div class="xact-add-card">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    
+                    <div class="add-address-card py-5" data-toggle="modal" data-target="#addAddressModal">
+                      
+                      <div class="add-icon text-center"><i class="fa fa-plus" aria-hidden="true"></i></div>
+                      <h2 class="text-center">Add Address</h2>
+                    
+                    </div>
+
+                  </div>
+              </div>
+            </div>
 
             </div>
                
@@ -239,9 +239,77 @@
        </div>
        <!-- edit address -->
 
+       <div class="col-md-6 order-md-1" style="margin-left: 180px; padding-bottom: 20px;">
+        <form class="needs-validation" novalidate="">
+          <hr class="mb-4">
+          <h4 class="mb-3">Payment</h4>
+
+          <div class="d-block my-3">
+            <div class="custom-control custom-radio">
+              <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" value="pay" checked="" required="">
+              <label class="custom-control-label" for="credit">Credit card</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input id="debit" name="paymentMethod" type="radio"  value = "pay"class="custom-control-input" required="">
+              <label class="custom-control-label" for="debit">Debit card</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+              <label class="custom-control-label" for="paypal">Cash on delivery</label>
+            </div>
+          </div>
+          <div class="mydiv" id="showpay">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cc-name">Name on card</label>
+              <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+              <small class="text-muted">Full name as displayed on card</small>
+              <div class="invalid-feedback">
+                Name on card is required
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="cc-number">Credit card number</label>
+              <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+              <div class="invalid-feedback">
+                Credit card number is required
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="cc-expiration">Expiration</label>
+              <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+              <div class="invalid-feedback">
+                Expiration date required
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="cc-expiration">CVV</label>
+              <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+              <div class="invalid-feedback">
+                Security code required
+              </div>
+            </div>
+          </div>
+        </div>
+          <hr class="mb-4">
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+        </form>
+      </div>
+
       <%- await include('_partials/footer.ejs'); %>
       <!-- Footer -->
      
       <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+      <script>
+         $(document).ready(function(){
+    $('input[type="radio"]').click(function(){
+    	var demovalue = $(this).val(); 
+        $("div.mydiv").hide();
+        $("#show"+demovalue).show();
+    });
+});
+      </script>
    </body>
 </html>
