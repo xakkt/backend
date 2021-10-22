@@ -45,8 +45,8 @@ exports.create = async (req, res) => {
            
        
         let userInfo = {
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
+            first_name: req.body.fname,
+            last_name: req.body.lname,
             email: req.body.email,
             password: req.body.password,
             contact_no: req.body.contact_no,
