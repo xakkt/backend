@@ -93,7 +93,8 @@ exports.createShoppingList = async function (req, res) {
 					return res.json({ status: 1, message: "Product removed", data: [] });
 				});
 		}
-		res.status(400).json({status:0, data: err.message });
+		console.log("=========error",err)
+		return res.status(400).json({status:0,message:"name already exist"});
 	}
 },
 exports.removeFromAllList = async (req, res) => {

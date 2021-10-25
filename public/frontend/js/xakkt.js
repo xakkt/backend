@@ -1,5 +1,5 @@
-// var baseUrl = "http://localhost:4800"
-var baseUrl = "http://xgrocery.cf"
+// var baseUrl = "http://localhost:4000"
+// var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -261,6 +261,7 @@ loginForm.on('submit', function(e){
                                 location.reload();
                          }
         }).fail(result=>{
+          console.log("==============hhh999h",result.responseJSON.errors)
                   $("#loginError").show().text(result.responseJSON.errors);
          });
 
@@ -566,12 +567,13 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
   data._store = $(".cartbutton").data('storeid')
   
          $.post('/list/shoppinglist', data).done(result => { 
-              
                     if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((list,index)=>{
                             tableHtml += `<tr>
                                             <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
+                                            <td><i class="fa fa-eye" aria-hidden="true"></i></td>
+                                            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
                                           </tr>`
                               })
                           

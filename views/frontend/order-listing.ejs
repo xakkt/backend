@@ -137,7 +137,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+    <script src="/frontend/js/xakkt.js"></script>
+    <script>
+        var baseUrl = '<%=process.env.BASE_URL%>'
+      
+    </script>
     <script>
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function() {
