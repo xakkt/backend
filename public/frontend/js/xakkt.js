@@ -261,7 +261,6 @@ loginForm.on('submit', function(e){
                                 location.reload();
                          }
         }).fail(result=>{
-          console.log("==============hhh999h",result.responseJSON.errors)
                   $("#loginError").show().text(result.responseJSON.errors);
          });
 
