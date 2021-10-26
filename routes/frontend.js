@@ -109,7 +109,7 @@ router.post('/shoppinglist/create',isloggedin, shoppinglistValidation, shoppingC
 router.post('/list/shoppinglist',getListValidation,shoppingController.allShoppingLists);
 router.get('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
 router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
-router.delete('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
+router.post('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
 router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistProducts)
 
 

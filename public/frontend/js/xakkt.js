@@ -560,6 +560,35 @@ $('#shoppingListModal').on('show.bs.modal',function(event){
             
 })
 
+// -------------->
+const creat = $('#createShopping')
+creat.on('submit', function(e){
+  e.preventDefault(); 
+  const data = creat.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+ 
+  $.post('/shoppinglist/create', data).done(result => { 
+       
+              if(result?.status === 1){
+                console.log("======staus",result?.status)
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Shopping List Created',
+                  showConfirmButton: false,
+                  timer: 1500,
+                }) 
+                location.reload();
+                       }else{
+                         console.log("====ll",result.message)
+                        $("#err").show().text(result?.message)
+                   }
+  }).fail(result=>{
+           console.log(result.responseJSON.message)
+            $("#err").show().text(result?.responseJSON?.message);
+   });
+            
+})
+
+//  shoping list 
 $('#allAhoppingListsModal').on('show.bs.modal',function(event){
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
@@ -571,8 +600,8 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
                         result.data.forEach((list,index)=>{
                             tableHtml += `<tr>
                                             <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
-                                            <td><i class="fa fa-eye" aria-hidden="true"></i></td>
-                                            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
+                                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}"><i class="fa fa-eye" aria-hidden="true"></i></td>
+                                            <td data-listid="${list._id}" data-toggle="modal" class="action_icon lsproducts" onclick="deleteShoppinglist(this)"><i class="fa fa-trash" aria-hidden="true"></i></span> </td>
                                           </tr>`
                               })
                           
@@ -585,7 +614,7 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
                 });
             
 })
-
+// =========>
 $('#shoppingListProducsModal').on('show.bs.modal',function(event){
   $('#allAhoppingListsModal').modal('hide')
  
@@ -690,16 +719,34 @@ function deleteFavorioutProduct(that){
   });
     $(that).parents('tr').remove()
 }
-function removeProductFromShoppingList(that){
-  var listid = $(that).data('id')
-  
-  $.get(`/shoppinglist/remove_product/${listid}`).done(result => { 
-      console.log(result);
-  }).fail(result=>{
-      //$("#loginError").show().text(result.responseJSON.errors);
-  });
+
+
+//  delete shopping list --------------
+function deleteShoppinglist(that){
+  var listid = $(that).data('listid')
+  $.post(`/shoppinglist/remove/${listid}`).done(result => { 
+    Swal.fire({
+      title: 'Once deleted, you will not be able to recover this record?',
+      icon: 'info',
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: 'Ok',
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      if (result.isConfirmed) {
     $(that).parents('tr').remove()
+        Swal.fire('done!', '', 'success')
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
+  }).fail(result=>{
+    console.log("err=>",result)
+      $("#loginError").show().text(result.responseJSON.err);
+  });
 }
+// ===========
+
 
 function removeFromAllShoppingList(that){
   
@@ -751,7 +798,6 @@ function removeProductFromCart(that){
 
 }
 function deleteProductFromShoppingList(that){
-  
   var lsitid = $(that).data('id');
   $.get(`/shoppinglist/remove_product/${lsitid}`).done(result => { 
     result.status&&$(that).parents('tr').remove()
@@ -762,27 +808,6 @@ function deleteProductFromShoppingList(that){
 
 $('#shoppingListModal').on('hide.bs.modal', function (e) {
     $('#error-x-list').html('').addClass('d-none')
-})
-
-$('#editAddressModal').on('show.bs.modal',function(){
-  
-  /*$.post('/shoppinglists/removeproduct/', data).done(result => { 
-              
-    if(result.status){ 
-        var tableHtml = ''
-        result.data.forEach((list,index)=>{
-            tableHtml += `<tr>
-                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
-                          </tr>`
-              })
-          
-            }else{
-                tableHtml = `<tr> <td> No data for cart </td> </tr>`
-              }
-          $('#shopping-table-navbar').html(tableHtml) 
-    }).fail(result=>{
-        $("#loginError").show().text(result.responseJSON.errors);
-    }); */
 })
 
 $('.xact-add-card').click(function(){
