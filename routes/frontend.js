@@ -66,6 +66,7 @@ router.get('/product/:id',IndexController.list)
 router.post('/cookie',IndexController.cookie)
 router.get('/cookiees',IndexController.cookiees)
 
+router.get('/user/login',(req,res)=> res.render('frontend/login'))
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)

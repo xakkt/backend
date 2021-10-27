@@ -14,8 +14,8 @@ module.exports = async (req, res, next)=>{
 
         res.locals.check = async (...value) => {
                const role = await User.findOne({_id:req.session.userid}).populate({
-                path: 'role_id', 
-                model: 'Role', 
+                path: 'role_id',
+                model: 'Role',
                 match: {
                   key:{$eq:'customer'}
                 }
@@ -28,7 +28,8 @@ module.exports = async (req, res, next)=>{
         next()
     }
     else {
-        return res.render('/admin/')
+        console.log("========daata")
+        // return res.render('/admin/')
     }
 };
 

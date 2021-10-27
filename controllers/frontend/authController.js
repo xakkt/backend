@@ -9,6 +9,8 @@ const { validationResult } = require('express-validator');
 
 exports.login = async (req, res) => {
     try {
+        
+       console.log("===datata",req.body)
             const errors = await validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ status:0,errors: errors.array()[0].msg,data:'fds'});
@@ -25,6 +27,8 @@ exports.login = async (req, res) => {
 
             await Cart.updateMany({ sessionId: req.sessionID },{ $set: { _user: userInfo._id } }).lean()
             //console.log("====>>>>",req.sessionID)              
+            console.log("======1",req.session.userid)
+            console.log("======2",req.session.customer)
 
             return res.json({ status:1,errors: '' });
     } catch (err) {
@@ -34,7 +38,7 @@ exports.login = async (req, res) => {
 }
 exports.create = async (req, res) => {
     try { 
-        
+        console.log("=======re")
             const errors = await validationResult(req);
             if (!errors.isEmpty()) {
                      return res.json({ status:0, errors: errors.array()[0].msg });

@@ -247,10 +247,11 @@ $.post('/user/create', obj)
 loginForm.on('submit', function(e){
   e.preventDefault(); 
   const obj = loginForm.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
-  
   $.post('/user/login', obj)
         .done(result => { 
-                    if(!result.status){ 
+          console.log("========ssspppp",result)
+
+                    if(!result.status){
                             $("#loginError").show().text(result.errors); }else{
                               Swal.fire({
                                   icon: 'success',
@@ -261,6 +262,7 @@ loginForm.on('submit', function(e){
                                 location.reload();
                          }
         }).fail(result=>{
+          console.log("========ssspppp",result)
                   $("#loginError").show().text(result.responseJSON.errors);
          });
 
@@ -285,6 +287,10 @@ $(function () {
 })
 
 $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
+  if(!$(".cartbutton").data('userid')){
+      $('#modalLoginForm').modal('show')
+      return false;
+   }
      var btntype = $(this).data('prop')
       switch (btntype) {
       case "x-cart":
@@ -529,6 +535,12 @@ $('#cartModal').on('show.bs.modal',function(e){
 })
 
 $('#shoppingListModal').on('show.bs.modal',function(event){
+  
+  if(!$(".cartbutton").data('userid')){ 
+        $('#modalLoginForm').modal('show')
+        return false
+   }
+
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
@@ -557,7 +569,7 @@ $('#shoppingListModal').on('show.bs.modal',function(event){
                 }).fail(result=>{
                     $("#loginError").show().text(result.responseJSON.errors);
                 });
-            
+                 
 })
 
 // -------------->
