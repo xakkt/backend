@@ -6,6 +6,7 @@ const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
 var isloggedin = require('../middlewares/customerloggedin')
+// var userloggedin = require('../middlewares/customerloggedin')
 
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
@@ -66,7 +67,10 @@ router.get('/product/:id',IndexController.list)
 router.post('/cookie',IndexController.cookie)
 router.get('/cookiees',IndexController.cookiees)
 
-router.get('/user/login',(req,res)=> res.render('frontend/login'))
+router.get('/user/login',(req,res)=>{
+    console.log("=========dataaa")
+    res.render('frontend/login')
+} )
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)
@@ -79,7 +83,7 @@ router.get('/user/get-address/:id', userController.editaddress)
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
-router.get('/checkout/:store',cartController.checkoutPage);
+router.get('/checkout/:store',isloggedin,cartController.checkoutPage);
 
 /*------- cart api ----------*/
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
@@ -120,7 +124,7 @@ router.get('/wishlist/remove/product/:listid',wishController.deleteProductWishli
 router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice);
 
 router.get('/myorders/:store',orderController.myorder)
-router.post('/placeorder',orderController.placeOrder);
+router.post('/placeorder',isloggedin,orderController.placeOrder);
 //router.post('/order/create/:store',orderController.creatOrder)
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
 router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)

@@ -20,7 +20,6 @@ exports.homepage = async (req, res) => {
 }
 
 exports.products = async (req, res) => {
-	
 	var userid = res.locals.userid??req.sessionId
 	var pdata = [];
 	var product = [];

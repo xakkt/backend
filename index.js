@@ -17,7 +17,7 @@ var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
 var isloggedin = require('./middlewares/isloggedin')
-var userloggedin = require('./middlewares/customerloggedin')
+// var userloggedin = require('./middlewares/customerloggedin')
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');
 //moment.tz.setDefault("America/New_York");

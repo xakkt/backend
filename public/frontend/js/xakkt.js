@@ -830,3 +830,4 @@ $('.xact-add-card').click(function(){
 $('.x-order-head').click(function(){ 
   $(this).next('.gold-members').toggle(1000)
 })
+

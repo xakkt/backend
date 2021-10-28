@@ -9,14 +9,14 @@ module.exports = async (req, res, next)=>{
         console.log("======1",req.session.userid)
         console.log("======2",req.session.customer)
 
-        locals.user = req.session.userid
+        // locals.user = req.session.userid
         
 
         // res.locals.check = async (...value) => {
         console.log("=======ppww")
                const role = await User.findOne({_id:req.session.userid})
             //    .populate({
-            //     path: 'role_id', 
+            //     path: 'role_id',
             //     model: 'Role', 
             //     match: {
             //       key:{$eq:'system_admin'}
@@ -33,8 +33,8 @@ module.exports = async (req, res, next)=>{
         next()
     }
     else {
-        console.log("=======pp")
-        return res.redirect('/user/login')
+        console.log("=======pjp")
+        return res.render('frontend/login')
     }
 };
 
