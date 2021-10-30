@@ -53,11 +53,12 @@
          <div class="container-list">
             <ul class="list-inline">
                 <% for (const [key,parent] of Object.entries(categories)) { %>
-                  
+                    
                     <li class="nav-item dropdown list-inline-item">
                         <a class="nav-link" href="/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>"><%=key%></a>
-                        
-                        <% if(categories[key].length) {%>   
+                      
+                        <% if(categories[key].length) {%>  
+                            
                         <div class="dropdown-menu cs-drop-mn" aria-labelledby="dropdownMenuLink">
                          <% categories[key].forEach((key,value)=>{  %> 
                             <a class="dropdown-item" href="<%=process.env.BASE_URL%>/<%=store.slug%>/category/products/<%=key.slug%>"><%=key.name%></a>

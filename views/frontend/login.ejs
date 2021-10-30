@@ -14,6 +14,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
 	<link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
       <style>
           body {
     padding-top: 90px;
@@ -128,35 +131,31 @@
 							<div class="col-xs-6">
 								<a href="#" class="active" id="login-form-link">Login</a>
 							</div>
-							<!-- <div class="col-xs-6">
+							<div class="col-xs-6">
 								<a href="#" id="register-form-link">Register</a>
-							</div> -->
+							</div>
 						</div>
 						<hr>
 					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login" method="POST"  style="display: block;">
-                         <span id="loginError" class="error-msg" style="display:none"></span>
-
+								<form id="login"  method="POST"   style="display: block;">
+									<span id="loginError" class="error-msg" style="display:none"></span>
 									<div class="form-group">
-										<label data-error="wrong" data-success="right" for="loginEmail">Email</label>
-										<input type="email" id="loginEmail" name="email" class="form-control validate" required>
+										<input type="email" id="loginEmail" name="email" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
 									<div class="form-group">
-										
-										<label data-error="wrong" data-success="right" for="loginPass">Password</label>
-                                        <input type="password" id="loginPass" name="password" class="form-control validate" required>
+										<input type="password" id="loginPass" name="password" tabindex="2" class="form-control" placeholder="Password">
 									</div>
-									<!-- <div class="form-group text-center">
+									<div class="form-group text-center">
 										<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
 										<label for="remember"> Remember Me</label>
-									</div> -->
+									</div>
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
-												<button class="btn btn-success">Login</button>
+												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
 											</div>
 										</div>
 									</div>
@@ -170,7 +169,65 @@
 										</div>
 									</div>
 								</form>
-							
+								<form id="registration"  method="post" role="form" style="display: none;">
+									<span id="error" class="error-msg" style="display:none"></span>
+									<div class="form-group">
+										<div class="form-row">
+											<div class="form-group col-md-6">
+										<input type="text" id="first_name" name = "first_name"  class="form-control validate" placeholder="First name"  required>
+									</div>
+									<div class="form-group col-md-6">
+										<input type="text" id="last_name" class="form-control validate"  placeholder="Last name" name = "last_name">
+									</div>
+									</div>
+								    </div>
+									<div class="form-group">
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<input type="email" id="email"  class="form-control validate" placeholder="Email" name="email">
+									</div>
+									<div class="form-group col-md-6">
+										<input type="number" id="contact_no" style="height: 45px;" class="form-control validate"  placeholder="Contact number" name="contact_no">
+										
+									</div>
+									</div>
+									</div>
+									<div class="form-group">
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<select id="gender" name="gender"   class="form-control" style="height: 45px;">
+													<option >Gender...</option>
+													<option value="male">Male</option>
+													<option value="female">Female</option>
+													<option value="other">Other</option>
+												  </select>
+									</div>
+									<div class="form-group col-md-6">
+										<input type="date" id="dob" style="height: 45px;" class="form-control validate" name="dob">
+									</div>
+									</div>
+									</div>
+									<div class="form-group">
+										<div class="form-row">
+											<input type="password" id="password"  class="form-control validate" name="password" placeholder="Password">
+											
+									</div>
+							    	</div>
+									<div class="form-group">
+										<div class="form-row">
+											<input type="password" id="confirm_password"  class="form-control validate" name="confirm_password" placeholder="Confirm Password">
+										
+									
+									</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+											</div>
+										</div>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -183,15 +240,15 @@
         $(function() {
 
 $('#login-form-link').click(function(e) {
-    $("#login-form").delay(100).fadeIn(100);
-     $("#register-form").fadeOut(100);
+    $("#login").delay(100).fadeIn(100);
+     $("#registration").fadeOut(100);
     $('#register-form-link').removeClass('active');
     $(this).addClass('active');
     e.preventDefault();
 });
 $('#register-form-link').click(function(e) {
-    $("#register-form").delay(100).fadeIn(100);
-     $("#login-form").fadeOut(100);
+    $("#registration").delay(100).fadeIn(100);
+     $("#login").fadeOut(100);
     $('#login-form-link').removeClass('active');
     $(this).addClass('active');
     e.preventDefault();

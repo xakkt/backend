@@ -185,6 +185,7 @@ exports.removeProductFromCart = async (req, res) => {
 			 delete (list.quantity)
 			 return { ...list, _product: { ...list._product, in_cart: quantity, total_price: total_price.toFixed(2), image: image } }
 		 })
+	
 		 data.cart = products;
 		 discounted_price = 20;
 		 coupon = {

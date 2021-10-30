@@ -189,6 +189,9 @@ $(document).delegate('.minus-btn','click', function(e) {
 
     $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
           $('.cart-price').html(result.subtotal.sub_total)
+          let productData = result.data.cart.filter(item=>item._product._id=== data._product);
+          const {_product} = productData?.[0]
+          $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -207,12 +210,20 @@ $(document).delegate('.plus-btn','click', function(e) {
     data._store = $(this).data('storeid')
     data._product = $(this).data('productid')
     data.quantity = value
+    // data.total_price = 
+    console.log("quamtou?=>",value)
+    console.log("data._product==>",data)
 
     $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
           $('.cart-price').html(result.subtotal.sub_total)
+          console.log("result===>",result)
+          let productData = result.data.cart.filter(item=>item._product._id=== data._product);
+          const {_product} = productData?.[0]
+          $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
+      
   }
 
 
@@ -492,7 +503,7 @@ $('#cartModal').on('show.bs.modal',function(e){
         var total = 0;
         result.data.forEach((product,index)=>{
             total += product.total_price;
-
+           
             tableHtml += `<tr>
                             <td class="w-25">
                               <img src="http://xgrocery.cf/images/products/${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
@@ -511,11 +522,12 @@ $('#cartModal').on('show.bs.modal',function(e){
                                 </div>
                             </td>
                             
-                            <td id='total_qnty_${product._product._id}'>${product.total_price}</td>
+                            <td id='total_qnty_${product._product._id}'>${product.total_price.toFixed(2)}</td>
                             <td> <span data-storeid="${data.storeid}" data-productid="${product._product._id}" class="action_icon" onclick="removeProductFromCart(this)"><i class="fa fa-trash"></i></span> </td>
+                          
                       </tr>`
           })
-          $('.cart-price').html(total)
+          $('.cart-price').html(total.toFixed(2))
           }else{
                 
                 tableHtml = `<tr>
@@ -612,7 +624,7 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
                         result.data.forEach((list,index)=>{
                             tableHtml += `<tr>
                                             <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
-                                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}"><i class="fa fa-eye" aria-hidden="true"></i></td>
+                                            
                                             <td data-listid="${list._id}" data-toggle="modal" class="action_icon lsproducts" onclick="deleteShoppinglist(this)"><i class="fa fa-trash" aria-hidden="true"></i></span> </td>
                                           </tr>`
                               })
@@ -796,6 +808,7 @@ function removeProductFromCart(that){
       });
   }else{
       $.post('/product/remove-from-cart', data).done(result => { 
+        $('.cart-price').html(result.subtotal.price)
         result.status&&$(that).parents('tr').remove()
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);
@@ -831,3 +844,7 @@ $('.x-order-head').click(function(){
   $(this).next('.gold-members').toggle(1000)
 })
 
+// $('#categorymodel').click(function() {
+//   // alert("hello")
+//   window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
+// });
