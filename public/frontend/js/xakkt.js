@@ -489,7 +489,7 @@ $.post('/wishlist/products', data).done(result => {
  
 })
 
-$('#cartModal').on('show.bs.modal',function(e){ 
+$('#cartModal').on('show.bs.modal',function(){ 
   
   var data ={}
   data.userid = $(".cartbutton").data('userid')??null

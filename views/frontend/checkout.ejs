@@ -46,7 +46,7 @@
                      <input type="hidden" name="products[<%=i%>][_product]" value="<%=product._product._id%>"/>
                      <input type="hidden" name="products[<%=i%>][quantity]" value="<%=product.quantity%>"/>
                      <h6 class="my-0"><%=product._product.name.get('english')%> </h6>
-                     <small class="text-muted"> X <%=product.quantity%></small>
+                     <small class="text-muted"> X <%= product.quantity %></small>
                      <small style="margin-left: 5px;">20gm</small>
                   </div>
                   
