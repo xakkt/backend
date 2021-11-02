@@ -844,7 +844,7 @@ $('.x-order-head').click(function(){
   $(this).next('.gold-members').toggle(1000)
 })
 
-// $('#categorymodel').click(function() {
-//   // alert("hello")
-//   window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
-// });
+$('#categorymodel').click(function() {
+  // alert("hello")
+  window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
+});
