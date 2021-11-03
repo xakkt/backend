@@ -123,8 +123,8 @@ router.post('/wishlist/products', wishController.allWishlistProducts);
 router.get('/wishlist/remove/product/:listid',wishController.deleteProductWishlist);
 router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice);
 
-router.get('/myorders/:store',orderController.myorder)
-router.post('/placeorder',isloggedin,orderController.placeOrder);
+router.get('/myorders/:store',isloggedin,orderController.myorder)
+router.post('/placeorder',orderController.placeOrder);
 //router.post('/order/create/:store',orderController.creatOrder)
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
 router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)

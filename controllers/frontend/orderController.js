@@ -155,7 +155,6 @@ exports.placeOrder = async (req, res) => {
     };
 exports.myorder = async (req,res) =>{
     try {
-        
         if(!res.locals.userid){
             return res.json({status:0,message:"You are not logged in"})
         }
@@ -190,9 +189,15 @@ exports.myorder = async (req,res) =>{
             }
        })*/
 
+
+     
+
+
         // console.log(order)
         //if (!order.length) return res.json({ message: "No Order found", data: "" });
         //return res.json({ status: 1, message: "", data:order});
+        // console.log("=================pankaj",order)
+
         return res.render('frontend/order-listing',{orders:order})
 
     } catch (err) {

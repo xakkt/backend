@@ -48,12 +48,19 @@
                                 </div>
                               </div>
                         </li>
+                        <% for (const [i,order] of orders.entries()) { %> 
+                          <% for (const [i,product] of order.products.entries()) { %> 
+                          <% console.log("test====",product) %> 
                         <li class="nav-item">
-                          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> KRACKJACK</a>
-                        </li>
-                        <li class="nav-item">
-                          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                         <div><%=product._product.image %></div>
+                         <!-- <img src="http://xgrocery.cf/images/products/<%-product._product.image %>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> -->
+                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> <%=product._product.name.english%></a>
+                            
+                         </li>
+                         <% }%>
+                         <% }%>  
+                        <!-- <li class="nav-item"> -->
+                          <!-- <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                             <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i>MONACO</a>
                         </li>
                         <li class="nav-item">
@@ -63,7 +70,7 @@
                         <li class="nav-item">
                           <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                             <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i>KASURI METHI</a>
-                        </li>
+                        </li>  -->
                     </ul>
                 </div>
             </div>
