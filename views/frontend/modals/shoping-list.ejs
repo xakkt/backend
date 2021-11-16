@@ -37,7 +37,7 @@
 </div>
 
 <div class="modal fade" id="allAhoppingListsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
     <div class="modal-content">
       
       <div class="modal-body">
@@ -46,6 +46,8 @@
           <thead>
             <tr>
                 <th scope="col">Shopping Lists</th>
+                <!-- <th scope="col">View</th> -->
+                <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody id="shopping-table-navbar">
@@ -107,10 +109,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="<%=process.env.BASE_URL%>/shoppinglist/create">
+        <form method="post"  id = "createShopping">
           <div class="form-group">
+            <span id="err" class="error-msg" style="display:none"></span>
             <!--label for="exampleInputEmail1">Name the ShoppingList</label-->
-            <input type="hidden" required name="_store" value="<%= (!!locals.store)?store._id:'' %>"/>
+            <input type="hidden" required  id="store"name="_store" value="<%= (!!locals.store)?store._id:'' %>"/>
             <input type="text" name="name" required class="form-control">
           </div>
         

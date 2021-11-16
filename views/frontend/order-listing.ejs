@@ -15,6 +15,8 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
+
     <!-- Custom styles for this template -->
     <link href="form-validation.css" rel="stylesheet">
     <style>
@@ -46,18 +48,29 @@
                                 </div>
                               </div>
                         </li>
+                        <% for (const [i,order] of orders.entries()) { %> 
+                          <% for (const [i,product] of order.products.entries()) { %> 
+                          <% console.log("test====",product) %> 
                         <li class="nav-item">
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> Random Product 2</a>
+                         <div><%=product._product.image %></div>
+                         <!-- <img src="http://xgrocery.cf/images/products/<%-product._product.image %>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> -->
+                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> <%=product._product.name.english%></a>
+                            
+                         </li>
+                         <% }%>
+                         <% }%>  
+                        <!-- <li class="nav-item"> -->
+                          <!-- <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i>MONACO</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> Random Product 3</a>
+                          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> PEACOCK</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> Random Product 4</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> Random Product 5</a>
-                        </li>
+                          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i>KASURI METHI</a>
+                        </li>  -->
                     </ul>
                 </div>
             </div>
@@ -137,7 +150,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
-    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+    <script src="/frontend/js/xakkt.js"></script>
+    <script>
+        var baseUrl = '<%=process.env.BASE_URL%>'
+      
+    </script>
     <script>
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function() {

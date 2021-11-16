@@ -1,5 +1,5 @@
-//var baseUrl = "http://localhost:4800"
-var baseUrl = "http://xgrocery.cf"
+// var baseUrl = "http://localhost:4000"
+// var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -189,6 +189,9 @@ $(document).delegate('.minus-btn','click', function(e) {
 
     $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
           $('.cart-price').html(result.subtotal.sub_total)
+          let productData = result.data.cart.filter(item=>item._product._id=== data._product);
+          const {_product} = productData?.[0]
+          $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -207,12 +210,20 @@ $(document).delegate('.plus-btn','click', function(e) {
     data._store = $(this).data('storeid')
     data._product = $(this).data('productid')
     data.quantity = value
+    // data.total_price = 
+    console.log("quamtou?=>",value)
+    console.log("data._product==>",data)
 
     $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
           $('.cart-price').html(result.subtotal.sub_total)
+          console.log("result===>",result)
+          let productData = result.data.cart.filter(item=>item._product._id=== data._product);
+          const {_product} = productData?.[0]
+          $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
+      
   }
 
 
@@ -247,10 +258,11 @@ $.post('/user/create', obj)
 loginForm.on('submit', function(e){
   e.preventDefault(); 
   const obj = loginForm.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
-  
   $.post('/user/login', obj)
         .done(result => { 
-                    if(!result.status){ 
+          console.log("========ssspppp",result)
+
+                    if(!result.status){
                             $("#loginError").show().text(result.errors); }else{
                               Swal.fire({
                                   icon: 'success',
@@ -261,6 +273,7 @@ loginForm.on('submit', function(e){
                                 location.reload();
                          }
         }).fail(result=>{
+          console.log("========ssspppp",result)
                   $("#loginError").show().text(result.responseJSON.errors);
          });
 
@@ -285,6 +298,10 @@ $(function () {
 })
 
 $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
+  if(!$(".cartbutton").data('userid')){
+      $('#modalLoginForm').modal('show')
+      return false;
+   }
      var btntype = $(this).data('prop')
       switch (btntype) {
       case "x-cart":
@@ -472,7 +489,7 @@ $.post('/wishlist/products', data).done(result => {
  
 })
 
-$('#cartModal').on('show.bs.modal',function(e){ 
+$('#cartModal').on('show.bs.modal',function(){ 
   
   var data ={}
   data.userid = $(".cartbutton").data('userid')??null
@@ -486,7 +503,7 @@ $('#cartModal').on('show.bs.modal',function(e){
         var total = 0;
         result.data.forEach((product,index)=>{
             total += product.total_price;
-
+           
             tableHtml += `<tr>
                             <td class="w-25">
                               <img src="http://xgrocery.cf/images/products/${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
@@ -505,11 +522,12 @@ $('#cartModal').on('show.bs.modal',function(e){
                                 </div>
                             </td>
                             
-                            <td id='total_qnty_${product._product._id}'>${product.total_price}</td>
+                            <td id='total_qnty_${product._product._id}'>${product.total_price.toFixed(2)}</td>
                             <td> <span data-storeid="${data.storeid}" data-productid="${product._product._id}" class="action_icon" onclick="removeProductFromCart(this)"><i class="fa fa-trash"></i></span> </td>
+                          
                       </tr>`
           })
-          $('.cart-price').html(total)
+          $('.cart-price').html(total.toFixed(2))
           }else{
                 
                 tableHtml = `<tr>
@@ -529,6 +547,12 @@ $('#cartModal').on('show.bs.modal',function(e){
 })
 
 $('#shoppingListModal').on('show.bs.modal',function(event){
+  
+  if(!$(".cartbutton").data('userid')){ 
+        $('#modalLoginForm').modal('show')
+        return false
+   }
+
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
@@ -557,21 +581,51 @@ $('#shoppingListModal').on('show.bs.modal',function(event){
                 }).fail(result=>{
                     $("#loginError").show().text(result.responseJSON.errors);
                 });
+                 
+})
+
+// -------------->
+const creat = $('#createShopping')
+creat.on('submit', function(e){
+  e.preventDefault(); 
+  const data = creat.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+ 
+  $.post('/shoppinglist/create', data).done(result => { 
+       
+              if(result?.status === 1){
+                console.log("======staus",result?.status)
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Shopping List Created',
+                  showConfirmButton: false,
+                  timer: 1500,
+                }) 
+                location.reload();
+                       }else{
+                         console.log("====ll",result.message)
+                        $("#err").show().text(result?.message)
+                   }
+  }).fail(result=>{
+           console.log(result.responseJSON.message)
+            $("#err").show().text(result?.responseJSON?.message);
+   });
             
 })
 
+//  shoping list 
 $('#allAhoppingListsModal').on('show.bs.modal',function(event){
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
   
          $.post('/list/shoppinglist', data).done(result => { 
-              
                     if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((list,index)=>{
                             tableHtml += `<tr>
                                             <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
+                                            
+                                            <td data-listid="${list._id}" data-toggle="modal" class="action_icon lsproducts" onclick="deleteShoppinglist(this)"><i class="fa fa-trash" aria-hidden="true"></i></span> </td>
                                           </tr>`
                               })
                           
@@ -584,7 +638,7 @@ $('#allAhoppingListsModal').on('show.bs.modal',function(event){
                 });
             
 })
-
+// =========>
 $('#shoppingListProducsModal').on('show.bs.modal',function(event){
   $('#allAhoppingListsModal').modal('hide')
  
@@ -689,16 +743,34 @@ function deleteFavorioutProduct(that){
   });
     $(that).parents('tr').remove()
 }
-function removeProductFromShoppingList(that){
-  var listid = $(that).data('id')
-  
-  $.get(`/shoppinglist/remove_product/${listid}`).done(result => { 
-      console.log(result);
-  }).fail(result=>{
-      //$("#loginError").show().text(result.responseJSON.errors);
-  });
+
+
+//  delete shopping list --------------
+function deleteShoppinglist(that){
+  var listid = $(that).data('listid')
+  $.post(`/shoppinglist/remove/${listid}`).done(result => { 
+    Swal.fire({
+      title: 'Once deleted, you will not be able to recover this record?',
+      icon: 'info',
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: 'Ok',
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      if (result.isConfirmed) {
     $(that).parents('tr').remove()
+        Swal.fire('done!', '', 'success')
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
+  }).fail(result=>{
+    console.log("err=>",result)
+      $("#loginError").show().text(result.responseJSON.err);
+  });
 }
+// ===========
+
 
 function removeFromAllShoppingList(that){
   
@@ -736,6 +808,7 @@ function removeProductFromCart(that){
       });
   }else{
       $.post('/product/remove-from-cart', data).done(result => { 
+        $('.cart-price').html(result.subtotal.price)
         result.status&&$(that).parents('tr').remove()
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);
@@ -750,7 +823,6 @@ function removeProductFromCart(that){
 
 }
 function deleteProductFromShoppingList(that){
-  
   var lsitid = $(that).data('id');
   $.get(`/shoppinglist/remove_product/${lsitid}`).done(result => { 
     result.status&&$(that).parents('tr').remove()
@@ -763,27 +835,6 @@ $('#shoppingListModal').on('hide.bs.modal', function (e) {
     $('#error-x-list').html('').addClass('d-none')
 })
 
-$('#editAddressModal').on('show.bs.modal',function(){
-  
-  /*$.post('/shoppinglists/removeproduct/', data).done(result => { 
-              
-    if(result.status){ 
-        var tableHtml = ''
-        result.data.forEach((list,index)=>{
-            tableHtml += `<tr>
-                            <td class="lsproducts" data-toggle="modal" data-target="#shoppingListProducsModal" data-listid="${list._id}">${list.name}</td>
-                          </tr>`
-              })
-          
-            }else{
-                tableHtml = `<tr> <td> No data for cart </td> </tr>`
-              }
-          $('#shopping-table-navbar').html(tableHtml) 
-    }).fail(result=>{
-        $("#loginError").show().text(result.responseJSON.errors);
-    }); */
-})
-
 $('.xact-add-card').click(function(){
   $('.xact-add-card').removeClass('active')
   $(this).toggleClass('active')
@@ -792,3 +843,8 @@ $('.xact-add-card').click(function(){
 $('.x-order-head').click(function(){ 
   $(this).next('.gold-members').toggle(1000)
 })
+
+$('#categorymodel').click(function() {
+  // alert("hello")
+  window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
+});

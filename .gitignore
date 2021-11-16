@@ -2,6 +2,7 @@
 node_modules
 config/database.js
 npm-debug.log
+package-lock.json
 .env
 # Local development
 *.dev

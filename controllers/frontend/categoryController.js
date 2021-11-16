@@ -88,7 +88,6 @@ exports.productbyParentCategoryy = async function(req, res){
 	}
 }, 
 exports.productbyParentCategory = async (req, res) => {
-	
 	var userid = res.locals.userid??req.sessionId
 	var pdata = [];
 	var product = [];
@@ -241,9 +240,10 @@ exports.productbyParentCategory = async (req, res) => {
 			
  
 		}))	
+	
+
 
 		let productCatogories = await Categories.find({ parent_id: pc._id }).populate('parent_id','slug name').lean()
-		  
 		var result = {}
 		
 		result.data = storeProduct
@@ -266,7 +266,7 @@ exports.productbyParentCategory = async (req, res) => {
 		return res.render('frontend/category-product',result)
 
 	} catch (err) {
-		console.log(err)
+		console.log("======pppp",err)
 		res.status(400).json({
 			status: 0,
 			message: "SOMETHING_WENT_WRONG",
@@ -275,7 +275,7 @@ exports.productbyParentCategory = async (req, res) => {
 	}
 },
 exports.categoryProducts = async (req, res) => {
-	
+	console.log("==========category")
 	var userid = res.locals.userid??req.sessionId
 	var pdata = [];
 	var product = [];
@@ -363,6 +363,7 @@ exports.categoryProducts = async (req, res) => {
 
 		var pageNo = (req.query.page)?parseInt(req.query.page):1
 		const pc = await ProductCategory.findOne({slug:req.params.category}).populate('_products');
+		// console.log("==========wwwww",pc)
 		totalItem=pc._products.length;
 		var option = {sort: { 'name.english': 1 }}
 		option.limit = 18
