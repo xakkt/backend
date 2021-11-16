@@ -254,7 +254,7 @@ exports.productbyParentCategory = async (req, res) => {
 		result.store   = storedata
 		result.storeProducts = storeProduct
 		result.categories = productCatogories
-		result.parentCategory = productCatogories[0].parent_id
+		result.parentCategory = productCatogories[0]?.parent_id
 		result.totalPages = totalPages
 		result.currentPage = pageNo
 		result.storeSlug = req.params.store
