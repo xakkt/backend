@@ -126,6 +126,8 @@ router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice)
 router.get('/myorders/:store',isloggedin,orderController.myorder)
 router.post('/placeorder',orderController.placeOrder);
 //router.post('/order/create/:store',orderController.creatOrder)
+//router.post('/order/create/:store',orderController.creatOrder)
+
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
 router.get('/:store/main-category/products/:category',categoryController.productbyParentCategory)
 router.get('/cart',function(req, res){
