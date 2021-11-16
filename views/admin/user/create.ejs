@@ -98,15 +98,18 @@
                                  <div class="col-md-6">
                                     <div class="form-group">
                                        <label for="contact_no">Contact no</label>
-                                       <input type="text" class="form-control" id="contact_no" name="contact_no"
+                                       <input type="number" class="form-control" id="contact_no" name="contact_no"
                                           placeholder="Contact no">
                                     </div>
                                  </div>
                                  <div class="col-md-6">
                                     <div class="form-group">
-                                       <label for="email">Email</label>
+                                       <label for="email">Email or Username</label>
                                        <input type="text" class="form-control" id="email" name="email"
                                           placeholder="Email">
+                                       <div class="message" style="display:none;">
+                                          <span style="color:red">Email already exists</span>
+                                        </div>    
                                     </div>
                                  </div>
                                  <div class="col-md-6">
@@ -132,15 +135,8 @@
 
                                  <div class="col-md-6">
                                     <div class="form-group">
-                                       <label for="">Store</label>
-                                       <input type="text" class="form-control" id="store" name="store"
-                                          placeholder="Store">
-                                    </div>
-                                 </div>
-                                 <div class="col-md-6">
-                                    <div class="form-group">
                                        <label for="">Company</label>
-                                       <select class="select2" name="company" multiple="multiple" style="width: 100%;"
+                                       <select class="select2" name="company" style="width: 100%;"
                                           placeholder="Select">
                                           <% company.forEach((company)=>{ %>
                                              <option value="<%=company._id%>">
@@ -149,6 +145,18 @@
                                              <%})%>
                                        </select>
                                     </div>
+                                   
+                                 </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                       <label for="">Store</label>
+                                         <select class="select2" name="store" multiple="multiple" style="width: 100%;" placeholder="Select Store">
+                                        <% stores.forEach((store)=>{ %>
+                                        <option value="<%=store._id%>"><%=store.name%></option>
+                                        <%})%>
+                                      </select>
+                                   
+                                     </div>
                                  </div>
                                  <div class="col-md-6">
                                     <div class="form-group">
@@ -180,7 +188,7 @@
                               </div>
                               <!-- /.row -->
                               <div class="card-footer">
-                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                 <button type="submit" class="btn btn-primary submit">Submit</button>
                               </div>
                            </form>
                            <!-- /.row -->
@@ -224,11 +232,7 @@
 
    <script>
       $(function () {
-         $('.select2').select2({
-            placeholder: "Choose "
-         })
-
-
+         $('.select2').select2({})
          bsCustomFileInput.init();
       });
 
@@ -236,31 +240,18 @@
 
          $('#userForm').validate({
             rules: {
-               first_name: {
-                  required: true
-               },
-               last_name: {
-                  required: true,
-               },
-               contact_no: {
-                  required: true
-               },
-               email: {
-                  required: true
-               },
-               password: {
-                  required: true
-               },
-               profile_pic: {
-                  required: true
-               },
-               timezone: {
-                  required: true
-               }
+               first_name  : {  required: true  },
+               last_name   : {  required: true  },
+               contact_no  : {  required: true  },
+               email       : {  required: true  },
+               password    : {  required: true  },
+               profile_pic : {  required: true  },
+               store       : {  required:true   },
+               timezone    : {  required: true  },
+               company     : {  required: true  },
+               role        : {  required: true  }
             },
-            messages: {
-
-            },
+            messages: { },
             errorElement: 'span',
             errorPlacement: function (error, element) {
                error.addClass('invalid-feedback');
@@ -273,6 +264,28 @@
                $(element).removeClass('is-invalid');
             }
          });
+
+
+         $("#email").keyup(function () {
+            let formdata = {
+            "email": $(this).val()
+            }
+            $.ajax({
+               url: '/admin/user/checkEmail',
+               type: 'POST',
+               data: formdata
+               }).done((data) => {
+               if (!data.status) {
+                  $('.message').show();
+                  $('.submit').prop('disabled', true).css('background-color', 'red');
+               }else{
+                  $('.message').hide();
+                  $('.submit').prop('disabled', false);
+                  $('.submit').addClass('btn btn-primary ').css('background-color', '')
+               }
+            })
+         })
+
       });
    </script>
 </body>

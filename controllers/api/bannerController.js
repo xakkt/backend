@@ -16,25 +16,46 @@ exports.bannderproduct = async (req, res) => {
                 { _deal: req.body._deal },
                 { deal_start: { $lte: date } }, { deal_end: { $gte: date } }
             ],
-        }).populate('_product').select(' -deal_percentage -createdAt -updatedAt').lean()
+        }).select('-createdAt -updatedAt -__v').populate({
+                        path:'_product',
+                        select:'name image unit weight description',
+                        populate: {
+                            path:'_unit',
+                            select:'name'
+                        } }).populate('_store','name city state unit weight description').populate('_deal','name city state _currency').lean()
+
+  
         await Promise.all(store.map(async (element) => {
+            console.log("=====",element)
             var data = {}
             var _store = element._store
             var _product = element._product._id
             let productPrice = await _global.productprice(_store, _product)
             data = { ...element }
+            data.dealType = element._deal.name
+            data.storeName = element._store.name
+            
             if (productPrice) {
                 data._product.image = `${process.env.BASE_URL}/images/products/${element._product.image}`,
+                data._product.unit = element._product._unit.name
                 data._product.regular_price = productPrice.regular_price
                 data._product.deal_price = productPrice.deal_price
+                data._product.is_favourite = 0
+                data._product.in_shoppinglist = 0
+                data._product.in_cart = 0
+                
             }
+            delete(element._product._unit)
             delete (data.deal_price)
+            delete (data._deal)
+            delete (data._store)
             storePrice.push(data)
         }))
         if (!store.length) return res.json({ status: 0, message: "Data not found" })
         return res.json({ status: 1, message: "Listing", data: storePrice })
 
     } catch (err) {
+        console.log(err)
         return res.status(404).json({ status: 0, message: err })
 
     }

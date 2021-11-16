@@ -18,11 +18,9 @@ exports.list = async (req, res) => {
                 data.effective_price = price.effective_price
                 data.deal_price = price.deal_price
                 prices.push(data)
-            })
-            )
+            }))
         }
         if (req.session.customer) {
-            console.log("reqddddd", req.session.customer)
             return res.render('frontend/index', { data: req.session.customer, product: prices })
         }
         return res.render('frontend/index', { data: '', product: prices })

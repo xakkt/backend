@@ -2,10 +2,10 @@
 node_modules
 config/database.js
 npm-debug.log
-env
+.env
 # Local development
 *.dev
-
+package-lock.json
 .DS_Store
 
 # Docker

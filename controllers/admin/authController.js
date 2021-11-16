@@ -1,10 +1,6 @@
 const Role = require('../../models/role');
 const User = require('../../models/user');
-const Store = require('../../models/store');
 const md5 = require("md5")
-const bcrypt = require("bcrypt")
-const jwt = require('jsonwebtoken');
-// const moment = require('moment')
 var moment = require('moment-timezone');
 
 const { validationResult } = require('express-validator');
@@ -15,27 +11,30 @@ exports.login = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        const userInfo = await User.findOne({ email: req.body.email }).exec()
+        const userInfo = await User.findOne({ email: req.body.email }).populate({path:'role_id', select:'key'}).lean()
+       
         if (!userInfo) { await req.flash('failure', "Email is not valid"); return res.redirect('/admin/login') };
         if (md5(req.body.password) !== userInfo.password) {
             await req.flash('failure', "Invalid password!!!");
             res.redirect('/admin/login');
         }
         await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
-        console.log("--userrr",userInfo._timezone)
+        
         var date = moment.tz.setDefault(userInfo._timezone)
         // console.log("--utc", utc._timezone.abbr)
         // var date = moment.tz.setDefault(utc._timezone.abbr);
         req.session.date = date,
         req.session.company = userInfo._company;
         req.session.email = userInfo.email;
-        req.session.userid = userInfo._id
-        req.session.roleid = userInfo.role_id[0]._id
+        req.session.userid = userInfo._id;
+        req.session.roles = userInfo.role_id.map(obj => obj.key );
+        req.session.rolesId = userInfo.role_id.map( obj => obj._id );  
 
         return res.redirect('/admin')
     } catch (err) {
+        console.log('err ====>>', err)
         await req.flash('failure', "Please enter valid email and password");
-        res.redirect('/admin/login');
+        return res.redirect('/admin/login');
 
     }
 }

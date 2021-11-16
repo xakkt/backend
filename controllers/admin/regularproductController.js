@@ -2,25 +2,32 @@ const RegularPrice = require('../../models/product_regular_pricing');
 const Store = require('../../models/store');
 const Deal = require('../../models/deal');
 const StoreProductPricing = require('../../models/store_product_pricing');
+var ObjectId = require('mongoose').Types.ObjectId;
+const User = require('../../models/user')
+const Product = require('../../models/product')
 
 exports.create = async (req, res) => {
     try {
-        var store = await Store.find({}).lean();
-        var regularPrice = await RegularPrice.find({
-            _product: req.params.productid
-        }).lean();
-        if (!regularPrice) return res.render('admin/product/regular_price', {
-            menu: "RegularPrice",
-            regularPrice: "",
-            store: store,
-            productid: req.params.productid
-        })
-        //   return  res.redirect('/admin/product/list')
+       
+        let product = await Product.findById(req.params.productid).select('name -_id').lean();
+        
+        if(req.session.roles.includes('system_admin')){
+            var stores = await Store.find({}).select('name _currency').populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+            userStores = stores
+        }else{
+            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
+            userStores = stores._store
+        }
+
+        var storesIds = userStores.map(store => store._id)
+        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean()
+   
         return res.render('admin/product/regular_price', {
             menu: "RegularPrice",
             regularPrice: regularPrice,
-            stores: store,
-            productid: req.params.productid
+            stores: userStores,
+            productid: req.params.productid,
+            productName:product.name.english
         })
     } catch (err) {
         res.status(400).json({
@@ -30,24 +37,26 @@ exports.create = async (req, res) => {
 }
 
 exports.addprice = async (req, res) => {
-    try {
+    try { 
+        if(req.body.store.length != req.body.regular_price.length){
+            return res.json({status:false, message:"Something went wrong"})
+        }
         const arr = [];
-        for (i = 0; i < req.body.no_of_stores; i++) {
-            // await RegularPrice.findOne({_store:req.body.store[i],_product:req.body.prod});
+        for (i = 0; i < req.body.store.length; i++) {
             data = {};
-            data.regular_price = req.body.regular_price[i];
+            data.regular_price = parseFloat(req.body.regular_price[i]).toFixed(2);
             data._store = req.body.store[i]
             data._product = req.body.productid
             data._user = req.session.userid
-            await RegularPrice.findOneAndUpdate({_store:req.body.store[i],_product:req.body.productid}, data, {
-                new: true,
-                upsert: true // Make this update into an upsert
-              })
-            // arr.push(data)
+            arr.push(data)
         }
+      
+        var remove_price = await RegularPrice.deleteMany({_user:data._user, _product:data._product}).exec();
+        if (!remove_price) return res.json({ status: false })
+
+        var prices = await RegularPrice.insertMany(arr).then()
+        if(!prices){ return res.json({ message:"Something went wrong", status: false })  }
             res.redirect('/admin/product')
-       
-     
 
     } catch (err) {
         console.log('===validation', err)
@@ -94,24 +103,24 @@ exports.remove = async (req, res) => {
  */
 exports.get = async (req, res) => {
     try {
-        console.log("0---im here", req.body)
-        let currency = await Store.findOne({
-            _id: req.body.storeid
-        }).populate({
-            path: '_currency'
-        }).exec()
+        
+        let storedata = await Store.findOne({ _id: req.body.storeid }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
+			path: '_currency',
+			select: 'name',
+		 }).lean()
         var regularPrice = await RegularPrice.findOne({
             _product: req.body.productid,
             _store: req.body.storeid
-        }).lean();
+        }).lean({ getters: true });
         if (!regularPrice) return res.json({
             status: false,
             message: "Not found"
         })
         return res.json({
             status: true,
-            message: regularPrice,
-            currency: currency
+            data: regularPrice,
+            store:storedata
+           
         })
     } catch (err) {
         res.status(400).json({

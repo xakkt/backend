@@ -42,10 +42,6 @@ const wishlistSchema = new Schema({
       type: Number,
       require:true
   },
-  max_price:{
-    type: Number,
-    required: true
-  },
   valid_till: {
     type: Date,
     

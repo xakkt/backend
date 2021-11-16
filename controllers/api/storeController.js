@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator');
 exports.list = async (req, res)=>{
 	
 	  try{
-			let store = await Store.find().populate('_department','name description no_of_stores').exec();
+			let store = await Store.find().select('-time_schedule').populate('_department','name description no_of_stores').populate('_currency','name').exec();
 			if(!store.length) return res.json({status:0, message: "No data found", data: store});
 			return res.json({status:1, message: "", data: store});
 			
@@ -19,7 +19,7 @@ exports.list = async (req, res)=>{
 
 exports.show =  async (req, res)=> { 
 	try{
-		const stores = await Store.findById(req.params.id).exec();
+		const stores = await Store.findById(req.params.id).populate('_currency','name').exec();
 		res.json({status: 1, message: "", data: stores});
 	 }catch(err){
 		res.status(400).json({status: 0, data: err});
@@ -90,7 +90,7 @@ exports.nearByStores = async(req, res) =>{
 
 	Store.find({ location :  { $near :	{ $geometry :  
 				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:10000 	}  } 
-		} ).then( stores => {
+		},'name address city _currency' ).populate('_currency','name').then( stores => {
 			
 		   			if(!stores.length) return res.status(400).json({status:false, message: "No store found nearby"});
 					return res.json({status:1, message: "", data:stores}); 
@@ -141,7 +141,7 @@ exports.deleteStore = async(req,res)=>{
 
 exports.getStoreByZipcode = async(req, res)=>{
 	try{
-		let stores = await Store.find({zipcode:req.params.zipcode}).lean();
+		let stores = await Store.find({zipcode:req.params.zipcode}).populate('_currency','name').lean();
 		if(!stores.length) return res.json({message: "Not store found"});
 		return res.json({status:1, message: "", data:stores});
 	}catch(err){
@@ -173,7 +173,7 @@ exports.userNearbyStore = async (req, res) => {
 		let long = 77.706413
 
 
-	let response = await Message.find({
+	let response = await Store.find({
 			location: {
 			 $near: {
 			  $maxDistance: 1000,
@@ -183,7 +183,7 @@ exports.userNearbyStore = async (req, res) => {
 			  }
 			 }
 			}
-		   }).lean()
+		   }).populate('_currency','name').lean()
 		if(response) return res.json({status:1, message: "success", data:response});
 		return res.json({status:0, message: "failed", data:''});
 

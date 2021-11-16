@@ -1,12 +1,10 @@
 const ProductCategory = require('../../models/product_category');
 const Product = require('../../models/product');
+const User = require('../../models/user')
 const Brand = require('../../models/brand')
 const Deals = require('../../models/deal')
 const Unit = require('../../models/unit')
-const Banner = require('../../models/banner')
-const Wishlist = require('../../models/wishlist')
-var waterfall = require('async-waterfall');
-const Currency = require('../../models/currency');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 const Stores = require('../../models/store')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -14,7 +12,6 @@ const RegularPrice = require('../../models/product_regular_pricing');
 const _globalCommon = require('../../helper/common')
 const { validationResult } = require('express-validator');
 var moment = require('moment')
-var waterfall = require('async-waterfall');
 const _global = require('../../helper/notification');
 
 /*
@@ -22,9 +19,9 @@ const _global = require('../../helper/notification');
 */
 exports.create = async (req, res) => {
     try {
-        var product = await ProductCategory.find({}).lean();
+        var categories = await ProductCategory.find({}).lean();
 
-        res.render('admin/product-category/create', { menu: "productCategory", submenu: "create", product: product })
+        res.render('admin/product-category/create', { menu: "productCategory", submenu: "create", categories: categories })
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
@@ -47,16 +44,19 @@ exports.productCreate = async (req, res) => {
     * Add new Product Category
     *params[name,filename]
     */
-    exports.save = async (req, res) => {
-
+exports.save = async (req, res) => {
+   
         try {
             const categoryInfo = {
                 name: req.body.name,
-                logo: req.file.filename
+                logo: req.file?.filename||null,
+                parent_id: req.body.parentid??null,
+                slug:req.body.name.replace(/ /g, "-").toLowerCase()                
             }
-            categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
 
-            const productCategory = await ProductCategory.create(categoryInfo);
+            categoryInfo.parent_id = req.body.parentid ?? null;
+
+            await ProductCategory.create(categoryInfo);
             await req.flash('success', 'ProductCategory added successfully!');
             res.redirect('/admin/category')
 
@@ -66,14 +66,15 @@ exports.productCreate = async (req, res) => {
         }
 
 
-    }
+}
 /*
 *Listing of Product Category
 */
 exports.list = async (req, res) => {
 
     try {
-        let productCategory = await ProductCategory.find().exec();
+        let productCategory = await ProductCategory.find().sort({'name': 1}).populate('parent_id','name').lean();
+        
         if (!productCategory.length) return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         return res.render('admin/product-category/listing', { menu: "productCategory", submenu: "list", productCategory: productCategory, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
@@ -98,9 +99,9 @@ exports.delete = async (req, res) => {
 */
 exports.edit = async (req, res) => {
     try {
-        var product = await ProductCategory.find({}).lean();
+        var allCategories = await ProductCategory.find({}).lean();
         const productCategory = await ProductCategory.findById(req.params.id).exec();
-        res.render('admin/product-category/edit', { status: "success", message: "", productCategory: productCategory, product: product, menu: "productCategory", submenu: "create" })
+        res.render('admin/product-category/edit', { status: "success", message: "", productCategory:productCategory, allCategories: allCategories, menu: "productCategory", submenu: "create" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -120,8 +121,10 @@ exports.update = async function (req, res) {
 
         const categoryInfo = {
             name: req.body.name,
+            parent_id: req.body.parentid||null,
+            slug:req.body.name.replace(/ /g, "-").toLowerCase(),
         }
-
+  
         if (req.file) { categoryInfo.logo = req.file.filename }
         const productCategory = await ProductCategory.findByIdAndUpdate({ _id: req.params.id }, categoryInfo, { new: true, upsert: true });
         if (productCategory) {
@@ -148,21 +151,24 @@ exports.productsave = async (req, res) => {
                 english: req.body.en_name
             },
             description: req.body.description,
-            sku: req.body.sku,
+           // sku: req.body.sku,
             _category: req.body._category,
+			slug:(req.body.en_name+req.body.sku).replace(/ /g, "-").toLowerCase(),
             weight: req.body.weight,
             _company: req.session.company,
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             _unit: req.body.unit,
             price: req.body.price,
+            cuisine:req.body.cuisine||null,
+            trending:req.body.trending,
             status: req.body.status,
-            brand_id: req.body.brand
-
+            brand_id: req.body.brand||null
         }
         productinfo.image = (req.file.filename) ? req.file.filename : 'no-image_1606218971.jpeg';
         productinfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;
         const product = await Product.create(productinfo);
+        await ProductCategory.findByIdAndUpdate({_id:req.body._category},{$push:{ _products : product._id }})
         res.redirect("/admin/regularprice/create/" + product._id)
     } catch (err) {
         await req.flash('failure', err.message);
@@ -174,10 +180,10 @@ exports.productsave = async (req, res) => {
 */
 exports.productlisting = async (req, res) => {
     try {
-        // let price = await StoreProductPricing.find().exec()
-        // let product = await Product.find().exec();
-        // if (!product.length) return res.render('admin/product/listing', { menu: "products", submenu: "list", price: "", product: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
-        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: '', price: '', success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+       
+        var cond = (req.session.roles.includes('system_admin'))?{}:{ _id :{ $in: req.session.stores } }
+		let stores = await Stores.find(cond).exec();
+        return res.render('admin/product/listing', { menu: "products", submenu: "list", product: '', price: '', store:stores,success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
     } catch (err) {
         res.status(400).json({ data: err.message });
@@ -203,8 +209,9 @@ exports.productedit = async (req, res) => {
         const product = await Product.findById(req.params.id).exec();
         var brands = await Brand.find({}).lean();
         var deals = await Deals.find({}).lean();
+        var unit = await Unit.find({}).lean();
         var productCategories = await ProductCategory.find({}).lean();
-        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals: deals, product: product, productCategories: productCategories, menu: "Product" })
+        res.render('admin/product/edit', { status: "success", message: "", brands: brands, deals: deals, unit:unit, product: product, productCategories: productCategories, menu: "Product" })
     } catch (err) {
         res.status(400).json({ status: "false", data: err });
     }
@@ -222,32 +229,43 @@ exports.productupdate = async function (req, res) {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+       
         const productinfo = {
             name: {
                 english: req.body.en_name
             },
             description: req.body.description,
-            sku: req.body.sku,
+           // sku: req.body.sku,
             _category: req.body._category,
             weight: req.body.weight,
+            slug:(req.body.en_name+req.body.sku).replace(/ /g, "-").toLowerCase(),
             short_description: req.body.short_description,
             is_featured: req.body.is_featured,
             price: req.body.price,
             _unit: req.body.unit,
-
+            cuisine:req.body.cuisine||null,
+            trending:req.body.trending,
             status: req.body.status,
-
+            brand_id:req.body.brand||null
         }
         if (req.file) { productinfo.image = req.file.filename }
-        const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: true, upsert: true });
+       
+        const product = await Product.findByIdAndUpdate({ _id: req.params.id }, productinfo, { new: false, upsert: true });
+
         if (product) {
+
+            //db.getCollection('productcategories').aggregate([{'$addFields': {'_products': {'$setUnion': ['$_products', []]}}}])
+            await ProductCategory.findByIdAndUpdate({_id:product._category},{ $pull:{ _products : product._id  }})
+            await ProductCategory.findByIdAndUpdate({_id:req.body._category},{ $push:{ _products : product._id }})
             await req.flash('success', 'Product updated successfully!');
             res.redirect('/admin/product')
+        }else{
+            await req.flash('failure', 'Something is wrong');
+            res.redirect('/admin/product')
         }
-        return res.status(400).json({ status: false, message: "ProductCategory not found" });
+        
 
     } catch (err) {
-        console.log(err)
         await req.flash('failure', err.message);
         res.redirect('/admin/product')
     }
@@ -263,7 +281,7 @@ exports.remove = async (req, res) => {
         let remove = await StoreProductPricing.deleteOne({ _id: req.body._id }).exec()
         if (!remove) return res.json({ status: false })
         return res.json({ status: true })
-    } catch (err) {
+    }catch (err) {
         res.send(err)
     }
 }
@@ -274,35 +292,13 @@ exports.remove = async (req, res) => {
 exports.priceSave = async (req, res) => {
     try {
         const arr = [];
-        // for (i = 0; i < req.body.no_of_stores; i++) {
-        //     for (k = i + 1; k < req.body.no_of_stores; k++) {
-        //         if (req.body.store[i] == req.body.store[k] && req.body.deal[i] == req.body.deal[k]) {
-        //             if (req.body.etime[i] >= req.body.stime[k]) {
-        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
-        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
-        //             }
-        //         }
-        //         else if (req.body.store[i]) {
-        //             if (moment(req.body.stime[k]).isBetween(moment(req.body.stime[i]), moment(req.body.etime[i])) || moment(req.body.stime[k]).isSame(req.body.stime[i]) || moment(req.body.stime[k]).isSame(req.body.etime[i]) || moment(req.body.etime[k]).isSame(req.body.stime[i]) || moment(req.body.etime[k]).isSame(req.body.etime[i])) {
-        //                 await req.flash('failure', "Cannot select two  same dates for same deals");
-        //                 return res.redirect('/admin/product/pricing/' + req.body.productid)
-        //             }
-
-        //         }
-        //     }
-        //     // if(req.body.deal_value[i] >0 && req.body.deal_price[i] )
-        //     // {
-        //     //     await req.flash('failure', "Only one value is selected from Deal% and Deal price");
-        //     //     return res.redirect('/admin/product/pricing/' + req.body.productid) 
-        //     // }
-        // }
+        
         for (i = 0; i < req.body.no_of_stores; i++) {
             data = {};
-            console.log("--product", req.body)
             data._deal = req.body.deal[i];
             // data.deal_price = req.body.deal_price[i];
             data.deal_percentage = req.body.deal_value[i];
-            data.deal_price = req.body.deal_price[i];
+            data.deal_price = parseFloat(req.body.deal_price[i]).toFixed(2);
             data.deal_start = moment(req.body.stime[i]).startOf('day').toISOString();
             data.deal_end = moment(req.body.etime[i]).endOf('day').toISOString();
             data._store = req.body.store[i]
@@ -321,45 +317,7 @@ exports.priceSave = async (req, res) => {
                 deal_end: { $gte: moment(req.body.stime[i]).startOf('day').toISOString() },
 
             }
-            // waterfall([
-            //     function (callback) {
-            //         Banner.findOneAndUpdate(
-            //             { $and: [{ _store: req.body.store[i] }, { _deal: req.body.deal[i] }, { deal_end: { $gt: moment(req.body.stime[i]).startOf('day').toISOString() } }, { deal_end: { $lt: moment(req.body.etime[i]).endOf('day').toISOString() } }] },
-            //             { deal_end: moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false },
-            //             function (err, result) {
-            //                 callback(err, result);
-            //             })
-            //     },
-            //     function (result, callback) {
-            //         if (result) callback(null, result);
-            //         else
-            //             Banner.findOne(banner, function (err, result1) {
-            //                 callback(err, result1);
-            //             })
-            //     },
-            //     function (result1, callback) {
-            //         bannerinfo.image = 'no-image_1606218971.jpeg'
-            //         if (result1)
-            //             callback(null, result1);
-            //         else {
-            //             Banner.create(bannerinfo)
-            //         }
-            //     }
-            // ], function (err, result) {
-            //     // result now equals 'done'
-            //     console.log("--errr", result)
-            // });
-
-            // const banner = await Banner.findOneAndUpdate({ _store: req.body.store[i], _deal: req.body.deal[i], deal_end: { $gte:moment(req.body.stime[i]).startOf('day').toISOString() }, deal_end: { $lte: moment(req.body.etime[i]).endOf('day').toISOString() } }, { deal_end:moment(req.body.etime[i]).endOf('day').toISOString() }, { returnOriginal: false }).exec()
-            // if (!banner) {
-            //     const bannerinfo = {
-            //         _deal: req.body.deal[i],
-            //         _store: req.body.store[i],
-            //         deal_start:moment(req.body.stime[i]).startOf('day').toISOString(),
-            //         deal_end:moment(req.body.etime[i]).endOf('day').toISOString()
-            //     }
-            //     await Banner.create(bannerinfo);
-            // }
+            
             await StoreProductPricing.deleteOne({ _store: req.body.store[i], _product: req.body.productid }).exec()
         }
 
@@ -385,31 +343,43 @@ exports.addPrice = async (req, res) => {
     try {
         var prices = [];
         var deal = [];
-         var product =  await Product.findOne({_id:req.params.productid}).lean()
+        var product =  await Product.findOne({_id:req.params.productid}).lean()
         var brands = await Brand.find({}).lean()
-        var deals = await Deals.find({}).lean();
-        var stores = await Stores.find({}).populate('_currency').lean();
-        var regularPrice = await RegularPrice.find({}).lean()
-        let price = await StoreProductPricing.find({ _product: req.params.productid }).lean()
-        if (!price) res.render('admin/product/pricing', { menu: "ProductCategory", productid: req.params.productid, productName:product, brands: brands, deals: '', price: '', stores: stores, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
+        var deals = await Deals.find({}).collation({ locale: "en" }).sort({'name': 1}).lean();
 
-        price.map((element) => {
-            var data = {};
-            var dealss = {}
-            regularPrice.map(regular => {
-                if (regular._product.equals(element._product) && regular._store.equals(element._store)) {
-                    data = { ...element, regularprice: regular.regular_price }
+        if(req.session.roles.includes('system_admin')){
+            var stores = await Stores.find({}).select('name _currency').populate('_currency').collation({ locale: "en" }).sort({'name': 1}).lean();
+            userStores = stores
+        }else{
+            var stores = await User.findOne({_id:req.session.userid}).select('-_id -password -role_id -coupons -last_login -updatedAt -createdAt -ncrStatus').populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency'} }).lean() 
+            userStores = stores._store
+        }
+        
+        var storesIds = userStores.map(store => store._id)
+        
+        let productPrice = await StoreProductPricing.find({ _store:{$in : storesIds},_product:req.params.productid}).populate({path:'_store',select:'name _currency',options: { sort: { 'name': 1 } }, populate: {path: '_currency', select:'name'}}).lean({ getters: true })
+        
+        let regularPrice = await RegularPrice.find({ _store:{$in : storesIds},_product:req.params.productid}).lean({ getters: true })
+        
+        let storeData = [];
+        productPrice.map((price)=>{
+                pricingData = {}
+                regularPrice.map((regPrice)=>{
+                        if(regPrice._store.equals(price._store._id)){
+                            pricingData = { ...price, regularprice: regPrice.regular_price, storeId:price._store._id, storeName:price._store.name, _currency:price._store._currency.name }
+                            delete(pricingData._store)
+                            delete(pricingData.createdAt)
+                            delete(pricingData.updatedAt)
+                            delete(pricingData.__v)
+                        }
+                })
+                storeData.push(pricingData)
+                //console.log(price._store._id,"==========",regularPricee)
+        }) 
+//return res.json(storeData)
+        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid:req.params.productid, brands:brands, deals:deals, storeData:storeData, stores:userStores, moment:moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
 
-                }
-            })
-
-            prices.push(data)
-
-        })
-  console.log("---product",product)
-        res.render('admin/product/pricing', { menu: "ProductCategory", productName:product, productid: req.params.productid, brands: brands, deals: deals, price: prices, stores: stores, moment: moment, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
     } catch (err) {
-        console.log("--err", err)
         res.status(400).json({ data: err.message });
     }
 }
@@ -419,11 +389,31 @@ exports.product_listing = async (req, res) => {
         var page = parseInt(req.query.draw) || 1; //for next page pass 1 here
         var limit = parseInt(req.query.length) || 5;
         let searchString = req.query.search.value || '';
-      
+        if(req.query._store) {
+         let productId = await RegularPrice.find({_store:req.query._store},['_product'])
+         let _product = []
+          productId.map((item)=>{
+            _product.push(item._product)
+           })
+           var where = {
+            _id : {$in : _product},
+            $or: [
+                { description: { $regex: '.*' + searchString + '.*', $options: 'i' } },
+                { "name.english": { $regex: searchString, $options: 'i' } },
+            ]
+        }
+           let product = await Product.find(where)
+           .skip((pagno - 1) * limit) //Notice here
+           .limit(limit)
+           .lean();
+       let total = await Product.find(
+           where
+       ).lean()
+       return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
+        }else{
         let productForSpecificCompany
         if (req.session.company) {
             productForSpecificCompany = await _globalCommon.companyStore(req)
-            //where._company = req.session.company
         }
         var where = {
             $or: [
@@ -432,24 +422,36 @@ exports.product_listing = async (req, res) => {
                 {_id : {$in : productForSpecificCompany}}
             ]
         }
-        let product = await Product.find(where)
+        
+        let product = await Product.find(where).populate('brand_id','name status').populate('_unit','name')
             .skip((pagno - 1) * limit) //Notice here
             .limit(limit)
             .lean();
-        let total = await Product.find(
-            where
-        ).lean()
+       
+            let total = await Product.find(where).populate('brand_id','name status').populate('_unit','name').lean()
+        
         return res.json({ draw: page, recordsTotal: total.length, recordsFiltered: total.length, data: product })
+        }
     } catch (err) {
         res.status(400).json({ data: err.message });
     }
 }
-
 exports.product_delete = async (req, res) => {
     try {
         let remove = await Product.deleteMany({ _id: { $in: req.body.id } }).exec()
         if (!remove) return res.json({ status: false })
         return res.json({ status: true })
+    } catch (err) {
+        res.send(err)
+    }
+}
+exports.unique_sku = async (req, res) => {
+    try {
+       let sku =  await Product.findOne({sku:req.body.sku}).lean()
+       if(sku)return res.send({ status: false })
+       
+       return res.send({status:true})
+      
     } catch (err) {
         res.send(err)
     }

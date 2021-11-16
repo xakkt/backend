@@ -2,6 +2,7 @@ const User = require('../../models/user');
 const Roles = require('../../models/role')
 const Device = require('../../models/device')
 const Company = require('../../models/company')
+const Stores = require('../../models/store')
 
 var randomstring = require("randomstring");
 const express = require('express');
@@ -42,7 +43,6 @@ class Mail {
 
 }
 
-
 exports.check = function (req, res) {
 
     const errors = validationResult(req);
@@ -52,23 +52,23 @@ exports.check = function (req, res) {
     res.json(req.body.email);
 },
 
-    exports.list = async (req, res) => {
-        let filter = {
-            limit: 10,
-            skip: 10,
-            search: '',
-            sort: 'ASC',
-            sort: {
-                name: 'asc'
-            }
+exports.list = async (req, res) => {
+    let filter = {
+        limit: 10,
+        skip: 10,
+        search: '',
+        sort: 'ASC',
+        sort: {
+            name: 'asc'
         }
+    }
 
         try {
-            // let list =  await Roles.find({_id:req.session.roleid,name:'SYSTEM ADMININSTRATOR'}).lean()
+            // let list =  await Roles.find({_id:req.session.rolesId,name:'SYSTEM ADMININSTRATOR'}).lean()
             // var cond ;
             // (list)?cond={role_id:{$in: [null, [] ]}}:cond={user_id:req.session.userid}
 
-            let users = await User.find({ role_id: { $in: [null, []] } }).lean();
+            let users = await User.find({}).populate('role_id').lean();
             if (!users) return res.render('admin/user/list', { menu: "users", submenu: "list", users: "", success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
             return res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         } catch (err) {
@@ -77,24 +77,29 @@ exports.check = function (req, res) {
 
     },
 
-    exports.edit = async (req, res) => {
-        try {
-            var role = await Roles.find({}).lean()
-            var TimeZone = moment.tz.names();
-            const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
-            return res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role, timezone: TimeZone, message: "", user: user });
-        } catch (err) {
-            res.status(400).json({ status: "false", data: err });
-        }
+exports.edit = async (req, res) => {
+    try {
+        var role = await Roles.find({}).lean()
+        var stores = await Stores.find({}).sort({'name': 1}).lean()
+        var company = await Company.find({}).lean()
+        var TimeZone = moment.tz.names();
+        const user = await User.findById(req.params.id, { password: false, updatedAt: false }).exec();
+        console.log
+        return res.render('admin/user/edit', { menu: "users", submenu: "create", status: "success", role: role, timezone:TimeZone,message: "",user:user,stores:stores,company:company });
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ status: "false", data: err });
     }
+}
 
 exports.create = async (req, res) => {
     try {
         var role = await Roles.find({}).lean()
         var TimeZone = moment.tz.names();
         var company = await Company.find({}).lean()
+        var stores = await Stores.find({}).sort({'name': 1}).lean()
 
-        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: TimeZone,company:company, role: role })
+        res.render('admin/user/create', { menu: "users", submenu: "create", timezone: TimeZone,company:company,role:role,stores:stores })
     } catch (err) {
         console.log(err)
         res.status(400).json({ data: err.message });
@@ -113,6 +118,7 @@ exports.save = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             role_id: req.body.role,
+            _store:req.body.store,
             contact_no: req.body.contact_no,
             status: req.body.status,
             _supervisor: req.session.userid,
@@ -146,18 +152,20 @@ exports.update = async function (req, res) {
             last_name: req.body.last_name,
             email: req.body.email,
             role_id: req.body.role,
+            _store: req.body.store,
             contact_no: req.body.contact_no,
             status: req.body.status,
             _supervisor: req.session.userid,
             last_login: req.body.last_login,
             ncrStatus: req.body.ncrStatus,
+            _company: req.body.company,
             superbuckId: req.body.superbuckId,
             _timezone: req.body.timezone,
             dob: moment(req.body.dob).format('YYYY-MM-DD')
         }
 
         if (req.file) { userinfo.profile_pic = req.file.path.replace(/public/g, ""); }
-        if (req.body.password.trim()) { userinfo.password = req.body.password }
+        if (req.body.password.trim()) { userinfo.password = md5(req.body.password) }
         const user = await User.findByIdAndUpdate({ _id: req.params.id }, userinfo, { new: true, upsert: true });
 
         if (!user) {
@@ -167,6 +175,26 @@ exports.update = async function (req, res) {
 
         await req.flash('success', 'User added successfully!');
         res.redirect('/admin/users')
+
+
+    } catch (err) {
+        res.status(400).json({ status: false, message: "Not updated", data: err });
+    }
+
+
+}
+
+exports.updateStatus = async function (req, res) {
+
+    try { 
+        
+        const user = await User.findByIdAndUpdate({ _id: req.query.userid }, {status:req.query.status}, { new: true, upsert: true });
+
+        if (!user) {
+            res.json({ status: false, message: "Status not updated" });
+        }
+
+        res.json({ status: true, message: "Status updated" });
 
 
     } catch (err) {
@@ -200,7 +228,7 @@ exports.authenticate = async (req, res) => {
 
 },
 
-    exports.updatestatus = async (req, res,) => {
+exports.updatestatus = async (req, res,) => {
 
         try {
             const user = await User.updateOne({ _id: req.params.userid }, { rider_status: req.params.status });
@@ -214,7 +242,8 @@ exports.authenticate = async (req, res) => {
         }
 
     },
-    exports.delete = (req, res) => {
+exports.delete = (req, res) => {
+
         User.deleteOne({ _id: req.params.userid }, async (err) => {
             if (err) return res.status(400).json({ data: err });
             await req.flash('success', 'User deleted!');
@@ -231,6 +260,16 @@ exports.adminlist = async (req, res) => {
         res.status(400).json({ status: "false", data: err });
     }
 
+}
+exports.checkEmail = async(req,res) =>{
+    try {
+        let email =  await User.findOne({email:req.body.email}).lean()
+        if(email)return res.send({ status: false })
+        return res.send({status:true})
+        
+    } catch (err) {
+        res.send(err)
+    }
 }
 
 

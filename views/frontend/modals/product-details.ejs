@@ -1,0 +1,59 @@
+
+   <div class="modal fade product_view" id="product_view">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" data-dismiss="modal" class="class pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+                <h3 class="modal-title"></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 product_img">
+                        <img src="" alt="no image" class="img-fluid xproduct-img">
+                    </div>
+                    <div class="col-md-6 product_content">
+                        <h4> SKU: <span class="sku"></span></h4>
+                        <!--div class="rating">
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            (10 reviews)
+                        </div-->
+                        <p id="description">Description goes here</p>
+                        <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> <span class="currency"></span> <span class="deal-price"></span> <small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> <span class="regular-price"></span></small></h3>
+                        <div class="row">
+                            
+                            <!-- end col -->
+                            
+                            <!-- end col -->
+                            <div class="col-md-12 col-sm-12">
+                                <div class="quantity dqnty">
+                                    <button class="minus-btn xbtn qxbtn" type="button" name="button">
+                                        <i class="fa fa-minus" aria-hidden="true"></i>
+                                    </button>
+                                    <input type="text" name="name" value="1">
+                                    <button class="plus-btn xbtn qxbtn" type="button" name="button">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                    
+                                  </div>
+                            </div>
+                            
+                            <!-- end col -->
+                        </div>
+                        
+                        <div class="btn-ground cart-img">
+                           
+                                <img class="img-thumbnail img-responsive xakkti x-cart x-cart-red" style="height:50px" data-toggle="tooltip" data-placement="bottom" title="Remove from Cart" data-prop="x-cart"  src="<%= process.env.BASE_URL %>/frontend/images/RED_Cart.png" alt="">
+                                <img class="img-thumbnail img-responsive xakkti x-heart x-heart-red-" style="height:50px" data-toggle="tooltip" data-placement="bottom" title="Remove from favourite" data-prop="x-heart"  src="<%= process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="">
+                                <img class="img-thumbnail img-responsive xakkti x-list x-list-red" style="height:50px" data-toggle="tooltip" data-placement="bottom" title="Remove from shopping list" "" data-prop="x-list"  src="<%= process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" alt="">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,28 +8,23 @@ const {
 } = require('express-validator');
 var moment = require('moment-timezone');
 const Currency = require('../../models/currency');
+const { ['log']: c } = console;
 
 
 exports.list = async (req, res) => {
 
 		try {
-			var where = (req.session.company) ? {
-				_company: req.session.company
-			} : {};
-			let stores = await Store.find(where).exec();
-			console.log('======================>stores', stores)
-			if (!stores.length) return res.render('admin/store/listing', {
-				menu: "store",
-				submenu: "list",
-				stores: ""
-			})
-			return res.render('admin/store/listing', {
-				menu: "store",
-				submenu: "list",
-				stores: stores
-			})
+			var cond = (req.session.roles.includes('system_admin'))?{}:{ _id :{ $in: req.session.stores } }
+			let stores = await Store.find(cond).exec();
 
-		} catch (err) {
+			return res.render('admin/store/listing', 
+				{
+					menu: "store",
+					submenu: "list",
+					stores: stores
+				})
+			 
+		 } catch (err) {
 			res.status(400).json({
 				status: "success",
 				data: err
@@ -37,23 +32,24 @@ exports.list = async (req, res) => {
 		}
 	},
 
-	exports.show = async (req, res) => {
-			try {
-				const stores = await Store.findById(req.params.id).exec();
-				res.json({
-					status: "success",
-					message: "",
-					data: stores
-				});
-			} catch (err) {
-				res.status(400).json({
-					status: "false",
-					data: err
-				});
-			}
+exports.show = async (req, res) => {
+		try {
+			const stores = await Store.findById(req.params.id).exec();
+			res.json({
+				status: "success",
+				message: "",
+				data: stores
+			});
+		} catch (err) {
+			res.status(400).json({
+				status: "false",
+				data: err
+			});
+		}
 
 
-		},
+	},
+
 		exports.create = async (req, res) => {
 
 			try {
@@ -103,6 +99,7 @@ exports.editStore = async (req, res) => {
 	exports.saveStore = async (req, res) => {
 
 			try {
+				
 				var holiday_date = req.body.holiday.split('-').map((item) => item.trim())
 				const storeinfo = {
 					name: req.body.name,
@@ -112,6 +109,7 @@ exports.editStore = async (req, res) => {
 					address: req.body.address,
 					city: req.body.city,
 					state: req.body.state,
+					slug:(req.body.name+req.body.address).replace(/ /g, "-").toLowerCase(),
 					_company: req.session.company,
 					_country: req.body.country,
 					_timezone: req.body.timezone,
@@ -234,7 +232,7 @@ exports.nearByStores = async (req, res) => {
 
 
 exports.updateStore = async function (req, res) {
-
+	
 	try {
 		const errors = await validationResult(req);
 		if (!errors.isEmpty()) {
@@ -242,7 +240,7 @@ exports.updateStore = async function (req, res) {
 				errors: errors.array()
 			});
 		}
-		var holiday_date = req.body.holiday.split('-').map((item) => item.trim())
+		//var holiday_date = req.body.holiday.split('-').map((item) => item.trim())
 		const storeinfo = {
 			name: req.body.name,
 			_department: req.body.department,
@@ -251,6 +249,7 @@ exports.updateStore = async function (req, res) {
 			address: req.body.address,
 			city: req.body.city,
 			state: req.body.state,
+			slug:(req.body.name+req.body.address).replace(/ /g, "-").toLowerCase(),
 			_country: req.body.country,
 			_currency: req.body.currency,
 			_timezone: req.body.timezone,
@@ -291,11 +290,11 @@ exports.updateStore = async function (req, res) {
 				},
 
 			},
-			holidays: {
+			/*holidays: {
 				startDate: holiday_date[0],
 				endDate: holiday_date[1],
 				message: req.body.holiday_message
-			}
+			}*/
 
 		}
 		const store = await Store.findByIdAndUpdate({

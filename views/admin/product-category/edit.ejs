@@ -34,8 +34,18 @@
    <!-- Theme style -->
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/dist/css/adminlte.min.css">
    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
-   <link rel="stylesheet"
-      href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+   <style>
+       
+      .select2-container .select2-selection--single {
+         height: 37px !important;
+      }
+      .select2-selection__arrow {
+         height: 36px !important;
+      }
+   </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -53,7 +63,7 @@
             <div class="container-fluid">
                <div class="row mb-2">
                   <div class="col-sm-6">
-                     <h1>Add Product Category</h1>
+                     <h1>Update Product Category</h1>
                   </div>
                   <div class="col-sm-6">
                      <ol class="breadcrumb float-sm-right">
@@ -71,7 +81,7 @@
                <!-- SELECT2 EXAMPLE -->
                <div class="card card-primary">
                   <div class="card-header">
-                     <h3 class="card-title">Edit Product Category</h3>
+                     <h3 class="card-title"><%=productCategory.name%></h3>
                      <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                            <i class="fas fa-minus"></i>
@@ -85,11 +95,12 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label>Parent</label>
-                                 <select class="select2" data-placeholder="Select a State" name="parentid"
+                                 <select class="custom-select category-select" name="parentid"
                                     style="width: 100%;">
-                                    <% if(product.length > 0) { %>
-                                    <% product.forEach((product)=>{ %>
-                                        <option value="<%=product._id%>"><%=product.name%></option>
+                                    <% if(allCategories.length > 0) { %>
+                                       <option></option>
+                                    <% allCategories.forEach((category)=>{ %>
+                                        <option value="<%=category._id%>" <%=productCategory._id%> <%=(category._id.equals(productCategory.parent_id))?'selected':'' %>><%=category.name%></option>
                                     <%})%>
                                     <% } else { %>
                                     <option value="">No Category Found</option>
@@ -155,6 +166,8 @@
                               <script src="<%= process.env.BASE_URL %>/dist/js/adminlte.min.js"></script>
                               <!-- AdminLTE for demo purposes -->
 
+                                 <!-- Select2 -->
+                               <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
                               <!-- jquery-validation -->
                               <script
                                  src="<%= process.env.BASE_URL %>/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -162,7 +175,14 @@
                                  src="<%= process.env.BASE_URL %>/plugins/jquery-validation/additional-methods.min.js"></script>
 
                               <script>
+
+                                 
+
                                  $(function () {
+                                    $('.category-select').select2({
+                                       placeholder: "Select a category",
+                                       allowClear: true
+                                    });
                                     bsCustomFileInput.init();
                                  });
 

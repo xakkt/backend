@@ -13,8 +13,8 @@ exports.save = async (req, res) => {
         try {
             const brandinfo = {
                 name: req.body.name,
-                logo: req.file.filename,
-                description: req.body.description,
+                logo: req.file?.filename ?? null,
+                description: req.body?.description ?? null,
                 status: req.body.status
             }
             // categoryInfo.parent_id = (req.body.parent_id) ? req.body.parent_id : null;

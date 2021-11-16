@@ -3,7 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
-var isloggedin = require('../middlewares/isloggedin')
+
 const departmentController = require('../controllers/admin/departmentController')
 const userController = require('../controllers/admin/userController')
 const productController = require('../controllers/admin/productController')
@@ -21,7 +21,7 @@ const coupanController = require('../controllers/admin/coupanController.js')
 const dashboardController = require('../controllers/admin/dashboardController.js')
 const orderController = require('../controllers/admin/orderController.js')
 const currencyController = require('../controllers/admin/currencyController.js')
-
+const fieldrepController = require('../controllers/admin/fieldrepController.js')
 
 // var auth = function(req, res, next) {
 //   if (req.session.email)
@@ -43,7 +43,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/departments');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
 
@@ -52,7 +52,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/users');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var productStorage =   multer.diskStorage({
@@ -60,7 +60,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/products');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var brandStorage =   multer.diskStorage({
@@ -68,7 +68,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/brands');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var bannerStorage =   multer.diskStorage({
@@ -76,7 +76,7 @@ var storage =   multer.diskStorage({
       callback(null, './public/images/banners');
     },
     filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
-      callback(null, img.replace(' ','_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
     }
   });
   var csvStorage =   multer.diskStorage({
@@ -104,55 +104,59 @@ const storeValidation = [
   verifyjwt.checkToken
 ]
 
-router.get('/',isloggedin,dashboardController.dashboard)
+router.get('/',dashboardController.dashboard)
 // (req,res)=>{
 //       res.render('admin/index',{ menu:"dashboard"}) 
 // });
 
 /*------------ User ---------*/
-router.get('/users',isloggedin,userController.list)
-router.get('/managers',isloggedin,userController.adminlist)
-router.get('/user/create',isloggedin,userController.create);
-router.post('/user/save',isloggedin,userUpload.single('profile_pic'),userController.save)
-router.get('/user/delete/:userid',isloggedin, userController.delete);
-router.get('/user/edit/:id',isloggedin, userController.edit);
-router.post('/user/update/:id',userUpload.single('profile_pic'),isloggedin,userController.update)
+router.get('/users',userController.list)
+router.get('/user/create',userController.create);
+router.post('/user/save',userUpload.single('profile_pic'),userController.save)
+router.get('/user/delete/:userid', userController.delete);
+router.get('/user/edit/:id', userController.edit);
+router.post('/user/update/:id',userUpload.single('profile_pic'),userController.update)
+router.get('/user/update/status',userController.updateStatus);
+router.post('/user/checkEmail',userController.checkEmail)
+
+/*---------- Field Rep ---------*/
+router.get('/fieldrep/companies',fieldrepController.assignCompanies)
 
 /*------------- Department -------*/
-router.get('/departments',isloggedin,departmentController.list)
-router.get('/department/create',isloggedin,departmentController.create);
-router.post('/department/save',isloggedin,upload.single('logo'),departmentController.save)
-router.get('/department/delete/:id',isloggedin, departmentController.delete);
-router.get('/department/edit/:id',isloggedin, departmentController.edit);
-router.post('/department/update/:id',isloggedin,upload.single('logo'),departmentController.update)
+router.get('/departments',departmentController.list)
+router.get('/department/create',departmentController.create);
+router.post('/department/save',upload.single('logo'),departmentController.save)
+router.get('/department/delete/:id', departmentController.delete);
+router.get('/department/edit/:id', departmentController.edit);
+router.post('/department/update/:id',upload.single('logo'),departmentController.update)
 
 /*------------- Store --------*/
 // _global.permission('store_edit')
-router.get('/stores',isloggedin,_global.permission('store_view'),storeController.list)
-router.get('/store/create',isloggedin,_global.permission('store_add'),storeController.create)
-router.post('/store/save',isloggedin,_global.permission('store_add'),storeController.saveStore)
-router.get('/store/edit/:storeid',isloggedin,_global.permission('store_edit'),storeController.editStore)
-router.get('/store/delete/:id',isloggedin,_global.permission('store_delete'), storeController.deleteStore);
-router.post('/store/update/:id', isloggedin,_global.permission('store_edit'),storeController.updateStore)
+router.get('/stores',_global.permission('store_view'),storeController.list)
+router.get('/store/create',_global.permission('store_add'),storeController.create)
+router.post('/store/save',_global.permission('store_add'),storeController.saveStore)
+router.get('/store/edit/:storeid',_global.permission('store_edit'),storeController.editStore)
+router.get('/store/delete/:id',_global.permission('store_delete'), storeController.deleteStore);
+router.post('/store/update/:id', _global.permission('store_edit'),storeController.updateStore)
 
 
 
 /*------------ Products --------*/
-router.get('/products',(req, res)=> {
+/*router.get('/products',(req, res)=> {
     res.render('admin/product/listing', { menu:"products", submenu:"list" })
-})
-router.post('/product/delete',isloggedin, productController.product_delete)
-router.post('/product/create',isloggedin,productUpload.single('logo'),_global.permission('product_add'),productController.productsave)
-router.get('/product',isloggedin,_global.permission('product_view'),productController.productlisting)
-router.get('/product/delete/:id',isloggedin,_global.permission('product_delete'),productController.productdelete);
-router.get('/product/edit/:id',isloggedin,_global.permission('product_edit'),productController.productedit)
-router.post('/product/update/:id',isloggedin,_global.permission('product_edit'),productUpload.single('logo'), productController.productupdate)
-router.get('/product/pricing/:productid',isloggedin,productController.addPrice);
-router.get('/product/create',isloggedin, productController.productCreate)
-router.post('/product_price/create',isloggedin, productController.priceSave)
-router.post('/product_price/remove',isloggedin, productController.remove)
-
-router.get('/product/list',isloggedin,_global.permission('product_view'),productController.product_listing)
+})*/
+router.post('/product/delete', productController.product_delete)
+router.post('/product/create',productUpload.single('logo'),_global.permission('product_add'),productController.productsave)
+router.get('/product',_global.permission('product_view'),productController.productlisting)
+router.get('/product/delete/:id',_global.permission('product_delete'),productController.productdelete);
+router.get('/product/edit/:id',_global.permission('product_edit'),productController.productedit)
+router.post('/product/update/:id',_global.permission('product_edit'),productUpload.single('logo'), productController.productupdate)
+router.get('/product/pricing/:productid',_global.permission('add_product_pricing'),productController.addPrice);
+router.get('/product/create', productController.productCreate)
+router.post('/product_price/create', productController.priceSave)
+router.post('/product_price/remove', productController.remove)
+router.get('/product/list',_global.permission('product_view'),productController.product_listing)
+router.post('/product/sku',_global.permission('product_view'),productController.unique_sku)
 
 /*--------- Invoice ---------*/
 router.get('/invoice',(req, res)=> {
@@ -160,24 +164,24 @@ router.get('/invoice',(req, res)=> {
 })
 
 /*----- product Category ------*/
-router.get('/category',isloggedin,productController.list)
-router.get('/category/create',isloggedin,productController.create)
-router.post('/category/save',isloggedin,upload.single('logo'),productController.save)
-router.get('/category/delete/:id',isloggedin, productController.delete)
-router.get('/category/edit/:id',isloggedin,productController.edit)
-router.post('/category/update/:id',isloggedin,upload.single('logo'), productController.update)
+router.get('/category',productController.list)
+router.get('/category/create',productController.create)
+router.post('/category/save',upload.single('logo'),productController.save)
+router.get('/category/delete/:id', productController.delete)
+router.get('/category/edit/:id',productController.edit)
+router.post('/category/update/:id',upload.single('logo'), productController.update)
 
 
-router.get('/category/create',isloggedin,(req, res)=> { 
+router.get('/category/create',(req, res)=> { 
         res.render('admin/category/create', { menu:"category"})
 })
 /*----------brand ------------*/
-router.get('/brand/create',isloggedin,brandController.create)
-router.get('/brand',isloggedin,brandController.listing)
-router.post('/brand/save',isloggedin,brandUpload.single('logo'),brandController.save)
-router.get('/brand/delete/:id', isloggedin,brandController.delete)
-router.get('/brand/edit/:id',isloggedin,brandController.edit)
-router.post('/brand/update/:id',isloggedin,brandUpload.single('logo'), brandController.update)
+router.get('/brand/create',brandController.create)
+router.get('/brand',brandController.listing)
+router.post('/brand/save',brandUpload.single('logo'),brandController.save)
+router.get('/brand/delete/:id', brandController.delete)
+router.get('/brand/edit/:id',brandController.edit)
+router.post('/brand/update/:id',brandUpload.single('logo'), brandController.update)
 
 // router.get('/brands',(req, res)=> { 
    
@@ -197,67 +201,69 @@ const dealsValidation = [
   body('name').not().isEmpty().trim().escape(),
  
 ]
-router.get('/deal/create',isloggedin,dealController.create)
-router.post('/deal/save',isloggedin,dealsValidation,dealController.save)
-router.get('/deal',isloggedin,dealController.listing)
-router.get('/deal/list',isloggedin,dealController.list)
-router.get('/deal/delete/:id', isloggedin,dealController.delete)
-router.get('/deal/edit/:id',isloggedin,dealController.edit)
-router.post('/deal/update/:id',isloggedin,dealController.update)
+router.get('/deal/create',dealController.create)
+router.post('/deal/save',dealsValidation,dealController.save)
+router.get('/deal',dealController.listing)
+router.get('/deal/list',dealController.list)
+router.get('/deal/delete/:id', dealController.delete)
+router.get('/deal/edit/:id',dealController.edit)
+router.post('/deal/update/:id',dealController.update)
 
 
 /*------------Store Product ----------*/
-router.post('/storeproduct',isloggedin,storeproductController.save)
-router.get('/storeproduct/delete/:id', isloggedin,storeproductController.delete)
-router.get('/storeproduct/view/:id',isloggedin,storeproductController.view)
-router.post('/storeproduct/update/:id',isloggedin,storeproductController.update)
+router.post('/storeproduct',storeproductController.save)
+router.get('/storeproduct/delete/:id', storeproductController.delete)
+router.get('/storeproduct/view/:id',storeproductController.view)
+router.post('/storeproduct/update/:id',storeproductController.update)
 
 /*------------ Roles n Permissions --------*/
-router.get('/roles',isloggedin,rpController.createRole)
-router.post('/roles/create',isloggedin,rpController.create)
-router.post('/roles/createPermission',isloggedin,rpController.createPermission)
-router.post('/roles/update',isloggedin,rpController.update)
+router.get('/roles',rpController.createRole)
+router.post('/roles/create',rpController.create)
+router.post('/roles/createPermission',rpController.createPermission)
+router.post('/roles/update',rpController.update)
 
 /*-------------login -------------- */
 router.get('/login',authController.create)
 router.post('/login',authController.login)
-router.get('/logout',isloggedin,authController.logout)
+router.get('/logout',authController.logout)
  
 /*-----------Regular Product -------*/
 
-router.get('/regularprice/create/:productid',isloggedin,regularproductController.create)
-router.post('/regularprice/update',isloggedin,regularproductController.addprice)
-router.post('/regularprice/remove',isloggedin,regularproductController.remove)
-router.post('/regularprice/get',isloggedin,regularproductController.get)
+router.get('/regularprice/create/:productid',_global.permission('add_product_pricing'),regularproductController.create)
+router.post('/regularprice/update',_global.permission('add_product_pricing'),regularproductController.addprice)
+router.post('/regularprice/remove',_global.permission('add_product_pricing'),regularproductController.remove)
+router.post('/regularprice/get',_global.permission('add_product_pricing'),regularproductController.get)
 
 /*---------Unit --------------*/
-router.get('/unit/create',isloggedin,unitController.create)
-router.post('/unit/create',isloggedin,unitController.save)
-router.get('/unit',isloggedin,unitController.listing)
-router.get('/unit/edit/:id',isloggedin,unitController.edit)
-router.post('/unit/edit/:id',isloggedin,unitController.update)
-router.get('/unit/delete/:id',isloggedin,unitController.delete)
+router.get('/unit/create',unitController.create)
+router.post('/unit/create',unitController.save)
+router.get('/unit',unitController.listing)
+router.get('/unit/edit/:id',unitController.edit)
+router.post('/unit/edit/:id',unitController.update)
+router.get('/unit/delete/:id',unitController.delete)
 
  /*----------Banner -------*/
- router.get('/banner/create',isloggedin,bannerController.create)
- router.post('/banner/deal',isloggedin,bannerController.deals)
- router.post('/banner/save',isloggedin,bannerUpload.single('logo'),bannerController.save)
- router.get('/banner/list',isloggedin,bannerController.list)
- router.get('/banner/delete/:id',isloggedin,bannerController.delete)
- router.get('/banner/edit/:id',isloggedin,bannerController.edit)
- router.post('/banner/update/:id',isloggedin,bannerUpload.single('banner_image'),bannerController.update)
- router.get('/banner/agreement',isloggedin,bannerController.agreement)
+ router.get('/banner/create',bannerController.create)
+ router.post('/banner/deal',bannerController.deals)
+ router.post('/banner/save',bannerUpload.single('logo'),bannerController.save)
+ router.get('/banner/list',bannerController.list)
+ router.get('/banner/delete/:id',bannerController.delete)
+ router.get('/banner/edit/:id',bannerController.edit)
+ router.post('/banner/update/:id',bannerUpload.single('banner_image'),bannerController.update)
+ router.get('/banner/agreement',bannerController.agreement)
 
 
 
  /*---------Company--------- */
  
- router.get('/company/create',isloggedin,compController.create)
- router.post('/company/save',isloggedin,compController.save)
- router.get('/company/list',isloggedin,compController.list)
- router.get('/company/delete/:id',isloggedin,compController.delete)
- router.get('/company/edit/:id',isloggedin,compController.edit)
- router.post('/company/update/:id',isloggedin,compController.update)
+ router.get('/company/create',compController.create)
+ router.post('/company/save',compController.save)
+ router.get('/company/list',compController.list)
+ router.post('/company/checkEmail',compController.checkEmail)
+ /*---- need to discuss ----*/
+ /*router.get('/company/delete/:id',compController.delete)*/
+ router.get('/company/edit/:id',compController.edit)
+ router.post('/company/update/:id',compController.update)
 
 
 /******-------upload */
@@ -265,23 +271,27 @@ router.get('/unit/delete/:id',isloggedin,unitController.delete)
 
 
 /********Coupon*********/
-router.get('/coupon/create',isloggedin,coupanController.create) 
-router.post('/coupon/save',isloggedin,coupanController.save) 
-router.get('/coupon/list',isloggedin,coupanController.listing) 
-router.get('/coupon/delete/:id',isloggedin,coupanController.delete) 
-router.get('/coupon/edit/:id',isloggedin,coupanController.edit) 
-router.post('/coupon/update/:id',isloggedin,coupanController.update) 
+router.get('/coupon/create',coupanController.create) 
+router.post('/coupon/save',coupanController.save) 
+router.get('/coupon/list',coupanController.listing) 
+router.get('/coupon/delete/:id',coupanController.delete) 
+router.get('/coupon/edit/:id',coupanController.edit) 
+router.post('/coupon/update/:id',coupanController.update) 
 
 /*****Order ******/
-router.get('/order/list',isloggedin,orderController.listing) 
-router.get('/order/edit/:id',isloggedin,orderController.edit) 
-router.post('/order/update/:id',isloggedin,orderController.update) 
+router.get('/order/list',orderController.listing) 
+router.get('/order/edit/:id',orderController.edit) 
+router.post('/order/update/:id',orderController.update) 
+router.get('/order/delete/:id',orderController.orderDelete) 
 /******Currecny******/
-router.post('/currency/add',isloggedin,currencyController.save) 
-router.get('/currency/create',isloggedin,currencyController.create) 
-router.get('/currency/list',isloggedin,currencyController.list) 
-router.get('/currency/delete/:id',isloggedin,currencyController.delete) 
-router.get('/currency/edit/:id',isloggedin,currencyController.edit) 
-router.post('/currency/update/:id',isloggedin,currencyController.update) 
+router.post('/currency/add',currencyController.save) 
+router.get('/currency/create',currencyController.create) 
+router.get('/currency/list',currencyController.list) 
+router.get('/currency/delete/:id',currencyController.delete) 
+router.get('/currency/edit/:id',currencyController.edit) 
+router.post('/currency/update/:id',currencyController.update) 
 
+router.get('/forbidden',(req, res) => {
+  return res.render('admin/forbidden/forbidden')
+})
 module.exports = router;

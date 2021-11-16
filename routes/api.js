@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 
 const homeController = require('../controllers/api/homeController')
 const productController = require('../controllers/api/productController')
@@ -56,6 +56,10 @@ const cartValidation = [
     body('quantity').not().isEmpty().withMessage('cart_price should not be empty'),
 ]
 
+const emptyCartValidation = [
+    param('storeid').not().isEmpty().trim().escape().withMessage('storeid should not be empty'),
+]
+
 const removeProductValidation = [
     body('_product').not().isEmpty().trim().escape().withMessage('_product should not be empty'),
     body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
@@ -94,7 +98,8 @@ const userValidation = [
     body('first_name').not().isEmpty().trim().escape().withMessage('first_name should not be empty'),
     body('last_name').not().isEmpty().trim().escape().withMessage('last_name should not be empty'),
     body('contact_no').not().isEmpty().trim().escape().withMessage('contact_no should not be empty'),
-    
+    body('password').not().isEmpty().trim().escape().withMessage('Password should not be empty'),
+    //body('dob').not().isEmpty().trim().escape().withMessage('Date of birth should not be empty'),
 ]
 
 const authValidation = [
@@ -113,23 +118,41 @@ const listProductsVali = [
      body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
 ]
 
-const orderValidation = [
+const orderValidationn = [
    // body('rating').isInt().withMessage('rating should not be empty') 
 ]
+
+const orderValidation = [
+    body('products').not().isEmpty().withMessage('_product should not be empty'),
+    body('_store').not().isEmpty().trim().escape().withMessage('_store should not be empty'),
+  //  body('tracking.status').not().isEmpty().trim().escape().withMessage('wish_price should not be empty'),
+   // body('max_price').not().isEmpty().trim().escape().withMessage('max_price should not be empty')
+]
+
+const addressValidation = [
+    body('address1').not().isEmpty().trim().escape().withMessage('address should not be empty'),
+    body('address_type').not().isEmpty().trim().escape().withMessage('address_type should not be empty'),
+    body('emirate').not().isEmpty().trim().escape().withMessage('state should not be empty'),
+    body('country').not().isEmpty().trim().escape().withMessage('country should not be empty'),
+    body('countrycode').not().isEmpty().trim().escape().withMessage('country code should not be empty'),
+    body('lat').not().isEmpty().trim().escape().withMessage('latitude should not be empty'),
+    body('long').not().isEmpty().trim().escape().withMessage('longitude should not be empty')
+]
+
 /*--- user ---*/
 router.post('/user/forgetpassword',userController.forgotPassword);
 router.post('/user/create',userValidation,userController.create);
 router.get('/user/list',verifyjwt.checkToken, userController.list);
 router.post('/user/authenticate', authValidation, userController.authenticate);
 router.post('/user/changepassword', verifyjwt.checkToken,userController.changePassword)
-router.post('/user/address', verifyjwt.checkToken,userController.address)
+router.post('/user/address', addressValidation, verifyjwt.checkToken,userController.address)
 router.get('/user/addresslist',verifyjwt.checkToken, userController.addresslist)
-router.put('/user/update/:id',verifyjwt.checkToken,userController.updateProfile);
+router.put('/user/update/:id',verifyjwt.checkToken,userValidation,userController.updateProfile);
 router.get('/user/:id', verifyjwt.checkToken,userController.getUser);
 router.get('/user/delete/:id', verifyjwt.checkToken,userController.deleteaddress);
 router.get('/user/edit/:id',verifyjwt.checkToken,userController.editaddress);
 router.post('/user/edit/:id',verifyjwt.checkToken,userController.updateaddress);
-
+router.post('/user/set_default_address',verifyjwt.checkToken,userController.makeDefaultAddress)
 
 /*--- home ---*/
 router.get('/app/dashboard/:storeid', homeController.dashboard);
@@ -149,19 +172,21 @@ router.post('/cart/add_product', verifyjwt.checkToken,cartValidation,cartControl
 router.get('/cart/products/:store', verifyjwt.checkToken, cartController.listCartProduct);
 router.delete('/cart/remove_product', verifyjwt.checkToken,removeProductValidation, cartController.removeProductFromCart);
 router.put('/cart/update_quantity', verifyjwt.checkToken, cartValidation,cartController.updateProductQuantity);
-
+router.delete('/cart/empty/:storeid',verifyjwt.checkToken,emptyCartValidation,cartController.makeCartEmpty)
+router.get('/cart/size/:storeid',verifyjwt.checkToken,emptyCartValidation,cartController.cartSize)
 
 /*--- product category ---*/
-router.post('/category/create', verifyjwt.checkToken,categoryValidation, categoryController.create);
-router.get('/category/:id/products', verifyjwt.checkToken, categoryValidation, categoryController.productsByCategory);
-router.get('/category/list',verifyjwt.checkToken,categoryController.list);
-router.delete('/category/:id/delete', verifyjwt.checkToken, categoryController.delete);
-router.put('/category/:id/update',verifyjwt.checkToken, categoryValidation, categoryController.update);
+//router.post('/category/create', verifyjwt.checkToken,categoryValidation, categoryController.create);
+router.get('/main-category/:id/products',categoryController.productbyParentCategory)
+router.get('/category/:id/products', categoryValidation, categoryController.productsByCategory);
+router.get('/category/list',categoryController.list);
+//router.delete('/category/:id/delete', verifyjwt.checkToken, categoryController.delete);
+//router.put('/category/:id/update',verifyjwt.checkToken, categoryValidation, categoryController.update);
 router.get('/category/:id', verifyjwt.checkToken, categoryController.show);
 
 /*--- order ---*/
 router.get('/order/myorder',verifyjwt.checkToken, orderController.myorder);
-router.post('/order/create',verifyjwt.checkToken, orderController.creatOrder);
+router.post('/order/create', orderValidation, verifyjwt.checkToken, orderController.creatOrder);
 router.get('/orders/:storeid',verifyjwt.checkToken, orderController.listOrders);
 router.put('/order/feedback/:orderid',orderValidation,verifyjwt.checkToken, orderController.rateOrder);
 router.get('/order/:orderid',verifyjwt.checkToken, orderController.orderDetails);

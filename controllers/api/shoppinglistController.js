@@ -21,29 +21,29 @@ exports.allShoppingLists = async (req, res) => {
 	}
 },
 
-	exports.addProductToshoppinglist = async (req, res) => {
+exports.addProductToshoppinglist = async (req, res) => {
 
-		const errors = await validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
+	const errors = await validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+
+	try {
+		shoppinglistInfo = {
+			_shoppinglist: req.body._shoppinglist,
+			_product: req.body._product,
+			quantity: req.body.quantity
 		}
+		const product = await Shoppinglist.create(shoppinglistInfo)
 
-		try {
-			shoppinglistInfo = {
-				_shoppinglist: req.body._shoppinglist,
-				_product: req.body._product,
-				quantity: req.body.quantity
-			}
-			const product = await Shoppinglist.create(shoppinglistInfo)
+		return res.json({ status:1, message: "Product added to shoppinglist successfully", data: product });
 
-			return res.json({ status:1, message: "Product added to shoppinglist successfully", data: product });
+	} catch (err) {
 
-		} catch (err) {
+		res.status(400).json({ data: err.message });
+	}
 
-			res.status(400).json({ data: err.message });
-		}
-
-	};
+};
 
 
 exports.createShoppingList = async function (req, res) {
@@ -51,7 +51,7 @@ exports.createShoppingList = async function (req, res) {
 	try {
 		const errors = await validationResult(req);
 		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
+			return res.status(400).json({ status:0,errors: errors.array() });
 		}
 console.log(req.decoded);
 		const ShoppinglistInfo = {
@@ -64,8 +64,8 @@ console.log(req.decoded);
 		return res.json({ status: 1, message: "Shopping List Created", data: shoppinglist });
 
 	} catch (err) { console.log(err)
-		if (err.code == 11000) return res.status(400).json({ data: "List with this name already exist" });
-		res.status(400).json({ data: err.message });
+		if (err.code == 11000) return res.status(400).json({ status:0,data: "List with this name already exist" });
+		res.status(400).json({status:0, data: err.message });
 	}
 },
 	exports.updateShoppinglist = async function (req, res) {
@@ -95,7 +95,7 @@ exports.deleteShoppinglist = async (req, res) => {
 		const delList = await ShoppinglistName.deleteOne({ _id: req.params.id }).then();
 		if (!delList.deletedCount) { return res.json({ status: 1, message: "No category found", data: "" }); }
 		const delProducts = await Shoppinglist.deleteMany({ _shoppinglist: req.params.id }).exec();
-		res.json({ status: 0, message: "List deleted", data: delProducts })
+		res.json({ status: 1, message: "List deleted", data: delProducts })
 	} catch (err) {
 		return res.status(400).json({ status: 0, message: "", data: err });
 	}
@@ -103,17 +103,28 @@ exports.deleteShoppinglist = async (req, res) => {
 
 exports.shoppinglistProducts = async (req, res) => {
 	try {
-		let shoppinglist = await Shoppinglist.find({ _shoppinglist: req.params.shoplist }).populate('_product', 'name sku price image').populate('_shoppinglist', 'name _store').lean();
+		let shoppinglist = await Shoppinglist.find({ _shoppinglist: req.params.shoplist }).populate({
+																									path:'_product', 
+																									select:'name sku image weight',
+																									populate:{
+																										path:'_unit',
+																										select:'name'
+																									}}).populate('_shoppinglist', 'name _store').lean();
 
-		if (!shoppinglist.length) return res.json({ status:0, message: "No data found", data: shoppinglist });
-
+		if(!shoppinglist.length) return res.json({ status:0, message: "No data found", data: shoppinglist });
+		
 		shoppinglist = await Promise.all(shoppinglist.map(async (list) => {
+
+			var productPrice = await _global.productprice(list._shoppinglist._store, list._product._id)
 
 			if (!list._product) return
 			var productId = list._product._id.toString();
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
 			let image = `${process.env.BASE_URL}/images/products/${image_path}`;
-
+			let unit = list._product._unit.name;
+			let deal_price = productPrice.deal_price;
+			let regular_price =  productPrice.regular_price;
+			
 			var wishList = await _global.wishList(req.decoded.id, list._shoppinglist._store)
 			var shoppingList = await _global.shoppingList(req.decoded.id, list._shoppinglist._store)
 			var cartProducts = await _global.cartProducts(req.decoded.id, list._shoppinglist._store)
@@ -121,16 +132,18 @@ exports.shoppinglistProducts = async (req, res) => {
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
+
 			var list_quantity = list.quantity;
 			delete(list.quantity)
-			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, quantity:list_quantity } };
+			delete(list._product._unit)
+			return { ...list, _product: { ...list._product, unit:unit,image: image,is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, deal_price:deal_price, regular_price:regular_price, in_cart: list_quantity, quantity:list_quantity } };
 		}).filter(Boolean));
 
 		return res.json({ status:1, message: "", data: shoppinglist });
 
 	} catch (err) {
 		console.log(err)
-		res.status(400).json({ status:0, message: "", data: err });
+		res.status(400).json({ status:0, message: err });
 	}
 }
 

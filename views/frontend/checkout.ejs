@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+      <script src="https://use.fontawesome.com/73e16e51a8.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
+      <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
+     
+   </head>
+   <body class="bg-light">
+      <%- await include('../_partials/_frontend/navbar.ejs'); %>
+      <div class="container">
+      <div class="py-5 text-center">
+         <h2>Checkout</h2>
+      </div>
+      <div class="row">
+         <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+               <span class="text-muted">Your cart</span>
+               <span class="badge badge-secondary badge-pill"><%=data.cart.length%></span>
+            </h4>
+            <form class="card p-2" method="post" id="placeorder" action="<%=process.env.BASE_URL%>/placeorder">
+               <input type="hidden" name="_store" value="<%=store._id%>"/>
+               <input type="hidden" name="slug" value="<%=store.slug%>"/>
+               <input type="hidden" name="payment_method" value="0" />
+            <ul class="list-group mb-3">
+               <% var total = 0 %>
+               <% for (const [i,product] of data.cart.entries()) { %>   
+               <li class="list-group-item d-flex justify-content-between lh-condensed">
+                  <div>
+
+                     <input type="hidden" name="products[<%=i%>][_product]" value="<%=product._product._id%>"/>
+                     <input type="hidden" name="products[<%=i%>][quantity]" value="<%=product.quantity%>"/>
+                     <h6 class="my-0"><%=product._product.name.get('english')%> </h6>
+                     <small class="text-muted"> X <%=product.quantity%></small>
+                  </div>
+                  <span class="text-muted"><%=product.total_price%></span>
+                  <% total += product.total_price %>
+               </li>
+               <% } %>
+               <li class="list-group-item d-flex justify-content-between">
+                  <span>Total</span>
+                  <strong><%=store._currency.name%> <%=total.toFixed(2)%></strong>
+                  <input type="hidden" name="total_cost" value="<%=total.toFixed(2)%>"/>
+               </li>
+            </ul>
+
+            
+               <div class="input-group">
+                  <button class="btn btn-primary btn-lg btn-block" type="submit">Place your order</button>
+               </div>
+             </form>
+
+         </div>
+         <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Billing address</h4>
+            <div class="row">
+
+            
+           
+            <% if(addresses) for (const [i,address] of addresses.entries()) { %> 
+            
+            <div class="col-md-4 mb-3 px-2">
+               <div class="xact-add-card <%=(address.is_default)?'active':''%>">
+                  <%if(address.is_default){%> <div class="defaut_add">
+                     <input type="hidden" name="address" value="<%=address._id%>" form="placeorder"/>
+                         <span class="d-flex align-items-center">Default: <img src="<%=process.env.BASE_URL%>/frontend/images/xakkt.png" alt="User Avatar"  class="d-xat-logo"></span>
+                  </div><%}%>
+                  <div class="address_xat">
+                     <div class="xact-box-inner">
+                        <div class="a-section address-section-no-default">
+                           <div class="a-row a-spacing-small">
+                              <ul class="mb-0">
+                                 <li>
+                                    <span class="a-list-item">
+                                       <h5 class="addr-search-name  a-text-bold"><%=addresses.first_name%> <%addresses.last_name%></h5>
+                                    </span>
+                                 </li>
+                                 <li><span class="addr-search-text"><%=address.address1%> <%=address.address2%></span></li>
+                                 <li><span class="addr-search-text"><%=address.emirate%> <%=address.zipcode%></span></li>
+                                 <li><span class="addr-search-text"><%=address.country%></span></li>
+                                 <li><span class="addr-search-text">Contact number: <%=address.phoneno%></span></li>
+                              </ul>
+                              <div class="mt-2"><a class="add-declarative"href="#">Add delivery instructions </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="aedit-address-desktop-link">
+                        <a href="#" class="a-link-normal"  data-toggle="modal" data-target="#editAddressModal">Edit</a> &nbsp; | &nbsp;
+                        <%if(!address.is_default){%><a class="a-link-normal delete-link" href="<%=process.env.BASE_URL%>/user/delete-address/<%=address._id%>">Remove</a> &nbsp; | &nbsp;<%}%>
+                        <%if(!address.is_default){%>  <a class="a-link-normal" href="<%=process.env.BASE_URL%>/user/defautl-address/<%=address._id%>">Set as Default</a> <%}%>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <%}%>
+
+            <div class="col-md-4 mb-3 px-2">
+              <div class="xact-add-card">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    
+                    <div class="add-address-card py-5" data-toggle="modal" data-target="#addAddressModal">
+                      
+                      <div class="add-icon text-center"><i class="fa fa-plus" aria-hidden="true"></i></div>
+                      <h2 class="text-center">Add Address</h2>
+                    
+                    </div>
+
+                  </div>
+              </div>
+            </div>
+
+            </div>
+               
+         </div>
+      </div>
+      </div>
+      <!-- Footer -->
+
+      <!-- add address modal-->
+       <div class="modal" id="addAddressModal">
+         <div class="modal-dialog">
+           <div class="modal-content">
+       
+             <!-- Modal Header -->
+             <!--div class="modal-header">
+               <h4 class="modal-title">Modal Heading</h4>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+             </div-->
+       
+             <!-- Modal body -->
+             <div class="modal-body">
+               <form action="<%=process.env.BASE_URL%>/user/add-address%>" method="POST">
+                  <div class="form-group">
+                    <label for="address1">Address1</label>
+                    <input type="text" class="form-control" required placeholder="Address" name="address1">
+                  </div>
+                  <div class="form-group">
+                     <label for="address2">Address2</label>
+                     <input type="text" class="form-control" required placeholder="Address" name="address2">
+                   </div>
+                   <div class="form-group">
+                     <label for="address1">Emirate or States</label>
+                     <input type="text" class="form-control" required placeholder="Emirate" name="emirate">
+                   </div>
+                   <div class="form-group">
+                     <label for="contactno">Contact</label>
+                     <input type="text" class="form-control" required placeholder="Contact" name="contact_no">
+                   </div>
+                   <div class="form-group">
+                     <label for="country">Country</label>
+                     <input type="text" class="form-control" required placeholder="Country" name="country">
+                   </div>
+                  <div class="form-group row">
+                    <label class="form-check-label col-md-6">
+                      <input class="form-check-input" name="address_type" value="home" type="radio"> Home
+                    </label>
+                    <label class="form-check-label col-md-6">
+                     <input class="form-check-input" name="address_type" value="office" type="radio"> Office
+                   </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+             </div>
+       
+             <!-- Modal footer -->
+             <!--div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+             </div-->
+       
+           </div>
+         </div>
+       </div>
+      <!--modal for address-->
+       <!--- edit address modal-->
+       <div class="modal" id="editAddressModal">
+         <div class="modal-dialog">
+           <div class="modal-content">
+       
+             <!-- Modal Header -->
+             <!--div class="modal-header">
+               <h4 class="modal-title">Modal Heading</h4>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+             </div-->
+       
+             <!-- Modal body -->
+             <div class="modal-body">
+               <form action="<%=process.env.BASE_URL%>/user/add-address%>" method="POST">
+                  <div class="form-group">
+                    <label for="address1">Address1</label>
+                    <input type="text" class="form-control" required placeholder="Address" name="address1">
+                  </div>
+                  <div class="form-group">
+                     <label for="address2">Address2</label>
+                     <input type="text" class="form-control" required placeholder="Address" name="address2">
+                   </div>
+                   <div class="form-group">
+                     <label for="address1">Emirate or States</label>
+                     <input type="text" class="form-control" required placeholder="Emirate" name="emirate">
+                   </div>
+                   <div class="form-group">
+                     <label for="contactno">Contact</label>
+                     <input type="text" class="form-control" required placeholder="Contact" name="contact_no">
+                   </div>
+                   <div class="form-group">
+                     <label for="country">Country</label>
+                     <input type="text" class="form-control" required placeholder="Country" name="country">
+                   </div>
+                  <div class="form-group row">
+                    <label class="form-check-label col-md-6">
+                      <input class="form-check-input" name="address_type" value="home" type="radio"> Home
+                    </label>
+                    <label class="form-check-label col-md-6">
+                     <input class="form-check-input" name="address_type" value="office" type="radio"> Office
+                   </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+             </div>
+       
+             <!-- Modal footer -->
+             <!--div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+             </div-->
+       
+           </div>
+         </div>
+       </div>
+       <!-- edit address -->
+
+      <%- await include('_partials/footer.ejs'); %>
+      <!-- Footer -->
+     
+      <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+   </body>
+</html>

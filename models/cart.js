@@ -7,14 +7,20 @@ const cartSchema = new Schema({
   _user: {
     type: Schema.Types.ObjectId,
     ref:'User',
-    required: true,
+    default:null,
     validate: {
       validator: function(v) {
+              if(v==null)return
               return FKHelper(mongoose.model('User'), v);
           },
         message: `User doesn't exist`
       }
     
+  },
+  sessionId: {
+    type: String,
+    unique: true,
+    required: false
   },
   cart:[ {
     _product:{ 

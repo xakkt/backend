@@ -11,28 +11,21 @@ exports.addPoductToWishlist = async (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	}
-	console.log(req.body);
+	
 	try {
 		const wishlistInfo = {
 			_user: req.decoded.id,
 			_product: req.body._product,
-			_store: req.body._store,
-			wish_price: req.body.wish_price,
-			max_price: req.body.max_price
+			_store: req.body._store
+			
 		}
 		//get deal price
 		var productPrice = await _global.productprice(req.body._store, req.body._product)
 		if(!productPrice) return res.json({status:0,message:"_Store and _Product are invalid"})
-		if (productPrice.effective_price <= req.body.wish_price) {
+		/*if (productPrice.effective_price <= req.body.wish_price) {
 			return res.json({ status: 0, message: "Wish price should be less than  product price" })
-		}
-		else if (productPrice.effective_price <= req.body.max_price) {
-			return res.json({ status: 0, message: "Max price should be less than product price" })
-		}
-		else if (req.body.max_price <= req.body.wish_price) {
-			var price =  req.body.wish_price - req.body.max_price 
-			return res.json({ status: 0, message: "Max price should be greather than Wish price "+ price.toFixed(2) + "" })
-		}
+		}*/
+		
 		const wishlist = await Wishlist.create(wishlistInfo);
 		return res.json({ status: 1, message: "Product added to wishlist successfully", data: wishlist });
 
@@ -84,13 +77,26 @@ exports.allWishlistProducts = async (req, res) => {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate('_product', 'name image price').lean();
+		let wishlist = await Wishlist.find({ _user: req.decoded.id, _store: req.body._store }).populate({
+				path:'_product', 
+				select:'name image price weight',
+				populate:{
+					path:'_unit',
+					select:'name'
+				}
+				}).lean();
 		if (!wishlist.length) return res.json({ status:1, message: "no data found", data: [] })
 		wishlist = await Promise.all(wishlist.map(async (list) => {
 			if (!list._product) return
 			var productId = list._product._id.toString();
 			let image_path = (list._product.image) ? list._product.image : 'not-available-image.jpg';
 			let image = `${process.env.BASE_URL}/images/products/${image_path}`;
+			
+
+			var productPrice = await _global.productprice(req.body._store, productId)
+			if(!productPrice) return res.json({status:0,message:"_Store and _Product are invalid"})
+
+			
 
 			var wishList = await _global.wishList(req.decoded.id, req.body._store)
 			var shoppingList = await _global.shoppingList(req.decoded.id, req.body._store)
@@ -99,13 +105,22 @@ exports.allWishlistProducts = async (req, res) => {
 			var in_wishlist = (wishList.includes(productId)) ? 1 : 0;
 			var in_shoppinglist = (shoppingList.includes(productId)) ? 1 : 0;
 			var quantity = (productId in cartProducts) ? cartProducts[productId] : 0;
-			var wish_price = list.wish_price;
-			var max_price = list.max_price;
+			
+			var unit = list._product._unit.name;
+			delete(list._product._unit)
 			delete (list.wish_price);
 			delete (list.max_price);
 			delete (list.createdAt)
 			delete (list.updatedAt)
-			return { ...list, _product: { ...list._product, image: image, is_favourite: in_wishlist, in_shoppinglist: in_shoppinglist, in_cart: quantity, wish_price: wish_price, max_price: max_price } };
+			return { ...list, _product: { ...list._product, 
+														image: image, 
+														is_favourite: in_wishlist, 
+														in_shoppinglist: in_shoppinglist, 
+														in_cart: quantity, 
+														unit:unit,
+														deal_price: productPrice.effective_price,
+														regular_price: productPrice.regular_price,
+													} };
 		}).filter(Boolean));
 		return res.json({ status: 1, message: "", data: wishlist })
 	} catch (err) {

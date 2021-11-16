@@ -49,6 +49,10 @@ const storeSchema = new Schema({
     _timezone: {
         type: String
     },
+    slug: {
+        type: String,
+        required:true
+    },
     // _timezone: {
     //     type: Schema.Types.ObjectId,
     //     ref:'Timezone',
@@ -116,6 +120,7 @@ const storeSchema = new Schema({
             type: [Number],
             required: false
         }
+
     },
     contact_no: {
         type: String,

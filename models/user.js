@@ -11,7 +11,10 @@ const saltRounds = 10;
 const childSchema = new Schema({
 
  
-  address: {
+  address1: {
+    type: String,
+  },
+  address2: {
     type: String,
   },
   address_type:{
@@ -19,11 +22,15 @@ const childSchema = new Schema({
     enum : ['Home','Office','Other'],
         default: 'Home'
   },
-  pincode: {
+  is_default :{
+      type: Boolean,
+      default: false
+  },
+  zipcode: {
     type: Number
   },
   phoneno: {
-    type: Number
+    type: String
   },
   countrycode :{
     type:String
@@ -31,28 +38,14 @@ const childSchema = new Schema({
   city: {
     type: String
   },
-  region: {
-    type: String
-  },
-  state: {
+  emirate: {
     type: String
   },
   country: {
     type: String
   },
  
- 
-//   _timezone: {
-//     type: Schema.Types.ObjectId,
-//     ref:'Timezone',
-//     validate: {
-//             validator: function(v) {
-//             return FKHelper(mongoose.model('Timezone'), v);
-//          },
-//         message: `Timezone doesn't exist`
-//     }
-// },
-  location: {
+ location: {
     type: {
         type: String,
         enum: ['Point'],
@@ -69,7 +62,7 @@ const childSchema = new Schema({
 const userSchema = Schema({
   first_name: {
     type: String,
-    required: false,
+    required: true,
   },
   last_name: {
     type: String,
@@ -78,7 +71,10 @@ const userSchema = Schema({
   email: {
     type: String,
     unique: true,
-    required: false
+    required: true
+  },
+  gender: {
+    type: String, enum:['male','female','other'], required:false
   },
   profile_pic: {
     type: String,
@@ -89,6 +85,7 @@ const userSchema = Schema({
   },
   contact_no: {
     type: String,
+    unique: true,
     required: false
   },
   status: {
@@ -127,17 +124,7 @@ _company:
     }
   },
 
-  // _timezone: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Timezone',
-  //   validate: {
-  //     validator: function (v) {
-  //       return FKHelper(mongoose.model('Timezone'), v);
-  //     },
-  //     message: `Timezone doesn't exist`
-  //   }
-  // },
-  role_id: [
+ role_id: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Role',
@@ -146,6 +133,19 @@ _company:
           return FKHelper(mongoose.model('Role'), v);
         },
         message: `Role doesn't exist`
+      }
+    },
+
+  ],
+  _store: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Store',
+      validate: {
+        validator: function (v) {
+          return FKHelper(mongoose.model('Store'), v);
+        },
+        message: `Store doesn't exist`
       }
     },
 
@@ -165,12 +165,19 @@ _company:
 
 userSchema.plugin(mongooseLeanGetters)
 userSchema.plugin(uniqueValidator)
-// userSchema.pre('save', async function () {
-//   this.password = await bcrypt.hash(this.password, saltRounds);
-// });
-userSchema.pre('save', async function () {
 
+userSchema.pre('save', async function () {
   this.password = await md5(this.password);
+});
+
+
+userSchema.post('save', function(error, doc, next) {
+  if (error) {
+    console.log(error)
+    next(new Error('User already exists with this email address or contact no'));
+  } else {
+    next(error);
+  }
 });
 
 function dateToString(date) {

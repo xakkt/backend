@@ -1,18 +1,17 @@
 const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
+const mongooseLeanGetters = require('mongoose-lean-getters')
 const FKHelper = require('../helper/foreign-key-constraint');
 const StoreProductPricing = require("./store_product_pricing");
 const ProductRegularPricing = require("./product_regular_pricing");
-const Order = require("./order");
 const Cart = require("./cart");
-const Banner = require("./banner");
 const Schema = mongoose.Schema;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const productSchema = new Schema({
   brand_id: {
     type: Schema.Types.ObjectId,
     ref:'Brand'
-    //required: true,
   },
   deal_id: {
     type: Schema.Types.ObjectId,
@@ -49,7 +48,10 @@ const productSchema = new Schema({
   sku:{
     type: String,
     required: false,
-   // unique:true
+  },
+  slug: {
+    type: String,
+    required: false
   },
   description:{
       type: String,
@@ -63,6 +65,14 @@ const productSchema = new Schema({
     type: Number,
     required: false
   },
+  cuisine:{
+    type:String,
+    required:false
+  },
+  trending:{
+    type:Boolean,
+    default:false
+    },
   valid_from: {
     type: Date,
     //required: true,
@@ -99,6 +109,9 @@ const productSchema = new Schema({
   },
   image: {
     type: String,
+    get: function(value) {
+      return `${process.env.BASE_URL}/images/products/${value}`;
+   },
     //required: true
   },
   unit_id: {
@@ -129,6 +142,8 @@ const productSchema = new Schema({
   },
 }, {timestamps:true});
 
+productSchema.plugin(mongoosePaginate);
+
 productSchema.pre("deleteOne",  function (next) {
   const _product = this.getQuery()["_id"];
       StoreProductPricing.deleteMany({ _product: _product }).exec()
@@ -138,7 +153,7 @@ productSchema.pre("deleteOne",  function (next) {
   next()
 });
 
-
+productSchema.plugin(mongooseLeanGetters)
 productSchema.plugin(uniqueValidator)
 
 
