@@ -50,4 +50,44 @@ exports.wishlist = async (_store, product, price) => {
     }
 
 
+},
+
+exports.pushNotification = async () => {
+    try {
+        var devices_token = []
+            let devices = await Device.find({ user_id: item._user }).exec()
+            devices.map((device) => {
+                devices_token.push(device.device_token)
+            })
+            const options = {
+                priority: 'high',
+                timeToLive: 60 * 60 * 24, // 1 day
+            };
+            var payload = {
+                notification: {
+                    title: 'Testing',
+                    body: 'Testing',
+                },
+                data: {
+                    push_type: "1",
+                },
+                notification: {
+                    body: "This is a message from FCM to web",
+                    requireInteraction: "true",
+                }
+                // }
+            }
+            admin.messaging().sendToDevice(devices_token, payload, options)
+                .then(response => {
+                    console.log("---respnsonessss", response)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+
+    } catch (err) {
+        console.log('error---------', err)
+    }
+
+
 }
