@@ -262,7 +262,6 @@ exports.productbyParentCategory = async (req, res) => {
 
 		if(pageNo>1)result.pre=pageNo-1
 		if(pageNo<totalPages)result.next=pageNo+1
-
 		return res.render('frontend/category-product',result)
 
 	} catch (err) {

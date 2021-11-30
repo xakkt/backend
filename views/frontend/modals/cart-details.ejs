@@ -22,7 +22,6 @@
             </tr>
           </thead>
           <tbody id="cart-table">
-           
           </tbody>
         </table> 
         <div class="d-flex justify-content-end">
@@ -31,6 +30,8 @@
       </div>
       <div class="modal-footer border-top-0 d-flex justify-content-between">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+
         <a href="/checkout/<%= (!!locals.store)?store.slug:'' %>" class="btn btn-success">Checkout</a>
       </div>
     </div>

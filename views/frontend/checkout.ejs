@@ -31,7 +31,6 @@
                 <% qnt += product.quantity %>
                <% } %>
                <span class="badge badge-secondary badge-pill"><%=qnt%></span>
-               <% console.log('test',qnt) %>
             </h4>
             <form class="card p-2" method="post" id="placeorder" action="<%=process.env.BASE_URL%>/placeorder">
                <input type="hidden" name="_store" value="<%=store._id%>"/>

@@ -1,7 +1,6 @@
 
 
 <%- await include('./auth.ejs'); %>
-
 <style>
   ul, li {
          list-style: none;
@@ -36,7 +35,6 @@
    }
 }
 </style>
-
 <nav class="custom-nav navbar navbar-expand-lg navbar-light bg-light for-desktop">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo2" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -79,9 +77,12 @@
                <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
             </li>
             <%}%>
+            <% console.log("-tab",(locals.store)?store.name:'') %>
             <li class="">
                <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
-               <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+               <%if(userid!=null){%> 
+                  <span class='badge badge-warning' id='lblCartCount'> <%= (!!locals.store)?store._id:'' %></span>
+                  <%}%>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

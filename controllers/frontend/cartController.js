@@ -102,7 +102,8 @@ exports.checkoutPage = async (req, res)=>{
 				 select:'name image unit'
 			 }
 			}).lean();
-
+   console.log("=====rrrr",cartProducts.cart[0].quantity)
+   console.log("=========datataa",storedata)
 
 		//if(cartProducts?.cart.length)return res.json({status:1,data:cartProducts.cart, store: storedata})
 			return res.render('frontend/checkout',{ status:1, data:cartProducts, addresses:user?.address??null, store:storedata })
@@ -300,4 +301,49 @@ exports.removeProductFromCart = async (req, res) => {
 	 }
  
  }
+
+
+ exports.getProductsQuantity = async (req, res)=>{
+	try{
+		console.log("=====",req.body)
+		let storedata = await Store.findOne({ slug: req.params.store }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
+			path: '_currency',
+			select: 'name',
+		  }).lean()
+
+
+		var user = await User.findOne({_id:req.session.userid }).lean()
+			// if(!addresses.address){ return res.json({ status: 0, message: "No default address added for you" }) }
+			// return res.json({data:addresses}) 
+
+
+		
+		let condition = {_store:storedata._id}
+		 condition = (req.session.userid)?{ ...condition, _user: req.session.userid} : { ...condition, sessionId: req.sessionID} ;
+
+
+		 var cartProducts = await Cart.findOne(condition).populate({
+			 path: 'cart',
+			 populate: {
+				 path: '_product',
+				 model: Product,
+				 select:'name image unit'
+			 }
+			}).lean();
+        
+			const array = []
+			cartProducts.cart.map(e=>{
+				array.push(e.quantity)
+			})
+			// console.log("======data",array)
+			// return res.json({status :1,data:array})
+       console.log("---- im herer")
+		//if(cartProducts?.cart.length)return res.json({status:1,data:cartProducts.cart, store: storedata})
+			return res.render('_partials/_frontend/navbar.ejs',{ data:"abc"})
+	}catch (err) {
+		console.log("--err", err)
+		return res.status(400).json({ data: "Something Went Wrong" });
+    }
+	
+}
 

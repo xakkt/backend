@@ -199,7 +199,6 @@ $(document).delegate('.minus-btn','click', function(e) {
 });
 
 $(document).delegate('.plus-btn','click', function(e) {
-  
   input = $(this).closest('div').find('input'); 
   value = parseInt(input.val());
   value = (value < 100)?value+1:100
@@ -494,9 +493,8 @@ $('#cartModal').on('show.bs.modal',function(){
   var data ={}
   data.userid = $(".cartbutton").data('userid')??null
   data.storeid = $(".cartbutton").data('storeid')
-
   $.post('/products/cart', data).done(result => { 
-     console.log('cart api result =======>>>',result)
+    //  console.log('cart api result =======>>>',result)
     if(result.status){ 
         
         var tableHtml = ''
@@ -556,7 +554,7 @@ $('#shoppingListModal').on('show.bs.modal',function(event){
   var data ={}
   data._user = $(".cartbutton").data('userid')??null
   data._store = $(".cartbutton").data('storeid')
- 
+  console.log("==========ooooo",data)
   
   var button = $(event.relatedTarget) // Button that triggered the modal
   var productForm = button.data('formid')
@@ -565,7 +563,6 @@ $('#shoppingListModal').on('show.bs.modal',function(event){
   
  
                   $.post('/list/shoppinglist', data).done(result => { 
-              
                     if(result.status){ 
                         var tableHtml = ''
                         result.data.forEach((list,index)=>{
@@ -848,3 +845,5 @@ $('#categorymodel').click(function() {
   // alert("hello")
   window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
 });
+
+

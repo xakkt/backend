@@ -84,6 +84,8 @@ router.get('/user/get-address/:id', userController.editaddress)
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
 router.get('/checkout/:store',isloggedin,cartController.checkoutPage);
+router.get('/get/products/quantity:store',cartController.getProductsQuantity);
+
 
 /*------- cart api ----------*/
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)

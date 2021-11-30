@@ -1,6 +1,8 @@
 const Department = require('../../models/department');
 const Product = require('../../models/product');
 const Store = require('../../models/store');
+const Cart = require('../../models/cart');
+
 const Categories = require('../../models/product_category')
 const Brands = require('../../models/brand')
 const StoreProductPricing = require('../../models/store_product_pricing')
@@ -17,13 +19,13 @@ function getUniqueListBy(product, key) {
 exports.homepage = async (req, res) => {
   let stores =   await Store.find().lean();
   if(stores) return res.render('frontend/index',{stores:stores})
-}
+}	
 
 exports.products = async (req, res) => {
-	
 	var userid = res.locals.userid??req.sessionId
 	var pdata = [];
 	var product = [];
+
 	//await _time.store_time(req.params.storeid)
 	var date = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 	try {
@@ -33,10 +35,10 @@ exports.products = async (req, res) => {
 			select: 'name',
 		  }).lean()
 
-		if (!storedata) {
+		if (!storedata) {      
 			return res.json({
 				status: 0,
-				data: 'Store does not exists'
+				data: '	Store does not exists'
 			})
 		}
 
@@ -105,14 +107,13 @@ exports.products = async (req, res) => {
 		//	const mergedArray = [...banners, ..._banners];
 /* ----------------- end of code for banners ----------*/
 
-	
 	let categories = await StoreProductPricing.find({
 		_store: storedata._id
 	}).populate({
 		path: '_product',
 		select: 'name sku image weight',
 		populate: {
-		  path: '_unit',
+		  path: '_unit',    
 		  select: 'name'
 	    }
 	  }).populate({
@@ -303,7 +304,25 @@ exports.products = async (req, res) => {
 				chilCategories = await Categories.find({ parent_id:element._id}).select('-_products -createdAt -updatedAt -__v').lean()
 				categorySet[element.name] = chilCategories
 		}))
-  		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, categories:categorySet,trending:pdata[1]})
+
+		const qntcart = await Cart.find({_store:storedata._id,_user:userid}).populate({
+			path: 'cart',
+			populate: {
+				path: '_product',
+				model: Product,
+				select:'name image unit'
+			}
+		   }).lean();
+          const total = []
+		   qntcart.map(e=>{
+			e?.cart?.map(el=>{
+				// console.log(el)
+				total.push(el.quantity)
+			   })
+		   })
+		   const  quantity = total.reduce((a, b) => a + b, 0);
+       
+  		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, qnt:quantity, categories:categorySet,trending:pdata[1]})
 
 	} catch (err) {
 		console.log(err)
