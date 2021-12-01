@@ -298,12 +298,19 @@ exports.products = async (req, res) => {
 		})    */
 		let parentCatogories = await Categories.find({ parent_id: { $eq: null } }).select('-_products -createdAt -updatedAt -__v').lean()
 		
-		var categorySet = {}
+		parentCategory = []
 		await Promise.all( parentCatogories.map(async function(element){
 				chilCategories = await Categories.find({ parent_id:element._id}).select('-_products -createdAt -updatedAt -__v').lean()
-				categorySet[element.name] = chilCategories
+				var categorySet = {}
+				categorySet.name=element.name
+				categorySet.subcategory = chilCategories
+				categorySet.parent_slug = element.slug
+				parentCategory.push(categorySet)
+				//chilCategories=chilCategories.map(v => ({...v, parentSlug: element.slug}))
+				//categorySet[element.name] = chilCategories
+				
 		}))
-  		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, categories:categorySet,trending:pdata[1]})
+  		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, categories:parentCategory,trending:pdata[1]})
 
 	} catch (err) {
 		console.log(err)

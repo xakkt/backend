@@ -45,22 +45,22 @@ exports.productCreate = async (req, res) => {
     *params[name,filename]
     */
 exports.save = async (req, res) => {
-   
+       
         try {
-            const categoryInfo = {
+            var categoryInfo = {
                 name: req.body.name,
-                logo: req.file?.filename||null,
-                parent_id: req.body.parentid??null,
-                slug:req.body.name.replace(/ /g, "-").toLowerCase()                
+                logo: req.file?.filename??"",
+                parent_id: req.body.parentid,
+                slug:req.body.slug                
             }
-
-            categoryInfo.parent_id = req.body.parentid ?? null;
-
+            categoryInfo = Object.entries(categoryInfo).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {})
+      
             await ProductCategory.create(categoryInfo);
             await req.flash('success', 'ProductCategory added successfully!');
             res.redirect('/admin/category')
 
         } catch (err) {
+            console.log(err,'=======>>')
             await req.flash('failure', err.message);
             res.redirect('/admin/category')
         }
@@ -119,13 +119,15 @@ exports.update = async function (req, res) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const categoryInfo = {
+        var categoryInfo = {
             name: req.body.name,
-            parent_id: req.body.parentid||null,
-            slug:req.body.name.replace(/ /g, "-").toLowerCase(),
+            parent_id: req.body.parentid,
+            logo:req.file?.filename,
+            slug:req.body.slug,
         }
   
-        if (req.file) { categoryInfo.logo = req.file.filename }
+        categoryInfo = Object.entries(categoryInfo).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {})
+        
         const productCategory = await ProductCategory.findByIdAndUpdate({ _id: req.params.id }, categoryInfo, { new: true, upsert: true });
         if (productCategory) {
             await req.flash('success', 'Product updated successfully!');

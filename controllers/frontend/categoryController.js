@@ -176,6 +176,10 @@ exports.productbyParentCategory = async (req, res) => {
 
 		var pageNo = (req.query.page)?parseInt(req.query.page):1
 		const pc = await ProductCategory.findOne({slug:req.params.category}).populate('_products');
+		
+		console.log("====>>",req.params.category)
+
+		if(!pc){  res.status(400).json({ status: 0, message: "No Categroy found with this name"	}); }
 		totalItem=pc._products.length;
 		var option = {sort: { 'name.english': 1 }}
 		option.limit = 18
