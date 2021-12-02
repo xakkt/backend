@@ -1,5 +1,5 @@
-var baseUrl = "http://localhost:4000"
-// var baseUrl = "http://xgrocery.cf"
+//var baseUrl = "http://localhost:4000"
+var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -188,10 +188,13 @@ $(document).delegate('.minus-btn','click', function(e) {
     data.quantity = value
 
     $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
+
           $('.cart-price').html(result.subtotal.sub_total)
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
+          $('.lblCartCount').text(result.total_products)
+          
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -220,6 +223,7 @@ $(document).delegate('.plus-btn','click', function(e) {
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
+          $('.lblCartCount').text(result.total_products)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
