@@ -1,4 +1,4 @@
-var baseUrl = "http://xgrocery.cf"
+var baseUrl = "http://localhost:4000"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -306,8 +306,7 @@ $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
 $(document).delegate('.cart-form','submit',function(e){ 
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
- console.log("===========>>>",obj)
- //return false;
+ 
  switch (obj.button_type) {
     case "x-cart":
       url = `${baseUrl}/product/add-to-cart`;
@@ -330,6 +329,28 @@ $(document).delegate('.cart-form','submit',function(e){
           $(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
          });
    
+})
+
+
+$(function(){
+
+ data = {
+              _user : $(".cartbutton").data('userid'),
+              _store : $(".cartbutton").data('storeid')
+        }
+
+        $(".cartbutton").data('userid')&&$.post(`${baseUrl}/product/cart-size`, data)
+          .done(result => { 
+            
+                if(result.status){
+                  $('.lblCartCount').removeClass('d-none')
+                  $('.lblCartCount').text(result.data.total_products)
+                }     
+                //$(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
+                          
+          }).fail(result=>{
+            //$(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
+          });
 })
 
 /*

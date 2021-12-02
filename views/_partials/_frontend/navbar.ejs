@@ -81,7 +81,7 @@
             <%}%>
             <li class="">
                <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
-               <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+               <span class='badge badge-warning d-none lblCartCount' id=''>  </span>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -140,7 +140,7 @@
             </li>
             <li class="">
                <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
-               <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+               <span class='badge badge-warning lblCartCount d-none' id=''> </span>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -242,12 +242,7 @@
                </li>
             <%}%>
         
-         
-         <li class="nav-item">
-            <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:10%" alt="">
-            <span class='badge badge-warning' id='lblCartCount'> 5 </span>
-         </li>
-       
+        
 
          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -249,7 +249,7 @@ exports.productbyParentCategory = async (req, res) => {
 		let productCatogories = await Categories.find({ parent_id: pc._id }).populate('parent_id','slug name').lean()
 		  
 		var result = {}
-		
+		parentCategory = (productCatogories.length)?productCatogories[0].parent_id:"";
 		result.data = storeProduct
 		var totalPages = Math.ceil(totalItem/option.limit)
 		
@@ -258,7 +258,7 @@ exports.productbyParentCategory = async (req, res) => {
 		result.store   = storedata
 		result.storeProducts = storeProduct
 		result.categories = productCatogories
-		result.parentCategory = productCatogories[0].parent_id
+		result.parentCategory = parentCategory
 		result.totalPages = totalPages
 		result.currentPage = pageNo
 		result.storeSlug = req.params.store

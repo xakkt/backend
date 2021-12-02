@@ -81,6 +81,7 @@ router.get('/checkout/:store',cartController.checkoutPage);
 /*------- cart api ----------*/
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
 router.post('/product/remove-from-cart',cartController.removeProductFromCart)
+router.post('/product/cart-size',cartController.cartSize)
 /*---- shoppinglist ----*/
 
 const updateListValidation = [

@@ -122,12 +122,12 @@ exports.cartSize = async (req, res) => {
  
 	try {
 		const cartInfo = {
-			_user: req.decoded.id,
-			_store: req.params.storeid,
+			_user: req.body._user,
+			_store: req.body._store,
 		}
- 
+
 		var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).lean();
- 
+ console.log("==from server==",cartInfo)
 		if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
 		let total_quantity;
 		 total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
