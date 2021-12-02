@@ -154,10 +154,12 @@ exports.updateAddress = async (req, res) => {
 }
 exports.editaddress = async (req, res) => {
 	try {
-		let user = await User.findOne({ 'address._id': req.params.id }).exec()
-		if (!user) return res.json({ status: 1, message: "Data not found" })
-		res.redirect(req.header('Referer'));
-
+		
+		let user = await User.findOne({ 'address._id': req.params.id },'address').exec()
+		let address = await user.address.id(req.params.id);
+		
+		if (!address) return res.json({ status: 0, message: "Data not found" })
+		return res.json({status :1,data:address})
 
 	} catch (err) {
 		console.log("--log", err)

@@ -53,7 +53,7 @@
          <div class="container-list">
             <ul class="list-inline">
                 <% for (const [key,parent] of Object.entries(categories)) { %>
-                  
+                    
                     <li class="nav-item dropdown list-inline-item">
                         <a class="nav-link" href="/<%=store.slug%>/main-category/products/<%=parent.parent_slug%>"><%=parent.name%></a>
                         
@@ -195,7 +195,10 @@
 <%- await include('_partials/footer.ejs'); %>
 <!-- Footer -->
 
-   <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+<script src="/frontend/js/xakkt.js"></script>
+<script>
+    var baseUrl = '<%=process.env.BASE_URL%>'
+</script>
 
   
 </body>

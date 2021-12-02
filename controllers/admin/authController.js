@@ -40,6 +40,7 @@ exports.login = async (req, res) => {
 }
 exports.create = async (req, res) => {
     try {
+        console.log("========")
         let role = await Role.find({}).lean()
         // res.render('admin/user/list', { menu: "users", submenu: "list", users: users, success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure') })
         res.render('admin/auth/login', { success: await req.consumeFlash('success'), failure: await req.consumeFlash('failure'), role: role })

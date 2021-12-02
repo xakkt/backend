@@ -6,6 +6,7 @@ const { body } = require('express-validator');
 var bodyParser = require('body-parser');
 const _global = require('../helper/common')
 var isloggedin = require('../middlewares/customerloggedin')
+// var userloggedin = require('../middlewares/customerloggedin')
 
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
@@ -66,6 +67,10 @@ router.get('/product/:id',IndexController.list)
 router.post('/cookie',IndexController.cookie)
 router.get('/cookiees',IndexController.cookiees)
 
+router.get('/user/login',(req,res)=>{
+    console.log("=========dataaa")
+    res.render('frontend/login')
+} )
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)
@@ -73,15 +78,19 @@ router.post('/user/add-address', userController.addAddress)
 router.get('/user/defautl-address/:address', userController.makeDefaultAddress)
 router.get('/user/delete-address/:address', userController.deleteAddress)
 router.post('/user/update-address', userController.updateAddress)
+router.get('/user/get-address/:id', userController.editaddress)
+
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
-router.get('/checkout/:store',cartController.checkoutPage);
+router.get('/checkout/:store',isloggedin,cartController.checkoutPage);
 
 /*------- cart api ----------*/
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
 router.post('/product/remove-from-cart',cartController.removeProductFromCart)
 router.post('/product/cart-size',cartController.cartSize)
+router.post('/cart/update_quantity',cartValidation,cartController.updateProductQuantity)
+router.post('/cart/empty_cart/:storeid',cartController.makeCartEmpty)
 /*---- shoppinglist ----*/
 
 const updateListValidation = [
@@ -106,7 +115,7 @@ router.post('/shoppinglist/create',isloggedin, shoppinglistValidation, shoppingC
 router.post('/list/shoppinglist',getListValidation,shoppingController.allShoppingLists);
 router.get('/shoppinglist/remove_product/:shoppinglistid',shoppingController.deleteProductFromShoppinglist)
 router.patch('/shoppinglist/product/quantity',shoppingController.updateShoppinglist);
-router.delete('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
+router.post('/shoppinglist/remove/:id',shoppingController.deleteShoppinglist);
 router.get('/shoppinglist/:shoplist/products', shoppingController.shoppinglistProducts)
 
 
@@ -115,7 +124,7 @@ router.post('/wishlist/products', wishController.allWishlistProducts);
 router.get('/wishlist/remove/product/:listid',wishController.deleteProductWishlist);
 router.put('/wishlist/update/:wishlistid',wishController.updateProductWishPrice);
 
-router.get('/myorders/:store',orderController.myorder)
+router.get('/myorders/:store',isloggedin,orderController.myorder)
 router.post('/placeorder',orderController.placeOrder);
 //router.post('/order/create/:store',orderController.creatOrder)
 router.get('/:store/category/products/:category',categoryController.categoryProducts)
