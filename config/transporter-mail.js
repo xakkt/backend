@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport({
 
 transporter.verify(function(error, success) {
                if (error) {
-                    console.log('-------error',error);
+                    console.log('-------errorrrr',error);
                } else {
                     console.log('Server is ready to take our messages');
                }

@@ -19,7 +19,7 @@
         
        <img class="img-responsive xakkti x-list x-list-red-<%=product._id%> <%=(product.in_shoppinglist)?'':'d-none' %>" data-productid="<%=product._id%>"  title="Add shopping list" data-prop="x-list" data-action=0 src="<%= process.env.BASE_URL %>/frontend/images/RED_shopping_List.png" title="Add to shopping list" alt="No Image">
       
-       <img class="img-responsive x-list xakkti x-list-grey-<%=product._id%> <%=(product.in_shoppinglist)?'d-none':'' %> " data-formid="product_form_<%=slider%>_<%=product._id%>" data-toggle="modal" data-action=1 data-target="#shoppingListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" data-id="<%=product._id%>" data-prop="x-list" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" title="Remove shopping list" alt="No Image">
+       <img class="img-responsive x-list xakkti x-list-grey-<%=product._id%> <%=(product.in_shoppinglist)?'d-none':'' %>" data-formid="product_form_<%=slider%>_<%=product._id%>" data-toggle="modal" data-action=1 data-target="#shoppingListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" data-id="<%=product._id%>" data-prop="x-list" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Shopping_List.png" title="Remove shopping list" alt="No Image">
     
     </span>
     <span class="col">

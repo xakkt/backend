@@ -1,4 +1,4 @@
-// var baseUrl = "http://localhost:4000"
+var baseUrl = "http://localhost:4000"
 // var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
@@ -188,10 +188,13 @@ $(document).delegate('.minus-btn','click', function(e) {
     data.quantity = value
 
     $.post('/cart/update_quantity?view_cart=1', data).done(result => { 
+
           $('.cart-price').html(result.subtotal.sub_total)
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
+          $('.lblCartCount').text(result.total_products)
+          
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -219,6 +222,7 @@ $(document).delegate('.plus-btn','click', function(e) {
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
+          $('.lblCartCount').text(result.total_products)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -286,12 +290,19 @@ $(function () {
 
  $('.product_view').on('show.bs.modal',function(e){
   var a =  $(e.relatedTarget)
- 
+  
   var modal = $(this)
   modal.find('.xproduct-img').prop('src',a.data('img'))
   modal.find('.modal-title').text(a.data('product-name'))
-  modal.find('.deal-price').text(a.data('deal-price'))
-  modal.find('.regular-price').text(a.data('regular-price'))
+  if(parseInt(a.data('deal-price'))){
+    modal.find('.deal-price').text(a.data('deal-price'))
+    modal.find('.regular-price').text(a.data('regular-price'))
+  }else{
+    modal.find('.deal-price').text(a.data('regular-price'))
+    modal.find('.regular-price').text('')
+ }
+  
+  
   modal.find('.sku').text(a.data('sku'))
   modal.find('.currency').text(a.data('store-currency'))
 })
@@ -349,8 +360,7 @@ $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
 $(document).delegate('.cart-form','submit',function(e){ 
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
- console.log("===========>>>",obj)
- //return false;
+ 
  switch (obj.button_type) {
     case "x-cart":
       url = `${baseUrl}/product/add-to-cart`;
@@ -364,15 +374,36 @@ $(document).delegate('.cart-form','submit',function(e){
     }
    $.post(url, obj)
         .done(result => { 
-               if(result.status){
-                 
-               }     
-              $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
+         
+               if(result.data.iscart)$('.lblCartCount').text(result.data.total_products)  
+               $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
                         
         }).fail(result=>{
           $(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
          });
    
+})
+
+
+$(function(){
+
+ data = {
+              _user : $(".cartbutton").data('userid'),
+              _store : $(".cartbutton").data('storeid')
+        }
+
+        $(".cartbutton").data('userid')&&$.post(`${baseUrl}/product/cart-size`, data)
+          .done(result => { 
+            
+                if(result.status){
+                  $('.lblCartCount').removeClass('d-none')
+                  $('.lblCartCount').text(result.data.total_products)
+                }     
+                //$(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
+                          
+          }).fail(result=>{
+            //$(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
+          });
 })
 
 /*

@@ -124,10 +124,16 @@
                         <!-- /.row -->
                      </div>
                      <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                            <div class="form-group">
                               <label for="departmentname">Name</label>
                               <input type="text" name="name" class="form-control" id="departmentname" placeholder="Enter name">
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <label for="slug">Slug</label>
+                              <input type="text" name="slug" class="form-control" id="slug" placeholder="Enter slug">
                            </div>
                         </div>
                      </div>
@@ -190,12 +196,18 @@
                                        rules: {
                                           name: {
                                              required: true
+                                          },
+                                          slug: {
+                                             required: true
                                           }
                                           
                                        },
                                        messages: {
                                           name: {
-                                             required: "Please enter a department name"
+                                             required: "Please enter a category name"
+                                          },
+                                          slug: {
+                                             required: "Please enter a category slug"
                                           }
                                           
                                        },

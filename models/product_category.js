@@ -25,8 +25,7 @@ const productCategorySchema = Schema({
     } 
   },
   logo: {
-      type: String,
-      default: null
+      type: String
   },
   slug: {
     type: String,

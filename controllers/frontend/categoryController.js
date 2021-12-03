@@ -119,18 +119,13 @@ exports.productbyParentCategory = async (req, res) => {
 		nearbystores.filter((item) => {
 			storeId.push(item._id)
 		})
-		var cartProductList = []
-		var wishlistids = []
-		var shoppinglistProductIds = []
 
 		let banners = await Banner.find({_store: {
 			$in: storeId
 		}}).populate('_deal','name').lean();
 		
 		bannerArr = [];
-        
-        
-        
+          
 		await Promise.all(banners.map( async function(banner){
 			let dealProducts =  await StoreProductPricing.findOne({$and: [ {_store:banner._store, _deal:banner._deal}, { deal_start:{$lte:date} },{ deal_end:{$gte:date} }  ]}).lean()
 						
@@ -175,30 +170,40 @@ exports.productbyParentCategory = async (req, res) => {
 
 		var pageNo = (req.query.page)?parseInt(req.query.page):1
 		const pc = await ProductCategory.findOne({slug:req.params.category}).populate('_products');
+		
+		console.log("====>>",req.params.category)
+
+		if(!pc){  res.status(400).json({ status: 0, message: "No Categroy found with this name"	}); }
 		totalItem=pc._products.length;
 		var option = {sort: { 'name.english': 1 }}
 		option.limit = 18
 
 		if(pageNo!=1){ option.skip = option.limit*(pageNo-1) }
 
-		const category = await ProductCategory.find({$or: [{parent_id:req.params.id},{_id:req.params.id}]})
+		// const category = await ProductCategory.find({$or: [{parent_id:req.params.id},{_id:req.params.id}]})
+		// .populate({
+		// 	path:'_products',
+		// 	select:'-crv -meta_description -_category -__v -cuisine -brand_id -createdAt -updatedAt -meta_title -meta_keywords',
+		// 	populate:{ path:'_unit', select:'-createdAt -updatedAt -__v'}
+		// }).lean()
+		
+		const category = await ProductCategory.findOne({slug:req.params.category}).lean()
+		const allCategory = await ProductCategory.find({parent_id:category._id})
 		.populate({
 			path:'_products',
 			select:'-crv -meta_description -_category -__v -cuisine -brand_id -createdAt -updatedAt -meta_title -meta_keywords',
 			populate:{ path:'_unit', select:'-createdAt -updatedAt -__v'}
 		}).lean()
-		   
 
 		var bigArr= []		
-		category.map((data)=>{			
+		allCategory.map((data)=>{			
 			bigArr = bigArr.concat(data._products)
 		})	
-
+//return res.json({data:bigArr})
         var storeProduct= []
         await Promise.all(bigArr.map(async (product) => {
 			var data = {}
 			var productId = product._id.toString();
-			
 			var productPrice = await _global.productprice(storedata._id, productId)
 			
 			if(productPrice)
@@ -245,7 +250,7 @@ exports.productbyParentCategory = async (req, res) => {
 
 		let productCatogories = await Categories.find({ parent_id: pc._id }).populate('parent_id','slug name').lean()
 		var result = {}
-		
+		parentCategory = (productCatogories.length)?productCatogories[0].parent_id:"";
 		result.data = storeProduct
 		var totalPages = Math.ceil(totalItem/option.limit)
 		
@@ -254,7 +259,7 @@ exports.productbyParentCategory = async (req, res) => {
 		result.store   = storedata
 		result.storeProducts = storeProduct
 		result.categories = productCatogories
-		result.parentCategory = productCatogories[0]?.parent_id
+		result.parentCategory = parentCategory
 		result.totalPages = totalPages
 		result.currentPage = pageNo
 		result.storeSlug = req.params.store

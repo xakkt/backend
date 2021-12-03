@@ -299,30 +299,19 @@ exports.products = async (req, res) => {
 		})    */
 		let parentCatogories = await Categories.find({ parent_id: { $eq: null } }).select('-_products -createdAt -updatedAt -__v').lean()
 		
-		var categorySet = {}
+		parentCategory = []
 		await Promise.all( parentCatogories.map(async function(element){
 				chilCategories = await Categories.find({ parent_id:element._id}).select('-_products -createdAt -updatedAt -__v').lean()
-				categorySet[element.name] = chilCategories
+				var categorySet = {}
+				categorySet.name=element.name
+				categorySet.subcategory = chilCategories
+				categorySet.parent_slug = element.slug
+				parentCategory.push(categorySet)
+				//chilCategories=chilCategories.map(v => ({...v, parentSlug: element.slug}))
+				//categorySet[element.name] = chilCategories
+				
 		}))
-
-		const qntcart = await Cart.find({_store:storedata._id,_user:userid}).populate({
-			path: 'cart',
-			populate: {
-				path: '_product',
-				model: Product,
-				select:'name image unit'
-			}
-		   }).lean();
-          const total = []
-		   qntcart.map(e=>{
-			e?.cart?.map(el=>{
-				// console.log(el)
-				total.push(el.quantity)
-			   })
-		   })
-		   const  quantity = total.reduce((a, b) => a + b, 0);
-       
-  		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, qnt:quantity, categories:categorySet,trending:pdata[1]})
+  		return res.render('frontend/products',{banners:pdata[0],deal:pdata[2],order_again:pdata[3],store:storedata, categories:parentCategory,trending:pdata[1]})
 
 	} catch (err) {
 		console.log(err)
