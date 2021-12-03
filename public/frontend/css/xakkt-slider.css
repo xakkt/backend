@@ -601,3 +601,6 @@ img.img-responsive.xakkti{
 .gold-members{
     display: none;
 }
+#modalLoginForm{
+    z-index: 9999;
+}

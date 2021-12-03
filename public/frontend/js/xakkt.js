@@ -1,5 +1,5 @@
 //var baseUrl = "http://localhost:4000"
-var baseUrl = "http://xgrocery.cf"
+ var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -291,12 +291,19 @@ $(function () {
 
  $('.product_view').on('show.bs.modal',function(e){
   var a =  $(e.relatedTarget)
- 
+  
   var modal = $(this)
   modal.find('.xproduct-img').prop('src',a.data('img'))
   modal.find('.modal-title').text(a.data('product-name'))
-  modal.find('.deal-price').text(a.data('deal-price'))
-  modal.find('.regular-price').text(a.data('regular-price'))
+  if(parseInt(a.data('deal-price'))){
+    modal.find('.deal-price').text(a.data('deal-price'))
+    modal.find('.regular-price').text(a.data('regular-price'))
+  }else{
+    modal.find('.deal-price').text(a.data('regular-price'))
+    modal.find('.regular-price').text('')
+ }
+  
+  
   modal.find('.sku').text(a.data('sku'))
   modal.find('.currency').text(a.data('store-currency'))
 })
