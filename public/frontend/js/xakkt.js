@@ -1,5 +1,5 @@
-var baseUrl = "http://localhost:4000"
-// var baseUrl = "http://xgrocery.cf"
+//var baseUrl = "http://localhost:4000"
+var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -840,6 +840,7 @@ function removeProductFromCart(that){
   }else{
       $.post('/product/remove-from-cart', data).done(result => { 
         $('.cart-price').html(result.subtotal.price)
+        $('.lblCartCount').text(result.subtotal.quantity)
         result.status&&$(that).parents('tr').remove()
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);
