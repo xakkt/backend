@@ -54,22 +54,32 @@ exports.addPoductToCart = async (req, res) => {
 		condition = (req.session.userid)?{ ...condition, _user: req.session.userid} : { ...condition, sessionId: req.sessionID} ;
 
 		let getProdCond = {...condition, cart: { $elemMatch: { _product: req.body._product } }};
-
+		
+		var total_quantity;
        	var product = await Cart.findOne(getProdCond);
 		
+
 		if (product?.cart) {
 			
 			await Cart.findOneAndUpdate(condition, { $pull: { cart: { _product:req.body._product } } });
-			return res.json({ status: 1, message: "Product removed from cart" })
+			var data = await Cart.findOne({ _user: req.session.userid, _store: req.body._store }).lean();
+			total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+				return acc + cur;
+			})
+			var message= "Product removed from cart" ;
 	
 		} else {
 			
-			let addProduct = await Cart.findOneAndUpdate(condition, { $push: { cart: data } },{ upsert: true }).lean();
-			
-			return res.json({status:1,message:'Product added to the cart'})
-			
+			await Cart.findOneAndUpdate(condition, { $push: { cart: data } },{ upsert: true }).lean();
+			var data = await Cart.findOne({ _user: req.session.userid, _store: req.body._store }).lean();
+			total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+				return acc + cur;
+			})
+			var message= "Product added to the cart" ;
 			
 		}
+
+		return res.json({ status: 1, message: message,data:{iscart:1,total_products:total_quantity} })
 		
 	} catch (err) {
 		console.log("--errr", err)
@@ -159,8 +169,6 @@ exports.removeProductFromCart = async (req, res) => {
 		 if (product?.cart) {
 			 product.cart.pull({ _product: cartInfo._product})
 			 await product.save()
-			 // product.cart.id().remove();
-			 console.log(product)
 		 }
 		 var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate('cart._product', 'name sku price image').lean();
 		 if (!data) return res.json({ success: 0, message: "cart is empty", data: "" });
