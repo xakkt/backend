@@ -83,6 +83,7 @@ router.get('/user/get-address/:id', userController.editaddress)
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
 router.get('/products/:slug',StoreController.products)
+router.get('/:store/product/:product',StoreController.productDetails)
 router.get('/checkout/:store',isloggedin,cartController.checkoutPage);
 
 /*------- cart api ----------*/

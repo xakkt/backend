@@ -363,11 +363,18 @@ border-radius: 6px;
     width: 100%;
     margin-top: 25px
 }
-
-.ccc_viewed_price {
+.ccc_viewed_price, .bbb_viewed_price {
     font-size: 16px;
     color: #000000;
-    font-weight: 500
+    font-weight: 500;
+    margin-top: 3px;
+    height: 3em;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .ccc_viewed_item.discount .ccc_viewed_price {
@@ -395,7 +402,13 @@ border-radius: 6px;
 
 .ccc_viewed_name {
     margin-top: 3px;
-    min-height:50px;
+    height: 3em;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .ccc_viewed_name a {
@@ -603,4 +616,7 @@ img.img-responsive.xakkti{
 }
 #modalLoginForm{
     z-index: 9999;
+}
+.categ-pro .cpr-page {
+    padding: 0 0;
 }

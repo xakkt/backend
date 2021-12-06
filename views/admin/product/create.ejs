@@ -130,10 +130,10 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="sku">SKU</label>
-                      <input type="text" name="sku" class="form-control" id="sku" placeholder="SKU code">
+                      <label for="slug">Slug</label>
+                      <input type="text" name="slug" class="form-control" id="slug" placeholder="Product slug">
                       <div class="message" style="display:none;">
-                        <span style="color:red">Duplicate sku number</span>
+                        <span style="color:red">Duplicate slug</span>
                       </div>
                     </div>
                   </div>
@@ -292,7 +292,7 @@
           name: { required: "Please enter a department name" },
           unit: { required: "Please select an unit"  },
           logo: { required: "Please select an image" },
-          sku:  { required: "Please enter unique sku code" },
+          slug:  { required: "Please enter unique slug code" },
           weight: { required: "Please enter weight value" }
         },
         errorElement: 'span',
