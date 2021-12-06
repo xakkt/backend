@@ -1,5 +1,5 @@
-//var baseUrl = "http://localhost:4000"
- var baseUrl = "http://xgrocery.cf"
+var baseUrl = "http://localhost:4000"
+ //var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -193,7 +193,7 @@ $(document).delegate('.minus-btn','click', function(e) {
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
-          $('.lblCartCount').text(result.total_products)
+          $('.lblCartCount').html(result.total_products)
           
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
@@ -223,7 +223,7 @@ $(document).delegate('.plus-btn','click', function(e) {
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
-          $('.lblCartCount').text(result.total_products)
+          $('.lblCartCount').html(result.total_products)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -375,8 +375,8 @@ $(document).delegate('.cart-form','submit',function(e){
     }
    $.post(url, obj)
         .done(result => { 
-         
-               if(result.data.iscart)$('.lblCartCount').text(result.data.total_products)  
+        
+               if(result.data.iscart)$('.lblCartCount').removeClass('d-none').html(result.data.total_products)  
                $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
                         
         }).fail(result=>{
@@ -398,7 +398,7 @@ $(function(){
             
                 if(result.status){
                   $('.lblCartCount').removeClass('d-none')
-                  $('.lblCartCount').text(result.data.total_products)
+                  $('.lblCartCount').html(result.data.total_products)
                 }     
                 //$(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
                           
@@ -833,14 +833,15 @@ function removeProductFromCart(that){
   if($('#cart-table .action_icon').length==1){
       $.post(`/cart/empty_cart/${data._store}`, data).done(result => { 
         result.status&&$(that).parents('tr').remove()
-        $('#cart-table .cart-price').html(0)
+        $('.cart-price').html(0)
+        $('.lblCartCount').addClass('d-none').html(0);
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);
       });
   }else{
       $.post('/product/remove-from-cart', data).done(result => { 
         $('.cart-price').html(result.subtotal.price)
-        $('.lblCartCount').text(result.subtotal.quantity)
+        $('.lblCartCount').html(result.subtotal.quantity)
         result.status&&$(that).parents('tr').remove()
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);

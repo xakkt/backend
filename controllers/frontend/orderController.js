@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 const _global = require('../../helper/common');
 const Store = require('../../models/store');
 const Product = require('../../models/product')
-
+const Cart = require('../../models/cart')
 exports.listOrders = async (req, res) => {
 
     const errors = await validationResult(req);
@@ -146,8 +146,8 @@ exports.placeOrder = async (req, res) => {
                                 total_cost:req.body.total_cost
                             }
                             
-            var order = await Order.create(orderInfo);
-           
+             await Order.create(orderInfo);
+             await Cart.deleteOne({  _user: req.session.userid,_store:req.body._store }).exec()
            return res.redirect('myorders/'+req.body.slug);
         } catch (err) {
             console.log("---value",err)

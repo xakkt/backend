@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-//var baseUrl = "http://localhost:4800"
-var baseUrl = "http://xgrocery.cf"
-=======
 // var baseUrl = "http://localhost:4000"
-// var baseUrl = "http://xgrocery.cf"
->>>>>>> 59ce6ccea9e5d3949920d799c70d8974b0158a1c
+ var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -847,13 +842,4 @@ $('.xact-add-card').click(function(){
 
 $('.x-order-head').click(function(){ 
   $(this).next('.gold-members').toggle(1000)
-<<<<<<< HEAD
 })
-=======
-})
-
-$('#categorymodel').click(function() {
-  // alert("hello")
-  window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
-});
->>>>>>> 59ce6ccea9e5d3949920d799c70d8974b0158a1c
