@@ -5,7 +5,9 @@ const { validationResult } = require('express-validator');
 const orderid = require('order-id')(process.env.ORDER_SECRET);
 const _time = require('../../helper/storetimezone')
 const mongoose = require('mongoose')
-const _global = require('../../helper/common')
+const _global = require('../../helper/common');
+const Store = require('../../models/store');
+const Product = require('../../models/product')
 
 exports.listOrders = async (req, res) => {
 
@@ -159,7 +161,8 @@ exports.myorder = async (req,res) =>{
             return res.json({status:0,message:"You are not logged in"})
         }
         
-        var order = await Order.find({_user: res.locals.userid}).select('-feedback -createdAt -updatedAt -__v').populate({
+        var store = await Store.findOne({slug:req.params.store}).lean();
+        var order = await Order.find({_user: res.locals.userid, _store: store._id}).select('-feedback -createdAt -updatedAt -__v').populate({
             path:'products._product',
             select:'name description _category weight _unit image quantity',
             populate:{
@@ -168,7 +171,8 @@ exports.myorder = async (req,res) =>{
             }
         }).populate('_store','name currency').lean({ getters: true });
 
-        
+        var random = Math.floor(Math.random() * 5)
+        var products = await Product.find().skip(random).limit(5).lean()
 
         /*order.map((element) => {
            
@@ -190,15 +194,9 @@ exports.myorder = async (req,res) =>{
        })*/
 
 
-     
+  
 
-
-        // console.log(order)
-        //if (!order.length) return res.json({ message: "No Order found", data: "" });
-        //return res.json({ status: 1, message: "", data:order});
-        // console.log("=================pankaj",order)
-
-        return res.render('frontend/order-listing',{orders:order})
+        return res.render('frontend/order-listing',{orders:order, products:products})
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
