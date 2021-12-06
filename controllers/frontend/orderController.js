@@ -171,8 +171,8 @@ exports.myorder = async (req,res) =>{
             }
         }).populate('_store','name currency').lean({ getters: true });
 
-        var random = Math.floor(Math.random() * 2)
-        var products = await Product.find().skip(random).limit(5).lean()
+        var random = Math.floor(Math.random() * 5)
+        var products = await Product.find().skip(random).limit(2).lean()
 
         return res.render('frontend/order-listing',{orders:order, products:products, store:store})
 
