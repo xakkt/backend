@@ -174,29 +174,7 @@ exports.myorder = async (req,res) =>{
         var random = Math.floor(Math.random() * 5)
         var products = await Product.find().skip(random).limit(5).lean()
 
-        /*order.map((element) => {
-           
-            for (const [i,product] of element.products.entries()) {
-                delete(product._id)
-                product._id = product._product._id
-                product.name = product._product.name
-                product.description = product._product.description
-                product._category = product._product._category
-                product.weight = product._product.weight
-                product._unit = product._product._unit
-                product.image = product._product.image
-                product._product.deal_price= product.deal_price
-                product._product.regular_price= product.regular_price
-
-                delete(product._product)
-                
-            }
-       })*/
-
-
-  
-
-        return res.render('frontend/order-listing',{orders:order, products:products})
+        return res.render('frontend/order-listing',{orders:order, products:products, store:store})
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
