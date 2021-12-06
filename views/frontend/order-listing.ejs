@@ -45,8 +45,15 @@
                         
                         <li class="nav-item">
                          
-                          <img src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> 
-                          <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><i class="icofont-food-cart"></i> <%=product.name.english%></a>
+                          <div class="card" style="width:400px">
+                            <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image">
+                            <div class="card-body">
+                              
+                              <p class="card-text"><a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><i class="icofont-food-cart"></i> <%=product.name.english%></a></p>
+                              
+                            </div>
+                          </div>
+
                             
                          </li>
                          <% }%>
