@@ -287,7 +287,7 @@ $(function () {
 
  $('.product_view').on('show.bs.modal',function(e){
   var a =  $(e.relatedTarget)
- 
+  console.log(a)
   var modal = $(this)
   modal.find('.xproduct-img').prop('src',a.data('img'))
   modal.find('.modal-title').text(a.data('product-name'))
@@ -295,6 +295,8 @@ $(function () {
   modal.find('.regular-price').text(a.data('regular-price'))
   modal.find('.sku').text(a.data('sku'))
   modal.find('.currency').text(a.data('store-currency'))
+  modal.find('.id').text(a.data('id'))
+
 })
 
 $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
