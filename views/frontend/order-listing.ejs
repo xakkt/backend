@@ -45,7 +45,7 @@
                         
                         <li class="nav-item">
                          
-                          <img src="<%product.image %>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> 
+                          <img src="<%=process.env.BASE_URL%>/images/product/<%=product.image%>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> 
                             <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> <%=product.name.english%></a>
                             
                          </li>

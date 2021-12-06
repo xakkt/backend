@@ -319,7 +319,8 @@ img{
                             <span>3 Reviews</span>
                         </div>
                         <div class="product-price-discount"><%=store._currency.name%> <span><%=data.product.price.deal_price?data.product.price.deal_price:data.product.price.regular_price%></span>
-                            <span class="line-through"><%=data.product.price.deal_price?product.price.regular_price:""%></span></div>
+                            <span class="line-through"><%=data.product.price.deal_price?data.product.price.regular_price:""%></span>
+                        </div>
                     </div>
                     <p><%=data.product.info.description%></p>
                     
@@ -337,7 +338,7 @@ img{
                     <!---end of cart section-->
                 </div>
                 <div class="checkout-btn">
-                    <a href="<%=process.env.BASE_URL%>/checkout/<%=store.slug%>" class="btn btn-success w-100 mt-3">Checkout</a>
+                    <a href="<%=process.env.BASE_URL%>/checkout/aviation-supermarket17-a-street" class="btn btn-success w-100 mt-3">Checkout</a>
                 </div>
                 
             </div>
