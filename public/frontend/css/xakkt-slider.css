@@ -363,7 +363,7 @@ border-radius: 6px;
     width: 100%;
     margin-top: 25px
 }
-.ccc_viewed_price, .bbb_viewed_price {
+.ccc_viewed_price, .bbb_viewed_price, .deal_price {
     font-size: 16px;
     color: #000000;
     font-weight: 500;
@@ -377,11 +377,11 @@ border-radius: 6px;
     overflow: hidden;
 }
 
-.ccc_viewed_item.discount .ccc_viewed_price {
+.ccc_viewed_item.discount .ccc_viewed_price, .deal_price {
     color: #df3b3b
 }
 
-.ccc_viewed_price span {
+.ccc_viewed_price span, .regular_price {
     position: relative;
     font-size: 12px;
     font-weight: 400;

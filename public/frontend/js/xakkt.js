@@ -1,5 +1,5 @@
-var baseUrl = "http://localhost:4000"
- //var baseUrl = "http://xgrocery.cf"
+//var baseUrl = "http://localhost:4000"
+ var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -877,7 +877,14 @@ $('.x-order-head').click(function(){
   $(this).next('.gold-members').toggle(1000)
 })
 
-$('#categorymodel').click(function() {
+/*$('#categorymodel').click(function() {
   // alert("hello")
   window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
-});
+});*/
+
+$("#modalLoginForm").on('show.bs.modal',function(e){ 
+        $("#modalRegisterForm").modal('hide')
+})
+$("#modalRegisterForm").on('show.bs.modal',function(e){ 
+  $("#modalLoginForm").modal('hide')
+})

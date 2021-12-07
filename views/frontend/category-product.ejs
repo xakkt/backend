@@ -82,7 +82,14 @@
                             </div>
 
                             <div class="pricing">
-                                <%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span>
+
+                              <%if(product.deal_price) {%>
+                                 <span style="width:100%" class="regular_price"><del><%=store._currency.name%><%=product.regular_price%></del></span>
+                                 <div class="deal_price"><%=store._currency.name%><%=product.deal_price%></div>
+                             <%}else{%>
+                                 <div class="deal_price"><%=store._currency.name%><%=product.regular_price%></div>
+                              <%}%> 
+                               
                             </div>
 
                           <form class="cart-form" method="post" id="product_form_subcategory_<%=product._id%>">
