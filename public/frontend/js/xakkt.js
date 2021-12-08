@@ -303,9 +303,11 @@ $(function () {
     modal.find('.regular-price').text('')
  }
   
-  
+  modal.find('.d-product').val(a.data('id'))
   modal.find('.sku').text(a.data('sku'))
   modal.find('.currency').text(a.data('store-currency'))
+  modal.find('.size').text(a.data('size'))
+  modal.find('.unit').text(a.data('unit'))
 })
 
 $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
@@ -357,6 +359,42 @@ $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
 
      
 })
+
+
+/*----- product details page ----*/
+
+$('.xakkt-product-popup').click(function(){
+        
+     
+     switch (true) {
+  
+      case $(this).hasClass('shoplist'):
+        $('.grey-list, .red-list').toggleClass('d-none')
+        url = `${baseUrl}/product/add-to-cart`;
+        break;
+      case $(this).hasClass('favlist'):
+        $('.grey-fav, .red-fav').toggleClass('d-none')
+        url = `${baseUrl}/product/add-to-favlist`;
+        break;
+      case $(this).hasClass('xcart'):
+        $('.cart-grey, .cart-red').toggleClass('d-none') 
+        url = `${baseUrl}/shoppinglist/add_product`;  
+        break;
+      }
+
+
+       $.post(url, obj).done(result => { 
+            
+                   if(result.data.iscart)$('.lblCartCount').removeClass('d-none').html(result.data.total_products)  
+                   $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
+                            
+            }).fail(result=>{
+              $(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
+             });
+
+})
+
+/* ------ end -------*/
 
 $(document).delegate('.cart-form','submit',function(e){ 
    e.preventDefault()

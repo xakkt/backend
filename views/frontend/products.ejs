@@ -95,17 +95,22 @@
                               <div class="owl-item">
                                
                                     <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" data-toggle="modal" data-target="#product_view" >
+                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" data-unit="<%=product.unit%>" data-size="<%=product.weight%>" data-toggle="modal" data-target="#product_view" >
                                             <img src="<%=product.image%>" alt="">
                                         </div>
                                         <div class="ccc_viewed_content text-center">
                                            
                                             <div class="ccc_viewed_name">
-                                                  <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
+                                                  <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-unit="<%=product.unit%>" data-size="<%=product.weight%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
                                             </div>
 
                                             <div class="ccc_viewed_price">
-                                                <%=store._currency.name%><%=product.deal_price%><span><%=product.regular_price%></span>
+                                                <%if(product.deal_price) {%>
+                                                    <span style="width:100%"><%=store._currency.name%><%=product.regular_price%></span>
+                                                    <div><%=store._currency.name%><%=product.deal_price%></div>
+                                                <%}else{%>
+                                                    <div><%=store._currency.name%><%=product.regular_price%></div>
+                                                 <%}%>  
                                             </div>
 
                                             <form class="cart-form" method="post" id="product_form_nearby_<%=product._id%>">
@@ -146,15 +151,19 @@
                               
                               <div class="owl-item">
                                     <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
+                                        <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-unit="<%=product.unit%>" data-size="<%=product.weight%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
                                         <div class="bbb_viewed_content text-center">
                                             <div class="bbb_viewed_name">
-                                                <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a>
+                                                <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>" data-unit="<%=product.unit%>" data-size="<%=product.weight%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a>
                                               </div>
                                               
                                             <div class="bbb_viewed_price">
-                                                <span style="width:100%"><%=store._currency.name%><%=product.regular_price%></span>
-                                                <div><%=store._currency.name%><%=product.deal_price%></div>
+                                                <%if(product.deal_price) {%>
+                                                    <span style="width:100%"><%=store._currency.name%><%=product.regular_price%></span>
+                                                    <div><%=store._currency.name%><%=product.deal_price%></div>
+                                                <%}else{%>
+                                                    <div><%=store._currency.name%><%=product.regular_price%></div>
+                                                 <%}%>  
                                             </div>
                                           
                                               <form class="cart-form" method="POST" id="product_form_deals_<%=product._id%>">

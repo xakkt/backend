@@ -14,7 +14,7 @@ exports.addPoductToWishlist = async (req, res) => {
 	
 	try {
 		const wishlistInfo = {
-			_user: res.locals.userid,
+			_user: req.session.userid,
 			_product: req.body._product,
 			_store: req.body._store
 			

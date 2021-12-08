@@ -530,8 +530,9 @@ input:focus {
 .cs-drop-mn a {
     color: #000;
 }
-img.img-responsive.xakkti{
-      width: 26px;
+img.img-responsive.xakkti, .xakkt-product-popup{
+    cursor: pointer;
+    width: 26px;
     margin: auto;
 }
 .mx-72 {
