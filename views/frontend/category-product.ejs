@@ -77,7 +77,6 @@
                        <!--span class="badge badge-primary py-1 mb-2">integrations</span-->
                        
 
-
                         <div class="d-block mb-5">
                             <div class="product-title">
                               <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>" > <%=product.name.english%> </a>
@@ -87,9 +86,9 @@
 
                               <%if(product.deal_price) {%>
                                  <span style="width:100%" class="regular_price"><del><%=store._currency.name%><%=product.regular_price%></del></span>
-                                 <div class="deal_price"><%=store._currency.name%><%=product.deal_price%></div>
+                                 <span class="deal_price"><%=store._currency.name%><%=product.deal_price%></span>
                              <%}else{%>
-                                 <div class="deal_price"><%=store._currency.name%><%=product.regular_price%></div>
+                                 <span class="deal_price"><%=store._currency.name%><%=product.regular_price%></span>
                               <%}%> 
                                
                             </div>
