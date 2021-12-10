@@ -7,11 +7,11 @@
          list-style: none;
          text-decoration: none;
          }
-         .user_img img {
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-    box-shadow: 0 0 2px #929292;
+.user_img img {
+   width: 45px;
+   height: 45px;
+   object-fit: cover;
+   box-shadow: 0 0 2px #929292;
 }
 .profile-area {
     line-height: 0.8;
@@ -39,69 +39,65 @@
     <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo2">
-    <div class="col-4">
-      <ul class="navbar-nav ml-auto align-items-center justify-content-end float-left">
-         <%if(userEmail==null){%> 
-            <li class="">
-               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
-            </li>
-            <li class="">
-               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
-            </li>
-            <%}%>
-           
-            <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <span class="user_img">
-                  <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
-               </span>
-               <span class=""><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-               </a>
-               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <%if(userEmail!=null){%>
-                     <div class="profile-area">
-                        <a class="dropdown-item u-name" href="javascript:void(0);"><%=fullName%></a>
-                        <a class="dropdown-item u-mail" href="javascript:void(0);"><%=userEmail%></a>
-                     </div>
-                  <hr/>
-                  <a class="dropdown-item" href="#">Edit Profile</a>
-                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="createShoppingList" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Create Shopping List</a>
-                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
-                  <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
-                  <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
+         <div class="col-4">
+            <ul class="navbar-nav ml-auto align-items-center justify-content-end float-left">
+               <%if(userEmail==null){%> 
+                  <!--li class="">
+                     <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
+                  </li>
+                  <li class="">
+                     <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
+                  </li-->
                   <%}%>
-                  <a class="dropdown-item" href="#">About Us</a>
-               </div>
-            </li> 
-         </ul>
-   </div>
-      <div class="col-4">
-       <div class="mx-auto">
-          <a href="/" class="text-sm-left text-md-right text-lg-right navbar-brand">
+               
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <span class="user_img">
+                        <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+                     </span>
+                     <span class=""><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                     </a>
+                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <%if(userEmail!=null){%>
+                           <div class="profile-area">
+                              <a class="dropdown-item u-name" href="javascript:void(0);"><%=fullName%></a>
+                              <a class="dropdown-item u-mail" href="javascript:void(0);"><%=userEmail%></a>
+                           </div>
+                        <hr/>
+
+                        
+                        <a class="dropdown-item" href="#">Edit Profile</a>
+                        <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="createShoppingList" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Create Shopping List</a>
+                        <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
+                        <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
+                        <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
+                        <%}else{%>
+                           <a class="dropdown-item" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
+                           <a class="dropdown-item" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
+                        <%}%>
+                        <a class="dropdown-item" href="#">About Us</a>
+                     </div>
+                  </li> 
+               </ul>
+         </div>
+         <div class="col-4">
+         <div class="mx-auto">
+            <a href="/" class="text-sm-left text-md-right text-lg-right navbar-brand">
                <img src="<%= process.env.BASE_URL %>/frontend/images/xakkt.png" alt="User Avatar" style="width:25%" class="img-size-50 img-circle mr-3">
             </a>
-       </div>
-       </div>
-       <div class="col-4 p-0">
-        <ul class="navbar-nav ml-auto align-items-center justify-content-end">
-         <%if(userEmail==null){%> 
-            <li class="">
-               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
-            </li>
-            <li class="">
-               <a class="nav-link btn btn-default btn-rounded" data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a>
-            </li>
-            <%}%>
+         </div>
+         </div>
+         <div class="col-4 p-0">
+         <ul class="navbar-nav ml-auto align-items-center justify-content-end">
+        
             <li class="">
                <img class="img-responsive xakkti xakkt-popup cartbutton" data-modal="cartModal" data-userid="<%=userid%>" data-storeid="<%= (!!locals.store)?store._id:'' %>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Cart.png" data-toggle="modal" style="width:26px;" alt="">
                <span class="badge badge-warning d-none lblCartCount">  </span>
             </li>
-           
+            
          </ul>
          </div>
-
-     
-    </div>
+   </div>
  </nav>
 
 
