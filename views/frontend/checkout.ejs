@@ -27,10 +27,16 @@
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                <span class="text-muted">Your cart</span>
                <% var qnt = 0 %>
-               <% for (const [i,product] of data.cart.entries()) { %> 
-                <% qnt += product.quantity %>
-               <% } %>
+               <%if(data?.cart){%>
+                  <% for (const [i,product] of data.cart.entries()) { %> 
+                    <% qnt += product.quantity %>
+                  <% } %>
+                 <%}%> 
                <span class="badge badge-secondary badge-pill"><%=qnt%></span>
+<<<<<<< HEAD
+=======
+              
+>>>>>>> 0af7e4fec3af7e5ef73d365632a6987ef716f329
             </h4>
             <form class="card p-2" method="post" id="placeorder" action="<%=process.env.BASE_URL%>/placeorder">
                <input type="hidden" name="_store" value="<%=store._id%>"/>
@@ -38,7 +44,7 @@
                <input type="hidden" name="payment_method" value="0" />
             <ul class="list-group mb-3">
                <% var total = 0 %>
-               <% for (const [i,product] of data.cart.entries()) { %>  
+               <% if(data?.cart){ for (const [i,product] of data.cart.entries()) { %>  
                <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <div>
 
@@ -52,7 +58,7 @@
                   <span class="text-muted"><%=product.total_price.toFixed(2)%></span>
                   <% total += product.total_price %>
                </li>
-               <% } %>
+               <% } }%>
              
                <li class="list-group-item d-flex justify-content-between">
                   <span>Total</span>
@@ -63,7 +69,7 @@
 
             
                <div class="input-group">
-                  <button class="btn btn-primary btn-lg btn-block" type="submit">Place your order</button>
+                  <button class="btn btn-primary btn-lg btn-block" <%=(data?.cart)?"":"disabled"%> type="submit">Place your order</button>
                </div>
              </form>
 
@@ -257,10 +263,10 @@
               <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" value="pay" checked="" required="">
               <label class="custom-control-label" for="credit">Credit card</label>
             </div>
-            <div class="custom-control custom-radio">
+            <!--div class="custom-control custom-radio">
               <input id="debit" name="paymentMethod" type="radio"  value = "pay"class="custom-control-input" required="">
               <label class="custom-control-label" for="debit">Debit card</label>
-            </div>
+            </div-->
             <div class="custom-control custom-radio">
               <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
               <label class="custom-control-label" for="paypal">Cash on delivery</label>

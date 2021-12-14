@@ -1,5 +1,5 @@
-//var baseUrl = "http://localhost:4000"
- var baseUrl = "http://xgrocery.cf"
+var baseUrl = "http://localhost:4000"
+//  var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -193,7 +193,7 @@ $(document).delegate('.minus-btn','click', function(e) {
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
-          $('.lblCartCount').text(result.total_products)
+          $('.lblCartCount').html(result.total_products)
           
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
@@ -222,7 +222,7 @@ $(document).delegate('.plus-btn','click', function(e) {
           let productData = result.data.cart.filter(item=>item._product._id=== data._product);
           const {_product} = productData?.[0]
           $(`#total_qnty_${data._product}`)[0].innerText=Number(_product.total_price).toFixed(2)
-          $('.lblCartCount').text(result.total_products)
+          $('.lblCartCount').html(result.total_products)
      }).fail(result=>{ console.log(result)
           $("#error").show().text(result.responseJSON.errors);
      });
@@ -302,9 +302,11 @@ $(function () {
     modal.find('.regular-price').text('')
  }
   
-  
+  modal.find('.d-product').val(a.data('id'))
   modal.find('.sku').text(a.data('sku'))
   modal.find('.currency').text(a.data('store-currency'))
+  modal.find('.size').text(a.data('size'))
+  modal.find('.unit').text(a.data('unit'))
 })
 
 $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
@@ -357,6 +359,42 @@ $(document).delegate('.x-cart,.x-heart,.x-list','click',function(){
      
 })
 
+
+/*----- product details page ----*/
+
+$('.xakkt-product-popup').click(function(){
+        
+     
+     switch (true) {
+  
+      case $(this).hasClass('shoplist'):
+        $('.grey-list, .red-list').toggleClass('d-none')
+        url = `${baseUrl}/product/add-to-cart`;
+        break;
+      case $(this).hasClass('favlist'):
+        $('.grey-fav, .red-fav').toggleClass('d-none')
+        url = `${baseUrl}/product/add-to-favlist`;
+        break;
+      case $(this).hasClass('xcart'):
+        $('.cart-grey, .cart-red').toggleClass('d-none') 
+        url = `${baseUrl}/shoppinglist/add_product`;  
+        break;
+      }
+
+
+       $.post(url, obj).done(result => { 
+            
+                   if(result.data.iscart)$('.lblCartCount').removeClass('d-none').html(result.data.total_products)  
+                   $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
+                            
+            }).fail(result=>{
+              $(`#error-${obj.button_type}`).removeClass('d-none').html(result.responseJSON.message);
+             });
+
+})
+
+/* ------ end -------*/
+
 $(document).delegate('.cart-form','submit',function(e){ 
    e.preventDefault()
    const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
@@ -374,8 +412,8 @@ $(document).delegate('.cart-form','submit',function(e){
     }
    $.post(url, obj)
         .done(result => { 
-         
-               if(result.data.iscart)$('.lblCartCount').text(result.data.total_products)  
+        
+               if(result.data.iscart)$('.lblCartCount').removeClass('d-none').html(result.data.total_products)  
                $(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
                         
         }).fail(result=>{
@@ -397,7 +435,7 @@ $(function(){
             
                 if(result.status){
                   $('.lblCartCount').removeClass('d-none')
-                  $('.lblCartCount').text(result.data.total_products)
+                  $('.lblCartCount').html(result.data.total_products)
                 }     
                 //$(`#error-${obj.button_type}`).removeClass('d-none').html(result.message); 
                           
@@ -830,14 +868,15 @@ function removeProductFromCart(that){
   if($('#cart-table .action_icon').length==1){
       $.post(`/cart/empty_cart/${data._store}`, data).done(result => { 
         result.status&&$(that).parents('tr').remove()
-        $('#cart-table .cart-price').html(0)
+        $('.cart-price').html(0)
+        $('.lblCartCount').addClass('d-none').html(0);
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);
       });
   }else{
       $.post('/product/remove-from-cart', data).done(result => { 
         $('.cart-price').html(result.subtotal.price)
-        $('.lblCartCount').text(result.subtotal.quantity)
+        $('.lblCartCount').html(result.subtotal.quantity)
         result.status&&$(that).parents('tr').remove()
       }).fail(result=>{
       $("#loginError").show().text(result.responseJSON.errors);
@@ -873,9 +912,14 @@ $('.x-order-head').click(function(){
   $(this).next('.gold-members').toggle(1000)
 })
 
-$('#categorymodel').click(function() {
+/*$('#categorymodel').click(function() {
   // alert("hello")
   window.location.href='/<%=store.slug%>/main-category/products/<%=key.replace(/ /g, "-").toLowerCase() %>';
-});
+});*/
 
-
+$("#modalLoginForm").on('show.bs.modal',function(e){ 
+        $("#modalRegisterForm").modal('hide')
+})
+$("#modalRegisterForm").on('show.bs.modal',function(e){ 
+  $("#modalLoginForm").modal('hide')
+})

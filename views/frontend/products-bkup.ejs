@@ -95,7 +95,7 @@
                               <div class="owl-item">
                                
                                     <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="ccc_viewed_image" data-producturl="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>">
+                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" >
                                             <img src="<%=product.image%>" alt="">
                                         </div>
                                         <div class="ccc_viewed_content text-center">
@@ -151,7 +151,7 @@
                               
                               <div class="owl-item">
                                     <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image" data-producturl="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><img src="<%=product.image%>" alt=""></div>
+                                        <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
                                         <div class="bbb_viewed_content text-center">
                                             <div class="bbb_viewed_name">
                                                 <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><%=product.name.english%></a>
@@ -207,9 +207,9 @@
 <script src="/frontend/js/xakkt.js"></script>
 
 <script type="text/javascript">
-    $('.ccc_viewed_image, .bbb_viewed_image').click(function(){
-        location.href=$(this).data('producturl');
-    })
+    /*document.getElementById("myButton").onclick = function () {
+        location.href = "www.yoursite.com";
+    };*/
 </script>
 
 

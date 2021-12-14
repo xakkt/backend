@@ -97,51 +97,6 @@
                         </button>
                      </div>
                   </div>
-<<<<<<< HEAD
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <br>
-                  <div class="container">
-                    <!-- <table style="width:100%"> -->
-                    <table class="table table-condensed" id="myTable">
-                      <tr>
-                        <th style="width:100px"></th>
-                        <% if(roles) roles.forEach(function(role){ %>
-                          <th>
-                            <%= role.name %>
-                          </th>
-                          <%}) %>
-                      </tr>
-                      <% permissionType="" %>
-                        <% permission.forEach(function(permission){ %>
-
-                          <% if(permissionType !=permission.type){ %>
-                            <% permissionType=permission.type %>
-
-                              <tbody class="panel">
-                                <!-- <tr class="parent"> -->
-                                <tr data-toggle="collapse" data-target="#<%= permission.type %>" data-parent="#myTable">
-                                  <th colspan="<%=roles.length+1%>">
-                                    <%= permission?.type?.toUpperCase() %>
-                                  </th>
-                                </tr>
-                                <% } %>
-                                  <tr id="<%=permission.type %>" class="collapse">
-                                    <th class="hiddenRow">
-                                      <%= permission.description %>
-                                    </th>
-                                    <% roles.forEach(function(role){ %>
-                                      <td colspan="1" class="hiddenRow">
-                                        <input data-roleid="<%= role._id %>" data-permisionid="<%= permission._id %>"
-                                          type="checkbox" <%=(role._permission.includes(permission._id))?'checked':''%>>
-                                      </td>
-                                      <%})%>
-                                  </tr>
-                                  <%}) %>
-                              </tbody>
-                    </table>
-=======
                   <!-- /.card-header -->
                   <div class="card-body">
                      <br>
@@ -183,7 +138,6 @@
                            </tbody>
                         </table>
                      </div>
->>>>>>> 1bb20d4fdbfe9b4a74b6a5314179b257ab5cde46
                   </div>
                   <!-- /.card -->
                </div>

@@ -167,3 +167,13 @@ exports.editaddress = async (req, res) => {
 	}
 
 }
+exports.editProfile = async (req, res)=>{
+
+	try{
+		return res.render('frontend/edit-profile')
+	}catch(err){
+		console.log(err)
+		return res.json({data:err})
+	}
+
+}

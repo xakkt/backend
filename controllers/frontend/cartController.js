@@ -138,7 +138,7 @@ exports.cartSize = async (req, res) => {
 		}
 
 		var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).lean();
- console.log("==from server==",cartInfo)
+ console.log("==from server==",data)
 		if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
 		let total_quantity;
 		 total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {

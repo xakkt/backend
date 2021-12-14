@@ -45,8 +45,15 @@
                         
                         <li class="nav-item">
                          
-                          <img src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> 
-                          <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><i class="icofont-food-cart"></i> <%=product.name.english%></a>
+                          <div class="card" style="width:200px">
+                            <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image">
+                            <div class="card-body">
+                              
+                              <p class="card-text"><a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><i class="icofont-food-cart"></i> <%=product.name.english%></a></p>
+                              
+                            </div>
+                          </div>
+
                             
                          </li>
                          <% }%>
@@ -99,7 +106,7 @@
                                             <hr>
                                             <div class="float-right">
                                                 <!--a class="btn btn-sm btn-outline-primary" href="#"><i class="icofont-headphone-alt"></i> HELP</a-->
-                                                <a class="btn btn-sm btn-primary" href="#"><i class="icofont-refresh"></i> REORDER</a>
+                                                <!--a class="btn btn-sm btn-primary" href="#"><i class="icofont-refresh"></i> REORDER</a-->
                                             </div>
                                             <p class="mb-0 text-black text-primary pt-2"><span class="text-black font-weight-bold"> Total Paid:</span> <%= (!!locals.store)?store._currency.name:'' %><%=order.total_cost%>
                                             </p>

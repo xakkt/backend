@@ -1,17 +1,16 @@
 <!-- Popup model for sign-up -->
-<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-   aria-hidden="true">
+<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
       
  
     <form method="POST" id="registration">
          <div class="modal-content">
-           <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
+            <div class="modal-header text-center">
+               <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
 
             <div class="modal-body mx-1">
                <span id="error" class="error-msg" style="display:none"></span>
@@ -76,7 +75,7 @@
                       <input type="confirm_password" id="confirm_password" class="form-control validate" name="confirm_password">
                    </div>
                </div>
-
+               <small id="emailHelp" class="form-text text-muted">If you are already an user so try to <a data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a></small>
 
             </div>
             <div class="modal-footer d-flex justify-content-center">
@@ -115,6 +114,7 @@
                         <label data-error="wrong" data-success="right" for="loginPass">Password</label>
                         <input type="password" id="loginPass" name="password" class="form-control validate" required>
                      </div>
+                     <small id="emailHelp" class="form-text text-muted">If you are new user, please <a data-toggle="modal" data-target="#modalRegisterForm" href="#">Signup</a></small>
                   </div>
                   </div>
 

@@ -293,17 +293,17 @@ img{
    <div class="main-body">
     <div class="container">
         <div class="heading-section">
-            <h2>some offers</h2>
+            <h2></h2>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <img src="<%=process.env.BASE_URL%>/images/products/<%=data.product.info.image%>" />
+                <img src="<%=process.env.BASE_URL%>/images/products/<%=data.product.info.image%>" style="width:70%" />
             </div>
             <div class="col-md-6">
                 <div class="product-dtl">
                     <div class="product-info">
                         <div class="product-name"><%=data.product.info.name.english%></div>
-                        <div class="reviews-counter">
+                        <!--div class="reviews-counter">
                             <div class="rate">
                                 <input type="radio" id="star5" name="rate" value="5" checked />
                                 <label for="star5" title="text">5 stars</label>
@@ -317,7 +317,7 @@ img{
                                 <label for="star1" title="text">1 star</label>
                               </div>
                             <span>3 Reviews</span>
-                        </div>
+                        </div-->
                         <div class="product-price-discount"><%=store._currency.name%> <span><%=data.product.price.deal_price?data.product.price.deal_price:data.product.price.regular_price%></span>
                             <span class="line-through"><%=data.product.price.deal_price?data.product.price.regular_price:""%></span>
                         </div>
@@ -337,9 +337,7 @@ img{
 
                     <!---end of cart section-->
                 </div>
-                <div class="checkout-btn">
-                    <a href="<%=process.env.BASE_URL%>/checkout/<%=store.slug%>" class="btn btn-success w-100 mt-3">Checkout</a>
-                </div>
+               
                 
             </div>
         </div>
@@ -350,9 +348,9 @@ img{
                   <li class="nav-item">
                     <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
                   </li>
-                  <li class="nav-item">
+                  <!--li class="nav-item">
                     <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Reviews (0)</a>
-                  </li>
+                  </li-->
             </ul>
             <div class="tab-content" id="myTabContent">
                   <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">

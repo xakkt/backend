@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 const _global = require('../../helper/common');
 const Store = require('../../models/store');
 const Product = require('../../models/product')
-
+const Cart = require('../../models/cart')
 exports.listOrders = async (req, res) => {
 
     const errors = await validationResult(req);
@@ -146,8 +146,8 @@ exports.placeOrder = async (req, res) => {
                                 total_cost:req.body.total_cost
                             }
                             
-            var order = await Order.create(orderInfo);
-           
+             await Order.create(orderInfo);
+             await Cart.deleteOne({  _user: req.session.userid,_store:req.body._store }).exec()
            return res.redirect('myorders/'+req.body.slug);
         } catch (err) {
             console.log("---value",err)
@@ -172,31 +172,9 @@ exports.myorder = async (req,res) =>{
         }).populate('_store','name currency').lean({ getters: true });
 
         var random = Math.floor(Math.random() * 5)
-        var products = await Product.find().skip(random).limit(5).lean()
+        var products = await Product.find().skip(random).limit(2).lean()
 
-        /*order.map((element) => {
-           
-            for (const [i,product] of element.products.entries()) {
-                delete(product._id)
-                product._id = product._product._id
-                product.name = product._product.name
-                product.description = product._product.description
-                product._category = product._product._category
-                product.weight = product._product.weight
-                product._unit = product._product._unit
-                product.image = product._product.image
-                product._product.deal_price= product.deal_price
-                product._product.regular_price= product.regular_price
-
-                delete(product._product)
-                
-            }
-       })*/
-
-
-  
-
-        return res.render('frontend/order-listing',{orders:order, products:products})
+        return res.render('frontend/order-listing',{orders:order, products:products, store:store})
 
     } catch (err) {
         return res.status(400).json({ data: err.message });
