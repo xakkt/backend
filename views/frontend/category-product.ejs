@@ -13,68 +13,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
   
-   <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
+<link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
    
-   <style>
-/*       .bg-custom-1 {
-  background-color: #85144b;
-}
-
-.bg-custom-2 {
-background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
-}
-       .pricing{
-           color:#df3b3b;
-       }
-       .pricing span{
-            text-decoration: line-through;
-            position: relative;
-            font-size: 12px;
-            font-weight: 400;
-            color: rgba(0, 0, 0, 0.6);
-            margin-left: 8px;
-       }
-.d-block.mb-5{
-    text-align: center;
-}
-.carousel-item img {
-    max-height: 350px;
-}
-       .quantity {
-padding: 10px 0 10px 0;
-}
-.quantity input {
-  -webkit-appearance: none;
-  border: none;
-  text-align: center;
-  width: 32px;
-  font-size: 16px;
-  color: #43484D;
-  font-weight: 300;
-}
- 
-.xbtn {
-  width: 30px;
-  height: 30px;
-  background-color: #E1E8EE;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-.minus-btn img {
-  margin-bottom: 3px;
-}
-.plus-btn img {
-  margin-top: 2px;
-}
- 
-button:focus,
-input:focus {
-  outline:0;
-}
-    */
-   </style>
 
 </head>
 <body>
@@ -121,13 +62,13 @@ input:focus {
       </div>
 
 
-      <div class="container">
+     <section class="categ-pro">
         <div class="container mt-5 mb-5">
             
             <div class="row mt-1">
                 <% for (const [i,product] of storeProducts.entries()) { %>
-                <div class="col-md-2 col-sm-12">
-                    <div class="p-card bg-white p-2 rounded px-3">
+                <div class="col-md-3 col-sm-12 mb-3">
+                    <div class="p-card bg-white p-2 rounded px-3 text-center">
                        <!--div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">2 credits</span></div-->
                        <img class="card-img-top" src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" alt="Card image cap">
                        
@@ -137,7 +78,7 @@ input:focus {
 
                         <div class="d-block mb-5">
                             <div class="product-title">
-                                <%=product.name.english%>
+                              <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>" > <%=product.name.english%> </a>
                             </div>
 
                             <div class="pricing">
@@ -157,8 +98,9 @@ input:focus {
                  <% }%> 
             </div>
            
-         </div>                   
-      </div> <!--container-fluid-->
+         </div> 
+     </section>                  
+     
   
 
       <nav aria-label="Page navigation example">

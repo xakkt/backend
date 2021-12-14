@@ -212,6 +212,7 @@ exports.productbyParentCategory = async (req, res) => {
 					...data,
 					_id: product._id,
 					name: product.name,
+					slug: product.slug,
 					unit: product._unit?.name??'n/a',
 					weight: product.weight,
 					description: product.description,

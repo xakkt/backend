@@ -130,11 +130,11 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="sku">SKU</label>
-                      <input type="text" name="sku" value="<%= product.sku %>" class="form-control" id="sku"
-                        placeholder="Enter SKU">
+                      <label for="slug">Product Slug</label>
+                      <input type="text" name="slug" value="<%= product.slug %>" class="form-control" id="slug"
+                        placeholder="Enter product slug">
                         <div class="message" style="display:none;">
-                          <span style="color:red">Duplicate sku number</span>
+                          <span style="color:red">Duplicate slug</span>
                         </div>
                     </div>
                   </div>
@@ -314,8 +314,8 @@ $("#sku").keyup(function () {
            unit: {
              required: "Please select an unit"
            },
-          sku: {
-            required: "Please enter unique sku code"
+          slug: {
+            required: "Please enter unique slug code"
           },
           weight: {
             required: "Please enter weight value"

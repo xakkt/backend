@@ -95,13 +95,13 @@
                               <div class="owl-item">
                                
                                     <div class="ccc_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" data-toggle="modal" data-target="#product_view" >
+                                        <div class="ccc_viewed_image" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>" >
                                             <img src="<%=product.image%>" alt="">
                                         </div>
                                         <div class="ccc_viewed_content text-center">
                                            
                                             <div class="ccc_viewed_name">
-                                                  <a href="javascript:void(0);" data-product-name="<%=product.name.get('english')%>" data-img="<%=product.image%>" data-store-currency="<%=store._currency.name%>" data-id="<%=product._id%>"  data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.get('english')%></a>
+                                                  <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>" ><%=product.name.get('english')%></a>
                                             </div>
 
                                             <div class="ccc_viewed_price">
@@ -154,7 +154,7 @@
                                         <div class="bbb_viewed_image" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>"  data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view" ><img src="<%=product.image%>" alt=""></div>
                                         <div class="bbb_viewed_content text-center">
                                             <div class="bbb_viewed_name">
-                                                <a href="javascript:void(0);" data-product-name="<%=product.name.english%>" data-img="<%=product.image%>" data-id="<%=product._id%>" data-store-currency="<%=store._currency.name%>" data-deal-price="<%=product.deal_price%>" data-regular-price="<%=product.regular_price%>"  data-toggle="modal" data-target="#product_view"><%=product.name.english%></a>
+                                                <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><%=product.name.english%></a>
                                               </div>
                                               
                                             <div class="bbb_viewed_price">
@@ -205,10 +205,13 @@
 <!-- Footer -->
 
 <script src="/frontend/js/xakkt.js"></script>
-<script>
-    var baseUrl = '<%=process.env.BASE_URL%>'
+
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "www.yoursite.com";
+    };
 </script>
 
-  
+
 </body>
 </html>

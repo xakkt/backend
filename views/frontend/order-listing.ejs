@@ -35,42 +35,23 @@
                     <div class="border-bottom p-4">
                         <div class="osahan-user text-center">
                             <div class="osahan-user-media">
-                                Customers who bought Tyzag Original Milk Frother Handheld Foam Maker fo... also bought
+                                Some products you may like to buy as well.
                             </div>
                         </div>
                     </div>
                     <ul class="nav nav-tabs flex-column border-0 pt-4 pl-4 pb-4" id="myTab" role="tablist">
+                        
+                          <% for (const [i,product] of products.entries()) { %> 
+                        
                         <li class="nav-item">
-                            <div class="card" style="width: 18rem;">
-                                <img class="card-img-top" src="..." alt="Card image cap">
-                                <div class="card-body">
-                                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                              </div>
-                        </li>
-                        <% for (const [i,order] of orders.entries()) { %> 
-                          <% for (const [i,product] of order.products.entries()) { %> 
-                          <% console.log("test====",product) %> 
-                        <li class="nav-item">
-                         <div><%=product._product.image %></div>
-                         <!-- <img src="http://xgrocery.cf/images/products/<%-product._product.image %>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> -->
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> <%=product._product.name.english%></a>
+                         
+                          <img src="<%=process.env.BASE_URL%>/images/products/<%=product.image%>" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep"> 
+                          <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><i class="icofont-food-cart"></i> <%=product.name.english%></a>
                             
                          </li>
                          <% }%>
-                         <% }%>  
-                        <!-- <li class="nav-item"> -->
-                          <!-- <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i>MONACO</a>
-                        </li>
-                        <li class="nav-item">
-                          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i> PEACOCK</a>
-                        </li>
-                        <li class="nav-item">
-                          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                            <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="icofont-food-cart"></i>KASURI METHI</a>
-                        </li>  -->
+                        
+                        
                     </ul>
                 </div>
             </div>

@@ -21,8 +21,50 @@ exports.homepage = async (req, res) => {
   if(stores) return res.render('frontend/index',{stores:stores})
 }	
 
+exports.productDetails = async (req, res) => {
+
+ try{
+
+	let store =   await Store.findOne({slug:req.params.store}).populate({
+		path: '_currency',
+		select: 'name',
+	  }).lean();
+	let product =  await Product.findOne({slug:req.params.product}).populate({
+		path:'_unit',
+		select:'name'
+	  }).lean();
+
+	  
+	  is_favourite= 0;
+	  in_shoppinglist= 0;
+	  in_cart=0;
+
+
+	if (res.locals.userid) {
+		cartProductList = await _global.cartProducts(res.locals.userid, store._id);
+		wishlistids = await _global.wishList(res.locals.userid, store._id)
+		shoppinglistProductIds = await _global.shoppingList(res.locals.userid, store._id)
+
+		in_cart = (product._id in cartProductList)? cartProductList[product._id]:0;
+	    in_shoppinglist = shoppinglistProductIds.includes(product._id.toString())?1:0;
+		is_favourite = wishlistids.includes(product._id.toString())?1:0;
+	}
+
+	var productPrice = await _global.productprice(store._id, product._id)
+	return res.render('frontend/product-details',{store:store, data : { product:{info:product,price:productPrice,in_shoppinglist:in_shoppinglist,is_favourite:is_favourite,in_cart:in_cart} }})
+  }catch(err){
+	  console.log('===>>',err)
+	res.status(400).json({
+		status: 0,
+		message: "SOMETHING_WENT_WRONG",
+		data: err
+	});
+  }
+}
+
 exports.products = async (req, res) => {
-	var userid = res.locals.userid??req.sessionId
+	
+	var userid = res.locals.userid
 	var pdata = [];
 	var product = [];
 
@@ -111,7 +153,7 @@ exports.products = async (req, res) => {
 		_store: storedata._id
 	}).populate({
 		path: '_product',
-		select: 'name sku image weight',
+		select: 'name sku image weight slug',
 		populate: {
 		  path: '_unit',    
 		  select: 'name'
@@ -151,6 +193,7 @@ exports.products = async (req, res) => {
 									...data,
 									type: "product",
 									_id: element._product._id,
+									slug:element._product.slug,
 									name: element._product.name,
 									unit: element._product._unit?.name??'n/a',
 									weight: element._product.weight,
@@ -226,7 +269,7 @@ exports.products = async (req, res) => {
 			_product:{$in: allTrendingIds }}).populate(
 				{
 				path: '_product',
-				select: 'name sku image trending weight',
+				select: 'name slug sku image trending weight',
 				populate: {
 						path: '_unit',
 						select: 'name'
@@ -254,6 +297,7 @@ exports.products = async (req, res) => {
 				type: "product",
 				_id: element._product._id,
 				name: element._product.name,
+				slug: element._product.slug,
 				unit: element._product._unit?.name??'n/a',
 				weight: element._product.weight,
 				sku:element._product.sku,
