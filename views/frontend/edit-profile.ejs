@@ -1,27 +1,37 @@
 <!doctype html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-      <script src="https://use.fontawesome.com/73e16e51a8.js"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
-      <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
-     
-   </head>
-   <body class="bg-light">
-      <%- await include('../_partials/_frontend/navbar.ejs'); %>
-      <div class="container rounded bg-white mt-5 mb-5">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/73e16e51a8.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
+    <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
+
+</head>
+<style>
+    .hide {
+  display: none;
+}
+</style>
+<body class="bg-light">
+    <%- await include('../_partials/_frontend/navbar.ejs'); %>
+    <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="https://i.picsum.photos/id/543/200/200.jpg?hmac=YuoZMit51ELMe2bbgwymVwwXFjmpaZ7hS_J1MfjC1IQ"><span class="font-weight-bold">Amelly</span><span class="text-black-50">amelly12@bbb.com</span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                        src="https://i.picsum.photos/id/543/200/200.jpg?hmac=YuoZMit51ELMe2bbgwymVwwXFjmpaZ7hS_J1MfjC1IQ"><span
+                        class="font-weight-bold">Amelly</span><span class="text-black-50">amelly12@bbb.com</span><span>
+                    </span></div>
             </div>
             <div class="col-md-9 border-right">
                 <div class="p-3 py-5">
@@ -29,39 +39,74 @@
                         <h4 class="text-right">Profile Settings</h4>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value=""></div>
-                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="" placeholder="surname"></div>
+                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control"
+                                placeholder="first name" value="<%= user.first_name%>"></div>
+                        <div class="col-md-6"><label class="labels">Surname</label><input type="text"
+                                class="form-control" value="<%= user.last_name%>" placeholder="surname"></div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">PhoneNumber</label><input type="text" class="form-control" placeholder="enter phone number" value=""></div>
-                        <div class="col-md-6"><label class="labels">Address</label><input type="text" class="form-control" placeholder="enter address" value=""></div>
-                        <div class="col-md-6"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value=""></div>
-                        <div class="col-md-6"><label class="labels">Gender</label><input type="text" class="form-control" placeholder="education" value=""></div>
+                        <div class="col-md-6"><label class="labels">PhoneNumber</label><input type="text"
+                                class="form-control" placeholder="enter phone number" value="<%= user.contact_no%>">
+                        </div>
+                        <div class="col-md-6"><label class="labels">Date of Birth</label><input type="date"
+                                class="form-control" placeholder="Date of Birth" value="<%= user.dob%>"></div>
+                        <div class="col-md-6"><label class="labels">Email ID</label><input type="text"
+                                class="form-control" placeholder="enter email id" value="<%= user.email%>"></div>
+                        <div class="col-md-6"><label class="labels">Gender</label><input type="text"
+                                class="form-control" placeholder="education" value="<%= user.gender%>"></div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                        <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                    <div class="d-block my-3">
+                        <input type="radio" name="tab" value="igottwo" onclick="show2();" />
+                          Change Your Password
+                        <!-- <input type="radio" name="tab" value="igotnone"  onclick="show1();" />
+                        No -->
+                        <div id="div1" class="hide">
+                            <div class="row mt-3">
+                                <div class="col-md-6"><label class="labels">Old Password</label><input type="text"
+                                        class="form-control" placeholder="enter old password" value="">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6"><label class="labels">New Password</label><input type="text"
+                                        class="form-control" placeholder="enter new password" value="">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6"><label class="labels">Confirm Password</label><input type="text"
+                                        class="form-control" placeholder="enter confirm password" value="">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+
+                    <!-- <div class="row mt-3">
+                        <div class="col-md-6"><label class="labels">Country</label><input type="text"
+                                class="form-control" placeholder="country" value=""></div>
+                        <div class="col-md-6"><label class="labels">State/Region</label><input type="text"
+                                class="form-control" value="" placeholder="state"></div>
+                    </div> -->
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save
+                            Profile</button></div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     </div>
     </div>
-      <%- await include('_partials/footer.ejs'); %>
-      <!-- Footer -->
-     
-      <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
-      <script>
-         $(document).ready(function(){
-    $('input[type="radio"]').click(function(){
-    	var demovalue = $(this).val(); 
-        $("div.mydiv").hide();
-        $("#show"+demovalue).show();
-    });
-});
-      </script>
-   </body>
+    <%- await include('_partials/footer.ejs'); %>
+    <!-- Footer -->
+
+    <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
+    <script>
+        function show1() {
+            document.getElementById('div1').style.display = 'none';
+        }
+        function show2() {
+            document.getElementById('div1').style.display = 'block';
+        }
+    </script>
+</body>
+
 </html>
