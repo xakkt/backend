@@ -71,6 +71,7 @@ router.get('/user/login',(req,res)=>{
     console.log("=========dataaa")
     res.render('frontend/login')
 } )
+router.get('/user/edit-profile',userController.editProfile)
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)
