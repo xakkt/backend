@@ -20,81 +20,102 @@
 </head>
 <style>
     .hide {
-  display: none;
+        display: none;
+    }
+
+    .profile-img-container {
+    position: relative;
+}
+
+.profile-img-container i {
+    position: absolute;
+    top: 45%;  
+    left: 45%;
+    transform: translate(-45%, -45%);
+    display: none;
+}
+
+.profile-img-container:hover img {
+    opacity: 0.5;    
+}
+
+.profile-img-container:hover i {
+    display: block;
+    z-index: 500;
 }
 </style>
+
 <body class="bg-light">
     <%- await include('../_partials/_frontend/navbar.ejs'); %>
-    <div class="container rounded bg-white mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                        src="https://i.picsum.photos/id/543/200/200.jpg?hmac=YuoZMit51ELMe2bbgwymVwwXFjmpaZ7hS_J1MfjC1IQ"><span
-                        class="font-weight-bold">Amelly</span><span class="text-black-50">amelly12@bbb.com</span><span>
-                    </span></div>
-            </div>
-            <div class="col-md-9 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Profile Settings</h4>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control"
-                                placeholder="first name" value="<%= user.first_name%>"></div>
-                        <div class="col-md-6"><label class="labels">Surname</label><input type="text"
-                                class="form-control" value="<%= user.last_name%>" placeholder="surname"></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">PhoneNumber</label><input type="text"
-                                class="form-control" placeholder="enter phone number" value="<%= user.contact_no%>">
+    <form action="<%=process.env.BASE_URL%>/user/update-profile/<%=userid%>" method="post">
+        <div class="container rounded bg-white mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-3 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <div class="profile-img-container">
+                        <img
+                            class="rounded-circle mt-5"
+                            src="https://i.picsum.photos/id/543/200/200.jpg?hmac=YuoZMit51ELMe2bbgwymVwwXFjmpaZ7hS_J1MfjC1IQ">
+                             <i class="fas fa-camera fa-2x" style="color: grey;"></i></div>
+                            <span
+                            class="font-weight-bold">Amelly</span><span
+                            class="text-black-50">amelly12@bbb.com</span><span>
+                        </span></div>
+                </div>
+                <div class="col-md-9 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Profile Settings</h4>
                         </div>
-                        <div class="col-md-6"><label class="labels">Date of Birth</label><input type="date"
-                                class="form-control" placeholder="Date of Birth" value="<%= user.dob%>"></div>
-                        <div class="col-md-6"><label class="labels">Email ID</label><input type="text"
-                                class="form-control" placeholder="enter email id" value="<%= user.email%>"></div>
-                        <div class="col-md-6"><label class="labels">Gender</label><input type="text"
-                                class="form-control" placeholder="education" value="<%= user.gender%>"></div>
-                    </div>
-                    <div class="d-block my-3">
-                        <input type="radio" name="tab" value="igottwo" onclick="show2();" />
-                          Change Your Password
-                        <!-- <input type="radio" name="tab" value="igotnone"  onclick="show1();" />
+                        <div class="row mt-2">
+                            <div class="col-md-6"><label class="labels" for="first_name">Name</label><input type="text"
+                                    class="form-control" name = "first_name" id="first_name" placeholder="first name" value="<%= user.first_name%>"></div>
+                            <div class="col-md-6"><label class="labels" for="last_name">Surname</label><input type="text"
+                                    class="form-control" value="<%= user.last_name%>" name = "last_name" id="last_name" placeholder="surname"></div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6"><label class="labels"  for="contact_no">PhoneNumber</label><input type="text"
+                                    class="form-control" placeholder="enter phone number" id="contact_no" name="contact_no" value="<%= user.contact_no%>">
+                            </div>
+                            <div class="col-md-6"><label class="labels" for="dob">Date of Birth</label><input type="date"
+                                    class="form-control" id="dob" name="dob" placeholder="Date of Birth" value="<%= user.dob%>"></div>
+                            <div class="col-md-6"><label class="labels" for="email">Email ID</label><input type="text"
+                                    class="form-control" placeholder="enter email id" id="email" name="email" value="<%= user.email%>"></div>
+                            <div class="col-md-6"><label class="labels" for="gender">Gender</label><input type="text"
+                                    class="form-control" id="gender" name="gender" placeholder="education" value="<%= user.gender%>"></div>
+                        </div>
+                        <div class="d-block my-3">
+                            <input type="radio" name="tab" value="igottwo" onclick="show2();" />
+                            Change Your Password
+                            <!-- <input type="radio" name="tab" value="igotnone"  onclick="show1();" />
                         No -->
-                        <div id="div1" class="hide">
-                            <div class="row mt-3">
-                                <div class="col-md-6"><label class="labels">Old Password</label><input type="text"
-                                        class="form-control" placeholder="enter old password" value="">
+                            <div id="div1" class="hide">
+                                <div class="row mt-3">
+                                    <div class="col-md-6"><label class="labels" for="old_password">Old Password</label><input type="text"
+                                            class="form-control" id="old_password" name="old_password" placeholder="enter old password" value="">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6"><label class="labels">New Password</label><input type="text"
-                                        class="form-control" placeholder="enter new password" value="">
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6"><label class="labels">Confirm Password</label><input type="text"
-                                        class="form-control" placeholder="enter confirm password" value="">
+                                <div class="row mt-3">
+                                    <div class="col-md-6"><label class="labels" for="password">New Password</label><input type="text"
+                                            class="form-control"  id="password" name="password" placeholder="enter new password" value="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-
-                    <!-- <div class="row mt-3">
+                        <!-- <div class="row mt-3">
                         <div class="col-md-6"><label class="labels">Country</label><input type="text"
                                 class="form-control" placeholder="country" value=""></div>
                         <div class="col-md-6"><label class="labels">State/Region</label><input type="text"
                                 class="form-control" value="" placeholder="state"></div>
                     </div> -->
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save
-                            Profile</button></div>
+                        <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
+                                Profile</button></div>
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
-    </div>
-    </div>
+    </form>
     <%- await include('_partials/footer.ejs'); %>
     <!-- Footer -->
 
@@ -103,6 +124,7 @@
         function show1() {
             document.getElementById('div1').style.display = 'none';
         }
+
         function show2() {
             document.getElementById('div1').style.display = 'block';
         }

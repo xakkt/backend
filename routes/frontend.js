@@ -72,7 +72,7 @@ router.get('/user/login',(req,res)=>{
     res.render('frontend/login')
 })
 router.get('/user/edit-profile',isloggedin,userController.editProfile)
-router.post('/user/update-profile',userController.updateProfile)
+router.post('/user/update-profile/:id',userController.updateProfile)
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)

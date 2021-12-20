@@ -171,6 +171,7 @@ userSchema.pre('save', async function () {
 });
 
 
+
 userSchema.post('save', function(error, doc, next) {
   if (error) {
     console.log("=================",error)

@@ -189,7 +189,7 @@ exports.makeDefaultAddress = async (req, res) => {
 
 		}
 	},
-exports.updateAddress = async (req, res) => {
+	exports.updateAddress = async (req, res) => {
 		try {
 
 			let user = await User.findOneAndUpdate({
@@ -276,11 +276,33 @@ exports.editProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
 	try {
 		let user = await User.findOne({
-			_id: req.session.userid
-		}).exec()
-		return res.render('frontend/edit-profile', {
-			user: user
-		})
+			_id: req.params.id
+	     	})
+	  if(req.body.old_password){
+		  if(!req.body.old_password == user.password){
+			return res.json({
+				data: "old password is incorrect"
+			})
+		  }
+		
+	  }
+		const pass = await md5(req.body.password)
+	  const userUpdate =  await User.findOneAndUpdate({
+		_id: req.params.id
+	  },
+	  {
+        $set: {
+			first_name:req.body.first_name,
+			last_name:req.body.last_name,
+			email:req.body.email,
+			password:pass?pass:user.password,
+			contact_no:req.body.contact_no,
+			dob:req.body.dob
+		}
+      })
+            if(userUpdate){
+			 return res.send("done")
+			}
 	} catch (err) {
 		console.log(err)
 		return res.json({
