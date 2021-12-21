@@ -10,9 +10,14 @@ const {
 } = require('express-validator');
 const Device = require('../../models/device')
 var md5 = require('md5');
+const transporter = require('../../config/transporter-mail');
+var fs = require('fs');
 
 const app = express();
 var server = require('http').Server(app);
+const ejs = require("ejs");
+const path = require('path')
+
 
 exports.addAddress = async (req, res) => {
 
@@ -274,40 +279,92 @@ exports.editProfile = async (req, res) => {
 }
 
 exports.updateProfile = async (req, res) => {
-	try {
-		let user = await User.findOne({
-			_id: req.params.id
-	     	})
-	  if(req.body.old_password){
-		  if(!req.body.old_password == user.password){
-			return res.json({
-				data: "old password is incorrect"
+		try {
+			let user = await User.findOne({
+				_id: req.params.id
 			})
-		  }
-		
-	  }
-		const pass = await md5(req.body.password)
-	  const userUpdate =  await User.findOneAndUpdate({
-		_id: req.params.id
-	  },
-	  {
-        $set: {
-			first_name:req.body.first_name,
-			last_name:req.body.last_name,
-			email:req.body.email,
-			password:pass?pass:user.password,
-			contact_no:req.body.contact_no,
-			dob:req.body.dob
-		}
-      })
-            if(userUpdate){
-			 return res.send("done")
+			if (req.body.old_password) {
+				if (!req.body.old_password == user.password) {
+					return res.json({
+						data: "old password is incorrect"
+					})
+				}
+
 			}
+			const pass = await md5(req.body.password)
+			const userUpdate = await User.findOneAndUpdate({
+				_id: req.params.id
+			}, {
+				$set: {
+					first_name: req.body.first_name,
+					last_name: req.body.last_name,
+					email: req.body.email,
+					password: pass ? pass : user.password,
+					contact_no: req.body.contact_no,
+					dob: req.body.dob
+				}
+			})
+			if (userUpdate) {
+				return res.send("done")
+			}
+		} catch (err) {
+			console.log(err)
+			return res.json({
+				data: err
+			})
+		}
+
+	},
+
+	exports.forgotPasswordPage = async (req, res) => {
+		try {
+			return res.render('frontend/modals/forgot-password')
+		} catch (err) {
+			res.status(400).json({
+				'data': err
+			})
+		}
+	}
+exports.forgotPassword = async (req, res) => {
+	try {
+		console.log("=======heree", req.body.email)
+
+		// const password = randomstring.generate({ length: 12, charset: 'alphanumeric' });
+		// const info = { email: req.body.email, password: password }
+		// mail = new Mail(info);
+		// //const encrypted_password = await bcrypt.hashSync(password, saltRounds);
+		// const encrypted_password = await md5(password);
+		const user = await User.findOne({
+			email: req.body.email
+		});
+		if (!user) {
+			res.status(400).json({
+				status: 0,
+				message: "Email not found"
+			});
+		}
+		if (user) {
+			const data = await ejs.renderFile(path.join( "views/frontend/reset-password-Email-template.ejs"),{
+				name: 'Stranger'
+			});
+			const mainOptions = {
+				from:`Message from @xakkt.com <donotreply@xakkt.com>`,
+				to: req.body.email,
+				subject:"xakkt",
+				html: data
+			};
+			transporter.sendMail(mainOptions, (err, info) => {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('Message sent: ' + info.response);
+				}
+			});
+
+		}
 	} catch (err) {
-		console.log(err)
-		return res.json({
-			data: err
+		res.status(400).json({
+			'data': err
 		})
 	}
-
 }

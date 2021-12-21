@@ -81,6 +81,8 @@ router.get('/user/defautl-address/:address', userController.makeDefaultAddress)
 router.get('/user/delete-address/:address', userController.deleteAddress)
 router.post('/user/update-address', userController.updateAddress)
 router.get('/user/get-address/:id', userController.editaddress)
+router.get('/user/forgetpassword',userController.forgotPasswordPage);
+router.post('/user/resetpassword',userController.forgotPassword);
 
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)

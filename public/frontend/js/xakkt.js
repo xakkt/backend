@@ -923,3 +923,9 @@ $("#modalLoginForm").on('show.bs.modal',function(e){
 $("#modalRegisterForm").on('show.bs.modal',function(e){ 
   $("#modalLoginForm").modal('hide')
 })
+
+$("#forgotPasswordModal").on('show.bs.modal',function(){ 
+  
+  console.log("=======here forgot page")
+
+})

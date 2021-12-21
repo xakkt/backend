@@ -29,9 +29,9 @@
 
 .profile-img-container i {
     position: absolute;
-    top: 45%;  
-    left: 45%;
-    transform: translate(-45%, -45%);
+    top: 50%;  
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: none;
 }
 
@@ -56,7 +56,13 @@
                         <img
                             class="rounded-circle mt-5"
                             src="https://i.picsum.photos/id/543/200/200.jpg?hmac=YuoZMit51ELMe2bbgwymVwwXFjmpaZ7hS_J1MfjC1IQ">
-                             <i class="fas fa-camera fa-2x" style="color: rgb(189, 159, 159);margin-top: 20px;"></i></div>
+                             <label for="file" style="cursor: pointer; margin-right: 10px; ">
+                             <i class="fas fa-camera fa-2x" style="color: rgb(156, 148, 148);margin-top: 20px;"></i>
+                                <input type="file" name="picture" id="file"
+                                  style="display: none;" accept="image/gif,image/jpeg,image/jpg,image/png"
+                                  data-original-title="upload photos"/>
+                              </label>
+                            </div>
                             <span
                             class="font-weight-bold">Amelly</span><span
                             class="text-black-50">amelly12@bbb.com</span><span>
