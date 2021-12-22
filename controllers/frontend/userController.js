@@ -316,7 +316,7 @@ exports.updateProfile = async (req, res) => {
 
 	},
 
-	exports.forgotPasswordPage = async (req, res) => {
+exports.forgotPasswordPage = async (req, res) => {
 		try {
 			return res.render('frontend/modals/forgot-password')
 		} catch (err) {
@@ -362,6 +362,17 @@ exports.forgotPassword = async (req, res) => {
 			});
 
 		}
+	} catch (err) {
+		res.status(400).json({
+			'data': err
+		})
+	}
+}
+
+exports.emailToResetPasswordPage = async (req, res) => {
+	try {
+		console.log("====")
+		return res.render('frontend/reset-password')
 	} catch (err) {
 		res.status(400).json({
 			'data': err
