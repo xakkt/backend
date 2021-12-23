@@ -6,14 +6,9 @@ const { check } = require('../controllers/admin/userController');
 
 module.exports = async (req, res, next)=>{
     if (req.session.customer) { 
-        console.log("======1",req.session.userid)
-        console.log("======2",req.session.customer)
-
         // locals.user = req.session.userid
-        
 
         // res.locals.check = async (...value) => {
-        console.log("=======ppww")
                const role = await User.findOne({_id:req.session.userid})
             //    .populate({
             //     path: 'role_id',

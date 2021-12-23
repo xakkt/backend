@@ -289,7 +289,6 @@ exports.updateProfile = async (req, res) => {
 						data: "old password is incorrect"
 					})
 				}
-
 			}
 			const pass = await md5(req.body.password)
 			const userUpdate = await User.findOneAndUpdate({
@@ -327,13 +326,7 @@ exports.forgotPasswordPage = async (req, res) => {
 	}
 exports.forgotPassword = async (req, res) => {
 	try {
-		console.log("=======heree", req.body.email)
 
-		// const password = randomstring.generate({ length: 12, charset: 'alphanumeric' });
-		// const info = { email: req.body.email, password: password }
-		// mail = new Mail(info);
-		// //const encrypted_password = await bcrypt.hashSync(password, saltRounds);
-		// const encrypted_password = await md5(password);
 		const user = await User.findOne({
 			email: req.body.email
 		});
@@ -344,13 +337,20 @@ exports.forgotPassword = async (req, res) => {
 			});
 		}
 		if (user) {
-			const data = await ejs.renderFile(path.join( "views/frontend/reset-password-Email-template.ejs"),{
-				name: 'Stranger'
+			var resetPasswordLink =
+				"http://localhost:4000/user/resetpassword"
+			const reset = {
+				link: resetPasswordLink,
+				name: 'Stranger',
+				userid: user.id
+			};
+			const data = await ejs.renderFile(path.join("views/frontend/reset-password-Email-template.ejs"), {
+				reset
 			});
 			const mainOptions = {
-				from:`Message from @xakkt.com <donotreply@xakkt.com>`,
+				from: `Message from @xakkt.com <donotreply@xakkt.com>`,
 				to: req.body.email,
-				subject:"xakkt",
+				subject: "xakkt",
 				html: data
 			};
 			transporter.sendMail(mainOptions, (err, info) => {
@@ -371,8 +371,36 @@ exports.forgotPassword = async (req, res) => {
 
 exports.emailToResetPasswordPage = async (req, res) => {
 	try {
-		console.log("====")
-		return res.render('frontend/reset-password')
+		const userid = req.query.userid
+		return res.render('frontend/reset-password', {
+			userid: userid
+		})
+	} catch (err) {
+		res.status(400).json({
+			'data': err
+		})
+	}
+}
+exports.changepassword = async (req, res) => {
+	try {
+		let user = await User.findOne({
+			_id: req.params.id
+		}).exec()
+		// const password = randomstring.generate({ length: 12, charset: 'alphanumeric' });
+		//const encrypted_password = await bcrypt.hashSync(password, saltRounds);
+		const encrypted_password = await md5(req.body.password);
+		const changePassword = await User.findOneAndUpdate({
+			email: user.email
+		}, {
+			$set: {
+				password: encrypted_password,
+			}
+		})
+		if (changePassword) {
+			return res.redirect('/user/login')
+		} else {
+              return res.send("Email not found")
+		}
 	} catch (err) {
 		res.status(400).json({
 			'data': err

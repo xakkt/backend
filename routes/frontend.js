@@ -83,7 +83,8 @@ router.post('/user/update-address', userController.updateAddress)
 router.get('/user/get-address/:id', userController.editaddress)
 router.get('/user/forgetpassword',userController.forgotPasswordPage);
 router.post('/user/resetpassword',userController.forgotPassword);
-router.get('/user/emailToResetPasswordPage',userController.emailToResetPasswordPage);
+router.get('/user/resetpassword',userController.emailToResetPasswordPage);
+router.post('/user/changepassword/:id',userController.changepassword);
 
 /*------------ User ---------*/
 router.get('/',StoreController.homepage)
