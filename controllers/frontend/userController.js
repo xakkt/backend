@@ -338,7 +338,7 @@ exports.forgotPassword = async (req, res) => {
 		}
 		if (user) {
 			var resetPasswordLink =
-				"http://localhost:4000/user/resetpassword"
+				"http://xgrocery.cf/user/resetpassword"
 			const reset = {
 				link: resetPasswordLink,
 				name: 'Stranger',
@@ -358,6 +358,7 @@ exports.forgotPassword = async (req, res) => {
 					console.log(err);
 				} else {
 					console.log('Message sent: ' + info.response);
+					return res.redirect('/user/login')
 				}
 			});
 
@@ -399,7 +400,7 @@ exports.changepassword = async (req, res) => {
 		if (changePassword) {
 			return res.redirect('/user/login')
 		} else {
-              return res.send("Email not found")
+            return res.send("Email not found")
 		}
 	} catch (err) {
 		res.status(400).json({
