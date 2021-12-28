@@ -1,5 +1,5 @@
-var baseUrl = "http://localhost:4000"
-//  var baseUrl = "http://xgrocery.cf"
+//var baseUrl = "http://localhost:4000"
+var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
   if (navigator.geolocation) {
