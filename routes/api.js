@@ -191,6 +191,7 @@ router.get('/orders/:storeid',verifyjwt.checkToken, orderController.listOrders);
 router.put('/order/feedback/:orderid',orderValidation,verifyjwt.checkToken, orderController.rateOrder);
 router.get('/order/:orderid',verifyjwt.checkToken, orderController.orderDetails);
 router.put('/order/update_status/:orderid',verifyjwt.checkToken, orderController.updateOrderStatus)
+router.get('/order/again/list',verifyjwt.checkToken, orderController.orderAgainList)
 
 /*--- settings ---*/
 router.post('/setting/add', settingValidation, settingController.add);

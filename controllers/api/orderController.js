@@ -5,7 +5,8 @@ const { validationResult } = require('express-validator');
 const orderid = require('order-id')(process.env.ORDER_SECRET);
 const _time = require('../../helper/storetimezone')
 const mongoose = require('mongoose')
-const _global = require('../../helper/common')
+const _global = require('../../helper/common');
+const { ObjectId } = require('bson');
 
 exports.listOrders = async (req, res) => {
 
@@ -183,6 +184,49 @@ exports.myorder = async (req,res) =>{
        })
 
         // console.log(order)
+        if (!order.length) return res.json({  status: 1, message: "No Order found", data: [] });
+        return res.json({ status: 1, message: "", data:order});
+
+    } catch (err) {
+        return res.status(400).json({ data: err.message });
+    }
+}
+
+exports.orderAgainList = async (req,res) =>{
+    try {
+        var order = await Order.aggregate([
+            { $match: {_user:ObjectId(req.decoded.id)}},
+            
+            {
+                $lookup:
+                  {
+                    from: 'products',
+                    localField: 'products._product',
+                    foreignField: '_id',
+                    as: 'products'
+                  }
+              },
+              {
+                $unwind: "$products"
+              },
+
+              {$group :{
+                  _id: "$products._id",
+                  name: {$first: "$products.name"},
+                  image: {$first: "$products.image"},
+                  description: {$first: "$products.description"},
+                  cuisine: {$first: "$products.cuisine"},
+                  price: {$first: "$products.price"},
+                  brand_id: {$first: "$products.brand_id"},
+                  _category: {$first: "$products._category"},
+                  _user: {$first: "$_user"},
+                  _store: {$first: "$_store"},
+                  feedback: {$first: "$feedback"},
+                  address: {$first: "$shipping.address"}
+              }}
+           
+          ])
+      
         if (!order.length) return res.json({  status: 1, message: "No Order found", data: [] });
         return res.json({ status: 1, message: "", data:order});
 

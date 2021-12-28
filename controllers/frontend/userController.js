@@ -338,7 +338,7 @@ exports.forgotPassword = async (req, res) => {
 		}
 		if (user) {
 			var resetPasswordLink =
-				"http://xgrocery.cf/user/resetpassword"
+				"http://localhost:4000/user/resetpassword"
 			const reset = {
 				link: resetPasswordLink,
 				name: 'Stranger',
