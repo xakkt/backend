@@ -139,11 +139,11 @@ exports.authenticate = async (req, res) => {
 		if (!userInfo) return res.status(400).json({ message: "User does not exist with this email." });
 
 		if (md5(req.body.password) !== userInfo.password) return res.status(400).json({ status: 0, message: "Invalid password!!!", data: null });
-		const deviceinfo = {
+		/*const deviceinfo = {
 			user_id: userInfo._id,
 			device_type: req.body.device_type,
 			device_token: req.body.device_token
-		}
+		}*/
 		Device.findOneAndUpdate({ user_id: userInfo._id, device_token: req.body.device_token }, { device_token: req.body.device_token, device_type: req.body.device_type }, { upsert: true }, function (err, result) {
 			if (err) {
 				return res.status(400).json({ message: err.message })

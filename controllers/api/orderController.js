@@ -194,6 +194,50 @@ exports.myorder = async (req,res) =>{
 
 exports.orderAgainList = async (req,res) =>{
     try {
+        var order = await Order.find({_user: req.decoded.id},).select('-feedback -shipping -_user -payment').populate({
+            path:'products._product',
+            select:'name description _category weight _unit image quantity',
+            populate:{
+                path:'_unit',
+                select:'name'
+            }
+        }).populate('_store','name').lean({ getters: true });
+
+        prodArray = [];
+
+        order.map((element) => {
+           
+            for (const [i,product] of element.products.entries()) {
+                delete(product._id)
+                product._id = product._product._id
+                product.name = product._product.name
+                product.description = product._product.description
+                product._category = product._product._category
+                product.weight = product._product.weight
+                product._unit = product._product._unit
+                product.image = product._product.image
+                /*product._product.deal_price= product.deal_price
+                product._product.regular_price= product.regular_price*/
+
+                delete(product._product)
+                prodArray.push(product)
+            }
+           
+       })
+
+       arrUniq = [...new Map(prodArray.map(v => [v._id, v])).values()]
+
+        // console.log(order)
+        if (!order.length) return res.json({  status: 1, message: "No Order found", data: [] });
+        return res.json({ status: 1, message: "", data:arrUniq});
+
+    } catch (err) {
+        return res.status(400).json({ data: err.message });
+    }
+}
+
+exports.orderAgainListk = async (req,res) =>{
+    try {
         var order = await Order.aggregate([
             { $match: {_user:ObjectId(req.decoded.id)}},
             
