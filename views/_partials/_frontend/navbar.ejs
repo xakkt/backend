@@ -55,7 +55,7 @@
                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <span class="user_img">
 
-                        <%if(locals.user){ %>
+                        <%if(profilePic!==null){ %>
                            <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/<%=profilePic%>">
                       <%}else{%>
                            <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/xuser.png">     
@@ -136,7 +136,7 @@
                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <span class="user_img">
                   <!-- <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>user.profile_pic"> -->
-                  <%if(locals.user){ %>
+                  <%if(profilePic!==null){ %>
                        <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/<%=profilePic%>">
                    <%}else{%>
                         <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/xuser.png">     

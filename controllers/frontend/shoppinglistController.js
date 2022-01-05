@@ -102,11 +102,10 @@ exports.removeFromAllList = async (req, res) => {
 		sLists = await ShoppinglistName.find({_user:req.body._user,_store:req.body._store},'name').lean();
 		if(!sLists){ return res.json({ status: 1, message: "Shopping list not found" }); }
 		var ids = sLists.map(data => data._id)
-		console.log("=======>>>",ids)
+		
 		Shoppinglist.deleteMany({ _product:req.body._product,_shoppinglist: {$in: ids} }, function (err,data) {
 			if (err) return res.json({ status: 1, message: "", data: err });
-			console.log("=================>>>",data)
-			return res.json({ status: 1, message: "Product removed", data: [] });
+					return res.json({ status: 1, message: "Product removed", data: [] });
 		});
 
 	} catch (err) {

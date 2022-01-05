@@ -37,6 +37,7 @@ app.use(cookieParser())
 
 app.use(function(req, res, next) {
   res.locals.user = req.session.customer;
+  res.locals.profilePic = req.session.profilePic
   next();
 });
 

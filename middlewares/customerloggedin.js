@@ -28,7 +28,7 @@ module.exports = async (req, res, next)=>{
         next()
     }
     else {
-        console.log("=======pjp")
+       
         return res.render('frontend/login')
     }
 };

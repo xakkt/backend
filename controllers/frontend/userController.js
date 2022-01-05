@@ -303,20 +303,21 @@ exports.updateProfile = async (req, res) => {
 				   first_name: req.body.first_name,
 					last_name: req.body.last_name,
 					email: req.body.email,
-					//password: pass ? pass : user.password,
 					contact_no: req.body.contact_no,
-					dob: req.body.dob,
-					profile_pic:req.body.profile_pic,
+					dob: req.body.dob,	
 					gender:req.body.gender
 			}
 			if(req.file){  data.profile_pic = req.file.path.replace(/public/g, "") }
 
-			console.log("==============",data)
-			await User.findOneAndUpdate({
+			
+			var userInfo = await User.findOneAndUpdate({
 				_id: req.params.id
 			}, {
 				$set: data
-			})
+			},{new: true})
+			
+			
+			req.session.profilePic = userInfo.profile_pic;
 			
 			res.redirect('/user/edit-profile/');
 			
