@@ -7,6 +7,19 @@ var bodyParser = require('body-parser');
 const _global = require('../helper/common')
 var isloggedin = require('../middlewares/customerloggedin')
 // var userloggedin = require('../middlewares/customerloggedin')
+var multer  = require('multer')
+var moment = require('moment');
+const path = require('path')
+
+var userStorage =   multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, './public/images/users');
+    },
+    filename: function (req, file, callback) { const img = path.basename(file.originalname,path.extname(file.originalname));
+      callback(null, img.split(' ').join('_').toLowerCase()+'_'+moment().unix() + path.extname(file.originalname));
+    }
+  });
+var userUpload = multer({storage: userStorage})  
 
 const IndexController = require('../controllers/frontend/indexController')
 const AuthController = require('../controllers/frontend/authController')
@@ -72,7 +85,7 @@ router.get('/user/login',(req,res)=>{
     res.render('frontend/login')
 })
 router.get('/user/edit-profile',isloggedin,userController.editProfile)
-router.post('/user/update-profile/:id',userController.updateProfile)
+router.post('/user/update-profile/:id',userUpload.single('profile_pic'),userController.updateProfile)
 router.post('/user/create',userValidation,AuthController.create)
 router.post('/user/login',userLoginValidation,AuthController.login)
 router.get('/user/logout',AuthController.logout)

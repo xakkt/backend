@@ -36,16 +36,15 @@ exports.addAddress = async (req, res) => {
 			address2: req.body.address2,
 			city: req.body.city,
 			address_type: req.body.address_type,
-			//countrycode: req.body.countrycode,
+			countrycode: req.body.countrycode,
 			country: req.body.country,
-			//region: req.body.region,
-			phoneno: req.body.contact_no,
+			area: req.body.area,
+			phoneno: req.body.phoneno,
 			zipcode: req.body.zipcode,
-			emirate: req.body.emirate,
+			
 			//location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
 		})
-		console.log("0--00000", address_array)
-
+		
 		let user = await User.findOneAndUpdate({
 			_id: req.session.userid
 		}, {
@@ -69,7 +68,8 @@ exports.addAddress = async (req, res) => {
 			status: 1,
 			message: "Data not found"
 		})
-		res.redirect(req.header('Referer'));
+		return res.json({status:1, message:"Address addedd"})
+		//res.redirect(req.header('Referer'));
 
 	} catch (err) {
 		console.log("--log", err)
@@ -280,37 +280,43 @@ exports.editProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
 		try {
+			
+			backURL=req.header('Referer') || '/';
+  
 			let user = await User.findOne({
 				_id: req.params.id
 			})
-			if (req.body.old_password) {
+			/*if (req.body.old_password) {
 				if (!req.body.old_password == user.password) {
 					return res.json({
 						data: "old password is incorrect"
 					})
 				}
-			}
-			const pass = await md5(req.body.password)
-			const userUpdate = await User.findOneAndUpdate({
-				_id: req.params.id
-			}, {
-				$set: {
-					first_name: req.body.first_name,
+			}*/
+			//const pass = await md5(req.body.password)
+
+			const data = {
+				   first_name: req.body.first_name,
 					last_name: req.body.last_name,
 					email: req.body.email,
-					password: pass ? pass : user.password,
+					//password: pass ? pass : user.password,
 					contact_no: req.body.contact_no,
 					dob: req.body.dob
-				}
-			})
-			if (userUpdate) {
-				return res.send("done")
 			}
+			if(req.file){  data.profile_pic = req.file.path.replace(/public/g, "") }
+
+			console.log("==============",data)
+			await User.findOneAndUpdate({
+				_id: req.params.id
+			}, {
+				$set: data
+			})
+			
+			res.redirect('/user/edit-profile/');
+			
 		} catch (err) {
 			console.log(err)
-			return res.json({
-				data: err
-			})
+			res.redirect('/user/edit-profile?err=1');
 		}
 
 	},

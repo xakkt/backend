@@ -1,4 +1,4 @@
-//var baseUrl = "http://localhost:4000"
+//var baseUrl = "http://localhost:4800"
 var baseUrl = "http://xgrocery.cf"
 
 function getLocation() {
@@ -263,8 +263,7 @@ loginForm.on('submit', function(e){
   const obj = loginForm.serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
   $.post('/user/login', obj)
         .done(result => { 
-          console.log("========ssspppp",result)
-
+          
                     if(!result.status){
                             $("#loginError").show().text(result.errors); }else{
                               Swal.fire({

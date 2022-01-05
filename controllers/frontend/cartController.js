@@ -112,9 +112,8 @@ exports.checkoutPage = async (req, res)=>{
 				 select:'name image unit'
 			 }
 			}).lean();
-   console.log("=====rrrr",cartProducts.cart[0].quantity)
-   console.log("=========datataa",storedata)
-
+   
+//return res.json(user?.address)
 		//if(cartProducts?.cart.length)return res.json({status:1,data:cartProducts.cart, store: storedata})
 			return res.render('frontend/checkout',{ status:1, data:cartProducts, addresses:user?.address??null, store:storedata })
 	}catch (err) {

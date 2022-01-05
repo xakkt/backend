@@ -10,10 +10,11 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const childSchema = new Schema({
 
- 
+ /*--street number--*/
   address1: {
     type: String,
   },
+  /*---building --*/
   address2: {
     type: String,
   },
@@ -38,7 +39,13 @@ const childSchema = new Schema({
   city: {
     type: String
   },
+  area:{
+    type: String
+  },
   emirate: {
+    type: String
+  },
+  landmark:{
     type: String
   },
   country: {

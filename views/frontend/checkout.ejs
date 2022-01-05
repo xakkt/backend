@@ -14,7 +14,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
-     
+      <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
    </head>
    <body class="bg-light">
       <%- await include('../_partials/_frontend/navbar.ejs'); %>
@@ -96,7 +96,7 @@
                                     </span>
                                  </li>
                                  <li><span class="addr-search-text"><%=address.address1%> <%=address.address2%></span></li>
-                                 <li><span class="addr-search-text"><%=address.emirate%> <%=address.zipcode%></span></li>
+                                 <li><span class="addr-search-text"><%=address.area%> <%=address.zipcode%></span></li>
                                  <li><span class="addr-search-text"><%=address.country%></span></li>
                                  <li><span class="addr-search-text">Contact number: <%=address.phoneno%></span></li>
                               </ul>
@@ -144,35 +144,93 @@
            <div class="modal-content">
        
              <!-- Modal Header -->
-             <!--div class="modal-header">
-               <h4 class="modal-title">Modal Heading</h4>
+             <div class="modal-header">
+               <h5 class="modal-title">Enter a new delivery address</h5>
                <button type="button" class="close" data-dismiss="modal">&times;</button>
-             </div-->
+             </div>
        
              <!-- Modal body -->
              <div class="modal-body">
-               <form action="<%=process.env.BASE_URL%>/user/add-address%>" method="POST">
+               <form action="<%=process.env.BASE_URL%>/user/add-address%>" class="addaddress" method="POST">
                   <div class="form-group">
-                    <label for="address1">Address1</label>
-                    <input type="text" class="form-control" required placeholder="Address" name="address1">
+                     <label for="country">Country/Region</label>
+                     <select class="country form-control" name="country" style="width:100%;" placeholder="Select">
+                      
+                          <option value="uae">UAE</option>
+                          <option value="usa">USA</option>
+                                             
+                    </select>
+                    <input type="hidden" name="countrycode" value="971" />
+                   </div>
+                   
+                   
+                   <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" class="form-control" name="fullname">
+                   </div>
+
+                   <div class="form-group">
+                    <label for="contactno">Contact Number</label>
+                    <input type="text" class="form-control" placeholder="Contact" name="phoneno">
                   </div>
-                  <div class="form-group">
-                     <label for="address2">Address2</label>
-                     <input type="text" class="form-control" required placeholder="Address" name="address2">
-                   </div>
-                   <div class="form-group">
-                     <label for="address1">Emirate or States</label>
-                     <input type="text" class="form-control" required placeholder="Emirate" name="emirate">
-                   </div>
-                   <div class="form-group">
-                     <label for="contactno">Contact</label>
-                     <input type="text" class="form-control" required placeholder="Contact" name="phoneno">
-                   </div>
-                   <div class="form-group">
-                     <label for="country">Country</label>
-                     <input type="text" class="form-control" required placeholder="Country" name="country">
-                   </div>
-                  <div class="form-group row">
+                    <div class="uae">
+                      <div class="form-group">
+                        <label for="streetno">Street Number</label>
+                        <input type="text" class="form-control" placeholder="E.g. Omar Ibn Al Khattab Street" name="streetno">
+                      </div>
+                      <div class="form-group">
+                        <label for="building">Building name/no., floor, apartment or villa no.</label>
+                        <input type="text" class="form-control"  placeholder="E.g. Princess tower, 5th floor, apt 5023" name="building">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="uaecity">City</label>
+                        <select class="uaecity form-control" name="uaecity" style="width:100%;" placeholder="Select">
+                      
+                          <option value="Dubai">Dubai</option>
+                          <option value="Abu Dhabi">Abu Dhabi</option>
+                          <option value="Al Ain">Al Ain</option>
+                          <option value="Sharjah">Sharjah</option>
+                          <option value="Ajman">Ajman</option>
+                          <option value="Fujairah">Fujairah</option>
+                          <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                          
+                    </select>
+                       
+                      </div>
+
+                      <div class="form-group">
+                        <label for="address1">Area/District</label>
+                        <input type="text" class="form-control" name="area">
+                      </div>
+                </div>
+                   <div class="form-group usa d-none">
+                    <label for="address1">Address</label>
+                    <input type="text" class="form-control" placeholder="Address" name="address1">
+                    <input type="text" class="form-control mt-2" placeholder="Address" name="address2">
+                  </div>
+                  
+                  
+                  <div class="row usa d-none">
+                    <div class="form-group col-md-4">
+                      <label for="city">City</label>
+                      <input type="text" class="form-control" name="usacity">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <label for="state">State</label>
+                      <input type="text" class="form-control" name="state">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <label for="zipcode">PIN Code</label>
+                      <input type="number" class="form-control" name="zipcode">
+                    </div>
+                </div>
+
+                  <div class="form-group"><label>Address Type</label></div>
+                  <div class="form-group text-center row">
+                    
                     <label class="form-check-label col-md-6">
                       <input class="form-check-input" name="address_type" value="home" type="radio"> Home
                     </label>
@@ -195,58 +253,117 @@
       <!--modal for address-->
        <!--- edit address modal-->
        <div class="modal" id="editAddressModal">
-         <div class="modal-dialog">
-           <div class="modal-content">
-       
-             <!-- Modal Header -->
-             <!--div class="modal-header">
-               <h4 class="modal-title">Modal Heading</h4>
-               <button type="button" class="close" data-dismiss="modal">&times;</button>
-             </div-->
-       
-             <!-- Modal body -->
-             <div class="modal-body">
-               <form action="<%=process.env.BASE_URL%>/user/get-address" id="editAddress"  method="GET">
-                  <div class="form-group">
-                    <label for="address1">Address1</label>
-                    <input type="text" id="edit_address1" class="form-control" required placeholder="Address" name="address1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Edit delivery address</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+      
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form action="<%=process.env.BASE_URL%>/user/get-address" class="addaddress" method="POST">
+                 <div class="form-group">
+                    <label for="country">Country/Region</label>
+                    <select class="country form-control" name="country" style="width:100%;" placeholder="Select">
+                     
+                         <option value="uae">UAE</option>
+                         <option value="usa">USA</option>
+                                            
+                   </select>
+                   <input type="hidden" name="countrycode" value="971" />
                   </div>
+                  
+                  
                   <div class="form-group">
-                     <label for="address2">Address2</label>
-                     <input type="text" class="form-control" required placeholder="Address" name="address2">
+                   <label for="fullname">Full Name</label>
+                   <input type="text" class="form-control" name="fullname">
+                  </div>
+
+                  <div class="form-group">
+                   <label for="contactno">Contact Number</label>
+                   <input type="text" class="form-control" placeholder="Contact" name="phoneno">
+                 </div>
+                   <div class="uae">
+                     <div class="form-group">
+                       <label for="streetno">Street Number</label>
+                       <input type="text" class="form-control" placeholder="E.g. Omar Ibn Al Khattab Street" name="streetno">
+                     </div>
+                     <div class="form-group">
+                       <label for="building">Building name/no., floor, apartment or villa no.</label>
+                       <input type="text" class="form-control"  placeholder="E.g. Princess tower, 5th floor, apt 5023" name="building">
+                     </div>
+
+                     <div class="form-group">
+                       <label for="uaecity">City</label>
+                       <select class="uaecity form-control" name="uaecity" style="width:100%;" placeholder="Select">
+                     
+                         <option value="Dubai">Dubai</option>
+                         <option value="Abu Dhabi">Abu Dhabi</option>
+                         <option value="Al Ain">Al Ain</option>
+                         <option value="Sharjah">Sharjah</option>
+                         <option value="Ajman">Ajman</option>
+                         <option value="Fujairah">Fujairah</option>
+                         <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                         
+                   </select>
+                      
+                     </div>
+
+                     <div class="form-group">
+                       <label for="address1">Area/District</label>
+                       <input type="text" class="form-control" name="area">
+                     </div>
+               </div>
+                  <div class="form-group usa d-none">
+                   <label for="address1">Address</label>
+                   <input type="text" class="form-control" placeholder="Address" name="address1">
+                   <input type="text" class="form-control mt-2" placeholder="Address" name="address2">
+                 </div>
+                 
+                 
+                 <div class="row usa d-none">
+                   <div class="form-group col-md-4">
+                     <label for="city">City</label>
+                     <input type="text" class="form-control" name="usacity">
                    </div>
-                   <div class="form-group">
-                     <label for="address1">Emirate or States</label>
-                     <input type="text" class="form-control" required placeholder="Emirate" name="emirate">
+
+                   <div class="form-group col-md-4">
+                     <label for="state">State</label>
+                     <input type="text" class="form-control" name="state">
                    </div>
-                   <div class="form-group">
-                     <label for="contactno">Contact</label>
-                     <input type="text" class="form-control" required placeholder="Contact" name="phoneno">
+
+                   <div class="form-group col-md-4">
+                     <label for="zipcode">PIN Code</label>
+                     <input type="number" class="form-control" name="zipcode">
                    </div>
-                   <div class="form-group">
-                     <label for="country">Country</label>
-                     <input type="text" class="form-control" required placeholder="Country" name="country">
-                   </div>
-                  <div class="form-group row">
-                    <label class="form-check-label col-md-6">
-                      <input class="form-check-input" name="address_type" value="home" type="radio"> Home
-                    </label>
-                    <label class="form-check-label col-md-6">
-                     <input class="form-check-input" name="address_type" value="office" type="radio"> Office
+               </div>
+
+                 <div class="form-group"><label>Address Type</label></div>
+                 <div class="form-group text-center row">
+                   
+                   <label class="form-check-label col-md-6">
+                     <input class="form-check-input" name="address_type" value="home" type="radio"> Home
                    </label>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-             </div>
+                   <label class="form-check-label col-md-6">
+                    <input class="form-check-input" name="address_type" value="office" type="radio"> Office
+                  </label>
+                 </div>
+                 <button type="submit" class="btn btn-primary">Submit</button>
+               </form>
+            </div>
+      
+            <!-- Modal footer -->
+            <!--div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div-->
+      
+          </div>
+        </div>
+      </div>
        
-             <!-- Modal footer -->
-             <!--div class="modal-footer">
-               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-             </div-->
-       
-           </div>
-         </div>
-       </div>
        <!-- edit address -->  
 
              <!--- payment modal-->
@@ -312,15 +429,72 @@
 
       <%- await include('_partials/footer.ejs'); %>
       <!-- Footer -->
-     
+      <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
+      <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
       <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
       <script>
          $(document).ready(function(){
-    $('input[type="radio"]').click(function(){
-    	var demovalue = $(this).val(); 
-        $("div.mydiv").hide();
-        $("#show"+demovalue).show();
-    });
+
+
+
+          $('.addaddress,.editAddressModal').submit(function(e){ 
+            e.preventDefault();
+            const obj = $(this).serializeArray().reduce((acc, {name, value}) => ({...acc, [name]: value}), {})
+            
+            var url = $(this).attr('action')
+            switch (obj.country)
+            {  
+              case 'uae': 
+                    obj.address1 = obj.streetno
+                    obj.address2 = obj.building
+                    obj.city = obj.uaecity
+                    obj.countrycode = "+971"
+
+                    delete obj.streetno
+                    delete obj.building
+                    delete obj.uaecity 
+                    break;
+              case 'usa': 
+                    obj.city = obj.usacity
+                    obj.countrycode = "+1"
+                    
+                    delete obj.uaecity
+                    delete obj.building 
+                    delete obj.area 
+                    delete obj.building
+                    delete obj.usacity
+                    delete obj.streetno   
+                    break;
+              
+            }
+
+            $.post(url, obj).done(result => { 
+                              
+                                        if(!result.status){
+                                                $("#loginError").show().text(result.errors); }else{
+                                                  Swal.fire({
+                                                      icon: 'success',
+                                                      title: 'Data addedd successfully',
+                                                      showConfirmButton: false,
+                                                      timer: 1500
+                                                    }) 
+                                                    location.reload();
+                                            }
+                            }).fail(result=>{
+                                      $("#loginError").show().text(result.responseJSON.errors);
+                            }); 
+         
+          })
+          
+            
+              $('.country').change(function(){
+                  $('.uae,.usa').toggleClass('d-none')
+              })
+              $('input[type="radio"]').click(function(){
+                var demovalue = $(this).val(); 
+                  $("div.mydiv").hide();
+                  $("#show"+demovalue).show();
+              });
 });
       </script>
    </body>
