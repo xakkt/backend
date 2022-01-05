@@ -57,8 +57,9 @@
 											<input type="text" class="form-control" placeholder="enter phone number" id="contact_no" name="contact_no" value="<%= user.contact_no%>"> </div>
 										<div class="col-md-6">
 											<label class="labels" for="dob">Date of Birth</label>
-											<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth" value="<%=user.dob%>">
+											<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth" value="<%=dob%>">
 										</div>
+
 										<div class="col-md-6">
 											<label class="labels" for="email">Email ID</label>
 											<input type="text" class="form-control" placeholder="enter email id" id="email" name="email" value="<%=user.email%>">
@@ -66,9 +67,19 @@
 										<div class="col-md-6">
 											<label class="labels" for="gender">Gender</label>
 											<select class="form-control" name="gender" style="width:100%;" placeholder="Select">
-												<option value="male">Male</option>
-												<option value="female">Female</option>
-												<option value="other">Other</option>
+												<% if (user.gender == "male"){%>
+													<option value="male" selected>Male</option>
+													<option value="female">Female</option>
+													<option value="other">Other</option>
+													<%}else if (user.gender == "female"){%>
+													<option value="male">Male</option>
+													<option value="female" selected>Female</option>
+													<option value="other">Other</option>
+													<% }else{%>
+														<option value="male">Male</option>
+														<option value="female" >Female</option>
+														<option value="other" selected >Other</option>
+														<%}%>
 											</select>
 										</div>
 									</div>

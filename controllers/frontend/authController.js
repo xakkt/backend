@@ -38,7 +38,6 @@ exports.login = async (req, res) => {
 }
 exports.create = async (req, res) => {
     try { 
-        console.log("=======re")
             const errors = await validationResult(req);
             if (!errors.isEmpty()) {
                      return res.json({ status:0, errors: errors.array()[0].msg });
@@ -54,12 +53,17 @@ exports.create = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             contact_no: req.body.contact_no,
-            dob: req.body.dob
+            dob: req.body.dob,
+            gender:req.body.gender
         }
         let user = await User.create(userInfo)
         if (user) {
+            console.log("=====here")
           // return res.render('/index')
              return res.json({ status: 1 })
+            //  return res.render('/frontend/login',{
+            //     status: 1
+            //  })
         }
         return res.json({ status: 0 })
 

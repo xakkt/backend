@@ -263,11 +263,17 @@ exports.editaddress = async (req, res) => {
 }
 exports.editProfile = async (req, res) => {
 	try {
-		let user = await User.findOne({
+		  const user = await User.findOne({
 			_id: req.session.userid
-		}).exec()
+		})
+
+		// user.dob = moment(user.dob).format("DD/MM/YYYY")
+		// console.log("=====here",user.dob)
+
+		let dob = moment(user.dob).format("YYYY-MM-DD")
 		return res.render('frontend/edit-profile', {
-			user: user
+			user: user,
+			dob:dob
 		})
 	} catch (err) {
 		console.log(err)
