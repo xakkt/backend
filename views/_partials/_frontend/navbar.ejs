@@ -55,10 +55,8 @@
                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <span class="user_img">
 
-                        <%if(user.profile_pic){ %>
-                        <% console.log("tesddddt",user.profile_pic, process.env.BASE_URL) %> 
-
-                           <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%><%=user.profile_pic%>">
+                        <%if(locals.user){ %>
+                           <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/<%=profilePic%>">
                       <%}else{%>
                            <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/xuser.png">     
                         <%}%>
@@ -138,12 +136,9 @@
                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <span class="user_img">
                   <!-- <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>user.profile_pic"> -->
-                  <%if(user.profile_pic){ %>
-                     <% console.log("====jj",user.profile_pic, process.env.BASE_URL) %>
-
-                        <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>user.profile_pic">
+                  <%if(locals.user){ %>
+                       <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/<%=profilePic%>">
                    <%}else{%>
-                     <% console.log("====jj33333333",user.profile_pic, process.env.BASE_URL) %>
                         <img width="40" height="40" class="rounded-circle" src="<%=process.env.BASE_URL%>/xuser.png">     
                      <%}%>
                </span>
