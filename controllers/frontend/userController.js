@@ -267,8 +267,6 @@ exports.editProfile = async (req, res) => {
 			_id: req.session.userid
 		})
 
-		// user.dob = moment(user.dob).format("DD/MM/YYYY")
-		// console.log("=====here",user.dob)
 
 		let dob = moment(user.dob).format("YYYY-MM-DD")
 		return res.render('frontend/edit-profile', {
@@ -307,7 +305,9 @@ exports.updateProfile = async (req, res) => {
 					email: req.body.email,
 					//password: pass ? pass : user.password,
 					contact_no: req.body.contact_no,
-					dob: req.body.dob
+					dob: req.body.dob,
+					profile_pic:req.body.profile_pic,
+					gender:req.body.gender
 			}
 			if(req.file){  data.profile_pic = req.file.path.replace(/public/g, "") }
 

@@ -28,7 +28,7 @@
 								<div class="d-flex flex-column align-items-center text-center p-3 py-5">
 									<div class="profile-img-container"> 
                                         <%if(user.profile_pic){%>
-                                            <img class="rounded-circle mt-5 img-thumbnail" id="profilepic" src="<%=process.env.BASE_URL%>/<%=user.profile_pic%>">
+                                            <img class="rounded-circle mt-5 img-thumbnail" id="profilepic" src="http://localhost:4000/<%=user.profile_pic%>">
 										<%}else{%>
                                             <img class="rounded-circle mt-5 img-thumbnail" id="profilepic" src="<%=process.env.BASE_URL%>/xuser.png">        
                                          <%}%>   
@@ -57,7 +57,7 @@
 											<input type="text" class="form-control" placeholder="enter phone number" id="contact_no" name="contact_no" value="<%= user.contact_no%>"> </div>
 										<div class="col-md-6">
 											<label class="labels" for="dob">Date of Birth</label>
-											<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth" value="<%=dob%>">
+											<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth" value="<%=user.dob%>">
 										</div>
 
 										<div class="col-md-6">
