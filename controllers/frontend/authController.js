@@ -55,14 +55,8 @@ exports.create = async (req, res) => {
             gender:req.body.gender
         }
         let user = await User.create(userInfo)
-        if (user) {
-            console.log("=====here")
-          // return res.render('/index')
-             return res.json({ status: 1 })
-            //  return res.render('/frontend/login',{
-            //     status: 1
-            //  })
-        }
+        if (user) return res.json({ status: 1 })
+         
         return res.json({ status: 0 })
 
     } catch (err) {

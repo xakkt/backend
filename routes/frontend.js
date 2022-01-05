@@ -82,10 +82,7 @@ router.get('/product/:id',IndexController.list)
 router.post('/cookie',IndexController.cookie)
 router.get('/cookiees',IndexController.cookiees)
 
-router.get('/user/login',(req,res)=>{
-    console.log("=========dataaa")
-    res.render('frontend/login')
-})
+router.get('/user/login',(req,res)=>res.render('frontend/login'))
 router.get('/user/edit-profile',isloggedin,userController.editProfile)
 router.post('/user/update-profile/:id',userUpload.single('profile_pic'),userController.updateProfile)
 router.post('/user/create',userValidation,AuthController.create)

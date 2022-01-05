@@ -249,8 +249,8 @@ $.post('/user/create', obj)
                               showConfirmButton: false,
                               timer: 1500
                             }) 
-                            
-                          location.reload();
+                          window.location.href = `${baseUrl}/user/login`; 
+                          
                        }
       }).fail(result=>{ console.log(result)
             $("#error").show().text(result.responseJSON.errors);
@@ -272,10 +272,9 @@ loginForm.on('submit', function(e){
                                   showConfirmButton: false,
                                   timer: 1500
                                 }) 
-                                location.reload();
+                                window.location.href = baseUrl;
                          }
         }).fail(result=>{
-          console.log("========ssspppp",result)
                   $("#loginError").show().text(result.responseJSON.errors);
          });
 
