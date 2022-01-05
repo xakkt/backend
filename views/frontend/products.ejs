@@ -101,16 +101,17 @@
                                         <div class="ccc_viewed_content text-center">
                                            
                                             <div class="ccc_viewed_name">
-                                                  <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>" ><%=product.name.get('english')%></a>
+                                                  <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>" > <%=product.name.get('english').substring(0, 18)%></a>
                                             </div>
-
+                                            <div><%=product.weight%> <%=product.unit%></div> 
                                             <div class="ccc_viewed_price">
                                                 <%if(product.deal_price) {%>
-                                                    <span style="width:100%"><%=store._currency.name%><%=product.regular_price%></span>
-                                                    <div><%=store._currency.name%><%=product.deal_price%></div>
+                                                    <span style="width:100%"><%=store._currency.name%> <%=product.regular_price%></span>
+                                                    <div><%=store._currency.name%> <%=product.deal_price%></div>
                                                 <%}else{%>
                                                     <div><%=store._currency.name%><%=product.regular_price%></div>
-                                                 <%}%>   
+                                                 <%}%> 
+                                                  
                                             </div>
 
                                             <form class="cart-form" method="post" id="product_form_nearby_<%=product._id%>">
@@ -154,9 +155,9 @@
                                         <div class="bbb_viewed_image" data-producturl="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><img src="<%=product.image%>" alt=""></div>
                                         <div class="bbb_viewed_content text-center">
                                             <div class="bbb_viewed_name">
-                                                <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"><%=product.name.english%></a>
+                                                <a href="<%=process.env.BASE_URL%>/<%=store.slug%>/product/<%=product.slug%>"> <%=product.name.english.substring(0, 18)%></a>
                                               </div>
-                                              
+                                              <div><%=product.weight%> <%=product.unit%></div>
                                             <div class="bbb_viewed_price">
                                                 <%if(product.deal_price) {%>
                                                     <span style="width:100%"><%=store._currency.name%><%=product.regular_price%></span>

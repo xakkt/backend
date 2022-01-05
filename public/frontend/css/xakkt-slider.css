@@ -237,7 +237,7 @@ border-radius: 6px;
 
  .bbb_viewed_name {
      margin-top: 3px;
-     min-height:50px;
+     /*min-height:50px;*/
  }
 
  .bbb_viewed_name a {
@@ -404,7 +404,7 @@ border-radius: 6px;
 
 .ccc_viewed_name {
     margin-top: 3px;
-    height: 3em;
+    height: 2em;
     text-overflow: ellipsis;
     width: 100%;
     display: -webkit-box;

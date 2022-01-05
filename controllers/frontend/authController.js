@@ -21,14 +21,12 @@ exports.login = async (req, res) => {
 
             await User.findOneAndUpdate({ email: req.body.email }, { last_login: Date.now() }).lean()
             req.session.customer = userInfo.email;
+            req.session.profilePic = userInfo.profile_pic;
             req.session.fullName = userInfo.first_name+' '+userInfo.last_name;
-            req.session.customer = userInfo.email;
             req.session.userid = userInfo._id
 
             await Cart.updateMany({ sessionId: req.sessionID },{ $set: { _user: userInfo._id } }).lean()
-            //console.log("====>>>>",req.sessionID)              
-            console.log("======1",req.session.userid)
-            console.log("======2",req.session.customer)
+            
 
             return res.json({ status:1,errors: '' });
     } catch (err) {
