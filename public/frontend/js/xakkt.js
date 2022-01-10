@@ -249,7 +249,8 @@ $.post('/user/create', obj)
                               showConfirmButton: false,
                               timer: 1500
                             }) 
-                          window.location.href = `${baseUrl}/user/login`; 
+                            $('#modalLoginForm').modal('show')
+                          //window.location.href = `${baseUrl}/user/login`; 
                           
                        }
       }).fail(result=>{ console.log(result)
