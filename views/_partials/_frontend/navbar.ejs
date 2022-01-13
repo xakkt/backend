@@ -78,7 +78,7 @@
             <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal"
                data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
             <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal"
-               data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
+               data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favourite</a>
             <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
             <%}else{%>
             <a class="dropdown-item" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
@@ -157,7 +157,7 @@
                <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="shoppingListModal"
                   data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping List</a>
                <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal"
-                  data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favoriout</a>
+                  data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favourite</a>
 
                <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
                <%}%>   

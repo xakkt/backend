@@ -530,7 +530,7 @@ $.post('/wishlist/products', data).done(result => {
                                        <img class="img-responsive xakkti x-cart x-cart-grey-${product._product._id} ${product._product.in_cart?'d-none':''}" title="Add to Cart" data-prop="x-cart" data-productid="${product._product._id}" src="${baseUrl}/frontend/images/GREY_Cart.png" alt="No Image"> 
              
                                 </span>
-                                <span class="action_icon" data-id="${product._id}" onclick="deleteFavorioutProduct(this)">
+                                <span class="action_icon" data-id="${product._id}" onclick="deleteFavouriteProduct(this)">
                                     <img style="width:26px" data-prop="x-delete" class="img-responsive" src="${baseUrl}/frontend/images/trash.png" title="Add to shopping list" alt="No Image">
                                 </span>
                               
@@ -799,7 +799,7 @@ function listnameClick(that){
   $($(that).data('formid')).submit()
   
 }
-function deleteFavorioutProduct(that){
+function deleteFavouriteProduct(that){
   var listid = $(that).data('id')
   $.get(`/wishlist/remove/product/${listid}`).done(result => { 
       console.log(result);
