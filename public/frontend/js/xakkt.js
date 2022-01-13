@@ -924,7 +924,12 @@ $("#modalRegisterForm").on('show.bs.modal',function(e){
 })
 
 $("#forgotPasswordModal").on('show.bs.modal',function(){ 
-  
-  console.log("=======here forgot page")
-
+ 
+})
+$("#createShoppingList").on('show.bs.modal',function(){ 
+  $("#allAhoppingListsModal").modal('hide')
+})
+$('#slclose').click(function(){
+  $("#createShoppingList").modal('hide')
+  $("#allAhoppingListsModal").modal('show')
 })

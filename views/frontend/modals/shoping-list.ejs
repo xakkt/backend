@@ -40,12 +40,23 @@
   <div class="modal-dialog modal-md modal-dialog-centered" role="document">
     <div class="modal-content">
       
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="shopListModalLabel">
+           Shopping Lists
+        </h5>
+        <a class="xakkt-popup" data-toggle="modal" data-modal="createShoppingList"
+               data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">+Add New</a>
+        <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button-->
+      </div>
+
       <div class="modal-body">
         <span id="shopilistError" class="error-msg d-none"></span>
         <table class="table table-image">
           <thead>
             <tr>
-                <th scope="col">Shopping Lists</th>
+                <th scope="col">Name</th>
                 <!-- <th scope="col">View</th> -->
                 <th scope="col">Delete</th>
             </tr>
@@ -100,11 +111,11 @@
     </div>
 </div>
 <div class="modal" id="createShoppingList" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Create a Shopping List</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" id="slclose" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
