@@ -71,14 +71,22 @@
             </div>
             <hr />
 
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>">Home</a>
+            <%if(!!locals.store){%>
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/products/<%=locals.store.slug%>">Shop @<%=locals.store.name%></a>
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/user/edit-profile">My Account</a>
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/myorders/<%=locals.store.slug%>">Order Again</a>
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/myorders/<%=locals.store.slug%>">Orders</a>
+            <%}%>
+            <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
+            <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal" data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favourite</a>
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/user/edit-profile">Bux</a>
+            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/user/edit-profile">Help</a>
 
-            <a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/user/edit-profile">Edit Profile</a>
+            <!--a class="dropdown-item" data-userid="<%=userid%>" href="<%=process.env.BASE_URL%>/user/edit-profile">Edit Profile</a-->
             <!--a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="createShoppingList"
                data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Create Shopping List</a-->
-            <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="allAhoppingListsModal"
-               data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Shopping Lists</a>
-            <a class="dropdown-item xakkt-popup" data-toggle="modal" data-modal="favListModal"
-               data-storeid="<%= (!!locals.store)?store._id:'' %>" href="javascript:void(0)">Favourite</a>
+            
             <a class="dropdown-item" href="<%=process.env.BASE_URL%>/user/logout">Log Out</a>
             <%}else{%>
             <a class="dropdown-item" data-toggle="modal" data-target="#modalLoginForm" href="#">Login </a>
