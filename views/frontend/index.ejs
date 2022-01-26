@@ -39,11 +39,11 @@
             <div class="content">
                 <div class="search" style="margin-top: 20px;">
                     <i class="fa fa-search"></i>
-                    <select class="form-select storelist" aria-label="Default select example">
+                    <select class="form-select storelist" style="width: 100%">
                         <option selected>Select an store</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <% for (const [i,store] of stores.entries()) { %>
+                        <option value="<%=process.env.BASE_URL%>/products/<%=store.slug%>" data-index=<%=i%> data-lat=<%=store?.location?.coordinates[1]%> data-long=<%=store?.location?.coordinates[0]%>><%=store.name%></option>
+                        <% }%>
                       </select>
                 </div>
                 <div class="map" >
@@ -97,7 +97,16 @@
 
           $(document).ready(function() {
                 $('.storelist').select2();
-            });
+                $('.storelist').on('select2:select', function (e) {
+                        var data = e.params.data;
+                        let long = $(e.params.data.element).data('long');
+                        let lat = $(e.params.data.element).data('lat');
+                        let index = $(e.params.data.element).data('index')
+                       
+                        $('#storeCarousel').carousel(index);
+                        //showPosition(lat,long)
+                    });
+                });
       </script>
 </body>
 
