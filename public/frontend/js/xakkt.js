@@ -87,6 +87,7 @@ $(document).ready(function() {
 
       viewedSlider.owlCarousel({
           stagePadding:50,
+          lazyLoad : true,
           loop: false,
           autoplay: true,
           autoplayTimeout: 6000,
@@ -132,6 +133,7 @@ $(document).ready(function() {
 
     viewedCSlider.owlCarousel({
         stagePadding:50,
+        lazyLoad : true,
         loop: false,
         autoplay: true,
         autoplayTimeout: 6000,
@@ -572,7 +574,7 @@ $('#cartModal').on('show.bs.modal',function(){
            
             tableHtml += `<tr>
                             <td class="w-25">
-                              <img src="http://xgrocery.cf/images/products/${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
+                              <img src="${baseUrl}/images/products/${product._product.image}" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>
                             <td>${product._product.name.english}</td>
                             <td class="qty">
