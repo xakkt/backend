@@ -72,7 +72,7 @@ function unique(arr) {
 app.get('/filter', function(req,res){
 
   MongoClient.connect("mongodb://localhost:27017/", function(err, db) {
-    if (err) throw err;
+    if (err) { console.log('not getting connected',err); throw err; }
     var dbo = db.db("xakkt-latest");
     dbo.collection("productcategories").find({}).forEach(async function (doc) {
       
