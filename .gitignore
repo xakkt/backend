@@ -1,6 +1,5 @@
 # Node build artifacts
 node_modules
-config/database.js
 npm-debug.log
 package-lock.json
 .env
