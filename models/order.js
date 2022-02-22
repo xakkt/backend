@@ -100,6 +100,7 @@ const OrderSchema = Schema({
       required: true
     },
     transaction_id:  { type:String },
+    customer_id: {type:String},
     payment_date:{type:String }
   },
   feedback: {

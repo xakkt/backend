@@ -5,6 +5,9 @@ const Cart = require('../../models/cart')
 const User = require('../../models/user')
 var ObjectId = require('mongoose').Types.ObjectId;
 const Store = require('../../models/store');
+const Stripe = require('stripe');
+
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.cartProducts = async (req, res) => {
     try {
@@ -89,7 +92,7 @@ exports.addPoductToCart = async (req, res) => {
 };
 
 exports.checkoutPage = async (req, res)=>{
-	try{
+	try{ 
 		let storedata = await Store.findOne({ slug: req.params.store }).select('-time_schedule -_department -holidays -__v -createdAt -updatedAt -_user').populate({
 			path: '_currency',
 			select: 'name',

@@ -1,7 +1,4 @@
-//var baseUrl = "http://localhost:4800"
-var baseUrl = "http://3.131.128.9:4800"
- 
-function getLocation() {
+ function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition(showPosition);
   } else { 

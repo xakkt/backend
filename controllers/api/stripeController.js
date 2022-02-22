@@ -1,5 +1,4 @@
-const Stripe = require('stripe');
-const stripe = Stripe('sk_test_51HyVQKIOdDwoZMJbvmjYdDWfnJphnYYJv970kC7kgTSssUnwdv95SHqJPQp8rjDDCSkW2RkFW9rXR8shV6Dg52fo00zWqcKMBg');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.stripe = async(req,res) =>{
     const token = await stripe.tokens.create({
@@ -24,9 +23,40 @@ exports.stripe = async(req,res) =>{
       if(charge) return res.json({message:"Payment",data:charge})
       return res.json({message:"not"})
 }
-exports.update = async (req,res) =>{
 
 
 
+exports.saveCard = async (req,res) =>{
+   try{
 
+  /*  const token = await stripe.tokens.create({
+      card: {
+        name:"manoj singh negi",
+        number: '4242424242424242',
+        exp_month: 2,
+        exp_year: 2023,
+        cvc: '314',
+      },
+    });*/
+
+   /* const card = await stripe.customers.createSource(
+      'cus_LCJvZ5lSoLqs8o',
+      {source: 'tok_visa'}
+    );*/
+    /*const customer = await stripe.customers.create({
+      source: 'tok_mastercard',
+      email: 'paying.user@example.com',
+    });
+    console.log('the -- custome-- ',customer);
+*/
+    const charge = await stripe.charges.create({
+      amount: 1000,
+      currency: 'usd',
+      customer: 'cus_LCJvZ5lSoLqs8o',
+    });
+    return res.json({data:charge})
+   }catch (err) {
+		console.log("--err", err)
+		return res.status(400).json({ data: "Something Went Wrong" });
+    }
 }

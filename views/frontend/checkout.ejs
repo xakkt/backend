@@ -15,6 +15,11 @@
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
       <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
+      <script src="https://js.stripe.com/v3/"></script>
+      <script>
+        var stripe = Stripe("<%=process.env.STRIPE_PUBLISH_KEY%>");
+        var elements = stripe.elements();
+      </script>
    </head>
    <body class="bg-light">
       <%- await include('../_partials/_frontend/navbar.ejs'); %>
@@ -431,6 +436,7 @@
       <!-- Footer -->
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+      <script> var baseUrl = '<%=process.env.BASE_URL%>'</script>
       <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
       <script>
          $(document).ready(function(){
