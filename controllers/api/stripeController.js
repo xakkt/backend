@@ -24,7 +24,19 @@ exports.stripe = async(req,res) =>{
       return res.json({message:"not"})
 }
 
+exports.updateCard = async (req,res) =>{
+  try{
 
+    const customer = await stripe.customers.update(
+      'cus_LCK8cCUH5EkwCz',
+      {metadata: {order_id: '6735'}}
+    );
+   return res.json({data:charge})
+  }catch (err) {
+   console.log("--err", err)
+   return res.status(400).json({ data: "Something Went Wrong" });
+   }
+}
 
 exports.saveCard = async (req,res) =>{
    try{
