@@ -5,6 +5,7 @@ const { check } = require('../controllers/admin/userController');
 
 
 module.exports = async (req, res, next)=>{
+    
     if (req.session.customer) { 
         console.log("======1",req.session.userid)
         console.log("======2",req.session.customer)
