@@ -112,6 +112,7 @@ router.post('/product/remove-from-cart',cartController.removeProductFromCart)
 router.post('/product/cart-size',cartController.cartSize)
 router.post('/cart/update_quantity',cartValidation,cartController.updateProductQuantity)
 router.post('/cart/empty_cart/:storeid',cartController.makeCartEmpty)
+router.post('/cart/checkout',cartController.orderCheckout)
 /*---- shoppinglist ----*/
 
 const updateListValidation = [
@@ -155,6 +156,8 @@ router.get('/:store/main-category/products/:category',categoryController.product
 router.get('/cart',function(req, res){
     return res.render('frontend/cart')
 })
-
+router.get('/payment-success',function(req, res){ 
+    return res.render('frontend/payment-success')
+})
 router.post('/products/cart',cartController.cartProducts)
 module.exports = router;

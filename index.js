@@ -17,6 +17,7 @@ var io = require('socket.io')(server);
 app.use(cors())
 var moment = require('moment');
 var isloggedin = require('./middlewares/isloggedin')
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // var userloggedin = require('./middlewares/customerloggedin')
 //var moment = require('moment-timezone');
 //moment().tz("America/Los_Angeles").format('ha z');

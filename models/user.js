@@ -80,6 +80,9 @@ const userSchema = Schema({
     unique: true,
     required: true
   },
+  stripe_customer_id:{
+    type: String
+  },
   gender: {
     type: String, enum:['male','female','other'], required:false
   },

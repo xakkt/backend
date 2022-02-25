@@ -6,7 +6,6 @@ const User = require('../../models/user')
 var ObjectId = require('mongoose').Types.ObjectId;
 const Store = require('../../models/store');
 const Stripe = require('stripe');
-
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.cartProducts = async (req, res) => {
@@ -140,7 +139,7 @@ exports.cartSize = async (req, res) => {
 		}
 
 		var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).lean();
- console.log("==from server==",data)
+ 
 		if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
 		let total_quantity;
 		 total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
@@ -357,3 +356,39 @@ exports.removeProductFromCart = async (req, res) => {
 	
 }
 
+exports.orderCheckout = async (req, res)=>{
+	try{
+		
+		const { items } = req.body;
+		console.log('----here we go--items--',items)
+	// Create a PaymentIntent with the order amount and currency
+	const paymentIntent = await stripe.paymentIntents.create({
+	  amount: 200,
+	  currency: "usd",
+	  payment_method_types: ['card'],
+	});
+  
+	res.send({
+	  clientSecret: paymentIntent.client_secret,
+	}); 
+	}catch (err) {
+		console.log("--err", err)
+		return res.status(400).json({ data: "Something Went Wrong" });
+    }
+}
+/*app.post("/create-payment-intent", async (req, res) => {
+	const { items } = req.body;
+  
+	// Create a PaymentIntent with the order amount and currency
+	const paymentIntent = await stripe.paymentIntents.create({
+	  amount: 200,
+	  currency: "usd",
+	  automatic_payment_methods: {
+		enabled: true,
+	  },
+	});
+  
+	res.send({
+	  clientSecret: paymentIntent.client_secret,
+	}); 
+  });*/

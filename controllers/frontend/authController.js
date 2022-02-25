@@ -4,7 +4,8 @@ const Cart = require('../../models/cart')
 const Store = require('../../models/store');
 var md5 = require('md5');
 const bcrypt = require("bcrypt")
-
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const { validationResult } = require('express-validator');
 
 exports.login = async (req, res) => {
@@ -44,11 +45,16 @@ exports.create = async (req, res) => {
                 return res.json({errors: "Password and Confirm password should be same.",status:0});
             }
            
-       
+            const customer = await stripe.customers.create({
+                email: req.body.email,
+                description: 'Xakkt Customer',
+              });
+console.log('----stripe id---',customer)
         let userInfo = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             email: req.body.email,
+            stripe_customer_id: customer.id,
             password: req.body.password,
             contact_no: req.body.contact_no,
             dob: req.body.dob,

@@ -15,11 +15,15 @@
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/xakkt-slider.css" type="text/css">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css">
       <script src="<%= process.env.BASE_URL %>/plugins/select2/js/select2.full.min.js"></script>
+    
+      <link rel="stylesheet" href="<%= process.env.BASE_URL %>/frontend/css/checkout.css" />
       <script src="https://js.stripe.com/v3/"></script>
-      <script>
-        var stripe = Stripe("<%=process.env.STRIPE_PUBLISH_KEY%>");
-        var elements = stripe.elements();
+      <script> 
+          const stripe = Stripe("<%=process.env.STRIPE_PUBLISH_KEY%>");
+          const baseUrl = '<%=process.env.BASE_URL%>';
       </script>
+      <script src="<%= process.env.BASE_URL %>/frontend/js/checkout.js" defer></script>
+
    </head>
    <body class="bg-light">
       <%- await include('../_partials/_frontend/navbar.ejs'); %>
@@ -373,7 +377,19 @@
 
              <!--- payment modal-->
        <div class="col-md-6 order-md-1" style="margin-left: 180px; padding-bottom: 20px;">
-        <form class="needs-validation" novalidate="">
+
+ <div class="row">
+        <div class="col">
+          Amazon Pay ICICI Bank Credit Cardending in 5005
+        </div>
+        <div class="col">
+          Manoj Singh Negi
+        </div>
+        <div class="col">
+          06/2023
+        </div>
+      </div>
+        <!--form class="needs-validation" novalidate="">
           <hr class="mb-4">
           <h4 class="mb-3">Payment</h4>
 
@@ -382,10 +398,7 @@
               <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" value="pay" checked="" required="">
               <label class="custom-control-label" for="credit">Credit card</label>
             </div>
-            <!--div class="custom-control custom-radio">
-              <input id="debit" name="paymentMethod" type="radio"  value = "pay"class="custom-control-input" required="">
-              <label class="custom-control-label" for="debit">Debit card</label>
-            </div-->
+           
             <div class="custom-control custom-radio">
               <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
               <label class="custom-control-label" for="paypal">Cash on delivery</label>
@@ -428,6 +441,24 @@
         </div>
           <hr class="mb-4">
           <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+        </form-->
+
+        <form id="payment-card">
+        <input id="cardholder-name" type="text">
+          <!-- placeholder for Elements -->
+          <div id="card-element"></div>
+          <div id="card-result"></div>
+        <button id="card-button">Save Card</button>
+      </form> 
+        <form id="payment-form">
+          <div id="payment-element">
+            <!--Stripe.js injects the Payment Element-->
+          </div>
+          <button id="submit">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="button-text">Pay now</span>
+          </button>
+          <div id="payment-message" class="hidden"></div>
         </form>
       </div>
           <!--- payment modal-->
@@ -436,7 +467,7 @@
       <!-- Footer -->
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2/css/select2.min.css">
       <link rel="stylesheet" href="<%= process.env.BASE_URL %>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-      <script> var baseUrl = '<%=process.env.BASE_URL%>'</script>
+      
       <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
       <script>
          $(document).ready(function(){

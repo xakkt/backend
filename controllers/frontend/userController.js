@@ -194,7 +194,7 @@ exports.makeDefaultAddress = async (req, res) => {
 
 		}
 	},
-	exports.updateAddress = async (req, res) => {
+exports.updateAddress = async (req, res) => {
 		try {
 
 			let user = await User.findOneAndUpdate({
@@ -351,7 +351,7 @@ exports.forgotPassword = async (req, res) => {
 		}
 		if (user) {
 			var resetPasswordLink =
-				"http://localhost:4000/user/resetpassword"
+				`${process.env.BASE_URL}/user/resetpassword`
 			const reset = {
 				link: resetPasswordLink,
 				name: 'Stranger',
