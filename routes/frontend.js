@@ -104,7 +104,9 @@ router.get('/products/:slug',StoreController.products)
 router.get('/:store/product/:product',StoreController.productDetails)
 router.get('/checkout/:store',isloggedin,cartController.checkoutPage);
 router.get('/get/products/quantity:store',cartController.getProductsQuantity);
-
+router.get('/listCards',isloggedin,cartController.listCards)
+router.post('/checkout/chargeSavedCard',isloggedin,cartController.chargeSavedCard)
+router.post('/checkout/connection_token',cartController.connectionToken)
 
 /*------- cart api ----------*/
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)
@@ -113,6 +115,7 @@ router.post('/product/cart-size',cartController.cartSize)
 router.post('/cart/update_quantity',cartValidation,cartController.updateProductQuantity)
 router.post('/cart/empty_cart/:storeid',cartController.makeCartEmpty)
 router.post('/cart/checkout',cartController.orderCheckout)
+router.post('/cart/savecard',cartController.saveCard)
 /*---- shoppinglist ----*/
 
 const updateListValidation = [

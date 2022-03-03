@@ -377,18 +377,37 @@
 
              <!--- payment modal-->
        <div class="col-md-6 order-md-1" style="margin-left: 180px; padding-bottom: 20px;">
+        <div class="row">
+          <div class="col font-weight-bold">
+            Card
+          </div>
+          <div class="col font-weight-bold">
+            Name on card
+          </div>
+          <div class="col font-weight-bold">
+            Expires on
+          </div>
+        </div>
+        <form method="post" action="<%=process.env.BASE_URL%>/checkout/chargeSavedCard">
+        <% if(cards) for (const [i,card] of cards.entries()) { %> 
+        <div class="row">
+        <div class="col">
+          <input type="radio" id="<%=card.id%>" name="paymentid" value="<%=card.id%>" required="required">
+          <label for="<%=card.id%>">  <%= card.card.brand %> ending in <%= card.card.last4 %> </label>
+          <i class="fa-brands fa-cc-visa"></i>
+        
+        </div>
+        <div class="col">
+          <label for="<%=card.id%>">  <%=card.billing_details.name%> </label>
+        </div>
+        <div class="col">
+          <label for="<%=card.id%>">  <%=card.card.exp_month%>/ <%=card.card.exp_year%></label>
+        </div>
 
- <div class="row">
-        <div class="col">
-          Amazon Pay ICICI Bank Credit Cardending in 5005
-        </div>
-        <div class="col">
-          Manoj Singh Negi
-        </div>
-        <div class="col">
-          06/2023
-        </div>
       </div>
+      <% } %>
+      <button class="btn btn-primary btn-lg btn-block" <%=(data?.cart)?"":"disabled"%> type="submit">Place your order</button>
+    </form>
         <!--form class="needs-validation" novalidate="">
           <hr class="mb-4">
           <h4 class="mb-3">Payment</h4>

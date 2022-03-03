@@ -16,17 +16,10 @@ const carddetailSchema = new Schema({
       }
     
   },
-  token:{
+  payment_id:{
    type:String,
    required:true
-  },
- last_digit:{
-     type:Number,
- },
- _customer:{
-   type:String,
-  require:true
-}
+  }
   
 }, {timestamps:true});
 

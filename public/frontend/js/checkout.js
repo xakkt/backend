@@ -13,8 +13,8 @@
       var cardButton = document.getElementById('card-button');
       var resultContainer = document.getElementById('card-result');
       
-      cardButton.addEventListener('click', function(ev) {
-      
+      $('#payment-card').submit(function(e) {
+      e.preventDefault();
         stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
@@ -22,18 +22,16 @@
               name: cardholderName.value,
             },
           }
-        ).then(function(result) {
+        ).then(async function(result) {
           if (result.error) {
             // Display error.message in your UI
             resultContainer.textContent = result.error.message;
           } else {
             // You have successfully created a new PaymentMethod
             resultContainer.textContent = "Created payment method: " + result.paymentMethod.id;
-
-            const response = await fetch(`${baseUrl}/cart/checkout`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items }),
+              
+              $.post(`${baseUrl}/cart/savecard`, {payment_id:result.paymentMethod.id}, function( data ) {
+                 console.log(data)
               });
               
           }

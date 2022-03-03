@@ -2,6 +2,7 @@ const Product = require('../../models/product');
 const { validationResult } = require('express-validator');
 const _global = require('../../helper/common');
 const Cart = require('../../models/cart')
+const cardDetails = require('../../models/carddetail')
 const User = require('../../models/user')
 var ObjectId = require('mongoose').Types.ObjectId;
 const Store = require('../../models/store');
@@ -115,9 +116,15 @@ exports.checkoutPage = async (req, res)=>{
 			 }
 			}).lean();
    
+			const paymentMethods = await stripe.customers.listPaymentMethods(
+				`${req.session.customerId}`,
+				{type: 'card'}
+			  );
+			  
+//return res.json({card:paymentMethods.data})
 //return res.json(user?.address)
 		//if(cartProducts?.cart.length)return res.json({status:1,data:cartProducts.cart, store: storedata})
-			return res.render('frontend/checkout',{ status:1, data:cartProducts, addresses:user?.address??null, store:storedata })
+			return res.render('frontend/checkout',{ status:1, data:cartProducts, addresses:user?.address??null, store:storedata,cards:paymentMethods.data })
 	}catch (err) {
 		console.log("--err", err)
 		return res.status(400).json({ data: "Something Went Wrong" });
@@ -375,7 +382,64 @@ exports.orderCheckout = async (req, res)=>{
 		console.log("--err", err)
 		return res.status(400).json({ data: "Something Went Wrong" });
     }
+},
+exports.saveCard = async (req, res)=>{
+	try{
+		
+		req.body._user= req.session.userid;
+
+		const paymentMethod = await stripe.paymentMethods.attach(
+			`${req.body.payment_id}`,
+			{
+			  customer: `${req.session.customerId}`,
+			});
+
+		console.log('----paymentMethod--',paymentMethod);
+		await cardDetails.create(req.body)
+		return res.status(200).json({ data: "Card Added Successfully" });
+		}catch (err) {
+			console.log("--err", err)
+			return res.status(400).json({ data: "Something Went Wrong" });
+		}
 }
+
+exports.listCards = async (req, res)=>{
+	try{
+		
+		const paymentMethods = await stripe.customers.listPaymentMethods(
+			`${req.session.customerId}`,
+			{type: 'card'}
+		  );
+		return res.status(200).json({ data: paymentMethods });
+		}catch (err) {
+			console.log("--err", err)
+			return res.status(400).json({ data: "Something Went Wrong" });
+		}
+}
+
+exports.chargeSavedCard = async(req, res)=>{
+	try{
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount: 1099,
+			currency: 'usd',
+			customer: `${req.session.customerId}`,
+			payment_method: `${req.body.paymentid}`,
+			error_on_requires_action: true,
+			confirm: true,
+			setup_future_usage: 'on_session',
+		});
+		return res.json({data:paymentIntent})
+	}catch (err) {
+		console.log("--err", err)
+		return res.status(400).json({ data: "Something Went Wrong" });
+	}
+}
+
+exports.connectionToken = async (req, res) => {
+	const token = await stripe.terminal.connectionTokens.create();
+	res.json({secret: token.secret});
+  };
+  
 /*app.post("/create-payment-intent", async (req, res) => {
 	const { items } = req.body;
   

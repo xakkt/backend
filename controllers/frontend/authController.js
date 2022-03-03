@@ -24,6 +24,7 @@ exports.login = async (req, res) => {
             req.session.customer = userInfo.email;
             req.session.profilePic = userInfo.profile_pic;
             req.session.fullName = userInfo.first_name+' '+userInfo.last_name;
+            req.session.customerId = userInfo.stripe_customer_id;
             req.session.userid = userInfo._id
 
             await Cart.updateMany({ sessionId: req.sessionID },{ $set: { _user: userInfo._id } }).lean()

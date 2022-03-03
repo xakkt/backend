@@ -55,7 +55,7 @@ exports.addAddress = async (req, res) => {
 			returnOriginal: false
 		}).exec()
 		if (user.address.length == 1) {
-			await User.update({
+			await User.updateOne({
 				_id: req.session.userid,
 				"address._id": user.address[0]._id
 			}, {
