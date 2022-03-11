@@ -241,7 +241,7 @@ router.post("/applycoupon",verifyjwt.checkToken,couponController.applycoupon)
 router.post("/coupon-list",verifyjwt.checkToken,couponController.list)
 router.post("/stripe",verifyjwt.checkToken,stripeController.stripe)
 router.get('/save_card',stripeController.saveCard);
-
+router.post('/order_checkout',cartController.orderCheckout)
 
 
 module.exports = router;

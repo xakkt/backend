@@ -2,6 +2,8 @@ const Cart = require('../../models/cart')
 const Product = require('../../models/product');
 const { validationResult } = require('express-validator');
 const _global = require('../../helper/common');
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.listCartProduct = async (req, res) => {
      var product_list = []
@@ -302,3 +304,22 @@ exports.makeCartEmpty = async (req, res) => {
 
 }
 
+exports.orderCheckout = async (req, res)=>{
+	try{
+		
+		const { items } = req.body;
+	// Create a PaymentIntent with the order amount and currency
+	const paymentIntent = await stripe.paymentIntents.create({
+	  amount: 200,
+	  currency: "usd",
+	  payment_method_types: ['card'],
+	});
+  
+	res.send({
+	  clientSecret: paymentIntent.client_secret,
+	}); 
+	}catch (err) {
+		console.log("--err", err)
+		return res.status(400).json({ data: "Something Went Wrong" });
+    }
+}

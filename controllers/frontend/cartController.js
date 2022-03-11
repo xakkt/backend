@@ -353,11 +353,9 @@ exports.removeProductFromCart = async (req, res) => {
 			})
 			// console.log("======data",array)
 			// return res.json({status :1,data:array})
-       console.log("---- im herer")
 		//if(cartProducts?.cart.length)return res.json({status:1,data:cartProducts.cart, store: storedata})
 			return res.render('_partials/_frontend/navbar.ejs',{ data:"abc"})
 	}catch (err) {
-		console.log("--err", err)
 		return res.status(400).json({ data: "Something Went Wrong" });
     }
 	
@@ -367,7 +365,6 @@ exports.orderCheckout = async (req, res)=>{
 	try{
 		
 		const { items } = req.body;
-		console.log('----here we go--items--',items)
 	// Create a PaymentIntent with the order amount and currency
 	const paymentIntent = await stripe.paymentIntents.create({
 	  amount: 200,
@@ -385,16 +382,14 @@ exports.orderCheckout = async (req, res)=>{
 },
 exports.saveCard = async (req, res)=>{
 	try{
-		
+		console.log('-----req.session.customerId}---',req.body)
 		req.body._user= req.session.userid;
 
 		const paymentMethod = await stripe.paymentMethods.attach(
 			`${req.body.payment_id}`,
 			{
-			  customer: `${req.session.customerId}`,
+			  customer: `cus_LFZ535QXhGygqE`,
 			});
-
-		console.log('----paymentMethod--',paymentMethod);
 		await cardDetails.create(req.body)
 		return res.status(200).json({ data: "Card Added Successfully" });
 		}catch (err) {
@@ -419,7 +414,30 @@ exports.listCards = async (req, res)=>{
 
 exports.chargeSavedCard = async(req, res)=>{
 	try{
-		const paymentIntent = await stripe.paymentIntents.create({
+		
+		stripe.confirmCardPayment(clientSecret, {
+			payment_method: `${req.body.paymentid}`,
+			payment_method_options: {
+			  card: {
+				cvc: cardCvcElement
+			  }
+			},
+		  }).then(function(result) {
+			if (result.error) {
+			  // Show error to your customer
+			  console.log(result.error.message);
+			} else {
+			  if (result.paymentIntent.status === 'succeeded') {
+				// Show a success message to your customer
+				// There's a risk of the customer closing the window before callback
+				// execution. Set up a webhook or plugin to listen for the
+				// payment_intent.succeeded event that handles any business critical
+				// post-payment actions.
+			  }
+			}
+		  });
+
+		/*const paymentIntent = await stripe.paymentIntents.create({
 			amount: 1099,
 			currency: 'usd',
 			customer: `${req.session.customerId}`,
@@ -427,7 +445,10 @@ exports.chargeSavedCard = async(req, res)=>{
 			error_on_requires_action: true,
 			confirm: true,
 			setup_future_usage: 'on_session',
-		});
+		}); */
+
+
+
 		return res.json({data:paymentIntent})
 	}catch (err) {
 		console.log("--err", err)

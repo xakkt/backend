@@ -10,6 +10,8 @@ var isloggedin = require('../middlewares/customerloggedin')
 var multer  = require('multer')
 var moment = require('moment');
 const path = require('path')
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 var userStorage =   multer.diskStorage({
     destination: function (req, file, callback) {
@@ -107,6 +109,17 @@ router.get('/get/products/quantity:store',cartController.getProductsQuantity);
 router.get('/listCards',isloggedin,cartController.listCards)
 router.post('/checkout/chargeSavedCard',isloggedin,cartController.chargeSavedCard)
 router.post('/checkout/connection_token',cartController.connectionToken)
+router.get('/savecard',function(req,res){
+    return res.render('frontend/save-card.ejs')
+})
+
+router.get("/public-key", (req, res) => { console.log('---public keyu---')
+    res.send({ publicKey: process.env.STRIPE_PUBLISH_KEY });
+  });
+  
+router.post("/create-setup-intent", async (req, res) => {
+    res.send(await stripe.setupIntents.create());
+});
 
 /*------- cart api ----------*/
 router.post('/product/add-to-cart',cartValidation,cartController.addPoductToCart)

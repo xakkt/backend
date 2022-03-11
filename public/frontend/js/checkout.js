@@ -6,10 +6,11 @@
 
       //---- for card saving --
       var _elements = stripe.elements();
+      
       var cardElement = _elements.create('card');
       cardElement.mount('#card-element');
 
-      var cardholderName = document.getElementById('cardholder-name');
+      var cardholderName = document.getElementById('email');
       var cardButton = document.getElementById('card-button');
       var resultContainer = document.getElementById('card-result');
       
@@ -22,7 +23,7 @@
               name: cardholderName.value,
             },
           }
-        ).then(async function(result) {
+        ).then(async function(result) { console.log('----result---',result)
           if (result.error) {
             // Display error.message in your UI
             resultContainer.textContent = result.error.message;
