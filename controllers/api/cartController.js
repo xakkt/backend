@@ -314,8 +314,9 @@ exports.orderCheckout = async (req, res)=>{
 	  currency: "usd",
 	  payment_method_types: ['card'],
 	});
-  
+  console.log(paymentIntent,'--paymentIntent-')
 	res.send({
+        paymentIntent:paymentIntent,
 	  clientSecret: paymentIntent.client_secret,
 	}); 
 	}catch (err) {
