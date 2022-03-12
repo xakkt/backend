@@ -307,7 +307,32 @@ exports.makeCartEmpty = async (req, res) => {
 exports.orderCheckout = async (req, res)=>{
 	try{
 		
-		const { items } = req.body;
+
+    /*    const cartInfo = {
+            _user: req.decoded.id,
+            _store: req.params.store,
+        }
+
+        var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate({
+                                                                                                path:'cart._product', 
+                                                                                                select:'name sku price image _unit weight',
+                                                                                                populate:{
+                                                                                                          path:'_unit',
+                                                                                                          select: 'name' 
+                                                                                                          }
+                                                                                                }).lean();
+        if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
+        let total_quantity, total_price, coupon, discounted_price;
+        total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+*/
+		const { items } = JSON.parse(req.body);
+        console.log('---the items--',items)
 	// Create a PaymentIntent with the order amount and currency
 	const paymentIntent = await stripe.paymentIntents.create({
 	  amount: 200,
@@ -317,7 +342,7 @@ exports.orderCheckout = async (req, res)=>{
   console.log(paymentIntent,'--paymentIntent-')
 	res.send({
         paymentIntent:paymentIntent,
-	  clientSecret: paymentIntent.client_secret,
+	    clientSecret: paymentIntent.client_secret,
 	}); 
 	}catch (err) {
 		console.log("--err", err)

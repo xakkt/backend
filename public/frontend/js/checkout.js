@@ -28,8 +28,7 @@
             // Display error.message in your UI
             resultContainer.textContent = result.error.message;
           } else {
-            // You have successfully created a new PaymentMethod
-            resultContainer.textContent = "Created payment method: " + result.paymentMethod.id;
+            // You have successfully created a new PaymentMetho
               
               $.post(`${baseUrl}/cart/savecard`, {payment_id:result.paymentMethod.id}, function( data ) {
                  console.log(data)
@@ -41,8 +40,11 @@
 
 //---------------------------------
 
+      let storeid=document.getElementById("storeid").value;
+      let userid=document.getElementById("userid").value;
 
-      const items = [{ id: "xl-tshirt" }];
+
+      const items = [{ store_id: storeid,user_id: userid }];
       let elements;
       
       initialize();

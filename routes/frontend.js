@@ -108,6 +108,7 @@ router.get('/checkout/:store',isloggedin,cartController.checkoutPage);
 router.get('/get/products/quantity:store',cartController.getProductsQuantity);
 router.get('/listCards',isloggedin,cartController.listCards)
 router.post('/checkout/chargeSavedCard',isloggedin,cartController.chargeSavedCard)
+router.post("/checkout/delete-card",cartController.deleteCard);
 router.post('/checkout/connection_token',cartController.connectionToken)
 router.get('/savecard',function(req,res){
     return res.render('frontend/save-card.ejs')

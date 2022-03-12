@@ -363,11 +363,39 @@ exports.removeProductFromCart = async (req, res) => {
 
 exports.orderCheckout = async (req, res)=>{
 	try{
-		
-		const { items } = req.body;
+
+		var total=0;
+		const cartInfo = {
+            _user: req.body.items[0].user_id,
+            _store: req.body.items[0].store_id,
+        }
+
+        var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate({
+                                                                                                path:'cart._product', 
+                                                                                                select:'name sku price image _unit weight',
+                                                                                                populate:{
+                                                                                                          path:'_unit',
+                                                                                                          select: 'name' 
+                                                                                                          }
+                                                                                                }).lean();
+        if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
+        let total_quantity, total_price, coupon, discounted_price;
+        total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+		for (const [i,product] of data.cart.entries()) {
+			total += product.total_price
+		}
+
+
 	// Create a PaymentIntent with the order amount and currency
 	const paymentIntent = await stripe.paymentIntents.create({
-	  amount: 200,
+	  amount: total*100,
 	  currency: "usd",
 	  payment_method_types: ['card'],
 	});
@@ -388,10 +416,13 @@ exports.saveCard = async (req, res)=>{
 		const paymentMethod = await stripe.paymentMethods.attach(
 			`${req.body.payment_id}`,
 			{
-			  customer: `cus_LFZ535QXhGygqE`,
+			  customer: `${req.session.customerId}`,
 			});
-		await cardDetails.create(req.body)
-		return res.status(200).json({ data: "Card Added Successfully" });
+		console.log('--paymentMethod-',paymentMethod)	
+		const addCard = await cardDetails.create(req.body)
+
+		console.log('--addCArd-',addCard)	
+		return res.status(200).json({ status:true,data: "Card Added Successfully" });
 		}catch (err) {
 			console.log("--err", err)
 			return res.status(400).json({ data: "Something Went Wrong" });
@@ -415,43 +446,55 @@ exports.listCards = async (req, res)=>{
 exports.chargeSavedCard = async(req, res)=>{
 	try{
 		
-		stripe.confirmCardPayment(clientSecret, {
-			payment_method: `${req.body.paymentid}`,
-			payment_method_options: {
-			  card: {
-				cvc: cardCvcElement
-			  }
-			},
-		  }).then(function(result) {
-			if (result.error) {
-			  // Show error to your customer
-			  console.log(result.error.message);
-			} else {
-			  if (result.paymentIntent.status === 'succeeded') {
-				// Show a success message to your customer
-				// There's a risk of the customer closing the window before callback
-				// execution. Set up a webhook or plugin to listen for the
-				// payment_intent.succeeded event that handles any business critical
-				// post-payment actions.
-			  }
-			}
-		  });
+console.log('----req body,',req.body)
+		var total=0;
 
-		/*const paymentIntent = await stripe.paymentIntents.create({
-			amount: 1099,
+		const cartInfo = {
+            _user: req.body.userid,
+            _store: req.body.storeid,
+			cvv:req.body.cvv.filter(Boolean)
+        }
+
+        var data = await Cart.findOne({ _user: cartInfo._user, _store: cartInfo._store }).populate({
+                                                                                                path:'cart._product', 
+                                                                                                select:'name sku price image _unit weight',
+                                                                                                populate:{
+                                                                                                          path:'_unit',
+                                                                                                          select: 'name' 
+                                                                                                          }
+                                                                                                }).lean();
+        if (!data) return res.json({ status: 0, message: "cart is empty", data: "" });
+        let total_quantity, total_price, coupon, discounted_price;
+        total_quantity = data.cart.map(product => product.quantity).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+        total_price = data.cart.map(product => product.total_price).reduce(function (acc, cur) {
+            return acc + cur;
+        })
+
+
+		for (const [i,product] of data.cart.entries()) {
+			total += product.total_price
+		}
+console.log("----",total)
+console.log(req.body.cvv.filter(Boolean));
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount: total*100,
+			currency: "usd",
+			payment_method_types: ['card'],
+		  });
+		
+		const charge = await stripe.charges.create({
+			amount: 1000,
 			currency: 'usd',
 			customer: `${req.session.customerId}`,
-			payment_method: `${req.body.paymentid}`,
-			error_on_requires_action: true,
-			confirm: true,
-			setup_future_usage: 'on_session',
-		}); */
-
-
-
+		  });
+console.log('charge----',charge)
 		return res.json({data:paymentIntent})
 	}catch (err) {
 		console.log("--err", err)
+		res.redirect('/')
 		return res.status(400).json({ data: "Something Went Wrong" });
 	}
 }
@@ -461,6 +504,20 @@ exports.connectionToken = async (req, res) => {
 	res.json({secret: token.secret});
   };
   
+
+ exports.deleteCard = async (req,res) => {
+
+   try{
+			const deleted = await stripe.customers.deleteSource(
+				'cus_AJ6yEs79rUDTXH',
+				'card_1KcKr32eZvKYlo2Crb8iDRlE'
+			);
+   }catch (err) {
+			console.log("--err", err)
+			return res.status(400).json({ data: "Something Went Wrong" });
+	}
+
+ } 
 /*app.post("/create-payment-intent", async (req, res) => {
 	const { items } = req.body;
   

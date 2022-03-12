@@ -491,6 +491,10 @@
           </div>
         </div>
         <form method="post" action="<%=process.env.BASE_URL%>/checkout/chargeSavedCard">
+
+          <input type="hidden" name="userid" value="<%=userid%>">
+          <input type="hidden" name="storeid" value="<%= (!!locals.store)?store._id:'' %>">
+
         <% if(cards) for (const [i,card] of cards.entries()) { %> 
         <div class="row">
         <div class="col-md-4">
@@ -507,7 +511,9 @@
         <div class="col-md-2">
            <input type="text" class="cvv" name="cvv" placeholder="CVV" />
         </div>
-
+        <div class="col-md-2">
+           <a href="#">delete</a>
+       </div>
       </div>
       <% } %>
       <button class="btn btn-primary btn-lg btn-block" <%=(data?.cart)?"":"disabled"%> type="submit">Place your order</button>
@@ -592,12 +598,14 @@
           </div>
        
       </form>
-
+      
 
         <form id="payment-form">
           <div id="payment-element">
             <!--Stripe.js injects the Payment Element-->
           </div>
+          <input type="hidden" id="userid" value="<%=userid%>">
+          <input type="hidden" id="storeid" value="<%= (!!locals.store)?store._id:'' %>">
           <button id="submit">
             <div class="spinner hidden" id="spinner"></div>
             <span id="button-text">Pay now</span>
