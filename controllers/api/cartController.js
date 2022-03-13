@@ -4,7 +4,74 @@ const { validationResult } = require("express-validator");
 const _global = require("../../helper/common");
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const cardDetails = require("../../models/carddetail");
 
+exports.listCards = async (req, res) => {
+  const errors = await validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ status: 0, errors: errors.array() });
+  }
+  try {
+    const paymentMethods = await stripe.customers.listPaymentMethods(
+      `${req.decoded.customer_id}`,
+      { type: "card" }
+    );
+    console.log(paymentMethods);
+    return res.status(200).json({ data: paymentMethods });
+  } catch (err) {
+    console.log("--err", err);
+    return res.status(400).json({ data: "Something Went Wrong" });
+  }
+};
+exports.saveCard = async (req, res) => {
+  try {
+    // req.body._user = req.decoded.id;
+    const user_id = req.decoded.id;
+    const cardNUmber = req.body.card_number;
+    const cvc = req.body.cvc;
+    const mm = req.body.month;
+    const yy = req.body.year;
+    const email = req.body.email;
+    const cardElement = {
+      number: cardNUmber,
+      cvc: cvc,
+      exp_month: mm,
+      exp_year: yy,
+    };
+    console.log(cardElement);
+    const payment = await stripe.paymentMethods.create({
+      type: "card",
+      card: cardElement,
+      billing_details: {
+        name: email,
+      },
+    });
+    console.log(payment.id);
+    console.log("session", req.decoded.customer_id);
+    const paymentMethod = await stripe.paymentMethods.attach(payment.id, {
+      customer: `${req.decoded.customer_id}`,
+    });
+    //create card source
+    // await stripe.customers.createSource(`${req.session.customerId}`, {
+    //   source: "tok_amex",
+    // });
+    console.log("--paymentMethod-", paymentMethod);
+    const saveCardData = {
+      _user: req.decoded.id,
+      payment_id: payment.id,
+    };
+    const addCard = await cardDetails.create(saveCardData);
+
+    console.log("--addCArd-", addCard);
+    return res
+      .status(200)
+      .json({ status: true, data: "Card Added Successfully" });
+  } catch (err) {
+    console.log("--err", err);
+    return res.status(400).json({ data: "Something Went Wrong" });
+  }
+};
 (exports.listCartProduct = async (req, res) => {
   var product_list = [];
   const errors = await validationResult(req);

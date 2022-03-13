@@ -1,16 +1,15 @@
-const mongoose = require('mongoose');
-const mongooseLeanGetters = require('mongoose-lean-getters')
-var uniqueValidator = require('mongoose-unique-validator');
-const FKHelper = require('../helper/foreign-key-constraint');
-const md5 = require("md5")
+const mongoose = require("mongoose");
+const mongooseLeanGetters = require("mongoose-lean-getters");
+var uniqueValidator = require("mongoose-unique-validator");
+const FKHelper = require("../helper/foreign-key-constraint");
+const md5 = require("md5");
 
 const Schema = mongoose.Schema;
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const childSchema = new Schema({
-
- /*--street number--*/
+  /*--street number--*/
   address1: {
     type: String,
   },
@@ -18,174 +17,173 @@ const childSchema = new Schema({
   address2: {
     type: String,
   },
-  address_type:{
+  address_type: {
     type: String,
-    enum : ['Home','Office','Other'],
-        default: 'Home'
+    enum: ["Home", "Office", "Other"],
+    default: "Home",
   },
-  is_default :{
-      type: Boolean,
-      default: false
+  is_default: {
+    type: Boolean,
+    default: false,
   },
   zipcode: {
-    type: Number
+    type: Number,
   },
   phoneno: {
-    type: String
+    type: String,
   },
-  countrycode :{
-    type:String
+  countrycode: {
+    type: String,
   },
   city: {
-    type: String
+    type: String,
   },
-  area:{
-    type: String
+  area: {
+    type: String,
   },
   emirate: {
-    type: String
+    type: String,
   },
-  landmark:{
-    type: String
+  landmark: {
+    type: String,
   },
   country: {
-    type: String
+    type: String,
   },
- 
- location: {
+
+  location: {
     type: {
-        type: String,
-        enum: ['Point'],
-        required: false
+      type: String,
+      enum: ["Point"],
+      required: false,
     },
     coordinates: {
-        type: [Number],
-        required: false
-    }
-},
-
+      type: [Number],
+      required: false,
+    },
+  },
 });
 
-const userSchema = Schema({
-  first_name: {
-    type: String,
-    required: true,
-  },
-  last_name: {
-    type: String,
-    required: false
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  stripe_customer_id:{
-    type: String
-  },
-  gender: {
-    type: String, enum:['male','female','other'], required:false
-  },
-  profile_pic: {
-    type: String,
-  },
-  password: {
-    type: String,
-    required: false
-  },
-  contact_no: {
-    type: String,
-    unique: true,
-    required: false
-  },
-  status: {
-    type: Boolean,
-    default: false
-  },
-  last_login: {
-    type: Date,
-    get: dateToString
-  },
-  ncrStatus: {
-    type: String,
-    default: false
-  },
-  superbuckId: {
-    type: Number,
-    default: 0
-  },
-  dob: {
-    type: Date,
-    required: false
-  },
-  address: [childSchema],
-  _timezone:{
-    type:String
-},
-_company: 
+const userSchema = Schema(
   {
-    type: Schema.Types.ObjectId,
-    ref: 'Company',
-    validate: {
-      validator: function (v) {
-        return FKHelper(mongoose.model('Company'), v);
+    first_name: {
+      type: String,
+      required: true,
+    },
+    last_name: {
+      type: String,
+      required: false,
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    stripe_customer_id: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      required: false,
+    },
+    profile_pic: {
+      type: String,
+    },
+    password: {
+      type: String,
+      required: false,
+    },
+    contact_no: {
+      type: String,
+      unique: true,
+      required: false,
+    },
+    status: {
+      type: Boolean,
+      default: false,
+    },
+    last_login: {
+      type: Date,
+      get: dateToString,
+    },
+    ncrStatus: {
+      type: String,
+      default: false,
+    },
+    superbuckId: {
+      type: Number,
+      default: 0,
+    },
+    dob: {
+      type: Date,
+      required: false,
+    },
+    address: [childSchema],
+    _timezone: {
+      type: String,
+    },
+    _company: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+      validate: {
+        validator: function (v) {
+          return FKHelper(mongoose.model("Company"), v);
+        },
+        message: `Company doesn't exist`,
       },
-      message: `Company doesn't exist`
-    }
-  },
-
- role_id: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Role',
-      validate: {
-        validator: function (v) {
-          return FKHelper(mongoose.model('Role'), v);
-        },
-        message: `Role doesn't exist`
-      }
     },
 
-  ],
-  _store: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Store',
-      validate: {
-        validator: function (v) {
-          return FKHelper(mongoose.model('Store'), v);
+    role_id: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Role",
+        validate: {
+          validator: function (v) {
+            return FKHelper(mongoose.model("Role"), v);
+          },
+          message: `Role doesn't exist`,
         },
-        message: `Store doesn't exist`
-      }
+      },
+    ],
+    _store: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Store",
+        validate: {
+          validator: function (v) {
+            return FKHelper(mongoose.model("Store"), v);
+          },
+          message: `Store doesn't exist`,
+        },
+      },
+    ],
+    last_login: {
+      type: Date,
+      default: Date.now,
     },
-
-  ],
-  last_login: {
-    type: Date,
-    default: Date.now
+    coupons: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
+    _supervisor: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
-  coupons: [
-    { type: Schema.Types.ObjectId, ref: 'Coupon' }
-  ],
-  _supervisor: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-userSchema.plugin(mongooseLeanGetters)
-userSchema.plugin(uniqueValidator)
+userSchema.plugin(mongooseLeanGetters);
+userSchema.plugin(uniqueValidator);
 
-userSchema.pre('save', async function () {
+userSchema.pre("save", async function () {
   this.password = await md5(this.password);
 });
 
-
-
-userSchema.post('save', function(error, doc, next) {
+userSchema.post("save", function (error, doc, next) {
   if (error) {
-    console.log("=================",error)
-    next(new Error('User already exists with this email address or contact no'));
+    console.log("=================", error);
+    next(
+      new Error("User already exists with this email address or contact no")
+    );
   } else {
     next(error);
   }
@@ -195,4 +193,4 @@ function dateToString(date) {
   if (date) return new Date(date).toISOString();
 }
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
