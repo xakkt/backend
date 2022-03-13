@@ -175,9 +175,9 @@
             </ul>
 
             
-               <div class="input-group">
+               <!-- <div class="input-group">
                   <button class="btn btn-primary btn-lg btn-block" <%=(data?.cart)?"":"disabled"%> type="submit">Place your order</button>
-               </div>
+               </div> -->
              </form>
 
          </div>
@@ -490,18 +490,39 @@
             Expires on
           </div>
         </div>
+        
         <form method="post" action="<%=process.env.BASE_URL%>/checkout/chargeSavedCard">
 
           <input type="hidden" name="userid" value="<%=userid%>">
           <input type="hidden" name="storeid" value="<%= (!!locals.store)?store._id:'' %>">
+          <input type="hidden" class="cvvHidden" name="cvvHidden" value="">
+          <input type="hidden" name="_store" value="<%=store._id%>"/>
+          <input type="hidden" name="slug" value="<%=store.slug%>"/>
+          <input type="hidden" name="payment_method" value="0" />
 
+          <% var total = 0 %>
+          <% if(data?.cart){ for (const [i,product] of data.cart.entries()) { %>  
+          <input type="hidden" name="products[<%=i%>][_product]" value="<%=product._product._id%>"/>
+          <input type="hidden" name="products[<%=i%>][quantity]" value="<%=product.quantity%>"/>
+          <% total += product.total_price %>
+          <input type="hidden" name="total_cost" value="<%=total.toFixed(2)%>"/>
+          <% } }%>
+          <% if(addresses) for (const [i,address] of addresses.entries()) { %> 
+              <input type="hidden" name="address" value="<%=address._id%>" />
+          <%} %>
+         
+          <% if(customerID)  { %> 
+          <input type="hidden" name="customerID" class="customerID" value="<%=customerID%>" />
+          <% } %>
         <% if(cards) for (const [i,card] of cards.entries()) { %> 
+         
         <div class="row">
         <div class="col-md-4">
           <input type="radio" id="<%=card.id%>" name="paymentid" value="<%=card.id%>" required="required">
           <label for="<%=card.id%>">  <%= card.card.brand %> ending in <%= card.card.last4 %> </label>
         </div>
         <div class="col-md-2">
+          <!-- <%=card.billing_details.name%> -->
           <label for="<%=card.id%>">  <%=card.billing_details.name%> </label>
         </div>
         <div class="col-md-2">
@@ -512,11 +533,12 @@
            <input type="text" class="cvv" name="cvv" placeholder="CVV" />
         </div>
         <div class="col-md-2">
-           <a href="#">delete</a>
+          <input type="hidden" name="cardIdNew" class="cardIdNew" value="<%=card.id%>" />
+           <a href="#" class="deleteCard">delete</a>
        </div>
       </div>
       <% } %>
-      <button class="btn btn-primary btn-lg btn-block" <%=(data?.cart)?"":"disabled"%> type="submit">Place your order</button>
+      <button class="btn btn-primary btn-lg btn-block newBtnClassCvv" <%=(data?.cart)?"":"disabled"%> type="submit">Place your order</button>
     </form>
         <!--form class="needs-validation" novalidate="">
           <hr class="mb-4">
@@ -579,7 +601,7 @@
               <label>
                 Account details
               </label>
-              <input type="text" id="email" placeholder="Email address" />
+              <input type="text" id="email" name="nameEmail" placeholder="Email address" />
             </div>
   
             <div class="sr-form-row">
@@ -623,8 +645,28 @@
       <script src="<%= process.env.BASE_URL %>/frontend/js/xakkt.js"></script>
       <script>
          $(document).ready(function(){
+          $('.newBtnClassCvv').on("click onchange", function(){
+          var getTxtValue = $(".cvv").val(); // this gives textbox value  
+          $(".cvvHidden").val(getTxtValue);
+          });
 
-
+          $('.deleteCard').on("click", async function(){
+            const cardId = $('.cardIdNew').val();
+            const customerId = $('.customer_id').val();
+            // alert(cardId);
+          //   const paymentMethod = await stripe.paymentMethods.detach(cardId);
+          //     console.log(paymentMethod);
+          //     window.location.reload();
+          //
+          const items = { customerId: customerId, cardId: cardId };
+          const response = await fetch(`${baseUrl}/checkout/delete-card`, {
+                              method: "POST",
+                             headers: { "Content-Type": "application/json" },
+                             body: JSON.stringify({ items }),
+                          }).then(function (success) {
+                          window.location.href();
+                        })
+                      });
 
           $('.addaddress,.editAddressModal').submit(function(e){ 
             e.preventDefault();

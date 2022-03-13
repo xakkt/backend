@@ -82,7 +82,7 @@
                                 <thead>
                                   <tr>
                                     <th>Name</th>
-                                    <th>Transaction</th>
+                                    <th>TransactionId</th>
                                     <th>OrderId</th>
                                     <th>Payment Method</th>
                                     <th>Status</th>
@@ -94,7 +94,7 @@
                                 <tfoot>
                                   <tr>
                                     <th>Name</th>
-                                    <th>Transaction</th>
+                                    <th>TransactionId</th>
                                     <th>OrderId</th>
                                     <th>Payment Method</th>
                                     <th>Status</th>
@@ -180,33 +180,33 @@
         },
         "columns": [
         {
-            data: "ID",
-            render: function (data, type, row) {
-              return  row._user
+            "data": "_store.name",
+            "render": function (data) {
+              return data;
             }
           },
           {
-            data: "ID",
+            data: "transaction_id",
             render: function (data, type, row) {
-              return  row.transation_id
+              return  row.payment.transaction_id??''
             }
           },
           {
-            data: "ID",
+            data: "order_id",
             render: function (data, type, row) {
-              return  row._order
+              return  row.shipping.order_id
             }
           },
           {
-            data: "ID",
+            data: "payment",
             render: function (data, type, row) {
-              return  row.method
+              return  row.payment.method
             }
           },
           {
-            data: "ID",
+            data: "status",
             render: function (data, type, row) {
-              return  row.status
+              return  row.shipping.tracking.status
             }
           },
           {
