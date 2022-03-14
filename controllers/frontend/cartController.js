@@ -656,7 +656,7 @@ exports.chargeSavedCard = async (req, res) => {
     return result;
     // return res.json({ data: paymentIntent });
   } catch (err) {
-    console.log("--err", err.raw.message);
+  //  console.log("--err", err.raw.message);
     return res.render("frontend/payment-error", {
       status: 1,
       message: err.raw.message,
