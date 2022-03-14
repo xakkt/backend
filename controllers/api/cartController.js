@@ -72,6 +72,28 @@ exports.saveCard = async (req, res) => {
     return res.status(400).json({ data: "Something Went Wrong" });
   }
 };
+exports.deleteCard = async (req, res) => {
+  const errors = await validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ status: 0, errors: errors.array() });
+  }
+  try {
+    const cardId = req.body.cardId;
+    const result = await stripe.paymentMethods.detach(cardId);
+    return res
+      .status(200)
+      .json({ status: true, data: "Card Deleted Successfully" });
+    // return res.status(200).json({ data: result });
+    // const deleted = await stripe.customers.deleteSource(
+    //   "cus_AJ6yEs79rUDTXH",
+    //   "card_1KcKr32eZvKYlo2Crb8iDRlE"
+    // );
+  } catch (err) {
+    console.log("--err", err);
+    return res.status(400).json({ data: "Something Went Wrong" });
+  }
+};
 (exports.listCartProduct = async (req, res) => {
   var product_list = [];
   const errors = await validationResult(req);

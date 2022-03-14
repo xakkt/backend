@@ -171,7 +171,7 @@
                           </div>
                           <div class="container">
                           <img id="bannerimage" class="img-thumbnail bannerimage" style="width: 6em;height: 4em"
-                            src="/images/banners/<%= data.image %>" />
+                            src="<%=process.env.AWS_BUCKET_PATH%>/banners/<%= data.image %>" />
                             <div class="middle">
                           <label for='<%= data._id %>'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>
                           </label>

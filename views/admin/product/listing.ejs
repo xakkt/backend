@@ -169,7 +169,7 @@
                     <% if(await check("system_admin")){ %>
                     <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                     <%} %>
-
+                    <input type="hidden" value="<%=process.env.AWS_BUCKET_PATH%>" id="imageUpload" name="imageUpload" />
                 </div>
                 </form>
                 <button type="button" style="display:none" class="btn btn-danger btn-sm check_delete">Delete</button>
@@ -404,6 +404,8 @@
                   } else {
                     url = "/admin/product/list"
                   }
+                  const imageUrl  = $('#imageUpload').val();
+            
                   var admin = $('#admin').val();
                   var del = $('#delete').val()
                   var edit = $('#edit').val()
@@ -433,7 +435,7 @@
                         "data": "ID",
                         render: function (data, type, row) {
                           return `<img class="img-thumbnail" style="width: 6em;height: 4em"
-                            src="/images/products/${row.image}">`;
+                            src=${imageUrl}/products/${row.image}>`;
                         }
                       },
                       

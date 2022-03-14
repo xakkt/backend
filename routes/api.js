@@ -511,5 +511,6 @@ router.get("/save_card", stripeController.saveCard);
 router.post("/order_checkout", cartController.orderCheckout);
 router.get("/list-cards", verifyjwt.checkToken, cartController.listCards);
 router.post("/save-card", verifyjwt.checkToken, cartController.saveCard);
+router.post("/delete-card", verifyjwt.checkToken, cartController.deleteCard);
 
 module.exports = router;

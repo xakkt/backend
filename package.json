@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "async-waterfall": "^0.1.5",
-    "aws-sdk": "^2.1078.0",
+    "aws-sdk": "^2.1092.0",
     "bcrypt": "^5.0.1",
     "bee-queue": "^0.3.0",
     "body-parser": "^1.19.2",
@@ -50,6 +50,7 @@
     "nodemon": "^2.0.15",
     "order-id": "^2.1.2",
     "randomstring": "^1.2.2",
+    "sharp": "^0.30.2",
     "socket.io": "^4.4.1",
     "stream-json": "^1.7.4",
     "stripe": "^8.203.0",
