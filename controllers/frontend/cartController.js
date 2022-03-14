@@ -633,7 +633,7 @@ exports.chargeSavedCard = async (req, res) => {
       total += product.total_price;
     }
     console.log("----", total);
-    console.log(req.body.cvv.filter(Boolean));
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total * 100,
       currency: "usd",
@@ -643,8 +643,9 @@ exports.chargeSavedCard = async (req, res) => {
         enabled: true,
       },
     });
+    console.log(req.body.paymentIntent);
     const charge = await stripe.charges.create({
-      amount: 1000,
+      amount: total * 100,
       currency: "usd",
       customer: `${req.session.customerId}`,
     });

@@ -93,7 +93,7 @@
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                   <div class="">
                                                       <p class="text-dark"><%=product._product.name.english%> x <%=product.quantity%> </p>
-                                                      <p class="text-gray mb-1"><i class="icofont-location-arrow"></i> <%=order.shipping.address.address1%>, Zipcode: <%=order.shipping.address.zipcode%>,<%=order.shipping.address.emirate%>
+                                                      <p class="text-gray mb-1"><i class="icofont-location-arrow"></i> <% if(order.shipping.address){ %><%=order.shipping.address.address1%> , Zipcode: <%=order.shipping.address.zipcode%>,<%=order.shipping.address.emirate%> <% } %>
                                                       </p>
                                                     </div> 
                                                   <div class="image-parent">
