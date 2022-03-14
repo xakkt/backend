@@ -79,8 +79,8 @@ exports.deleteCard = async (req, res) => {
     return res.status(400).json({ status: 0, errors: errors.array() });
   }
   try {
-    const cardId = req.body.cardId;
-    const result = await stripe.paymentMethods.detach(cardId);
+    const paymentId = req.body.paymentId;
+    const result = await stripe.paymentMethods.detach(paymentId);
     return res
       .status(200)
       .json({ status: true, data: "Card Deleted Successfully" });
