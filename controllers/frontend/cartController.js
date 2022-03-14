@@ -659,7 +659,7 @@ exports.chargeSavedCard = async (req, res) => {
   //  console.log("--err", err.raw.message);
     return res.render("frontend/payment-error", {
       status: 1,
-      message: err.raw.message,
+     // message: err.raw.message,
     });
     // res.redirect("/payment-error", mess);
     // return res.status(400).json({ data: "Something Went Wrong" });
