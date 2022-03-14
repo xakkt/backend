@@ -6,6 +6,7 @@ exports.uploadNew = async (req, folder) => {
   try {
     const fileContent = fs.readFileSync(req);
     // Setting up S3 upload parameters
+
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: req, // File name you want to save as in S3
