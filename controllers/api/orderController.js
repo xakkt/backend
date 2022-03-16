@@ -6,6 +6,9 @@ const orderid = require("order-id")(process.env.ORDER_SECRET);
 const _time = require("../../helper/storetimezone");
 const mongoose = require("mongoose");
 const _global = require("../../helper/common");
+const Store = require("../../models/store");
+const Product = require("../../models/product");
+const Cart = require("../../models/cart");
 const { ObjectId } = require("bson");
 
 (exports.listOrders = async (req, res) => {
@@ -361,39 +364,39 @@ exports.placeOrder = async (req, res) => {
     var product = [];
     const charge = req.charge;
 
-    await Promise.all(
-      req.body.products.map(async (element) => {
-        var data = {};
-        var productId = element._product;
-        var productPrice = await _global.productprice(
-          req.body._store,
-          productId
-        );
+    // await Promise.all(
+    //   req.body.products.map(async (element) => {
+    //     var data = {};
+    //     var productId = element._product;
+    //     var productPrice = await _global.productprice(
+    //       req.body._store,
+    //       productId
+    //     );
 
-        if (productPrice) {
-          data = {
-            ...data,
-            _product: productId,
-            quantity: element.quantity,
-            deal_price: productPrice.deal_price,
-            regular_price: productPrice.regular_price,
-          };
-        } else {
-          data = {
-            ...data,
-            _product: productId,
-            quantity: element.quantity,
-            deal_price: 0,
-            regular_price: 0,
-          };
-        }
-        product.push(data);
-      })
-    );
+    //     if (productPrice) {
+    //       data = {
+    //         ...data,
+    //         _product: productId,
+    //         quantity: element.quantity,
+    //         deal_price: productPrice.deal_price,
+    //         regular_price: productPrice.regular_price,
+    //       };
+    //     } else {
+    //       data = {
+    //         ...data,
+    //         _product: productId,
+    //         quantity: element.quantity,
+    //         deal_price: 0,
+    //         regular_price: 0,
+    //       };
+    //     }
+    //     product.push(data);
+    //   })
+    // );
 
     var orderInfo = {
       _user: req.decoded.id,
-      _store: req.body._store,
+      _store: req.body.storeid,
       shipping: {
         address: address,
         delivery_notes: req.body.delivery_notes ?? null,
@@ -404,23 +407,24 @@ exports.placeOrder = async (req, res) => {
         method: req.body.payment_method,
         transaction_id: charge.id,
       },
-      products: product,
+      // products: product,
       total_cost: req.body.total_cost,
     };
 
     await Order.create(orderInfo);
     await Cart.deleteOne({
       _user: req.decoded.id,
-      _store: req.body._store,
+      _store: req.body.storeid,
     }).exec();
-
-    return res.json({
-      status: 1,
-      data: req.body.slug,
-    });
+    return true;
+    // return res.json({
+    //   status: 1,
+    //   data: req.body.slug,
+    // });
     // return res.redirect("/myorders/" + req.body.slug);
   } catch (err) {
-    console.log("---value", err);
-    return res.status(400).json({ data: err.message });
+    return false;
+    // console.log("---value", err);
+    // return res.status(400).json({ data: err.message });
   }
 };

@@ -54,9 +54,9 @@ exports.saveCard = async (req, res) => {
       customer: `${req.decoded.customer_id}`,
     });
     //create card source
-    // await stripe.customers.createSource(`${req.session.customerId}`, {
-    //   source: "tok_amex",
-    // });
+    await stripe.customers.createSource(`${req.decoded.customer_id}`, {
+      source: "tok_amex",
+    });
     console.log("--paymentMethod-", paymentMethod);
     const saveCardData = {
       _user: req.decoded.id,
@@ -672,15 +672,20 @@ exports.chargeSavedCard = async (req, res) => {
       currency: "usd",
       payment_method_types: ["card"],
       customer: req.decoded.customer_id,
+      payment_method: req.body.payment_method_id,
+      setup_future_usage: "off_session",
       // automatic_payment_methods: {
       //   enabled: true,
       // },
     });
-    console.log(total * 100);
+
     const charge = await stripe.charges.create({
       amount: total * 100,
       currency: "usd",
       customer: req.decoded.customer_id,
+      // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
+      metadata: { payment_intent: paymentIntent.id },
+      // payment_intent: paymentIntent.id,
     });
 
     console.log("charge----", charge);
@@ -688,10 +693,10 @@ exports.chargeSavedCard = async (req, res) => {
     const result = await orderController.placeOrder(req, res);
 
     console.log(result);
-    return res.status(200).json({ data: result });
+    return res.status(200).json({ data: "Successfully charged" });
     // return res.json({ data: paymentIntent });
   } catch (err) {
     console.log("--err", err);
-    return res.status(400).json({ data: err.raw.message });
+    return res.status(400).json({ data: "something went wrong" });
   }
 };
