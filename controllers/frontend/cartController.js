@@ -643,7 +643,7 @@ exports.chargeSavedCard = async (req, res) => {
         enabled: true,
       },
     });
-    console.log(req.body.paymentIntent);
+
     const charge = await stripe.charges.create({
       amount: total * 100,
       currency: "usd",

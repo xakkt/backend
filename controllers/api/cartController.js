@@ -5,6 +5,7 @@ const _global = require("../../helper/common");
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const cardDetails = require("../../models/carddetail");
+const orderController = require("./orderController");
 
 exports.listCards = async (req, res) => {
   const errors = await validationResult(req);
@@ -619,5 +620,78 @@ exports.orderCheckout = async (req, res) => {
   } catch (err) {
     console.log("--err", err);
     return res.status(400).json({ data: "Something Went Wrong" });
+  }
+};
+exports.chargeSavedCard = async (req, res) => {
+  try {
+    console.log("----req body,", req.body);
+    var total = 0;
+
+    const cartInfo = {
+      _user: req.decoded.id,
+      _store: req.body.storeid,
+      cvv: req.body.cvv,
+      // cvv: req.body.cvv.filter(Boolean),
+    };
+
+    var data = await Cart.findOne({
+      _user: cartInfo._user,
+      _store: cartInfo._store,
+    })
+      .populate({
+        path: "cart._product",
+        select: "name sku price image _unit weight",
+        populate: {
+          path: "_unit",
+          select: "name",
+        },
+      })
+      .lean();
+    if (!data)
+      return res.json({ status: 0, message: "cart is empty", data: "" });
+    let total_quantity, total_price, coupon, discounted_price;
+    total_quantity = data.cart
+      .map((product) => product.quantity)
+      .reduce(function (acc, cur) {
+        return acc + cur;
+      });
+
+    total_price = data.cart
+      .map((product) => product.total_price)
+      .reduce(function (acc, cur) {
+        return acc + cur;
+      });
+
+    for (const [i, product] of data.cart.entries()) {
+      total += product.total_price;
+    }
+    console.log("----", total);
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: total * 100,
+      currency: "usd",
+      payment_method_types: ["card"],
+      customer: req.decoded.customer_id,
+      // automatic_payment_methods: {
+      //   enabled: true,
+      // },
+    });
+    console.log(total * 100);
+    const charge = await stripe.charges.create({
+      amount: total * 100,
+      currency: "usd",
+      customer: req.decoded.customer_id,
+    });
+
+    console.log("charge----", charge);
+    req.charge = charge;
+    const result = await orderController.placeOrder(req, res);
+
+    console.log(result);
+    return res.status(200).json({ data: result });
+    // return res.json({ data: paymentIntent });
+  } catch (err) {
+    console.log("--err", err);
+    return res.status(400).json({ data: err.raw.message });
   }
 };

@@ -517,5 +517,10 @@ router.post(
   verifyjwt.checkToken,
   orderController.orderSuccess
 );
+router.post(
+  "/charge-saved-card",
+  verifyjwt.checkToken,
+  cartController.chargeSavedCard
+);
 
 module.exports = router;

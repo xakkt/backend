@@ -334,3 +334,93 @@ exports.orderSuccess = async (req, res) => {
     return res.status(400).json({ data: err.message });
   }
 };
+exports.placeOrder = async (req, res) => {
+  // console.log(req);
+  // return;
+  const errors = await validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    var user = await User.findOne(
+      { _id: req.decoded.id },
+      {
+        address: {
+          $elemMatch: { _id: mongoose.Types.ObjectId(req.body.address) },
+        },
+      }
+    ).lean();
+    console.log(req);
+    if (user.address === undefined) {
+      return res.json({ status: 0, message: "address not found" });
+    }
+    delete user.address[0]._id;
+    var address = { ...user.address[0] };
+
+    var product = [];
+    const charge = req.charge;
+
+    await Promise.all(
+      req.body.products.map(async (element) => {
+        var data = {};
+        var productId = element._product;
+        var productPrice = await _global.productprice(
+          req.body._store,
+          productId
+        );
+
+        if (productPrice) {
+          data = {
+            ...data,
+            _product: productId,
+            quantity: element.quantity,
+            deal_price: productPrice.deal_price,
+            regular_price: productPrice.regular_price,
+          };
+        } else {
+          data = {
+            ...data,
+            _product: productId,
+            quantity: element.quantity,
+            deal_price: 0,
+            regular_price: 0,
+          };
+        }
+        product.push(data);
+      })
+    );
+
+    var orderInfo = {
+      _user: req.decoded.id,
+      _store: req.body._store,
+      shipping: {
+        address: address,
+        delivery_notes: req.body.delivery_notes ?? null,
+        order_id: orderid.generate(),
+      },
+
+      payment: {
+        method: req.body.payment_method,
+        transaction_id: charge.id,
+      },
+      products: product,
+      total_cost: req.body.total_cost,
+    };
+
+    await Order.create(orderInfo);
+    await Cart.deleteOne({
+      _user: req.decoded.id,
+      _store: req.body._store,
+    }).exec();
+
+    return res.json({
+      status: 1,
+      data: req.body.slug,
+    });
+    // return res.redirect("/myorders/" + req.body.slug);
+  } catch (err) {
+    console.log("---value", err);
+    return res.status(400).json({ data: err.message });
+  }
+};
