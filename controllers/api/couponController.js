@@ -12,7 +12,6 @@ exports.list = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    console.log(req.params.store);
     let coupon = await Coupon.find({ _store: req.params.store }).lean();
     console.log(coupon);
     if (!coupon) return res.json({ message: "Data not found", data: [] });

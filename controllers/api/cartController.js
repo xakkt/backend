@@ -235,6 +235,7 @@ exports.deleteCard = async (req, res) => {
 
     try {
       var productInfo = await Product.findById(req.body._product);
+      console.log(productInfo);
       let productprice = await _global.productprice(
         req.body._store,
         req.body._product
@@ -690,6 +691,7 @@ exports.chargeSavedCard = async (req, res) => {
 
     console.log("charge----", charge);
     req.charge = charge;
+    req.total = total;
     const result = await orderController.placeOrder(req, res);
 
     console.log(result);

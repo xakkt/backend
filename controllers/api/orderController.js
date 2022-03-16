@@ -393,7 +393,10 @@ exports.placeOrder = async (req, res) => {
     //     product.push(data);
     //   })
     // );
-
+    // const cart = await Cart.find({
+    //   _user: req.decoded.id,
+    //   _store: req.body.storeid,
+    // }).lean();
     var orderInfo = {
       _user: req.decoded.id,
       _store: req.body.storeid,
@@ -404,11 +407,12 @@ exports.placeOrder = async (req, res) => {
       },
 
       payment: {
-        method: req.body.payment_method,
+        method: 0,
         transaction_id: charge.id,
       },
       // products: product,
-      total_cost: req.body.total_cost,
+      total_cost: req.total,
+      // total_cost: req.body.total_cost,
     };
 
     await Order.create(orderInfo);
