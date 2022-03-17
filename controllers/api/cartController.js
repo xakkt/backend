@@ -6,6 +6,7 @@ const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const cardDetails = require("../../models/carddetail");
 const orderController = require("./orderController");
+const pushController = require("./pushController");
 
 exports.listCards = async (req, res) => {
   const errors = await validationResult(req);
@@ -234,12 +235,16 @@ exports.deleteCard = async (req, res) => {
     }
 
     try {
+      // const push = await pushController.firebase(req, res);
+      // console.log("push", push);
+      // return;
       var productInfo = await Product.findById(req.body._product);
       console.log(productInfo);
       let productprice = await _global.productprice(
         req.body._store,
         req.body._product
       );
+
       if (!productprice)
         return res.json({
           status: 0,
@@ -631,7 +636,7 @@ exports.chargeSavedCard = async (req, res) => {
     const cartInfo = {
       _user: req.decoded.id,
       _store: req.body.storeid,
-      cvv: req.body.cvv,
+      // cvv: req.body.cvv,
       // cvv: req.body.cvv.filter(Boolean),
     };
 
@@ -680,22 +685,22 @@ exports.chargeSavedCard = async (req, res) => {
       // },
     });
 
-    const charge = await stripe.charges.create({
-      amount: total * 100,
-      currency: "usd",
-      customer: req.decoded.customer_id,
-      // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
-      metadata: { payment_intent: paymentIntent.id },
-      // payment_intent: paymentIntent.id,
-    });
+    // const charge = await stripe.charges.create({
+    //   amount: total * 100,
+    //   currency: "usd",
+    //   customer: req.decoded.customer_id,
+    //   // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
+    //   metadata: { payment_intent: paymentIntent.id },
+    //   // payment_intent: paymentIntent.id,
+    // });
 
-    console.log("charge----", charge);
-    req.charge = charge;
-    req.total = total;
-    const result = await orderController.placeOrder(req, res);
+    // console.log("charge----", charge);
+    // req.charge = charge;
+    // req.total = total;
+    // const result = await orderController.placeOrder(req, res);
 
-    console.log(result);
-    return res.status(200).json({ data: "Successfully charged" });
+    // console.log(result);
+    return res.status(200).json({ data: paymentIntent.id });
     // return res.json({ data: paymentIntent });
   } catch (err) {
     console.log("--err", err);
