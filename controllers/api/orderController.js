@@ -354,7 +354,6 @@ exports.placeOrder = async (req, res) => {
         },
       }
     ).lean();
-    console.log(req);
     if (user.address === undefined) {
       return res.json({ status: 0, message: "address not found" });
     }
@@ -363,43 +362,39 @@ exports.placeOrder = async (req, res) => {
 
     var product = [];
     const charge = req.charge;
+    const cart = await Cart.findOne({
+      _id: req.body.cartid,
+    }).lean();
+    await Promise.all(
+      cart.cart.map(async (element) => {
+        var data = {};
+        var productId = element._product;
+        var productPrice = await _global.productprice(cart._store, productId);
 
-    // await Promise.all(
-    //   req.body.products.map(async (element) => {
-    //     var data = {};
-    //     var productId = element._product;
-    //     var productPrice = await _global.productprice(
-    //       req.body._store,
-    //       productId
-    //     );
+        if (productPrice) {
+          data = {
+            ...data,
+            _product: productId,
+            quantity: element.quantity,
+            deal_price: productPrice.deal_price,
+            regular_price: productPrice.regular_price,
+          };
+        } else {
+          data = {
+            ...data,
+            _product: productId,
+            quantity: element.quantity,
+            deal_price: 0,
+            regular_price: 0,
+          };
+        }
+        product.push(data);
+      })
+    );
 
-    //     if (productPrice) {
-    //       data = {
-    //         ...data,
-    //         _product: productId,
-    //         quantity: element.quantity,
-    //         deal_price: productPrice.deal_price,
-    //         regular_price: productPrice.regular_price,
-    //       };
-    //     } else {
-    //       data = {
-    //         ...data,
-    //         _product: productId,
-    //         quantity: element.quantity,
-    //         deal_price: 0,
-    //         regular_price: 0,
-    //       };
-    //     }
-    //     product.push(data);
-    //   })
-    // );
-    // const cart = await Cart.find({
-    //   _user: req.decoded.id,
-    //   _store: req.body.storeid,
-    // }).lean();
     var orderInfo = {
       _user: req.decoded.id,
-      _store: req.body.storeid,
+      _store: cart._store,
       shipping: {
         address: address,
         delivery_notes: req.body.delivery_notes ?? null,
@@ -410,16 +405,16 @@ exports.placeOrder = async (req, res) => {
         method: 0,
         transaction_id: charge.id,
       },
-      // products: product,
+      products: product,
       total_cost: req.total,
       // total_cost: req.body.total_cost,
     };
 
     await Order.create(orderInfo);
     await Cart.deleteOne({
-      _user: req.decoded.id,
-      _store: req.body.storeid,
+      _id: req.body.cartid,
     }).exec();
+    console.log("trie");
     return true;
     // return res.json({
     //   status: 1,

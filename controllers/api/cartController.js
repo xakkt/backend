@@ -631,48 +631,44 @@ exports.orderCheckout = async (req, res) => {
 exports.chargeSavedCard = async (req, res) => {
   try {
     console.log("----req body,", req.body);
-    var total = 0;
-
+    const total = req.body.total;
     const cartInfo = {
-      _user: req.decoded.id,
-      _store: req.body.storeid,
+      _id: req.body.cartid,
       // cvv: req.body.cvv,
       // cvv: req.body.cvv.filter(Boolean),
     };
 
     var data = await Cart.findOne({
-      _user: cartInfo._user,
-      _store: cartInfo._store,
-    })
-      .populate({
-        path: "cart._product",
-        select: "name sku price image _unit weight",
-        populate: {
-          path: "_unit",
-          select: "name",
-        },
-      })
-      .lean();
+      _id: cartInfo._id,
+    }).lean();
+    // .populate({
+    //   path: "cart._product",
+    //   select: "name sku price image _unit weight",
+    //   populate: {
+    //     path: "_unit",
+    //     select: "name",
+    //   },
+    // })
+
     if (!data)
       return res.json({ status: 0, message: "cart is empty", data: "" });
-    let total_quantity, total_price, coupon, discounted_price;
-    total_quantity = data.cart
-      .map((product) => product.quantity)
-      .reduce(function (acc, cur) {
-        return acc + cur;
-      });
+    // let total_quantity, total_price, coupon, discounted_price;
+    // total_quantity = data.cart
+    //   .map((product) => product.quantity)
+    //   .reduce(function (acc, cur) {
+    //     return acc + cur;
+    //   });
 
-    total_price = data.cart
-      .map((product) => product.total_price)
-      .reduce(function (acc, cur) {
-        return acc + cur;
-      });
+    // total_price = data.cart
+    //   .map((product) => product.total_price)
+    //   .reduce(function (acc, cur) {
+    //     return acc + cur;
+    //   });
 
-    for (const [i, product] of data.cart.entries()) {
-      total += product.total_price;
-    }
-    console.log("----", total);
-
+    // for (const [i, product] of data.cart.entries()) {
+    //   total += product.total_price;
+    // }
+    // console.log("----", total);
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total * 100,
       currency: "usd",
@@ -685,22 +681,22 @@ exports.chargeSavedCard = async (req, res) => {
       // },
     });
 
-    // const charge = await stripe.charges.create({
-    //   amount: total * 100,
-    //   currency: "usd",
-    //   customer: req.decoded.customer_id,
-    //   // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
-    //   metadata: { payment_intent: paymentIntent.id },
-    //   // payment_intent: paymentIntent.id,
-    // });
+    const charge = await stripe.charges.create({
+      amount: total * 100,
+      currency: "usd",
+      customer: req.decoded.customer_id,
+      // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
+      metadata: { payment_intent: paymentIntent.id },
+    });
 
-    // console.log("charge----", charge);
-    // req.charge = charge;
-    // req.total = total;
-    // const result = await orderController.placeOrder(req, res);
-
-    // console.log(result);
-    return res.status(200).json({ data: paymentIntent.id });
+    req.charge = charge;
+    req.total = total;
+    const result = await orderController.placeOrder(req, res);
+    if (result == true) {
+      return res.status(200).json({ transaction_id: charge.id });
+    } else {
+      return res.status(400).json({ data: "something went wrong" });
+    }
     // return res.json({ data: paymentIntent });
   } catch (err) {
     console.log("--err", err);
