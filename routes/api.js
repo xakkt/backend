@@ -522,5 +522,5 @@ router.post(
   verifyjwt.checkToken,
   cartController.chargeSavedCard
 );
-
+router.get("/cronwishlists", wishController.cronWishlist);
 module.exports = router;

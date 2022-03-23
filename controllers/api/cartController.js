@@ -235,8 +235,8 @@ exports.deleteCard = async (req, res) => {
     }
 
     try {
-      // const push = await pushController.firebase(req, res);
-      // console.log("push", push);
+      const push = await pushController.firebase(req, res);
+      console.log("push", push);
       // return;
       var productInfo = await Product.findById(req.body._product);
       console.log(productInfo);
