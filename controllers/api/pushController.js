@@ -1,42 +1,43 @@
 const admin = require("../../firebase-config");
-const notification_options = {
-  priority: "high",
-  timeToLive: 60 * 60 * 24,
-};
-exports.firebase = async (req, res) => {
+var FCM = require("fcm-push");
+const User = require("../../models/user");
+const Device = require("../../models/device");
+
+exports.firebase = async (req, message) => {
   try {
-    const registrationToken = req.body.registrationToken;
-    console.log(registrationToken);
-    const message = req.body.message;
-    const options = {
-      priority: "high",
-      timeToLive: 60 * 60 * 24, // 1 day
-    };
+    var registrationToken = []; //req.body.registrationToken;
+    const device = await Device.find({
+      user: req.decoded.id,
+      device_type: "ios",
+    });
+    for (const deviceElem of device) {
+      registrationToken.push(deviceElem.device_token);
+    }
+
     var payload = {
+      registration_ids: registrationToken,
       notification: {
-        title: "Testing",
-        body: "Testing",
+        sound: "default",
+        title: message,
+        body: message,
       },
-      data: {
-        push_type: "1",
-      },
-      notification: {
-        body: "This is a message from FCM to web",
-        requireInteraction: "true",
-      },
-      // }
     };
-    admin
-      .messaging()
-      .sendToDevice(registrationToken, payload, options)
-      .then((response) => {
-        return res
-          .status(200)
-          .json({ message: "Notification sent successfully", data: response });
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      let sender = new FCM(process.env.FCM_KEY);
+      console.log("pushMessage->>>>>", payload);
+      sender.send(payload, (err, result) => {
+        sender = null;
+        payload = null;
+        if (err) {
+          console.log("error in sending push>>>", err);
+        } else {
+          console.log("sending push done>>>", result);
+        }
       });
+    } catch (err) {
+      console.log("ERROR IN PUSH", err);
+      // resolve({ error: err });
+    }
   } catch (err) {
     console.log("errr", err);
   }

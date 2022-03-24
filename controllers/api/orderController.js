@@ -10,6 +10,7 @@ const Store = require("../../models/store");
 const Product = require("../../models/product");
 const Cart = require("../../models/cart");
 const { ObjectId } = require("bson");
+const pushController = require("./pushController");
 
 (exports.listOrders = async (req, res) => {
   const errors = await validationResult(req);
@@ -163,7 +164,7 @@ const { ObjectId } = require("bson");
       };
 
       var order = await Order.create(orderInfo);
-
+      await pushController.firebase(req, "Order Created");
       return res.json({
         status: 1,
         message: "Order createddd",
