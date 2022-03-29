@@ -9,6 +9,8 @@ const _global = require("../../helper/common");
 const Store = require("../../models/store");
 const Product = require("../../models/product");
 const Cart = require("../../models/cart");
+const pushController = require("./pushController");
+
 (exports.listOrders = async (req, res) => {
   const errors = await validationResult(req);
   if (!errors.isEmpty()) {
@@ -81,7 +83,10 @@ const Cart = require("../../models/cart");
     ).lean();
     console.log(order);
     if (!order) return res.json({ message: "No Order found", data: "" });
-    return res.json({ status: 1, message: "", data: order });
+    else {
+      await pushController.firebase(req, "Order is" + req.body.status);
+      return res.json({ status: 1, message: "", data: order });
+    }
   } catch (err) {
     return res.status(400).json({ data: err.message });
   }
@@ -165,6 +170,7 @@ const Cart = require("../../models/cart");
         _user: req.session.userid,
         _store: req.body._store,
       }).exec();
+      await pushController.firebase(req, "New Order Placed");
       return res.redirect("/myorders/" + req.body.slug);
     } catch (err) {
       console.log("---value", err);

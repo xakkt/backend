@@ -87,6 +87,7 @@ const pushController = require("./pushController");
       { new: true }
     ).lean();
     console.log(order);
+    await pushController.firebase(req, "Order" + req.body.status);
     if (!order) return res.json({ message: "No Order found", data: "" });
     return res.json({ status: 1, message: "", data: order });
   } catch (err) {
