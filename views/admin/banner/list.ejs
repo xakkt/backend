@@ -164,21 +164,23 @@
                       <tr>
                         <td><%= data?._store?.name %></td>
                         <td><%= data?._deal?.name %></td>
-                        <td>
-                          <div id='loader' style='display: none;'>
+                        <!-- <td> -->
+                          <!-- <div id='loader' style='display: none;'>
                             <i class="fa fa-spinner fa-spin" style="font-size:48px;color:red"></i>
                             <!-- <img src='/reload.gif'> -->
-                          </div>
-                          <div class="container">
-                          <img id="bannerimage" class="img-thumbnail bannerimage" style="width: 6em;height: 4em"
-                            src="<%=process.env.AWS_BUCKET_PATH%>/banners/<%= data.image %>" />
-                            <div class="middle">
-                          <label for='<%= data._id %>'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>
+                          <!-- </div> -->
+                          <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="<%=process.env.AWS_BUCKET_PATH%>/banners/<%= data.image %>" /></td>
+                       
+                          <!-- <div class="container"> -->
+                          <!-- <img id="bannerimage" class="img-thumbnail bannerimage" style="width: 6em;height: 4em"
+                            src="<%=process.env.AWS_BUCKET_PATH%>/banners/<%= data.image %>" /> -->
+                            <!-- <div class="middle"> -->
+                          <!-- <label for='<%= data._id %>'><i class="fa fa-upload" class="icon" aria-hidden="true"></i>
                           </label>
                           </div>
                           <input type="file" style="display:none;" class="uploads" name="uploads" id='<%= data._id %>'
-                            onchange="myFunction(this)" data-id="<%= data._id %>" /></div>
-                        </td>
+                            onchange="myFunction(this)" data-id="<%= data._id %>" /></div> -->
+                        <!-- </td> -->
                         <!-- <td><%= moment(data.deal_start).format('MMM-DD-YYYY') %></td>
                         <td><%= moment(data.deal_end).format('MMM-DD-YYYY') %></td> -->
                         <td><a href="/admin/banner/delete/<%= data._id %>"

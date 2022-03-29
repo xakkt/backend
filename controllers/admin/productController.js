@@ -15,17 +15,7 @@ var moment = require("moment");
 const _global = require("../../helper/notification");
 
 const imageUpload = require("../../helper/imageUpload");
-var aws = require("aws-sdk");
-const fs = require("fs");
-const sharp = require("sharp");
 
-aws.config.update({
-  secretAccessKey: `${process.env.AWS_SECRET_KEY}`,
-  accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
-  region: `${process.env.AWS_BUCKET_REGION}`,
-  signature_version: "v4",
-});
-const s3 = new aws.S3();
 /*
  * View of product category
  */
@@ -81,6 +71,8 @@ exports.create = async (req, res) => {
       );
 
       await ProductCategory.create(categoryInfo);
+      const folder = "product_category/";
+      await imageUpload.uploadNew(req, folder);
       await req.flash("success", "ProductCategory added successfully!");
       res.redirect("/admin/category");
     } catch (err) {
@@ -178,13 +170,16 @@ exports.update = async function (req, res) {
       categoryInfo,
       { new: true, upsert: true }
     );
+    const folder = "product_category/";
+    await imageUpload.uploadNew(req, folder);
     if (productCategory) {
       await req.flash("success", "Product updated successfully!");
       res.redirect("/admin/category");
+    } else {
+      return res
+        .status(400)
+        .json({ status: false, message: "ProductCategory not found" });
     }
-    return res
-      .status(400)
-      .json({ status: false, message: "ProductCategory not found" });
   } catch (err) {
     console.log(err);
     await req.flash("failure", err.message);
@@ -220,35 +215,10 @@ exports.productsave = async (req, res) => {
       ? req.file.filename
       : "no-image_1606218971.jpeg";
     productinfo.parent_id = req.body.parent_id ? req.body.parent_id : null;
-    // console.log(req.file.filename);
-    // await imageUpload.uploadNew(req.file.filename, "products/");
-    const folder = "products" + "/";
-    const file = req.file.filename;
-    const absoluteFilePath = req.file.path;
-    fs.readFile(absoluteFilePath, async (err, data) => {
-      // var buffer = await sharp(file).toBuffer();
-      // console.log(buffer);
-      const params = {
-        Bucket: `${process.env.AWS_BUCKET_NAME}`,
-        Key: folder + file,
-        ACL: "public-read",
-        Body: data,
-      };
-      console.log("Folder name: " + folder);
-      //   console.log("File: " + buffer);
 
-      s3.upload(params, function (s3Err, data) {
-        if (s3Err) throw s3Err;
-        console.log(`File uploaded successfully at ${data.Location}`);
-      });
-      // s3.putObject(params, function (err, data) {
-      //   if (err) {
-      //     console.log("Error: ", err);
-      //   } else {
-      //     console.log(data);
-      //   }
-      // }).promise();
-    });
+    const folder = "products/";
+    await imageUpload.uploadNew(req, folder);
+
     const product = await Product.create(productinfo);
     await ProductCategory.findByIdAndUpdate(
       { _id: req.body._category },
@@ -349,6 +319,8 @@ exports.productupdate = async function (req, res) {
     };
     if (req.file) {
       productinfo.image = req.file.filename;
+      const folder = "products/";
+      await imageUpload.uploadNew(req, folder);
     }
 
     const product = await Product.findByIdAndUpdate(
@@ -367,6 +339,7 @@ exports.productupdate = async function (req, res) {
         { _id: req.body._category },
         { $push: { _products: product._id } }
       );
+
       await req.flash("success", "Product updated successfully!");
       res.redirect("/admin/product");
     } else {

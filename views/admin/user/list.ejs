@@ -101,7 +101,8 @@
                       <% if(users) users.forEach(function(user, userIndex){ %>
                       <tr>
                         <td><%= user.first_name%> <%=user.last_name%></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="<%= user.profile_pic %>" />
+                        <!-- ${process.env.AWS_BUCKET_PATH}/users/ -->
+                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src=<%= `${process.env.AWS_BUCKET_PATH}` + '/users/' + user.profile_pic %> />
                         </td>
                         <td><%= user.email %></td>
                         <td><%= user.contact_no %> </td>

@@ -39,9 +39,9 @@ const path = require("path");
 
 var multer = require("multer");
 var storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, "./public/images/departments");
-  },
+  // destination: function (req, file, callback) {
+  //   callback(null, "./public/images/departments");
+  // },
   filename: function (req, file, callback) {
     const img = path.basename(
       file.originalname,
@@ -58,26 +58,8 @@ var storage = multer.diskStorage({
 });
 
 var userStorage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, "./public/images/users");
-  },
-  filename: function (req, file, callback) {
-    const img = path.basename(
-      file.originalname,
-      path.extname(file.originalname)
-    );
-    callback(
-      null,
-      img.split(" ").join("_").toLowerCase() +
-        "_" +
-        moment().unix() +
-        path.extname(file.originalname)
-    );
-  },
-});
-var productStorage = multer.diskStorage({
   // destination: function (req, file, callback) {
-  //   callback(null, `${process.env.AWS_BUCKET_NAME}` + "/products");
+  //   callback(null, "./public/images/users");
   // },
   filename: function (req, file, callback) {
     const img = path.basename(
@@ -93,32 +75,26 @@ var productStorage = multer.diskStorage({
     );
   },
 });
-// var productStorage = multer.diskStorage({
-//   // storage: multerS3({
-//   s3: s3,
-//   bucket: `${process.env.AWS_BUCKET_NAME}` + "/products/",
-//   acl: "public-read",
-//   key: function (req, file, cb) {
-//     console.log("=====file", file);
-//     const img = path.basename(
-//       file.originalname,
-//       path.extname(file.originalname)
-//     );
-//     cb(
-//       null,
-//       img.split(" ").join("_").toLowerCase() +
-//         "_" +
-//         moment().unix() +
-//         path.extname(file.originalname)
-//     ); //use Date.now() for unique file keys
-//   },
-//   // }),
-// });
-// var productStorage =
-var brandStorage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, "./public/images/brands");
+var productStorage = multer.diskStorage({
+  filename: function (req, file, callback) {
+    const img = path.basename(
+      file.originalname,
+      path.extname(file.originalname)
+    );
+    callback(
+      null,
+      img.split(" ").join("_").toLowerCase() +
+        "_" +
+        moment().unix() +
+        path.extname(file.originalname)
+    );
   },
+});
+
+var brandStorage = multer.diskStorage({
+  // destination: function (req, file, callback) {
+  //   callback(null, "./public/images/brands");
+  // },
   filename: function (req, file, callback) {
     const img = path.basename(
       file.originalname,
@@ -134,9 +110,9 @@ var brandStorage = multer.diskStorage({
   },
 });
 var bannerStorage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, "./public/images/banners");
-  },
+  // destination: function (req, file, callback) {
+  //   callback(null, "./public/images/banners");
+  // },
   filename: function (req, file, callback) {
     const img = path.basename(
       file.originalname,

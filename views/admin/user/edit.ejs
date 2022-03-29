@@ -107,8 +107,8 @@
                              </div>
                              <div class="col-md-6">
                               <div class="form-group">
-                                <label for="departmentLogo">Profile pic</label>
-                                <div class="input-group">
+                                 <label for="profilePic"><img id="blah" src=<%=`${process.env.AWS_BUCKET_PATH}` + '/users/' + user.profile_pic%> style="height:100px; cursor:pointer;" alt="your image" /></label>
+                                <div class="input-group"  style="display:none;">
                                   <div class="custom-file">
                                     <input type="file" name="profile_pic" class="custom-file-input" accept="image/png,image/jpeg" id="profilePic">
                                     <label class="custom-file-label" for="departmentLogo">Choose file</label>
@@ -217,7 +217,13 @@
   });
 
   $(function () {
-  
+   profilePic.onchange = evt => {
+        const [file] = profilePic.files
+        // console.log("<%= process.env.BASE_URL %>",file)
+        if (file) {
+          blah.src = URL.createObjectURL(file)
+        }
+      }
   $('#userForm').validate({
     rules: {
       first_name: {
