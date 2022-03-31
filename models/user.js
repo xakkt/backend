@@ -178,12 +178,35 @@ userSchema.pre("save", async function () {
   this.password = await md5(this.password);
 });
 
-userSchema.post("save", function (error, doc, next) {
+userSchema.post("save", async function (error, doc, next) {
   if (error) {
     console.log("=================", error);
-    next(
-      new Error("User already exists with this email address or contact no")
-    );
+    let userDB = await mongoose.model("User", userSchema).findOne({
+      $or: [{ email: doc.email }, { contact_no: doc.contact_no }],
+    });
+
+    if (userDB) {
+      if (doc.email == userDB.email && doc.contact_no == userDB.contact_no) {
+        next(
+          new Error(
+            "User already exists with this email address and contact no"
+          )
+        );
+      } else if (doc.email == userDB.email) {
+        next(new Error("User already exists with this email address "));
+      } else if (doc.contact_no == userDB.contact_no) {
+        next(new Error("User already exists with this contact number "));
+      } else {
+        next(
+          new Error(
+            "User already exists with this email address or contact no "
+          )
+        );
+      }
+    }
+    // next(
+    //   new Error("User already exists with this email address or contact no")
+    // );
   } else {
     next(error);
   }
