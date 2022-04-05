@@ -505,6 +505,11 @@ router.post("/push", pushController.firebase);
 // router.post("/push",pushController.firebase)
 
 router.post("/applycoupon", verifyjwt.checkToken, couponController.applycoupon);
+router.post(
+  "/removecoupon",
+  verifyjwt.checkToken,
+  couponController.removecoupon
+);
 router.get("/coupon-list/:store", verifyjwt.checkToken, couponController.list);
 router.post("/stripe", verifyjwt.checkToken, stripeController.stripe);
 router.get("/save_card", stripeController.saveCard);

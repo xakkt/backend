@@ -26,6 +26,7 @@ exports.applycoupon = async (req, res) => {
     let coupon = await Coupon.findOne({
       coupon_code: req.body.coupan_name,
     }).lean();
+
     var price = 0;
     if (coupon.min_amount > cart.cart[0].total_price) {
       return res.json({
@@ -42,10 +43,41 @@ exports.applycoupon = async (req, res) => {
     } else if (coupon.apply == "fixed") {
       price = cart.cart[0].total_price - coupon.amount;
     }
-    delete cart.cart[0].total_price;
-    cart.cart[0].total_price = price;
+    // delete cart.cart[0].total_price;
+    // cart.cart[0].total_price = price;
 
-    return res.json({ message: "Listing of coupouns", data: cart });
+    const newupdate = await Cart.updateOne(
+      { _id: req.body._cart },
+      {
+        _coupon: {
+          coupon_id: coupon._id,
+          discounted_price: price,
+        },
+      }
+      // { new: true }
+    ).lean();
+    let cartLatest = await Cart.findOne({ _id: req.body._cart }).lean();
+    return res.json({ message: "Listing of coupouns", data: cartLatest });
+  } catch (err) {
+    console.log("--logs", err);
+    return res.status(400).json({ data: err.message });
+  }
+};
+exports.removecoupon = async (req, res) => {
+  try {
+    let coupan_id = req.body.coupan_id;
+    await Cart.updateOne(
+      { _id: req.body._cart },
+      {
+        _coupon: {
+          coupon_id: coupan_id,
+          discounted_price: 0,
+        },
+      }
+      // { new: true }
+    ).lean();
+    let cart = await Cart.findOne({ _id: req.body._cart }).lean();
+    return res.json({ message: "Remove coupoun", data: cart });
   } catch (err) {
     console.log("--logs", err);
     return res.status(400).json({ data: err.message });
