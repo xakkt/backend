@@ -181,33 +181,3 @@ exports.allWishlistProducts = async (req, res) => {
     return res.status(400).json({ status: 0, message: "", data: err });
   }
 };
-exports.cronWishlist = async (req, res) => {
-  let wishlist = await Wishlist.find().lean();
-  var productprice = [];
-  for (const wishlistElem of wishlist) {
-    const productStorePriceData = await StoreProductPricing.findOne({
-      _product: wishlistElem._product,
-      _store: wishlistElem._store,
-    });
-    const productRegularPriceData = await ProductRegularPricing.findOne({
-      _product: wishlistElem._product,
-      _store: wishlistElem._store,
-    });
-    const productregularprice = productRegularPriceData
-      ? productRegularPriceData.regular_price
-      : 0;
-    const storedealprice = productStorePriceData
-      ? productStorePriceData.deal_price
-      : 0;
-
-    if (
-      wishlistElem.wish_price <= storedealprice ||
-      wishlistElem.wish_price <= productregularprice
-    ) {
-      productprice.push(wishlistElem._user);
-      //send push to user in this case
-    }
-  }
-
-  return res.status(200).json({ status: 1, message: productprice });
-};

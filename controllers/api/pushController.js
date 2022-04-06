@@ -5,9 +5,10 @@ const Device = require("../../models/device");
 
 exports.firebase = async (req, message) => {
   try {
+    // console.log(req);
     var registrationToken = []; //req.body.registrationToken;
     const device = await Device.find({
-      user: req.decoded.id,
+      user: req,
       device_type: "ios",
     });
     for (const deviceElem of device) {

@@ -38,7 +38,7 @@ exports.payment = async (req, res) => {
             },
             { new: true }
           ).lean();
-      await pushController.firebase(req, "Payment Done");
+      await pushController.firebase(req.decoded.id, "Payment Done");
       return res.json({
         status: "success",
         total_price: amount,
@@ -47,7 +47,7 @@ exports.payment = async (req, res) => {
         message: "Payment Done",
       });
     }
-    await pushController.firebase(req, "Payment Failed");
+    await pushController.firebase(req.decoded.id, "Payment Failed");
     return res.json({ message: "Payment Failed" });
   } catch (err) {
     console.log("---er", err);

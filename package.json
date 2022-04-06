@@ -23,6 +23,7 @@
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
+    "events": "^3.3.0",
     "express": "^4.17.3",
     "express-flash-message": "^2.1.0",
     "express-session": "^1.17.2",

@@ -5,7 +5,7 @@ const Brand = require("../../models/brand");
 const Deals = require("../../models/deal");
 const Unit = require("../../models/unit");
 var ObjectId = require("mongoose").Types.ObjectId;
-
+const Wishlist = require("../../models/wishlist");
 const Stores = require("../../models/store");
 const StoreProductPricing = require("../../models/store_product_pricing");
 const RegularPrice = require("../../models/product_regular_pricing");
@@ -13,12 +13,48 @@ const _globalCommon = require("../../helper/common");
 const { validationResult } = require("express-validator");
 var moment = require("moment");
 const _global = require("../../helper/notification");
-
+const pushController = require("../api/pushController");
+const EventEmitter = require("events");
+const emitter = new EventEmitter();
 const imageUpload = require("../../helper/imageUpload");
-
+const uploadController = require("./uploadController");
 /*
  * View of product category
  */
+exports.cronWishlist = async (req, res) => {
+  emitter.on("cronWishlist", async (req, res) => {
+    let wishlist = await Wishlist.find().lean();
+    var users = [];
+    for (const wishlistElem of wishlist) {
+      const productStorePriceData = await StoreProductPricing.findOne({
+        _product: wishlistElem._product,
+        _store: wishlistElem._store,
+      });
+      const productRegularPriceData = await ProductRegularPricing.findOne({
+        _product: wishlistElem._product,
+        _store: wishlistElem._store,
+      });
+      const productregularprice = productRegularPriceData
+        ? productRegularPriceData.regular_price
+        : 0;
+      const storedealprice = productStorePriceData
+        ? productStorePriceData.deal_price
+        : 0;
+
+      if (
+        wishlistElem.wish_price <= storedealprice ||
+        wishlistElem.wish_price <= productregularprice
+      ) {
+        users.push(wishlistElem._user);
+        //send push to user in this case
+        pushController.firebase(wishlistElem._user, "Deal Price");
+      }
+    }
+    return true;
+    // return res.status(200).json({ status: 1, message: users });
+  });
+  emitter.emit("cronWishlist", { data: "Data" });
+};
 exports.create = async (req, res) => {
   try {
     var categories = await ProductCategory.find({}).lean();
@@ -411,6 +447,7 @@ exports.priceSave = async (req, res) => {
     }
 
     var productprice = await StoreProductPricing.insertMany(arr);
+    uploadController.cronWishlist(req, res);
     if (!productprice) {
       await req.flash("failure", "Product price");
       res.redirect("/admin/product");
@@ -501,6 +538,8 @@ exports.addPrice = async (req, res) => {
       storeData.push(pricingData);
       //console.log(price._store._id,"==========",regularPricee)
     });
+
+    // this.cronWishlist(req, res);
     //return res.json(storeData)
     res.render("admin/product/pricing", {
       menu: "ProductCategory",

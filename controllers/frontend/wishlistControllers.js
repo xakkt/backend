@@ -16,6 +16,7 @@ exports.addPoductToWishlist = async (req, res) => {
       _user: req.session.userid,
       _product: req.body._product,
       _store: req.body._store,
+      wish_price: req.body.wish_price,
     };
 
     //get deal price

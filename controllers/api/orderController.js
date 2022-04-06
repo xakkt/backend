@@ -87,7 +87,7 @@ const pushController = require("./pushController");
       { new: true }
     ).lean();
     console.log(order);
-    await pushController.firebase(req, "Order" + req.body.status);
+    await pushController.firebase(req.decoded.id, "Order" + req.body.status);
     if (!order) return res.json({ message: "No Order found", data: "" });
     return res.json({ status: 1, message: "", data: order });
   } catch (err) {
@@ -165,7 +165,7 @@ const pushController = require("./pushController");
       };
 
       var order = await Order.create(orderInfo);
-      await pushController.firebase(req, "Order Created");
+      await pushController.firebase(req.decoded.id, "Order Created");
       return res.json({
         status: 1,
         message: "Order createddd",
