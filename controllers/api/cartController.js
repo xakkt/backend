@@ -184,7 +184,7 @@ exports.listCartProduct = async (req, res) => {
         price: total_price.toFixed(2),
         shipping_cost: "100.00",
         discounted_amount:discout_amount,
-        sub_total: (total_price+100-discout_amount).toFixed(2),
+        sub_total: (total_price-discout_amount).toFixed(2),
       },
     });
   } catch (err) {

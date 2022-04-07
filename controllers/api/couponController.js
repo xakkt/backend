@@ -140,7 +140,7 @@ exports.applycoupon = async (req, res) => {
       price: total_price.toFixed(2),
       shipping_cost: "100.00",
       discounted_amount:discout_amount,
-      sub_total: (total_price+100-discout_amount).toFixed(2),
+      sub_total: (total_price-discout_amount).toFixed(2),
     } });
   } catch (err) {
     console.log("--logs", err);
@@ -152,7 +152,16 @@ exports.applycoupon = async (req, res) => {
 exports.removecoupon = async (req, res) => {
   try {
     let coupan_id = req.body.coupan_id;
-    await Cart.updateOne(
+
+    //let abc = await Cart.children.id(req.body._cart).remove();
+
+    let cart = await Cart.findByIdAndUpdate(
+      { _id: req.body._cart },
+      { $pull: { _coupon: req.body.coupon_id } }
+    );
+
+    console.log(cart)
+    /*await Cart.updateOne(
       { _id: req.body._cart },
       {
         _coupon: {
@@ -161,8 +170,8 @@ exports.removecoupon = async (req, res) => {
         },
       }
       // { new: true }
-    ).lean();
-    let cart = await Cart.findOne({ _id: req.body._cart }).lean();
+    ).lean();*/
+    //let cart = await Cart.findOne({ _id: req.body._cart }).lean();
     return res.json({ message: "Remove coupoun", data: cart });
   } catch (err) {
     console.log("--logs", err);
