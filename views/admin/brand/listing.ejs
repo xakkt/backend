@@ -92,7 +92,7 @@
                         <td><%= brand.name %></td>
                         <td>
                           <% if(brand.logo) { %>
-                              <img class="img-thumbnail" style="width: 6em;height: 4em" src="<%=process.env.AWS_BUCKET_PATH%>/brands/<%= brand.logo %>" />
+                              <img class="img-thumbnail" style="width: 6em;height: 4em" src="<%=process.env.IMAGES_BUCKET_PATH%>/brands/<%= brand.logo %>" />
                            <% }else{ %>
                                 N/A
                             <% } %>

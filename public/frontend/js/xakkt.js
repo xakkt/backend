@@ -637,7 +637,7 @@ $("#cartModal").on("show.bs.modal", function () {
 
           tableHtml += `<tr>
                             <td class="w-25">
-                              <img src="${baseUrl}/images/products/${
+                              <img src="${imageBaseUrl}/images/products/${
             product._product.image
           }" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>

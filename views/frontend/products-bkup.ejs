@@ -35,7 +35,7 @@
             <div class="carousel-inner">
                 <% for (const [i,banner] of banners.banner.entries()) { %>
                     <div class="carousel-item <%=(i==0)?'active':''%>">
-                        <img class="d-block w-100" src="<%= process.env.AWS_BUCKET_PATH %>/banners/<%=banner.image%>" alt="First slide">
+                        <img class="d-block w-100" src="<%= process.env.IMAGES_BUCKET_PATH %>/banners/<%=banner.image%>" alt="First slide">
                     </div>
                 <% }%> 
             </div>

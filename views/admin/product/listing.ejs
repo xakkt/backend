@@ -169,7 +169,7 @@
                     <% if(await check("system_admin")){ %>
                     <input type="hidden" value="<%=user%>" id="admin" name="admin" />
                     <%} %>
-                    <input type="hidden" value="<%=process.env.AWS_BUCKET_PATH%>" id="imageUpload" name="imageUpload" />
+                    <input type="hidden" value="<%=process.env.IMAGES_BUCKET_PATH%>" id="imageUpload" name="imageUpload" />
                 </div>
                 </form>
                 <button type="button" style="display:none" class="btn btn-danger btn-sm check_delete">Delete</button>

@@ -93,7 +93,7 @@
                       <tr>
                         <td><%= department.name %></td>
                         <td><%= department.no_of_stores %></td>
-                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="<%=process.env.AWS_BUCKET_PATH%>/departments/<%= department.logo %>" /></td>
+                        <td><img class="img-thumbnail" style="width: 6em;height: 4em" src="<%=process.env.IMAGES_BUCKET_PATH%>/departments/<%= department.logo %>" /></td>
                         <td><%= department.description %></td>
                         <td><%= department.is_active %> </td>
                         <td><%= moment(department.createdAt).format('MMMM Do YYYY'); %></td>

@@ -107,7 +107,7 @@
                              </div>
                              <div class="col-md-6">
                               <div class="form-group">
-                                 <label for="profilePic"><img id="blah" src=<%=`${process.env.AWS_BUCKET_PATH}` + '/users/' + user.profile_pic%> style="height:100px; cursor:pointer;" alt="your image" /></label>
+                                 <label for="profilePic"><img id="blah" src=<%=`${process.env.IMAGES_BUCKET_PATH}` + '/users/' + user.profile_pic%> style="height:100px; cursor:pointer;" alt="your image" /></label>
                                 <div class="input-group"  style="display:none;">
                                   <div class="custom-file">
                                     <input type="file" name="profile_pic" class="custom-file-input" accept="image/png,image/jpeg" id="profilePic">

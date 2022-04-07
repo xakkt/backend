@@ -149,7 +149,7 @@ exports.deleteCard = async (req, res) => {
         let image_path = list._product.image
           ? list._product.image
           : "not-available-image.jpg";
-        let image = `${process.env.BASE_URL}/products/${image_path}`;
+        let image = `${process.env.IMAGES_BUCKET_PATH}/products/${image_path}`;
         let total_price = list.total_price;
         let quantity = list.quantity;
         let unit = list._product._unit.name;
