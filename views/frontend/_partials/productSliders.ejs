@@ -24,8 +24,8 @@
     </span>
     <span class="cpr-page">
 
-            <img class="img-responsive xakkti x-heart x-heart-red-<%=product._id%> <%=(product.is_favourite)?'':'d-none' %>" title="Remove from favourite" data-prop="x-heart" data-productid="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="No Image">
-            <img class="img-responsive xakkti x-heart x-heart-grey-<%=product._id%> <%=(product.is_favourite)?'d-none':'' %>" title="Add to favourite" data-prop="x-heart" data-productid="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="No Image">
+            <img class="img-responsive xakkti x-heart x-remove-wishlist x-heart-red-<%=product._id%> <%=(product.is_favourite)?'':'d-none' %>" title="Remove from favourite" data-prop="x-heart" data-productid="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/RED_Favorite.png" alt="No Image">
+            <img class="img-responsive xakkti x-heart x-add-wishlist x-heart-grey-<%=product._id%> <%=(product.is_favourite)?'d-none':'' %>" title="Add to favourite" data-prop="x-heart" data-toggle="modal" data-target="#wishPriceModal" data-productid="<%=product._id%>" src="<%= process.env.BASE_URL %>/frontend/images/GREY_Favorite.png" alt="No Image">
             
     </span>
     <span class="">

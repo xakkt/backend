@@ -34,4 +34,54 @@
       </div>
     </div>
   </div>
+  <div id="wishPriceModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <!--div class="modal-header">
+          
+        </div-->
+        <div class="modal-body">
+          <form method="POST" id="save-wish-price" action="http://localhost:4800/product/add-to-favlist">   
+            <div class="modal-content">
+                  
+               <div class="modal-header border-right">
+                     <h4 class="modal-title w-100 font-weight-bold">Add Wish Price</h4>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                     </button>
+                  </div>
+                  <input type="hidden" id="wishlistproduct" name="_product" value="">
+                  <div class="modal-body mx-1">
+                     <span id="loginError" class="error-msg" style="display:none"></span>
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <!-- <i class="fas fa-envelope prefix grey-text"></i> -->
+                        <label data-error="wrong" data-success="right" for="loginEmail">Wish Price</label>
+                        <input type="number" id="wishprice" name="wishprice" class="form-control validate" required>
+                     </div>
+                     <div class="form-group col-md-12">
+                      <!-- <i class="fas fa-envelope prefix grey-text"></i> -->
+                      <label data-error="wrong" data-success="right" for="loginEmail">Max Wish Price</label>
+                      <input type="number" id="maxwishprice" name="maxwishprice" class="form-control validate" required>
+                   </div>
+                    
+                  </div>
+                  </div>
+
+                  <div class="modal-footer d-flex justify-content-right">
+                     <button class="btn btn-success">Login</button>
+                     
+                  </div>
+               </div>
+         </form>   
+        </div>
+        <!--div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div-->
+      </div>
+  
+    </div>
+  </div>
   

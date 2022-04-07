@@ -173,11 +173,8 @@ exports.listCartProduct = async (req, res) => {
       }))
     );
     data.cart = product_list;
-    discounted_price = 20;
-    coupon = {
-      code: "AZXPN102",
-      discount: "20%",
-    };
+   let discout_amount = (data?._coupon[0]?.discounted_price)??0
+    
     return res.json({
       status: 1,
       message: "All cart products",
@@ -186,7 +183,8 @@ exports.listCartProduct = async (req, res) => {
         in_cart: total_quantity,
         price: total_price.toFixed(2),
         shipping_cost: "100.00",
-        sub_total: total_price.toFixed(2),
+        discounted_amount:discout_amount,
+        sub_total: (total_price+100-discout_amount).toFixed(2),
       },
     });
   } catch (err) {

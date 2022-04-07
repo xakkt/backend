@@ -352,7 +352,7 @@ $(document).delegate(".x-cart,.x-heart,.x-list", "click", function () {
 
       $(`${greyClass},${redClass}`).toggleClass("d-none");
       $(this).parents(".xshop").siblings(".button_type").val(btntype);
-      $(this).closest("form").submit();
+     // $(this).closest("form").submit();
       break;
     case "x-list":
       $(this).parents(".xshop").siblings(".button_type").val(btntype);
@@ -383,9 +383,7 @@ $(".xakkt-product-popup").click(function () {
       break;
     case $(this).hasClass("favlist"):
       $(".grey-fav, .red-fav").toggleClass("d-none");
-      // let foo = prompt("Add Wish Price");
-      // let bar = confirm("Confirm or deny");
-      url = `${baseUrl}/product/add-to-favlist`;
+     // url = `${baseUrl}/product/add-to-favlist`;
       break;
     case $(this).hasClass("xcart"):
       $(".cart-grey, .cart-red").toggleClass("d-none");
@@ -421,19 +419,7 @@ $(document).delegate(".cart-form", "submit", function (e) {
       url = `${baseUrl}/product/add-to-cart`;
       break;
     case "x-heart":
-      console.log($(".xakkti").hasClass("d-none"));
-      if ($(".xakkti").hasClass("d-none")) {
-        let foo = prompt("Add Wish Price");
-        let bar = confirm("Confirm or deny");
-        $("<input>")
-          .attr({
-            type: "hidden",
-            value: foo,
-            name: "wish_price",
-          })
-          .appendTo("form");
-      }
-      url = `${baseUrl}/product/add-to-favlist`;
+       url = `${baseUrl}/product/add-to-favlist`;
       break;
     case "x-list":
       url = `${baseUrl}/shoppinglist/add_product`;
@@ -505,6 +491,43 @@ $(".xakkt-popup").on("click", function (e) {
   }
 });
 
+$('#wishPriceModal').on("show.bs.modal", function (e) {
+  var data = {};
+  var targetData = $(e.relatedTarget);
+  $('#wishlistproduct').val(targetData.data('productid'))
+});
+
+$("#save-wish-price").on("submit", function (e) {
+  e.preventDefault();
+  let formdata = $(this).serializeArray();
+  console.log('--formdata--',formdata)
+
+  var data = {};
+  data._user = $(".cartbutton").data("userid") ?? null;
+  data._store = $(".cartbutton").data("storeid");
+  data._product = formdata[0].value
+  data.wish_price = formdata[1].value
+  data.max_price = formdata[2].value
+
+  $.post(`${baseUrl}/product/add-to-favlist`, data)
+    .done((result) => {
+       if(result.status){
+          Swal.fire({
+            icon: "success",
+            title: "Product Added to wishlist",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          location.reload();
+       }
+      
+    })
+    .fail((result) => {
+      $("#loginError").show().text(result.responseJSON.errors);
+    }); 
+});
+
+
 $("#favListModal").on("show.bs.modal", function (e) {
   var data = {};
   data._user = $(".cartbutton").data("userid") ?? null;
@@ -516,7 +539,7 @@ $("#favListModal").on("show.bs.modal", function (e) {
         var tableHtml = "";
         var total = 0;
         result.data.forEach((product, index) => {
-          console.log("=------->>", product);
+       
 
           tableHtml += `<tr>
                             <td class="w-25">
