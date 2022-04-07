@@ -96,7 +96,7 @@ exports.deleteCard = async (req, res) => {
     return res.status(400).json({ data: "Something Went Wrong" });
   }
 };
-(exports.listCartProduct = async (req, res) => {
+exports.listCartProduct = async (req, res) => {
   var product_list = [];
   const errors = await validationResult(req);
   if (!errors.isEmpty()) {
@@ -192,8 +192,8 @@ exports.deleteCard = async (req, res) => {
   } catch (err) {
     return res.status(400).json({ status: 0, data: err.message });
   }
-}),
-  (exports.cartSize = async (req, res) => {
+};
+exports.cartSize = async (req, res) => {
     const errors = await validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ status: 0, errors: errors.array() });
@@ -227,8 +227,8 @@ exports.deleteCard = async (req, res) => {
     } catch (err) {
       return res.status(400).json({ status: 0, data: err.message });
     }
-  }),
-  (exports.addPoductToCart = async (req, res) => {
+  };
+exports.addPoductToCart = async (req, res) => {
     const errors = await validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -304,7 +304,7 @@ exports.deleteCard = async (req, res) => {
       console.log("--errr", err);
       return res.status(400).json({ data: err.message });
     }
-  });
+  };
 
 exports.removeProductFromCart = async (req, res) => {
   const errors = await validationResult(req);

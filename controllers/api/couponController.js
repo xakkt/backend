@@ -23,6 +23,7 @@ exports.list = async (req, res) => {
 exports.applycoupon = async (req, res) => {
   try {
     let cart = await Cart.findOne({ _id: req.body._cart }).lean();
+    if(!cart){ return res.json({status:true, message:"cart with given id not exists"}) }
     let coupon = await Coupon.findOne({
       coupon_code: req.body.coupan_name,
     }).lean();
@@ -56,13 +57,191 @@ exports.applycoupon = async (req, res) => {
       }
       // { new: true }
     ).lean();
-    let cartLatest = await Cart.findOne({ _id: req.body._cart }).lean();
-    return res.json({ message: "Listing of coupouns", data: cartLatest });
+   /* let cartLatest = await Cart.findOne({ _id: req.body._cart })
+    .populate({
+      path: "cart",
+      populate: {
+        path: "_product",
+        model: Product,
+        select: "name image unit",
+      },
+    }).lean();*/
+
+    var cartLatest = await Cart.findOne({_id: req.body._cart})
+                                              .populate({
+                                                path: "cart._product",
+                                                select: "name sku price image _unit weight",
+                                                populate: {
+                                                  path: "_unit",
+                                                  select: "name",
+                                                },
+                                              })
+                                              .lean();
+
+
+
+    if(!cartLatest)return res.json({ status: 0, message: "cart is empty", data: "" });
+    let total_quantity, total_price, discounted_price;
+
+    total_quantity = cartLatest.cart
+    .map((product) => product.quantity)
+    .reduce(function (acc, cur) {
+      return acc + cur;
+    });                                          
+
+    total_price = cartLatest.cart
+      .map((product) => product.total_price)
+      .reduce(function (acc, cur) {
+        return acc + cur;
+      });
+
+    var product_list = [];
+    await Promise.all(
+      (products = cartLatest.cart.map(async (list) => {
+        console.log("---product", list);
+        var data = {};
+        if (!list._product) return;
+        let product_price = await _global.productprice(
+          cartLatest._store,
+          list._product._id
+        );
+        let image_path = list._product.image
+          ? list._product.image
+          : "not-available-image.jpg";
+        let image = `${process.env.IMAGES_BUCKET_PATH}/products/${image_path}`;
+        let total_price = list.total_price;
+        let quantity = list.quantity;
+        let unit = list._product._unit.name;
+        delete list._product._unit;
+        delete list.total_price;
+        delete list.quantity;
+        delete list.price;
+        data = {
+          ...list,
+          _product: {
+            ...list._product,
+            in_cart: quantity,
+            total_price: total_price.toFixed(2),
+            image: image,
+            unit: unit,
+            regular_price: product_price.regular_price,
+            deal_price: product_price.deal_price,
+          },
+        };
+        product_list.push(data);
+      }))
+    );
+    cartLatest.cart = product_list
+
+
+    return res.json({ message: "Listing of coupouns", data: cartLatest,subtotal: {
+      in_cart: total_quantity,
+      price: total_price.toFixed(2),
+      shipping_cost: "100.00",
+      sub_total: total_price.toFixed(2),
+    } });
   } catch (err) {
     console.log("--logs", err);
     return res.status(400).json({ data: err.message });
   }
 };
+exports.listCartProduct = async (req, res) => {
+  var product_list = [];
+  const errors = await validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ status: 0, errors: errors.array() });
+  }
+
+  try {
+    const cartInfo = {
+      _user: req.decoded.id,
+      _store: req.params.store,
+    };
+
+    var data = await Cart.findOne({_user: cartInfo._user,_store: cartInfo._store})
+                                              .populate({
+                                                path: "cart._product",
+                                                select: "name sku price image _unit weight",
+                                                populate: {
+                                                  path: "_unit",
+                                                  select: "name",
+                                                },
+                                              })
+                                              .lean();
+    
+     if (!data)return res.json({ status: 0, message: "cart is empty", data: "" });
+
+    let total_quantity, total_price, coupon, discounted_price;
+
+    total_quantity = data.cart
+      .map((product) => product.quantity)
+      .reduce(function (acc, cur) {
+        return acc + cur;
+      });
+
+    total_price = data.cart
+      .map((product) => product.total_price)
+      .reduce(function (acc, cur) {
+        return acc + cur;
+      });
+
+    await Promise.all(
+      (products = data.cart.map(async (list) => {
+        console.log("---product", list);
+        var data = {};
+        if (!list._product) return;
+        let product_price = await _global.productprice(
+          req.params.store,
+          list._product._id
+        );
+        let image_path = list._product.image
+          ? list._product.image
+          : "not-available-image.jpg";
+        let image = `${process.env.IMAGES_BUCKET_PATH}/products/${image_path}`;
+        let total_price = list.total_price;
+        let quantity = list.quantity;
+        let unit = list._product._unit.name;
+        delete list._product._unit;
+        delete list.total_price;
+        delete list.quantity;
+        delete list.price;
+        data = {
+          ...list,
+          _product: {
+            ...list._product,
+            in_cart: quantity,
+            total_price: total_price.toFixed(2),
+            image: image,
+            unit: unit,
+            regular_price: product_price.regular_price,
+            deal_price: product_price.deal_price,
+          },
+        };
+        product_list.push(data);
+      }))
+    );
+    data.cart = product_list;
+    discounted_price = 20;
+    coupon = {
+      code: "AZXPN102",
+      discount: "20%",
+    };
+    return res.json({
+      status: 1,
+      message: "All cart products",
+      data: data,
+      subtotal: {
+        in_cart: total_quantity,
+        price: total_price.toFixed(2),
+        shipping_cost: "100.00",
+        sub_total: total_price.toFixed(2),
+      },
+    });
+  } catch (err) {
+    return res.status(400).json({ status: 0, data: err.message });
+  }
+};
+
 exports.removecoupon = async (req, res) => {
   try {
     let coupan_id = req.body.coupan_id;
