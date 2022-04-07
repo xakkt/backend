@@ -1,6 +1,7 @@
 const Cart = require("../../models/cart");
 const Product = require("../../models/product");
 const Coupon = require("../../models/coupon");
+const mongoose = require("mongoose");
 
 var moment = require("moment");
 const { validationResult } = require("express-validator");
@@ -155,23 +156,21 @@ exports.removecoupon = async (req, res) => {
 
     //let abc = await Cart.children.id(req.body._cart).remove();
 
-    let cart = await Cart.findByIdAndUpdate(
+   /* let cart = await Cart.findByIdAndUpdate(
       { _id: req.body._cart },
-      { $pull: { _coupon: req.body.coupon_id } }
-    );
+      { $pull: { _coupon._id: req.body.coupon_id } }
+    );*/
 
-    console.log(cart)
-    /*await Cart.updateOne(
-      { _id: req.body._cart },
-      {
-        _coupon: {
-          coupon_id: coupan_id,
-          discounted_price: 0,
-        },
+console.log(typeof req.body.coupon_id);
+
+   let cart = await Cart.findByIdAndUpdate(
+      {_id: req.body._cart},
+      {$pull: {_coupon: {coupon_id: req.body.coupon_id}}},{
+        new:true
       }
-      // { new: true }
-    ).lean();*/
-    //let cart = await Cart.findOne({ _id: req.body._cart }).lean();
+  );
+
+
     return res.json({ message: "Remove coupoun", data: cart });
   } catch (err) {
     console.log("--logs", err);
