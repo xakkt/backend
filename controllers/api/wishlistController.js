@@ -18,27 +18,35 @@ exports.addPoductToWishlist = async (req, res) => {
       _user: req.decoded.id,
       _product: req.body._product,
       _store: req.body._store,
+      wish_price: req.body.wish_price,
+      max_price: req.body.max_price,
     };
     //get deal price
     var productPrice = await _global.productprice(
       req.body._store,
       req.body._product
     );
-    if (!productPrice)
+    if (!productPrice) {
       return res.json({
         status: 0,
         message: "_Store and _Product are invalid",
       });
+    } else if (req.body.wish_price > productPrice.regular_price) {
+      return res.json({
+        status: 0,
+        message: "Price should be greater than regular price",
+      });
+    } else {
+      const wishlist = await Wishlist.create(wishlistInfo);
+      return res.json({
+        status: 1,
+        message: "Product added to wishlist successfully",
+        data: wishlist,
+      });
+    }
     /*if (productPrice.effective_price <= req.body.wish_price) {
 			return res.json({ status: 0, message: "Wish price should be less than  product price" })
 		}*/
-
-    const wishlist = await Wishlist.create(wishlistInfo);
-    return res.json({
-      status: 1,
-      message: "Product added to wishlist successfully",
-      data: wishlist,
-    });
   } catch (err) {
     console.log("--value", err);
     if (err.code == 11000)
@@ -123,7 +131,7 @@ exports.allWishlistProducts = async (req, res) => {
           let image_path = list._product.image
             ? list._product.image
             : "not-available-image.jpg";
-          let image = `${process.env.BASE_URL}/products/${image_path}`;
+          let image = `${process.env.AWS_BUCKET_PATH}/products/${image_path}`;
 
           var productPrice = await _global.productprice(
             req.body._store,

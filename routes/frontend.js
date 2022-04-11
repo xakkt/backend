@@ -322,7 +322,7 @@ router.get(
   "/shoppinglist/:shoplist/products",
   shoppingController.shoppinglistProducts
 );
-
+router.get("/wishlist/lists/:product_id", wishController.getListingWish);
 router.post(
   "/product/add-to-favlist",
   wishlistValidation,
@@ -361,4 +361,5 @@ router.get("/payment-error", function (req, res) {
   return res.render("frontend/payment-error");
 });
 router.post("/products/cart", cartController.cartProducts);
+
 module.exports = router;
