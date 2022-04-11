@@ -149,7 +149,7 @@ exports.listCartProduct = async (req, res) => {
         let image_path = list._product.image
           ? list._product.image
           : "not-available-image.jpg";
-        let image = `${process.env.IMAGES_BUCKET_PATH}/products/${image_path}`;
+        let image = `${process.env.AWS_BUCKET_PATH}/products/${image_path}`;
         let total_price = list.total_price;
         let quantity = list.quantity;
         let unit = list._product._unit.name;
@@ -173,8 +173,8 @@ exports.listCartProduct = async (req, res) => {
       }))
     );
     data.cart = product_list;
-   let discout_amount = (data?._coupon[0]?.discounted_price)??0
-    
+    let discout_amount = data?._coupon[0]?.discounted_price ?? 0;
+
     return res.json({
       status: 1,
       message: "All cart products",
@@ -183,8 +183,8 @@ exports.listCartProduct = async (req, res) => {
         in_cart: total_quantity,
         price: total_price.toFixed(2),
         shipping_cost: "100.00",
-        discounted_amount:discout_amount,
-        sub_total: (total_price-discout_amount).toFixed(2),
+        discounted_amount: discout_amount,
+        sub_total: (total_price - discout_amount).toFixed(2),
       },
     });
   } catch (err) {
@@ -192,117 +192,117 @@ exports.listCartProduct = async (req, res) => {
   }
 };
 exports.cartSize = async (req, res) => {
-    const errors = await validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ status: 0, errors: errors.array() });
-    }
+  const errors = await validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ status: 0, errors: errors.array() });
+  }
 
-    try {
-      const cartInfo = {
-        _user: req.decoded.id,
-        _store: req.params.storeid,
-      };
+  try {
+    const cartInfo = {
+      _user: req.decoded.id,
+      _store: req.params.storeid,
+    };
 
-      var data = await Cart.findOne({
-        _user: cartInfo._user,
-        _store: cartInfo._store,
-      }).lean();
+    var data = await Cart.findOne({
+      _user: cartInfo._user,
+      _store: cartInfo._store,
+    }).lean();
 
-      if (!data)
-        return res.json({ status: 0, message: "cart is empty", data: "" });
-      let total_quantity;
-      total_quantity = data.cart
-        .map((product) => product.quantity)
-        .reduce(function (acc, cur) {
-          return acc + cur;
-        });
-
-      return res.json({
-        status: 1,
-        message: "total products in the cart",
-        data: { total_products: total_quantity },
+    if (!data)
+      return res.json({ status: 0, message: "cart is empty", data: "" });
+    let total_quantity;
+    total_quantity = data.cart
+      .map((product) => product.quantity)
+      .reduce(function (acc, cur) {
+        return acc + cur;
       });
-    } catch (err) {
-      return res.status(400).json({ status: 0, data: err.message });
-    }
-  };
+
+    return res.json({
+      status: 1,
+      message: "total products in the cart",
+      data: { total_products: total_quantity },
+    });
+  } catch (err) {
+    return res.status(400).json({ status: 0, data: err.message });
+  }
+};
 exports.addPoductToCart = async (req, res) => {
-    const errors = await validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+  const errors = await validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-    try {
-      // const push = await pushController.firebase(req, res);
-      // console.log("push", push);
-      // return;
-      var productInfo = await Product.findById(req.body._product);
-      console.log(productInfo);
-      let productprice = await _global.productprice(
-        req.body._store,
-        req.body._product
-      );
+  try {
+    // const push = await pushController.firebase(req, res);
+    // console.log("push", push);
+    // return;
+    var productInfo = await Product.findById(req.body._product);
+    console.log(productInfo);
+    let productprice = await _global.productprice(
+      req.body._store,
+      req.body._product
+    );
 
-      if (!productprice)
-        return res.json({
-          status: 0,
-          message: "Product Price of this id not set yet",
-        });
-      if (!productInfo)
-        return res.json({
-          status: 0,
-          message: "Product with this id not exists",
-        });
-      const cartInfo = {
-        _user: req.decoded.id,
-        _store: req.body._store,
-        cart: {
-          _product: req.body._product,
-          quantity: req.body.quantity,
-          total_price: productprice.effective_price * req.body.quantity,
-        },
-      };
+    if (!productprice)
+      return res.json({
+        status: 0,
+        message: "Product Price of this id not set yet",
+      });
+    if (!productInfo)
+      return res.json({
+        status: 0,
+        message: "Product with this id not exists",
+      });
+    const cartInfo = {
+      _user: req.decoded.id,
+      _store: req.body._store,
+      cart: {
+        _product: req.body._product,
+        quantity: req.body.quantity,
+        total_price: productprice.effective_price * req.body.quantity,
+      },
+    };
 
-      var product = await Cart.findOne({
+    var product = await Cart.findOne({
+      _user: cartInfo._user,
+      _store: cartInfo._store,
+      cart: { $elemMatch: { _product: cartInfo.cart._product } },
+    });
+    if (product?.cart) {
+      return res.json({
+        status: 0,
+        message: "Product is already in the cart",
+      });
+    } else {
+      product = await Cart.findOne({
         _user: cartInfo._user,
         _store: cartInfo._store,
-        cart: { $elemMatch: { _product: cartInfo.cart._product } },
       });
-      if (product?.cart) {
-        return res.json({
-          status: 0,
-          message: "Product is already in the cart",
-        });
+      if (!product) {
+        product = await Cart.create(cartInfo);
+        console.log(product);
       } else {
-        product = await Cart.findOne({
-          _user: cartInfo._user,
-          _store: cartInfo._store,
-        });
-        if (!product) {
-          product = await Cart.create(cartInfo);
-          console.log(product);
-        } else {
-          product.cart.push(cartInfo.cart);
-          await product.save();
-        }
+        product.cart.push(cartInfo.cart);
+        await product.save();
       }
-      var prod = product.toObject();
-      var total_products = 0;
-      product = prod.cart.map((data) => {
-        total_products += data.quantity;
-        return data;
-      });
-
-      return res.json({
-        status: 1,
-        message: "Product added to cart successfully",
-        total_products: total_products,
-      });
-    } catch (err) {
-      console.log("--errr", err);
-      return res.status(400).json({ data: err.message });
     }
-  };
+    var prod = product.toObject();
+    var total_products = 0;
+    product = prod.cart.map((data) => {
+      total_products += data.quantity;
+      return data;
+    });
+
+    return res.json({
+      status: 1,
+      message: "Product added to cart successfully",
+      total_products: total_products,
+    });
+  } catch (err) {
+    console.log("--errr", err);
+    return res.status(400).json({ data: err.message });
+  }
+};
 
 exports.removeProductFromCart = async (req, res) => {
   const errors = await validationResult(req);

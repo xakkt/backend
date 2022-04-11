@@ -501,11 +501,12 @@ $(".x-remove-wishlist").on("click", function () {
   var product_id = $(this).attr("data-productid");
 
   $.get(`/wishlist/lists/${product_id}`).done((result) => {
-    alert(result.data);
     $(this).attr("data-id", result.data);
-  });
 
-  deleteFavouriteProduct($(this));
+    console.log("this 1" + $(this));
+
+    deleteFavouriteProduct($(this), product_id);
+  });
 });
 
 $("#save-wish-price").on("submit", function (e) {
@@ -518,7 +519,7 @@ $("#save-wish-price").on("submit", function (e) {
   data._store = $(".cartbutton").data("storeid");
   data._product = formdata[0].value;
   data.wish_price = formdata[1].value;
-  data.max_price = formdata[2].value;
+  // data.max_price = formdata[2].value;
 
   $.post(`${baseUrl}/product/add-to-favlist`, data)
     .done((result) => {
@@ -961,12 +962,19 @@ function listnameClick(that) {
 
   $($(that).data("formid")).submit();
 }
-function deleteFavouriteProduct(that) {
+function deleteFavouriteProduct(that, productid) {
   var listid = $(that).data("id");
-  alert(listid);
+  var productid = $(that).data("product_id");
+  section = $(that).data("section");
+  var greyClass = `.${section}-grey-${productid}`;
+  var redClass = `.${section}-red-${productid}`;
   $.get(`/wishlist/remove/product/${listid}`)
     .done((result) => {
       console.log(result);
+
+      $(`${greyClass}`).removeClass("d-none");
+      $(`${redClass}`).addClass("d-none");
+      location.reload();
     })
     .fail((result) => {
       //$("#loginError").show().text(result.responseJSON.errors);
