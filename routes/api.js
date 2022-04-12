@@ -518,6 +518,11 @@ router.get("/list-cards", verifyjwt.checkToken, cartController.listCards);
 router.post("/save-card", verifyjwt.checkToken, cartController.saveCard);
 router.post("/delete-card", verifyjwt.checkToken, cartController.deleteCard);
 router.post(
+  "/order_cancel/:id",
+  verifyjwt.checkToken,
+  orderController.orderCancel
+);
+router.post(
   "/order-success/:id",
   verifyjwt.checkToken,
   orderController.orderSuccess

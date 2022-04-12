@@ -11,6 +11,8 @@ const Product = require("../../models/product");
 const Cart = require("../../models/cart");
 const { ObjectId } = require("bson");
 const pushController = require("./pushController");
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 (exports.listOrders = async (req, res) => {
   const errors = await validationResult(req);
@@ -427,5 +429,49 @@ exports.placeOrder = async (req, res) => {
     return false;
     // console.log("---value", err);
     // return res.status(400).json({ data: err.message });
+  }
+};
+exports.orderCancel = async (req, res) => {
+  const errors = await validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const orderID = req.params.id;
+
+  try {
+    const orderData = await Order.findOne({ _id: orderID });
+    if (!orderData) return res.json({ message: "No Order found", data: "" });
+
+    if (orderData.payment.transaction_id) {
+      const refundCreate = await stripe.refunds.create({
+        charge: orderData.payment.transaction_id,
+      });
+
+      await Order.updateOne(
+        { _id: orderID },
+        {
+          shipping: {
+            tracking: {
+              status: "Cancelled",
+            },
+            order_id: orderData.shipping.order_id,
+          },
+        },
+        { new: true }
+      );
+    } else {
+      return res.json({
+        message: "No Payment method for this order",
+        data: "",
+      });
+    }
+
+    return res.json({
+      status: 1,
+      message: "Order Refund Successfully",
+      // data: refundCreate,
+    });
+  } catch (err) {
+    res.send(err);
   }
 };
