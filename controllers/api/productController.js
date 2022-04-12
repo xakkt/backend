@@ -45,7 +45,7 @@ const _global = require("../../helper/common");
         stores.map(async (store) => {
           var data = {};
           // stores = stores.map(store => {
-          //product.image = `${process.env.BASE_URL}/images/products/${product.image}`;
+          //product.image = `${process.env.IMAGES_BUCKET_PATH}/images/products/${product.image}`;
           let prices = await _global.productprice(
             req.params.storeid,
             store._product
