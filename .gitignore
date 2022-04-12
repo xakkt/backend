@@ -12,7 +12,7 @@ package-lock.json
 Dockerfile
 docker-compose.yml
 public/images/products/*
-public/images/banners/*
+public/banners/*
 public/images/brands/*
 public/images/departments/*
 public/images/users/*
