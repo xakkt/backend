@@ -17,6 +17,9 @@ const childSchema = new Schema({
   address2: {
     type: String,
   },
+  name: {
+    type: String,
+  },
   address_type: {
     type: String,
     enum: ["Home", "Office", "Other"],

@@ -287,6 +287,7 @@ exports.address = async (req, res) => {
       contactno: req.body.contactno,
       zipcode: req.body.zipcode,
       emirate: req.body.emirate,
+      name: req.body.name,
       location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
     });
     console.log("0--00000", address_array);
