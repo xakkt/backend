@@ -156,7 +156,7 @@ exports.shoppinglistProducts = async (req, res) => {
           let image_path = list._product.image
             ? list._product.image
             : "not-available-image.jpg";
-          let image = `${process.env.BASE_URL}/products/${image_path}`;
+          let image = `${process.env.AWS_BUCKET_PATH}/products/${image_path}`;
           let unit = list._product._unit.name;
           let deal_price = productPrice.deal_price;
           let regular_price = productPrice.regular_price;
