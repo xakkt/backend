@@ -58,7 +58,7 @@ const _global = require("../../helper/common");
             _product: _product._id,
             name: _product.name,
             regular_price: prices.regular_price,
-            image: `${process.env.AWS_BUCKET_PATH}/products/${_product.image}`,
+            image: `${process.env.IMAGES_BUCKET_PATH}/products/${_product.image}`,
             sku: _product.sku,
             deal: _deal.name,
           };
@@ -70,7 +70,7 @@ const _global = require("../../helper/common");
       let regularData = {
         _product: item._product._id,
         _store: item._store,
-        image: `${process.env.AWS_BUCKET_PATH}/products/${item._product.image}`,
+        image: `${process.env.IMAGES_BUCKET_PATH}/products/${item._product.image}`,
         sku: item._product.sku,
         name: item._product.name,
         deal_price: 0,
@@ -177,7 +177,7 @@ exports.search = async (req, res) => {
           data = {
             ...element,
           };
-          (data._product.image = `${process.env.AWS_BUCKET_PATH}/products/${element._product.image}`),
+          (data._product.image = `${process.env.IMAGES_BUCKET_PATH}/products/${element._product.image}`),
             (data._product.deal_price = productPrice.deal_price.toFixed(2)),
             (data._product.regular_price =
               productPrice.regular_price.toFixed(2));
