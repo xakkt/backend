@@ -9,11 +9,9 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const childSchema = new Schema({
-  /*--street number--*/
   address1: {
     type: String,
   },
-  /*---building --*/
   address2: {
     type: String,
   },
