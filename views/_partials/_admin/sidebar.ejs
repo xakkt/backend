@@ -380,7 +380,7 @@
               </ul> -->
         </li>
         <%}%>
-        <!----------------Coupan ----------------->
+        <!----------------Coupon ----------------->
         <% if(await check("system_admin")) {%>
         <!--li class="nav-item  <% if (menu === 'coupon') { %> menu-open <% } %>">
            <a href="#" class="nav-link <% if (menu === 'coupon') { %> active <% } %>">
@@ -394,13 +394,13 @@
              <li class="nav-item">
                <a href="/admin/coupon/create" class="nav-link <% if (menu === 'coupon' && submenu === 'add' ) { %> active <% } %>">
                  <i class="far fa-circle nav-icon"></i>
-                 <p>New Coupan</p>
+                 <p>New Coupon</p>
                </a>
              </li>
              <li class="nav-item">
               <a href="/admin/coupon/list" class="nav-link <% if (menu === 'coupon' && submenu === 'list' ) { %> active <% } %>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Manage Coupans</p>
+                <p>Manage Coupons</p>
               </a>
             </li>
            </ul-->
@@ -486,7 +486,38 @@
            </ul>
         </li>
         <%}%>
-        
+      
+      <!--  <% if(await check("company_view") ) {%> -->
+         <!-------coupon------->
+         <li class="nav-item <% if (menu === 'company') { %> menu-open <% } %> " >
+            <a href="#" class="nav-link <% if (menu === 'company') { %> active <% } %>">
+               <i class="nav-icon fab fa-cc-stripe"></i>
+               <p>
+                  Coupons
+                  <i class="fas fa-angle-left right"></i>
+               </p>
+            </a>
+            <ul class="nav nav-treeview">
+             <!--  <% if(await check("company_add")) {%> -->
+               <li class="nav-item">
+                  <a href="/admin/coupon/create" class="nav-link <% if (menu === 'company' && submenu === 'create' ) { %> active <% } %>">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>Add New Coupon</p>
+                  </a>
+               </li>
+            <!-- <%}%> -->
+            </ul>
+            <ul class="nav nav-treeview">
+               <li class="nav-item">
+                  <a href="/admin/coupon/list" class="nav-link <% if (menu === 'company' && submenu === 'list' ) { %> active <% } %>">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>Manage Coupons</p>
+                  </a>
+               </li>
+            </ul>
+         </li>
+       <!--  <%}%> -->
+
         <% if(await check("order_view")) {%>
         <li class="nav-item <% if (menu === 'orders') { %> menu-open <% } %>">
            <a href="#" class="nav-link <% if (menu === 'orders') { %> active <% } %>">

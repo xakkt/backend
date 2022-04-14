@@ -17,7 +17,7 @@ const unitController = require("../controllers/admin/unitController");
 const bannerController = require("../controllers/admin/bannerController.js");
 const compController = require("../controllers/admin/compController.js");
 const uploadController = require("../controllers/admin/uploadController.js");
-const coupanController = require("../controllers/admin/coupanController.js");
+const couponController = require("../controllers/admin/couponController.js");
 const dashboardController = require("../controllers/admin/dashboardController.js");
 const orderController = require("../controllers/admin/orderController.js");
 const currencyController = require("../controllers/admin/currencyController.js");
@@ -442,6 +442,13 @@ router.post(
   compController.update
 );
 
+/*--------------coupon route -----*/
+router.get("/coupon/create", _global.permission("add_coupon"),couponController.create);
+router.get("/coupons/list", _global.permission("view_coupon"),couponController.listing);
+router.post("/coupon/update", _global.permission("edit_coupon"),couponController.update);
+/*------------end of coupon code----*/ 
+
+
 /******-------upload */
 router.post("/upload", csvUpload.single("file"), uploadController.upload);
 
@@ -449,32 +456,32 @@ router.post("/upload", csvUpload.single("file"), uploadController.upload);
 router.get(
   "/coupon/create",
   _global.permission("coupon_add"),
-  coupanController.create
+  couponController.create
 );
 router.post(
   "/coupon/save",
   _global.permission("coupon_add"),
-  coupanController.save
+  couponController.save
 );
 router.get(
   "/coupon/list",
   _global.permission("coupon_view"),
-  coupanController.listing
+  couponController.listing
 );
 router.get(
   "/coupon/delete/:id",
   _global.permission("coupon_delete"),
-  coupanController.delete
+  couponController.delete
 );
 router.get(
   "/coupon/edit/:id",
   _global.permission("coupon_edit"),
-  coupanController.edit
+  couponController.edit
 );
 router.post(
   "/coupon/update/:id",
   _global.permission("coupon_edit"),
-  coupanController.update
+  couponController.update
 );
 
 /*****Order ******/
