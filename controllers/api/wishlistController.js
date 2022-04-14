@@ -165,8 +165,10 @@ exports.allWishlistProducts = async (req, res) => {
             productId in cartProducts ? cartProducts[productId] : 0;
 
           var unit = list._product._unit.name;
+          var wish_price = list.wish_price;
           delete list._product._unit;
-          delete list.wish_price;
+          delete list._product.price;
+          delete list.__v;
           delete list.createdAt;
           delete list.updatedAt;
           return {
@@ -180,6 +182,7 @@ exports.allWishlistProducts = async (req, res) => {
               unit: unit,
               deal_price: productPrice.effective_price,
               regular_price: productPrice.regular_price,
+              wish_price:wish_price
             },
           };
         })
