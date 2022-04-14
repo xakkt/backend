@@ -93,7 +93,7 @@
                                     </div>
                                     <!-- /.col -->
                                     <div class="col-md-6">
-                                        <img id="blah" src="/images/banners/<%=data.image%>" style="height:100px; widht:10px" alt="your image" />
+                                        <img id="blah" src="<%= process.env.IMAGES_BUCKET_PATH %>/banners/<%=data.image%>" style="height:100px; widht:10px" alt="your image" />
                                         <div class="form-group">
                                             <label for="departmentLogo">Banner Image</label>
                                             <div class="input-group">

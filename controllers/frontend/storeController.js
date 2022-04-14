@@ -170,14 +170,14 @@ exports.products = async (req, res) => {
     if (!bannerArr.length) {
       //banners.concat(_banners)
       pdata[0] = {
-        path: `${process.env.AWS_BUCKET_PATH}/banners/`,
+        path: `${process.env.IMAGES_BUCKET_PATH}/banners/`,
         type: "banner1",
         message: "No banner found",
         banner: _banners,
       };
     } else {
       pdata[0] = {
-        path: `${process.env.AWS_BUCKET_PATH}/banners/`,
+        path: `${process.env.IMAGES_BUCKET_PATH}/banners/`,
         type: "banner2",
         banner: bannerArr.reverse(),
       };
@@ -214,7 +214,7 @@ exports.products = async (req, res) => {
 
     if (!categories.length) {
       pdata[2] = {
-        path: `${process.env.AWS_BUCKET_PATH}/products/`,
+        path: `${process.env.IMAGES_BUCKET_PATH}/products/`,
         type: "product",
         sub_type: "Deals",
         message: "No Product on this store available",
@@ -245,7 +245,7 @@ exports.products = async (req, res) => {
               is_favourite: 0,
               in_shoppinglist: 0,
               in_cart: 0,
-              image: `${process.env.AWS_BUCKET_PATH}/products/${element._product.image}`,
+              image: `${process.env.IMAGES_BUCKET_PATH}/products/${element._product.image}`,
               deal_price: productPrice.deal_price,
               regular_price: productPrice.regular_price,
             };
@@ -267,7 +267,7 @@ exports.products = async (req, res) => {
             product.push(data);
           } else {
             pdata[2] = {
-              path: `${process.env.AWS_BUCKET_PATH}/products/`,
+              path: `${process.env.IMAGES_BUCKET_PATH}/products/`,
               type: "product",
               sub_type: "Deals",
               message: "No Product on this store available",
@@ -279,7 +279,7 @@ exports.products = async (req, res) => {
       product = getUniqueListBy(product, "_id");
 
       pdata[2] = {
-        path: `${process.env.AWS_BUCKET_PATH}/products/`,
+        path: `${process.env.IMAGES_BUCKET_PATH}/products/`,
         type: "product",
         dealName: deal_name,
         sub_type: "Deals",
@@ -290,7 +290,7 @@ exports.products = async (req, res) => {
     /*--------- order again --------*/
     let orderAgain = [];
     pdata[3] = {
-      path: `${process.env.AWS_BUCKET_PATH}/products/`,
+      path: `${process.env.IMAGES_BUCKET_PATH}/products/`,
       type: "product",
       sub_type: "order_again",
       message: "You have not placed any orders in the last 90 days",
@@ -322,7 +322,7 @@ exports.products = async (req, res) => {
 
     if (!storeTrending.length) {
       pdata[1] = {
-        path: `${process.env.AWS_BUCKET_PATH}/products/`,
+        path: `${process.env.IMAGES_BUCKET_PATH}/products/`,
         type: "product",
         sub_type: "trending",
         message: "No trending product available",
@@ -375,7 +375,7 @@ exports.products = async (req, res) => {
       );
 
       pdata[1] = {
-        path: `${process.env.AWS_BUCKET_PATH}/products/`,
+        path: `${process.env.IMAGES_BUCKET_PATH}/products/`,
         type: "product",
         sub_type: "trending",
         product: trendingProducts,

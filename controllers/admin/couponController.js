@@ -12,7 +12,7 @@ exports.create = async (req, res) => {
         res.status(400).json({ status: "false", data: err });
     }
 },
-    exports.save = async (req, res) => {
+exports.save = async (req, res) => {
 
         try {
             const couponinfo = {

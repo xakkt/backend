@@ -50,12 +50,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Edit Coupan</h1>
+                            <h1>Edit Coupon</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Edit Coupan</li>
+                                <li class="breadcrumb-item active">Edit Coupon</li>
                             </ol>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                     <!-- SELECT2 EXAMPLE -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Edit Coupan</h3>
+                            <h3 class="card-title">Edit Coupon</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
@@ -81,7 +81,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="coupanname">CoupanCode</label>
+                                            <label for="coupanname">CouponCode</label>
                                             <input type="text" name="coupanname" value="<%= data.coupon_code %>" class="form-control" id="coupanname"
                                                 placeholder="Enter coupan code">
                                         </div>
@@ -102,7 +102,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="brands">Coupan</label>
+                                            <label for="brands">Coupon</label>
                                             <select name="coupan_applied" class="form-control custom-select" id="coupan">
                                                 <option value="">Choose one</option>
                                                 <option <%= (data.apply == 'fixed')?'selected':''%> value="fixed">Fixed</option>

@@ -681,7 +681,7 @@ $("#cartModal").on("show.bs.modal", function () {
 
           tableHtml += `<tr>
                             <td class="w-25">
-                              <img src="${imageBaseUrl}/images/products/${
+                              <img src="${imageBaseUrl}/products/${
             product._product.image
           }" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>
@@ -732,6 +732,7 @@ $("#cartModal").on("show.bs.modal", function () {
       $("#cart-table").html(tableHtml);
     })
     .fail((result) => {
+      console.log('--error in cart listing --',result)
       $("#loginError").show().text(result.responseJSON.errors);
     });
 });

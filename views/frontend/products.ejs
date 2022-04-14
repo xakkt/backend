@@ -35,7 +35,7 @@
             <div class="carousel-inner">
                 <% for (const [i,banner] of banners.banner.entries()) { %>
                     <div class="carousel-item <%=(i==0)?'active':''%>">
-                        <img class="d-block w-100 lozad" data-src="<%= process.env.BASE_URL %>/images/banners/<%=banner.image%>" alt="First slide">
+                        <img class="d-block w-100 lozad" data-src="<%= process.env.IMAGES_BUCKET_PATH %>/banners/<%=banner.image%>" alt="First slide">
                     </div>
                 <% }%> 
             </div>
@@ -204,6 +204,7 @@
 <!-- Footer -->
 <%- await include('_partials/footer.ejs'); %>
 <!-- Footer -->
+<script> var imageBaseUrl = '<%=process.env.IMAGES_BUCKET_PATH%>' </script>
 <script> var baseUrl = '<%=process.env.BASE_URL%>'</script>
 <script src="/frontend/js/xakkt.js"></script>
 
