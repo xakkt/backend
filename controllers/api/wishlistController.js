@@ -166,6 +166,7 @@ exports.allWishlistProducts = async (req, res) => {
 
           var unit = list._product._unit.name;
           var wish_price = list.wish_price;
+          delete list.wish_price;
           delete list._product._unit;
           delete list._product.price;
           delete list.__v;
