@@ -64,13 +64,12 @@ exports.addPoductToWishlist = async (req, res) => {
 
 (exports.updateProductWishPrice = async (req, res) => {
   try {
-    _wishlist = req.params.wishlistid;
+    _wishlist = req.body.wishlistid;
     wish_price = req.body.wish_price;
-    valid_till = req.body.valid_till;
 
     const wishlistProduct = await Wishlist.updateOne(
       { _id: _wishlist },
-      { wish_price: wish_price, valid_till: valid_till }
+      { wish_price: wish_price}
     );
     return res.json({
       status: 1,

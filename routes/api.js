@@ -486,7 +486,7 @@ router.delete(
   wishController.deleteProductWishlist
 );
 router.put(
-  "/wishlist/update/:wishlistid",
+  "/wishlist/update",
   verifyjwt.checkToken,
   wishController.updateProductWishPrice
 );
