@@ -42,7 +42,7 @@ exports.bannderproduct = async (req, res) => {
         data.storeName = element._store.name;
 
         if (productPrice) {
-          (data._product.image = `${process.env.BASE_URL}/products/${element._product.image}`),
+          (data._product.image = `${process.env.IMAGES_BUCKET_PATH}/products/${element._product.image}`),
             (data._product.unit = element._product._unit.name);
           data._product.regular_price = productPrice.regular_price;
           data._product.deal_price = productPrice.deal_price;

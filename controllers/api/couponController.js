@@ -24,7 +24,12 @@ exports.list = async (req, res) => {
 exports.applycoupon = async (req, res) => {
   try {
     let cart = await Cart.findOne({ _id: req.body._cart }).lean();
-    if(!cart){ return res.json({status:true, message:"cart with given id not exists"}) }
+    if (!cart) {
+      return res.json({
+        status: true,
+        message: "cart with given id not exists",
+      });
+    }
     let coupon = await Coupon.findOne({
       coupon_code: req.body.coupan_name,
     }).lean();
@@ -58,7 +63,7 @@ exports.applycoupon = async (req, res) => {
       }
       // { new: true }
     ).lean();
-   /* let cartLatest = await Cart.findOne({ _id: req.body._cart })
+    /* let cartLatest = await Cart.findOne({ _id: req.body._cart })
     .populate({
       path: "cart",
       populate: {
@@ -68,27 +73,26 @@ exports.applycoupon = async (req, res) => {
       },
     }).lean();*/
 
-    var cartLatest = await Cart.findOne({_id: req.body._cart})
-                                              .populate({
-                                                path: "cart._product",
-                                                select: "name sku price image _unit weight",
-                                                populate: {
-                                                  path: "_unit",
-                                                  select: "name",
-                                                },
-                                              })
-                                              .lean();
+    var cartLatest = await Cart.findOne({ _id: req.body._cart })
+      .populate({
+        path: "cart._product",
+        select: "name sku price image _unit weight",
+        populate: {
+          path: "_unit",
+          select: "name",
+        },
+      })
+      .lean();
 
-
-
-    if(!cartLatest)return res.json({ status: 0, message: "cart is empty", data: "" });
+    if (!cartLatest)
+      return res.json({ status: 0, message: "cart is empty", data: "" });
     let total_quantity, total_price, discounted_price;
 
     total_quantity = cartLatest.cart
-    .map((product) => product.quantity)
-    .reduce(function (acc, cur) {
-      return acc + cur;
-    });                                          
+      .map((product) => product.quantity)
+      .reduce(function (acc, cur) {
+        return acc + cur;
+      });
 
     total_price = cartLatest.cart
       .map((product) => product.total_price)
@@ -132,23 +136,26 @@ exports.applycoupon = async (req, res) => {
         product_list.push(data);
       }))
     );
-    cartLatest.cart = product_list
+    cartLatest.cart = product_list;
 
-    let discout_amount = (cartLatest?._coupon[0]?.discounted_price)??0
+    let discout_amount = cartLatest?._coupon[0]?.discounted_price ?? 0;
 
-    return res.json({ message: "Listing of coupouns", data: cartLatest,subtotal: {
-      in_cart: total_quantity,
-      price: total_price.toFixed(2),
-      shipping_cost: "100.00",
-      discounted_amount:discout_amount,
-      sub_total: (total_price-discout_amount).toFixed(2),
-    } });
+    return res.json({
+      message: "Listing of coupouns",
+      data: cartLatest,
+      subtotal: {
+        in_cart: total_quantity,
+        price: total_price.toFixed(2),
+        shipping_cost: "100.00",
+        discounted_amount: discout_amount,
+        sub_total: (total_price - discout_amount).toFixed(2),
+      },
+    });
   } catch (err) {
     console.log("--logs", err);
     return res.status(400).json({ data: err.message });
   }
 };
-
 
 exports.removecoupon = async (req, res) => {
   try {
@@ -156,20 +163,20 @@ exports.removecoupon = async (req, res) => {
 
     //let abc = await Cart.children.id(req.body._cart).remove();
 
-   /* let cart = await Cart.findByIdAndUpdate(
+    /* let cart = await Cart.findByIdAndUpdate(
       { _id: req.body._cart },
       { $pull: { _coupon._id: req.body.coupon_id } }
     );*/
 
-console.log(typeof req.body.coupon_id);
+    console.log(typeof req.body.coupon_id);
 
-   let cart = await Cart.findByIdAndUpdate(
-      {_id: req.body._cart},
-      {$pull: {_coupon: {coupon_id: req.body.coupon_id}}},{
-        new:true
+    let cart = await Cart.findByIdAndUpdate(
+      { _id: req.body._cart },
+      { $pull: { _coupon: { coupon_id: req.body.coupon_id } } },
+      {
+        new: true,
       }
-  );
-
+    );
 
     return res.json({ message: "Remove coupoun", data: cart });
   } catch (err) {

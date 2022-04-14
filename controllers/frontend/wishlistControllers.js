@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const _global = require("../../helper/common");
 const { json } = require("body-parser");
 const product = require("../../models/product");
+const StoreProductPricing = require("../../models/store_product_pricing");
 
 exports.addPoductToWishlist = async (req, res) => {
   const errors = await validationResult(req);
@@ -17,7 +18,7 @@ exports.addPoductToWishlist = async (req, res) => {
       _product: req.body._product,
       _store: req.body._store,
       wish_price: req.body.wish_price,
-      max_price: req.body.max_price
+      // max_price: req.body.max_price,
     };
 
     //get deal price
@@ -25,15 +26,31 @@ exports.addPoductToWishlist = async (req, res) => {
       req.body._store,
       req.body._product
     );
-    if (!productPrice) return res.json({ status: 0, message: "_Store and _Product are invalid"});
-  
-
-    const wishlist = await Wishlist.create(wishlistInfo);
-    return res.json({
-      status: 1,
-      message: "Product added to wishlist successfully",
-      data: wishlist,
+    var storeProductPrice = await StoreProductPricing.findOne({
+      where: { _store: req.body._store, _product: req.body._product },
     });
+
+    if (!productPrice)
+      return res.json({
+        status: 0,
+        message: "_Store and _Product are invalid",
+      });
+    else if (
+      req.body.wish_price > productPrice.regular_price ||
+      req.body.wish_price > storeProductPrice.deal_price
+    ) {
+      return res.json({
+        status: 2,
+        message: "Price should not be greater than regular price",
+      });
+    } else {
+      const wishlist = await Wishlist.create(wishlistInfo);
+      return res.json({
+        status: 1,
+        message: "Product added to wishlist successfully",
+        data: wishlist,
+      });
+    }
   } catch (err) {
     if (err.code == 11000) {
       await Wishlist.deleteOne({
@@ -41,7 +58,9 @@ exports.addPoductToWishlist = async (req, res) => {
         _product: req.body._product,
         _store: req.body._store,
       });
-      return res.status(200).json({ status: 1, data: "Product removed from wishlist" });
+      return res
+        .status(200)
+        .json({ status: 1, data: "Product removed from wishlist" });
     }
     return res.status(400).json({ data: err.message });
   }
@@ -51,12 +70,12 @@ exports.addPoductToWishlist = async (req, res) => {
   try {
     _wishlist = req.params.wishlistid;
     wish_price = req.body.wish_price;
-    max_price = req.body.max_price;
+    // max_price = req.body.max_price;
     valid_till = req.body.valid_till;
 
     const wishlistProduct = await Wishlist.updateOne(
       { _id: _wishlist },
-      { wish_price: wish_price, max_price, valid_till: valid_till }
+      { wish_price: wish_price, valid_till: valid_till }
     );
     return res.json({
       status: 1,
@@ -128,9 +147,9 @@ exports.allWishlistProducts = async (req, res) => {
           var in_shoppinglist = shoppingList.includes(productId) ? 1 : 0;
           var in_cart = productId in cartProducts ? cartProducts[productId] : 0;
           var wish_price = list.wish_price;
-          var max_price = list.max_price;
+          // var max_price = list.max_price;
           delete list.wish_price;
-          delete list.max_price;
+          // delete list.max_price;
           delete list.createdAt;
           delete list.updatedAt;
           return {
@@ -151,4 +170,11 @@ exports.allWishlistProducts = async (req, res) => {
     console.log(err);
     return res.status(400).json({ status: 0, message: "", data: err });
   }
+};
+//
+exports.getListingWish = async (req, res) => {
+  let wishlist = await Wishlist.findOne({
+    _product: req.params.product_id,
+  });
+  return res.json({ status: 1, message: "", data: wishlist._id });
 };
