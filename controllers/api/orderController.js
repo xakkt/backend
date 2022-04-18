@@ -169,21 +169,23 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
       var order = await Order.create(orderInfo);
       await pushController.firebase(req.decoded.id, "Order Created");
 
-      await Order.updateOne(
-        { _id: orderInfo._id },
-        {
-          shipping: {
-            tracking: {
-              status: req.body.status,
+      if (req.body.transaction_id) {
+        await Order.updateOne(
+          { _id: orderInfo._id },
+          {
+            shipping: {
+              tracking: {
+                status: "Succeded",
+              },
+              order_id: orderInfo.shipping.order_id,
             },
-            order_id: orderInfo.shipping.order_id,
+            payment: {
+              transaction_id: req.body.transaction_id,
+            },
           },
-          payment: {
-            transaction_id: req.body.transaction_id,
-          },
-        },
-        { new: true }
-      ).lean();
+          { new: true }
+        ).lean();
+      }
 
       return res.json({
         status: 1,
@@ -469,7 +471,7 @@ exports.orderCancel = async (req, res) => {
       {
         shipping: {
           tracking: {
-            status: "Cancelled",
+            status: "Refunded",
           },
           order_id: orderData.shipping.order_id,
         },
