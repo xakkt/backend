@@ -156,11 +156,13 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
           address: address,
           delivery_notes: req.body.delivery_notes ?? null,
           order_id: orderid.generate(),
+          tracking: {
+            status: "recieved",
+          },
         },
-
         payment: {
           method: req.body.payment_method,
-          // transaction_id: req.body.transaction_id
+          transaction_id: req.body.transaction_id,
         },
         products: product,
         total_cost: req.body.total_cost.toFixed(2),
@@ -169,23 +171,24 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
       var order = await Order.create(orderInfo);
       await pushController.firebase(req.decoded.id, "Order Created");
 
-      if (req.body.transaction_id) {
-        await Order.updateOne(
-          { _id: orderInfo._id },
-          {
-            shipping: {
-              tracking: {
-                status: "Succeded",
-              },
-              order_id: orderInfo.shipping.order_id,
-            },
-            payment: {
-              transaction_id: req.body.transaction_id,
-            },
-          },
-          { new: true }
-        ).lean();
-      }
+      // if (req.body.transaction_id) {
+      //   console.log("df");
+      //   await Order.updateOne(
+      //     { _id: orderInfo._id },
+      //     {
+      //       shipping: {
+      //         tracking: {
+      //           status: "Succeded",
+      //         },
+      //         order_id: orderInfo.shipping.order_id,
+      //       },
+      //       payment: {
+      //         transaction_id: req.body.transaction_id,
+      //       },
+      //     },
+      //     { new: true }
+      //   ).lean();
+      // }
 
       return res.json({
         status: 1,
@@ -471,7 +474,7 @@ exports.orderCancel = async (req, res) => {
       {
         shipping: {
           tracking: {
-            status: "Refunded",
+            status: "cancelled",
           },
           order_id: orderData.shipping.order_id,
         },
@@ -488,7 +491,7 @@ exports.orderCancel = async (req, res) => {
 
     return res.json({
       status: 1,
-      message: "Order Refund Successfully",
+      message: "Order Cancel Successfully",
       // data: refundCreate,
     });
   } catch (err) {

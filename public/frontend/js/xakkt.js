@@ -686,6 +686,7 @@ $("#cartModal").on("show.bs.modal", function () {
           }" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>
                             <td>${product._product.name.english}</td>
+                            <td>200</td>
                             <td class="qty">
                                 <div class="quantity">
                                   <button class="xbtn minus-btn"  data-storeid="${
@@ -732,7 +733,7 @@ $("#cartModal").on("show.bs.modal", function () {
       $("#cart-table").html(tableHtml);
     })
     .fail((result) => {
-      console.log('--error in cart listing --',result)
+      console.log("--error in cart listing --", result);
       $("#loginError").show().text(result.responseJSON.errors);
     });
 });
