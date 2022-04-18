@@ -160,7 +160,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
         payment: {
           method: req.body.payment_method,
-          // transaction_id: req.body.payment.transaction_id
+          // transaction_id: req.body.transaction_id
         },
         products: product,
         total_cost: req.body.total_cost.toFixed(2),
@@ -168,6 +168,23 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
       var order = await Order.create(orderInfo);
       await pushController.firebase(req.decoded.id, "Order Created");
+
+      await Order.updateOne(
+        { _id: orderInfo._id },
+        {
+          shipping: {
+            tracking: {
+              status: req.body.status,
+            },
+            order_id: orderInfo.shipping.order_id,
+          },
+          payment: {
+            transaction_id: req.body.transaction_id,
+          },
+        },
+        { new: true }
+      ).lean();
+
       return res.json({
         status: 1,
         message: "Order createddd",
@@ -442,29 +459,30 @@ exports.orderCancel = async (req, res) => {
     const orderData = await Order.findOne({ _id: orderID });
     if (!orderData) return res.json({ message: "No Order found", data: "" });
 
-    if (orderData.payment.transaction_id) {
+    if (orderData.payment.method == 1) {
       const refundCreate = await stripe.refunds.create({
         charge: orderData.payment.transaction_id,
       });
-
-      await Order.updateOne(
-        { _id: orderID },
-        {
-          shipping: {
-            tracking: {
-              status: "Cancelled",
-            },
-            order_id: orderData.shipping.order_id,
-          },
-        },
-        { new: true }
-      );
-    } else {
-      return res.json({
-        message: "No Payment method for this order",
-        data: "",
-      });
     }
+    await Order.updateOne(
+      { _id: orderID },
+      {
+        shipping: {
+          tracking: {
+            status: "Cancelled",
+          },
+          order_id: orderData.shipping.order_id,
+        },
+      },
+      { new: true }
+    );
+
+    // else {
+    //   return res.json({
+    //     message: "No Payment method for this order",
+    //     data: "",
+    //   });
+    // }
 
     return res.json({
       status: 1,
