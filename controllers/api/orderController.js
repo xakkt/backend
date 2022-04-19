@@ -465,7 +465,7 @@ exports.orderCancel = async (req, res) => {
     const orderData = await Order.findOne({ _id: orderID });
     if (!orderData) return res.json({ message: "No Order found", data: "" });
 
-    if (orderData.payment.method == 1) {
+    if (orderData.payment.transaction_id) {
       const refund = await stripe.refunds.create({
         payment_intent: orderData.payment.transaction_id,
       });
