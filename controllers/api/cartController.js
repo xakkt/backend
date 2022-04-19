@@ -686,7 +686,7 @@ exports.chargeSavedCard = async (req, res) => {
       currency: "usd",
       customer: `${req.decoded.customer_id}`,
       // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
-      metadata: { payment_intent: paymentIntent.id },
+      // metadata: { payment_intent: paymentIntent.id },
     });
 
     req.charge = charge;
