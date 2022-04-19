@@ -675,10 +675,12 @@ exports.chargeSavedCard = async (req, res) => {
       // payment_method_types: ["card"],
       customer: `${req.decoded.customer_id}`,
       payment_method: req.body.payment_method_id,
+      confirmation_method: "manual",
+      confirm: true,
       // setup_future_usage: "off_session",
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      // automatic_payment_methods: {
+      //   enabled: true,
+      // },
     });
 
     const charge = await stripe.charges.create({
@@ -686,7 +688,7 @@ exports.chargeSavedCard = async (req, res) => {
       currency: "usd",
       customer: `${req.decoded.customer_id}`,
       // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
-      // metadata: { payment_intent: paymentIntent.id },
+      metadata: { payment_intent: paymentIntent.id },
     });
 
     req.charge = charge;
