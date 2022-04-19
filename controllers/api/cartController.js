@@ -49,15 +49,16 @@ exports.saveCard = async (req, res) => {
         name: email,
       },
     });
+
     console.log(payment.id);
     console.log("session", req.decoded.customer_id);
     const paymentMethod = await stripe.paymentMethods.attach(payment.id, {
       customer: `${req.decoded.customer_id}`,
     });
     //create card source
-    await stripe.customers.createSource(`${req.decoded.customer_id}`, {
-      source: "tok_amex",
-    });
+    // await stripe.customers.createSource(`${req.decoded.customer_id}`, {
+    //   source: "tok_amex",
+    // });
     console.log("--paymentMethod-", paymentMethod);
     const saveCardData = {
       _user: req.decoded.id,
@@ -690,6 +691,7 @@ exports.chargeSavedCard = async (req, res) => {
     req.charge = charge;
     req.total = total;
     const result = await orderController.placeOrder(req, res);
+    console.log("result", result);
     if (result == true) {
       return res.status(200).json({ transaction_id: charge.id });
     } else {

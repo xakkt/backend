@@ -12,7 +12,6 @@ const Cart = require("../../models/cart");
 const { ObjectId } = require("bson");
 const pushController = require("./pushController");
 const Stripe = require("stripe");
-const order = require("../../models/order");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 (exports.listOrders = async (req, res) => {
@@ -438,10 +437,10 @@ exports.placeOrder = async (req, res) => {
     };
 
     await Order.create(orderInfo);
+
     await Cart.deleteOne({
       _id: req.body.cartid,
     }).exec();
-    console.log("trie");
     return true;
     // return res.json({
     //   status: 1,
@@ -449,8 +448,9 @@ exports.placeOrder = async (req, res) => {
     // });
     // return res.redirect("/myorders/" + req.body.slug);
   } catch (err) {
+    console.log("---value", err);
     return false;
-    // console.log("---value", err);
+
     // return res.status(400).json({ data: err.message });
   }
 };
@@ -466,15 +466,9 @@ exports.orderCancel = async (req, res) => {
     if (!orderData) return res.json({ message: "No Order found", data: "" });
 
     if (orderData.payment.method == 1) {
-      if (orderData.payment.transaction_id.includes("pm_")) {
-        const refund = await stripe.refunds.create({
-          payment_intent: orderData.payment.transaction_id,
-        });
-      } else {
-        const refundCreate = await stripe.refunds.create({
-          charge: orderData.payment.transaction_id,
-        });
-      }
+      const refundCreate = await stripe.refunds.create({
+        charge: orderData.payment.transaction_id,
+      });
     }
     await Order.updateOne(
       { _id: orderID },
