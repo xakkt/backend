@@ -682,23 +682,22 @@ exports.chargeSavedCard = async (req, res) => {
       //   enabled: true,
       // },
     });
-    console.log("payment_intet", paymentIntent);
-    console.log("dfdf");
-    const charge = await stripe.charges.create({
-      amount: total * 100,
-      currency: "usd",
-      customer: `${req.decoded.customer_id}`,
-      // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
-      metadata: { payment_intent: paymentIntent.id },
-    });
-    console.log("ch");
-    console.log("chrage", charge);
-    req.charge = charge;
+    // console.log("payment_intet", paymentIntent);
+    // console.log("dfdf");
+    // const charge = await stripe.charges.create({
+    //   amount: total * 100,
+    //   currency: "usd",
+    //   customer: `${req.decoded.customer_id}`,
+    //   // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
+    //   metadata: { payment_intent: paymentIntent.id },
+    // });
+
+    req.charge = paymentIntent;
     req.total = total;
     const result = await orderController.placeOrder(req, res);
     console.log("result", result);
     if (result == true) {
-      return res.status(200).json({ transaction_id: charge.id });
+      return res.status(200).json({ transaction_id: paymentIntent.id });
     } else {
       return res.status(400).json({ data: "something went wrong" });
     }
