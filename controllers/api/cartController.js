@@ -677,10 +677,6 @@ exports.chargeSavedCard = async (req, res) => {
       payment_method: req.body.payment_method_id,
       confirmation_method: "manual",
       confirm: true,
-      // setup_future_usage: "off_session",
-      // automatic_payment_methods: {
-      //   enabled: true,
-      // },
     });
     // console.log("payment_intet", paymentIntent);
     // console.log("dfdf");

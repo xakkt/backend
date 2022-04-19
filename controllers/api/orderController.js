@@ -469,9 +469,6 @@ exports.orderCancel = async (req, res) => {
       const refund = await stripe.refunds.create({
         payment_intent: orderData.payment.transaction_id,
       });
-      // const refundCreate = await stripe.refunds.create({
-      //   charge: orderData.payment.transaction_id,
-      // });
     }
     await Order.updateOne(
       { _id: orderID },
