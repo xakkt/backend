@@ -569,6 +569,7 @@ $("#favListModal").on("show.bs.modal", function (e) {
                               }" class="cart-prod-img img-fluid img-thumbnail" alt="">
                             </td>
                             <td>${product._product.name.english}</td>
+                            <td>${product._product.wish_price}</td>
                             <td class="qty">
                                 <div class="quantity">
                                   <button class="xbtn minus-btn" data-place="fav_${
@@ -686,7 +687,6 @@ $("#cartModal").on("show.bs.modal", function () {
           }" class="cart-prod-img img-fluid img-thumbnail" alt="Sheep">
                             </td>
                             <td>${product._product.name.english}</td>
-                            <td>200</td>
                             <td class="qty">
                                 <div class="quantity">
                                   <button class="xbtn minus-btn"  data-storeid="${
