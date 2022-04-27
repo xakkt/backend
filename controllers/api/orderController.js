@@ -11,6 +11,8 @@ const Product = require("../../models/product");
 const Cart = require("../../models/cart");
 const { ObjectId } = require("bson");
 const pushController = require("./pushController");
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 (exports.listOrders = async (req, res) => {
   const errors = await validationResult(req);
@@ -154,11 +156,13 @@ const pushController = require("./pushController");
           address: address,
           delivery_notes: req.body.delivery_notes ?? null,
           order_id: orderid.generate(),
+          tracking: {
+            status: "recieved",
+          },
         },
-
         payment: {
           method: req.body.payment_method,
-          // transaction_id: req.body.payment.transaction_id
+          transaction_id: req.body.transaction_id,
         },
         products: product,
         total_cost: req.body.total_cost.toFixed(2),
@@ -166,6 +170,26 @@ const pushController = require("./pushController");
 
       var order = await Order.create(orderInfo);
       await pushController.firebase(req.decoded.id, "Order Created");
+
+      // if (req.body.transaction_id) {
+      //   console.log("df");
+      //   await Order.updateOne(
+      //     { _id: orderInfo._id },
+      //     {
+      //       shipping: {
+      //         tracking: {
+      //           status: "Succeded",
+      //         },
+      //         order_id: orderInfo.shipping.order_id,
+      //       },
+      //       payment: {
+      //         transaction_id: req.body.transaction_id,
+      //       },
+      //     },
+      //     { new: true }
+      //   ).lean();
+      // }
+
       return res.json({
         status: 1,
         message: "Order createddd",
@@ -413,10 +437,10 @@ exports.placeOrder = async (req, res) => {
     };
 
     await Order.create(orderInfo);
+
     await Cart.deleteOne({
       _id: req.body.cartid,
     }).exec();
-    console.log("trie");
     return true;
     // return res.json({
     //   status: 1,
@@ -424,8 +448,54 @@ exports.placeOrder = async (req, res) => {
     // });
     // return res.redirect("/myorders/" + req.body.slug);
   } catch (err) {
+    console.log("---value", err);
     return false;
-    // console.log("---value", err);
+
     // return res.status(400).json({ data: err.message });
+  }
+};
+exports.orderCancel = async (req, res) => {
+  const errors = await validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const orderID = req.params.id;
+
+  try {
+    const orderData = await Order.findOne({ _id: orderID });
+    if (!orderData) return res.json({ message: "No Order found", data: "" });
+
+    if (orderData.payment.transaction_id) {
+      const refund = await stripe.refunds.create({
+        payment_intent: orderData.payment.transaction_id,
+      });
+    }
+    await Order.updateOne(
+      { _id: orderID },
+      {
+        shipping: {
+          tracking: {
+            status: "cancelled",
+          },
+          order_id: orderData.shipping.order_id,
+        },
+      },
+      { new: true }
+    );
+
+    // else {
+    //   return res.json({
+    //     message: "No Payment method for this order",
+    //     data: "",
+    //   });
+    // }
+
+    return res.json({
+      status: 1,
+      message: "Order Cancel Successfully",
+      // data: refundCreate,
+    });
+  } catch (err) {
+    res.send(err);
   }
 };

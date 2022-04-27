@@ -11,9 +11,4 @@ package-lock.json
 # Docker
 Dockerfile
 docker-compose.yml
-public/images/products/*
-public/images/banners/*
-public/images/brands/*
-public/images/departments/*
-public/images/users/*
-public/images/files/*
+public/images

@@ -49,15 +49,16 @@ exports.saveCard = async (req, res) => {
         name: email,
       },
     });
+
     console.log(payment.id);
     console.log("session", req.decoded.customer_id);
     const paymentMethod = await stripe.paymentMethods.attach(payment.id, {
       customer: `${req.decoded.customer_id}`,
     });
     //create card source
-    await stripe.customers.createSource(`${req.decoded.customer_id}`, {
-      source: "tok_amex",
-    });
+    // await stripe.customers.createSource(`${req.decoded.customer_id}`, {
+    //   source: "tok_amex",
+    // });
     console.log("--paymentMethod-", paymentMethod);
     const saveCardData = {
       _user: req.decoded.id,
@@ -667,31 +668,32 @@ exports.chargeSavedCard = async (req, res) => {
     //   total += product.total_price;
     // }
     // console.log("----", total);
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total * 100,
       currency: "usd",
-      payment_method_types: ["card"],
-      customer: req.decoded.customer_id,
+      // payment_method_types: ["card"],
+      customer: `${req.decoded.customer_id}`,
       payment_method: req.body.payment_method_id,
-      setup_future_usage: "off_session",
-      // automatic_payment_methods: {
-      //   enabled: true,
-      // },
+      confirmation_method: "manual",
+      confirm: true,
     });
+    // console.log("payment_intet", paymentIntent);
+    // console.log("dfdf");
+    // const charge = await stripe.charges.create({
+    //   amount: total * 100,
+    //   currency: "usd",
+    //   customer: `${req.decoded.customer_id}`,
+    //   // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
+    //   metadata: { payment_intent: paymentIntent.id },
+    // });
 
-    const charge = await stripe.charges.create({
-      amount: total * 100,
-      currency: "usd",
-      customer: req.decoded.customer_id,
-      // source: "pm_1KdpUMLkH4ZUmaJSVBN0Z7YM",
-      metadata: { payment_intent: paymentIntent.id },
-    });
-
-    req.charge = charge;
+    req.charge = paymentIntent;
     req.total = total;
     const result = await orderController.placeOrder(req, res);
+    console.log("result", result);
     if (result == true) {
-      return res.status(200).json({ transaction_id: charge.id });
+      return res.status(200).json({ transaction_id: paymentIntent.id });
     } else {
       return res.status(400).json({ data: "something went wrong" });
     }

@@ -486,7 +486,7 @@ router.delete(
   wishController.deleteProductWishlist
 );
 router.put(
-  "/wishlist/update/:wishlistid",
+  "/wishlist/update",
   verifyjwt.checkToken,
   wishController.updateProductWishPrice
 );
@@ -517,6 +517,11 @@ router.post("/order_checkout", cartController.orderCheckout);
 router.get("/list-cards", verifyjwt.checkToken, cartController.listCards);
 router.post("/save-card", verifyjwt.checkToken, cartController.saveCard);
 router.post("/delete-card", verifyjwt.checkToken, cartController.deleteCard);
+router.post(
+  "/order_cancel/:id",
+  verifyjwt.checkToken,
+  orderController.orderCancel
+);
 router.post(
   "/order-success/:id",
   verifyjwt.checkToken,

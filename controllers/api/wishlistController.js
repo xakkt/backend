@@ -64,13 +64,12 @@ exports.addPoductToWishlist = async (req, res) => {
 
 (exports.updateProductWishPrice = async (req, res) => {
   try {
-    _wishlist = req.params.wishlistid;
+    _wishlist = req.body.wishlistid;
     wish_price = req.body.wish_price;
-    valid_till = req.body.valid_till;
 
     const wishlistProduct = await Wishlist.updateOne(
       { _id: _wishlist },
-      { wish_price: wish_price, valid_till: valid_till }
+      { wish_price: wish_price}
     );
     return res.json({
       status: 1,
@@ -166,8 +165,11 @@ exports.allWishlistProducts = async (req, res) => {
             productId in cartProducts ? cartProducts[productId] : 0;
 
           var unit = list._product._unit.name;
-          delete list._product._unit;
+          var wish_price = list.wish_price;
           delete list.wish_price;
+          delete list._product._unit;
+          delete list._product.price;
+          delete list.__v;
           delete list.createdAt;
           delete list.updatedAt;
           return {
@@ -181,6 +183,7 @@ exports.allWishlistProducts = async (req, res) => {
               unit: unit,
               deal_price: productPrice.effective_price,
               regular_price: productPrice.regular_price,
+              wish_price:wish_price
             },
           };
         })

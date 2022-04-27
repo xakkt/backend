@@ -161,6 +161,7 @@ console.log('---wishlist--',list)
               is_favourite: in_wishlist,
               in_shoppinglist: in_shoppinglist,
               in_cart: in_cart,
+              wish_price: wish_price,
             },
           };
         })

@@ -569,6 +569,7 @@ $("#favListModal").on("show.bs.modal", function (e) {
                               }" class="cart-prod-img img-fluid img-thumbnail" alt="">
                             </td>
                             <td>${product._product.name.english}</td>
+                            <td>${product._product.wish_price}</td>
                             <td class="qty">
                                 <div class="quantity">
                                   <button class="xbtn minus-btn" data-place="fav_${
@@ -732,7 +733,7 @@ $("#cartModal").on("show.bs.modal", function () {
       $("#cart-table").html(tableHtml);
     })
     .fail((result) => {
-      console.log('--error in cart listing --',result)
+      console.log("--error in cart listing --", result);
       $("#loginError").show().text(result.responseJSON.errors);
     });
 });

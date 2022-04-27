@@ -633,25 +633,33 @@ exports.chargeSavedCard = async (req, res) => {
       total += product.total_price;
     }
     console.log("----", total);
-
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total * 100,
       currency: "usd",
       // payment_method_types: ["card"],
-      customer: `${req.session.customerId}`,
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      customer: `${req.decoded.customer_id}`,
+      payment_method: req.body.payment_method_id,
+      confirmation_method: "manual",
+      confirm: true,
     });
+    // const paymentIntent = await stripe.paymentIntents.create({
+    //   amount: total * 100,
+    //   currency: "usd",
+    //   // payment_method_types: ["card"],
+    //   customer: `${req.session.customerId}`,
+    //   automatic_payment_methods: {
+    //     enabled: true,
+    //   },
+    // });
 
-    const charge = await stripe.charges.create({
-      amount: total * 100,
-      currency: "usd",
-      customer: `${req.session.customerId}`,
-    });
+    // const charge = await stripe.charges.create({
+    //   amount: total * 100,
+    //   currency: "usd",
+    //   customer: `${req.session.customerId}`,
+    // });
 
     console.log("charge----", charge);
-    req.charge = charge;
+    req.charge = paymentIntent;
     const result = await orderController.placeOrder(req, res);
 
     return result;

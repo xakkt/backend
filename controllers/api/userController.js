@@ -277,7 +277,7 @@ exports.address = async (req, res) => {
 
     var address_array = [];
     address_array.push({
-      address1: req.body.address1,
+      address1: req.body.address1Line,
       address2: req.body.address2,
       city: req.body.city,
       address_type: req.body.address_type,
@@ -287,6 +287,7 @@ exports.address = async (req, res) => {
       contactno: req.body.contactno,
       zipcode: req.body.zipcode,
       emirate: req.body.emirate,
+      name: req.body.name,
       location: { type: "Point", coordinates: [req.body.long, req.body.lat] },
     });
     console.log("0--00000", address_array);
