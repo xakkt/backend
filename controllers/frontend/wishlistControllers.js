@@ -129,7 +129,7 @@ exports.allWishlistProducts = async (req, res) => {
             ? list._product.image
             : "not-available-image.jpg";
           let image = `${process.env.IMAGES_BUCKET_PATH}/products/${image_path}`;
-
+console.log('---wishlist--',list)
           var wishList = await _global.wishList(
             res.locals.userid,
             req.body._store
@@ -148,7 +148,7 @@ exports.allWishlistProducts = async (req, res) => {
           var in_cart = productId in cartProducts ? cartProducts[productId] : 0;
           var wish_price = list.wish_price;
           // var max_price = list.max_price;
-          delete list.wish_price;
+        //  delete list.wish_price;
           // delete list.max_price;
           delete list.createdAt;
           delete list.updatedAt;
@@ -157,6 +157,7 @@ exports.allWishlistProducts = async (req, res) => {
             _product: {
               ...list._product,
               image: image,
+              wish_price:wish_price,
               is_favourite: in_wishlist,
               in_shoppinglist: in_shoppinglist,
               in_cart: in_cart,

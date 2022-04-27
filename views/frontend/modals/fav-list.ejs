@@ -14,9 +14,9 @@
             <thead>
               <tr>
                 <th scope="col"></th>
-                <th scope="col">Product</th>
+                <th scope="col"></th>
                 <!--th scope="col">Price</th-->
-                <th scope="col">Actions</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody id="fav-table">
@@ -43,7 +43,7 @@
           
         </div-->
         <div class="modal-body">
-          <form method="POST" id="save-wish-price" action="http://localhost:4800/product/add-to-favlist">   
+          <form method="POST" id="save-wish-price" action="<%=process.env.BASE_URL%>/product/add-to-favlist">   
             <div class="modal-content">
                   
                <div class="modal-header border-right">
