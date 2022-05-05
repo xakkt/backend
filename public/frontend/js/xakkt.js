@@ -383,7 +383,7 @@ $(".xakkt-product-popup").click(function () {
       break;
     case $(this).hasClass("favlist"):
       $(".grey-fav, .red-fav").toggleClass("d-none");
-      // url = `${baseUrl}/product/add-to-favlist`;
+       url = `${baseUrl}/product/add-to-favlist`;
       break;
     case $(this).hasClass("xcart"):
       $(".cart-grey, .cart-red").toggleClass("d-none");
@@ -418,7 +418,7 @@ $(document).delegate(".cart-form", "submit", function (e) {
     case "x-cart":
       url = `${baseUrl}/product/add-to-cart`;
       break;
-    case "x-heart":
+    case "x-heart": alert('--here-')
       url = `${baseUrl}/product/add-to-favlist`;
       break;
     case "x-list":
@@ -747,7 +747,6 @@ $("#shoppingListModal").on("show.bs.modal", function (event) {
   var data = {};
   data._user = $(".cartbutton").data("userid") ?? null;
   data._store = $(".cartbutton").data("storeid");
-  console.log("==========ooooo", data);
 
   var button = $(event.relatedTarget); // Button that triggered the modal
   var productForm = button.data("formid");
