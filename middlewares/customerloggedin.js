@@ -5,6 +5,8 @@ const { check } = require('../controllers/admin/userController');
 
 
 module.exports = async (req, res, next)=>{
+
+
     if (req.session.customer) { 
         // locals.user = req.session.userid
 
