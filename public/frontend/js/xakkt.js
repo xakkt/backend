@@ -327,7 +327,7 @@ $(".product_view").on("show.bs.modal", function (e) {
   modal.find(".unit").text(a.data("unit"));
 });
 
-$(document).delegate(".x-cart,.x-heart,.x-list", "click", function () {
+$(document).delegate(".x-cart,.x-heart,.x-list", "click", function () { 
   if (!$(".cartbutton").data("userid")) {
     $("#modalLoginForm").modal("show");
     return false;
@@ -350,9 +350,9 @@ $(document).delegate(".x-cart,.x-heart,.x-list", "click", function () {
       greyClass = `.${btntype}-grey-${productId}`;
       redClass = `.${btntype}-red-${productId}`;
 
-      // $(`${greyClass},${redClass}`).toggleClass("d-none");
+      $(`${greyClass},${redClass}`).toggleClass("d-none");
       $(this).parents(".xshop").siblings(".button_type").val(btntype);
-      // $(this).closest("form").submit();
+      $(this).closest("form").submit();
       break;
     case "x-list":
       $(this).parents(".xshop").siblings(".button_type").val(btntype);
@@ -418,10 +418,10 @@ $(document).delegate(".cart-form", "submit", function (e) {
     case "x-cart":
       url = `${baseUrl}/product/add-to-cart`;
       break;
-    case "x-heart": alert('--here-')
+    case "x-heart": 
       url = `${baseUrl}/product/add-to-favlist`;
       break;
-    case "x-list":
+    case "x-list": 
       url = `${baseUrl}/shoppinglist/add_product`;
   }
   $.post(url, obj)
