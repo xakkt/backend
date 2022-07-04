@@ -13,8 +13,15 @@ const { ['log']: c } = console;
 
 exports.list = async (req, res) => {
 
-		try {
-			var cond = (req.session.roles.includes('system_admin'))?{}:{ _id :{ $in: req.session.stores } }
+		try { 
+
+		if(req.session.roles.includes('system_admin')){
+			var cond = {}
+		}else{
+			var users = await User.findById(req.session.userid).exec();
+			var cond = { _id :{ $in: users._store }}
+		}
+		
 			let stores = await Store.find(cond).exec();
 
 			return res.render('admin/store/listing', 
