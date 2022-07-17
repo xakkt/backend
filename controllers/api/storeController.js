@@ -82,9 +82,9 @@ exports.addLocation = async(req,res) => {
 	} 
 }
 exports.nearByStores = async(req, res) =>{
-console.log('---req--',req)
+
 	const errors = await validationResult(req);
-		if (!errors.isEmpty()) { console.log('---errors--',errors)
+		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
@@ -92,11 +92,10 @@ console.log('---req--',req)
 				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:10000 	}  } 
 		},'name address city _currency location' ).populate('_currency','name').then( stores => {
 			
-			if(!stores.length) return res.status(400).json({status:false, message: "No store found nearby"});
-			return res.json({status:1, message: "", data:stores}); 
+		   			if(!stores.length) return res.status(400).json({status:false, message: "No store found nearby"});
+					return res.json({status:1, message: "", data:stores}); 
 								
 		}).catch( err => {
-			console.log('---err--',err)
 			res.status(400).json({status:0, message:err});
   		})
 
