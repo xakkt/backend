@@ -89,7 +89,7 @@ exports.nearByStores = async(req, res) =>{
 		}
 
 	Store.find({ location :  { $near :	{ $geometry :  
-				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:10000 	}  } 
+				{ type : "Point", coordinates : [req.body.long,req.body.lat]  }, $maxDistance:20000 	}  } 
 		},'name address city _currency location' ).populate('_currency','name').then( stores => {
 			
 		   			if(!stores.length) return res.status(400).json({status:false, message: "No store found nearby"});
