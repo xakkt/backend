@@ -298,7 +298,7 @@ exports.address = async (req, res) => {
       { returnOriginal: false }
     ).exec();
     if (user.address.length == 1) {
-      await User.update(
+      await User.updateOne(
         {
           _id: req.decoded.id,
           "address._id": user.address[0]._id,
